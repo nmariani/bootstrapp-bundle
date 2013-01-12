@@ -12,6 +12,7 @@
             "homepage": "http://www.nmariani.fr/"
         }
     ],
+    "minimum-stability": "dev",
 
     "require": {
         "php": ">=5.3.3",
