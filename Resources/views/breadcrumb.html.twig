@@ -1,0 +1,18 @@
+{% block breadcrumb %}
+{% if breadcrumb is defined and breadcrumb|length %}
+<ul class="breadcrumb">
+    {% block breadcrumb_items %}
+        {% for item in breadcrumb %}
+            <li>
+                {% if item.url|default('')|length and item.url != app.request.requestUri %}
+                    <a href="{{ item.url }}">{{ item.text|trans(item.parameters|default([]), domain|default(null), locale|default(null))|capitalize }}</a>
+                {% else %}
+                    {{ item.text|trans(item.parameters|default([]), domain|default(null), locale|default(null))|capitalize }}
+                {% endif %}
+                {% if not loop.last %}<span class='divider'>{{ separator|default('/') }}</span>{% endif %}
+            </li>
+        {% endfor %}
+    {% endblock breadcrumb_items %}
+</ul>
+{% endif %}
+{% endblock breadcrumb %}

@@ -1,0 +1,25 @@
+# navigation
+Home: Accueil
+About: A propos
+My account: Mon compte
+Profile: Profil
+Settings: Paramètres
+Help: Aide
+
+# alert
+alert:
+    heading:
+        info: Information
+        warn: Attention
+        error: Erreur
+
+# modal
+modal:
+    header: Confirmer votre action.
+    body: Etes-vous sûr de vouloir effectuer cette action?
+    button:
+        ok: Oui
+        cancel: Annuler
+
+# globals
+All rights reserved: Tous droits réservés

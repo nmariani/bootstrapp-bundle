@@ -1,0 +1,169 @@
+{% extends 'BootstrappBundle:layout:base.html.twig' %}
+
+{% block stylesheets %}
+{% stylesheets filter='less' output='bundles/bootstrapp/css/app.css'
+    "@BootstrappBundle/Resources/public/less/app.less"
+%}
+<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+{% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block headline %}Twitter Bootstrap application layout{% endblock headline %}
+
+{% block flashes %}
+{{ parent() }}
+{% for name, value in app.session.flashes if name in ['success', 'error'] %}
+<div class="alert alert-{{ name }}">
+    <a class="close" data-dismiss="alert" href="#">×</a>
+    {{ value|trans }}
+</div>
+{% endfor %}
+{% endblock flashes %}
+
+{% block modal_id %}confirmer-modal{% endblock %}
+{% block modal_class %}hide fade{% endblock %}
+{% block modal_header %}{{ 'confirmer.header'|trans }}{% endblock %}
+{% block modal_body %}
+<p class="confirmer-modal-question">{{ 'confirmer.question'|trans }}</p>
+{% endblock %}
+{% block modal_footer %}
+<a class="confirmer-modal-confirm btn btn-primary">{{ 'yes'|trans }}</a>
+<a class="btn" data-dismiss="modal">{{ 'cancel'|trans }}</a>
+{% endblock %}
+
+{% block body %}
+    <div id="modal-ask" class="modal hide fade">
+        <div class="modal-header">
+            {# <a class="close" data-dismiss="modal">×</a> #}
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>{{ 'modal.header'|trans }}</h3>
+        </div>
+        <div class="modal-body">
+            <p>{{ 'modal.body'|trans }}</p>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-primary">{{ 'modal.button.ok'|trans }}</a>
+            <a class="btn" data-dismiss="modal">{{ 'modal.button.cancel'|trans }}</a>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock body %}
+
+{% block container %}
+    <div id="sidebar" class="span2">
+        <div id="sidebar-header">
+            {% block sidebar_header %}
+            {% endblock %}
+        </div>
+        <div class="sidebar-nav well">
+            {% block sidebar_nav %}
+            <ul class="nav nav-list">
+                <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
+                <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
+                <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
+                <li class="nav-header">{% trans %}My account{% endtrans %}</li>
+                <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
+                <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
+                <li class="divider"></li>
+                <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+            </ul>
+            {% endblock %}
+        </div>
+    </div>
+    <div id="content" class="span10">
+        <div id="content-inner">
+            {{ parent() }}
+        </div>
+    </div>
+</div>
+{% endblock container %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/twitter-cldr/'~ app.request.locale|slice(0,2)|lower ~'.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-cldr.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-datetime.js') }}"></script>
+
+    {% javascripts output='bundles/bootstrapp/js/app.js'
+        'bundles/bootstrapp/js/app.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.bootstrapp-datetime').datetime({}, function(element) {
+                element = $(element);
+                var parent = element.parent(),
+                    widget = parent.data('widget'),
+                    type = parent.data('type'),
+                    grandparent = parent.parent(),
+                    grandwidget = grandparent.data('widget'),
+                    grandtype = grandparent.data('type'),
+                    plugin;
+
+                if(grandparent && 'datetime' == grandtype && widget == grandwidget) {
+                    // composant datetime
+                    parent = grandparent;
+                    type = grandtype;
+                }
+
+                plugin = parent.data('plugin');
+                if(!plugin) {
+                    var input = parent.children('input[class~="'+widget+'"]').first(),
+                        lang = '{{ app.request.locale|slice(0,2)|lower }}';
+                    // get options in data- attributes
+                    /*
+                     $.each(options, function(index, value) {
+                     var data = element.data(index);
+                     if(data) {
+                     options[index] = data;
+                     }
+                     });
+                     */
+                    switch(parent.data('widget')) {
+                        case 'eyecon' :
+                            var options = {
+                                language: lang
+                            };
+                            if(Bootstrapp.EyeconDatePicker)
+                                plugin =  new Bootstrapp.EyeconDatePicker(input, options);
+                            break;
+                        case 'pickadate' :
+                            if(Bootstrapp.Pickadate)
+                                plugin = new Bootstrapp.Pickadate(input);
+                            break;
+                        case 'jqueryui' :
+                            if(Bootstrapp.jQueryUIDatePicker)
+                                plugin = new Bootstrapp.jQueryUIDatePicker(input);
+                            break;
+                        case 'mobiscroll' :
+                            var options = {
+                                preset: type,
+                                lang: lang,
+                                theme: 'mobiscroll light'
+                                //invalid: { daysOfWeek: [0, 6], daysOfMonth: ['5/1', '12/24', '12/25'] },
+                                //readonly: [false, false, true],
+                            };
+                            if(Bootstrapp.Mobiscroll)
+                                plugin = new Bootstrapp.Mobiscroll(input, options);
+                            break;
+                        case 'jdewit' :
+                            var options = {
+                                lang: lang
+                            };
+                            if(Bootstrapp.JdewitTimepicker)
+                                plugin = new Bootstrapp.JdewitTimepicker(input, options);
+                        default:
+                            break;
+                    }
+                    if(plugin) {
+                        parent.data('plugin', plugin);
+                    }
+                }
+                return plugin;
+            });
+        });
+    </script>
+{% endblock javascripts %}

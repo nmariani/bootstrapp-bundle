@@ -1,0 +1,33 @@
+parameters:
+    bootstrapp.locales: [en_US,fr_FR]
+    form.type.date.widget: eyecon
+    form.type.date.format: 1 # 16 juillet 1983
+    form.type.time.widget: jdewit
+    form.type.datetime.widget: mobiscroll
+    templating.globals.class: nmariani\Bundle\BootstrappBundle\Templating\GlobalVariables
+
+services:
+    form.type.date:
+        class: nmariani\Bundle\BootstrappBundle\Form\Type\DateType
+        #scope: prototype
+        tags: [{ name: form.type, alias: date }]
+        calls:
+            - [ setDefaultWidget, [ %form.type.date.widget% ] ]
+            - [ setDefaultFormat, [ %form.type.date.format% ] ]
+            - [ setAssetsLoader, [ @assets_loader ] ]
+    form.type.time:
+        class: nmariani\Bundle\BootstrappBundle\Form\Type\TimeType
+        #scope: prototype
+        tags: [{ name: form.type, alias: time }]
+        calls:
+            - [ setDefaultWidget, [ %form.type.time.widget% ] ]
+            - [ setAssetsLoader, [ @assets_loader ] ]
+    form.type.datetime:
+        class: nmariani\Bundle\BootstrappBundle\Form\Type\DateTimeType
+        #scope: prototype
+        tags: [{ name: form.type, alias: datetime }]
+        calls:
+            - [ setDefaultWidget, [ %form.type.datetime.widget% ] ]
+            - [ setAssetsLoader, [ @assets_loader ] ]
+    assets_loader:
+        class: nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader

@@ -1,0 +1,137 @@
+{% import 'BootstrappBundle:Macro:assets.html.twig' as assets %}
+{# fixed or fluid layout #}
+{% if layout is not defined %}
+    {% set layout = 'fluid' %}
+{% endif %}
+{% if layout == 'fixed' %}
+    {% set layout = '' %}
+{% else %}
+    {% set layout = '-fluid' %}
+{% endif %}
+
+{% set breadcrumb = [] %}
+
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{% block meta_description %}{% endblock meta_description %}">
+    <meta name="author" content="{% block meta_author %}{% endblock meta_author %}">
+
+    <title>{% block title %}Your Twitter Bootstrap based application{% endblock title %}</title>
+
+    {% block stylesheets %}
+        {% stylesheets filter='less' output='bundles/bootstrapp/css/base.css'
+            "@BootstrappBundle/Resources/public/less/base.less"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+    {% endblock stylesheets %}
+
+    {% block assets_stylesheets %}
+        {% for vendor in app.vendors %}
+            {{ assets.stylesheets(vendor) }}
+        {% endfor %}
+    {% endblock assets_stylesheets %}
+
+    {% block javascripts_head %}
+        {# Append JavaScript at the bottom for fast page loading except in special cases. #}
+        {# Le HTML5 shim, for IE6-8 support of HTML5 elements #}
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    {% endblock javascripts_head %}
+
+    <!-- Le fav and touch icons -->
+    {% block icon %}
+    <link rel="shortcut icon" href="{{ asset('bundles/bootstrapp/ico/favicon.ico') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-144.png') }}" sizes="144x144">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-114.png') }}" sizes="114x114">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-72.png') }}" sizes="72x72">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-57.png') }}">
+    {% endblock icon %}
+</head>
+<body class="{{body.class|default(null)}}">
+{% block body %}
+    {% block navbar %}{% include 'BootstrappBundle::navbar.html.twig' %}{% endblock navbar %}
+
+    <div class="container{{ layout }}">
+        <div class="row{{ layout }}">
+            {% block container %}
+            <header>
+                {% block header %}
+                <div class="page-header">
+                    <h1>{% block headline %}Twitter Bootstrap base layout{% endblock headline %}</h1>
+                </div>
+                {% if breadcrumb|length %}
+                    {% include 'BootstrappBundle::breadcrumb.html.twig' with {'breadcrumb' : breadcrumb} %}
+                {% endif %}
+                {% endblock header %}
+            </header>
+
+            <div class="flashes">
+                {% block flashes %}
+                {% import 'BootstrappBundle:Macro:alert.html.twig' as alert %}
+                {{ alert.session_flashbag(false, true, true, 'fade in') }}
+
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-message">
+                    <em>Notice</em>: {{ flashMessage }}
+                </div>
+                {% endfor %}
+                {% endblock flashes %}
+            </div>
+
+            <div class="content">
+                {% block content %}
+                    <p>
+                        Cupcake ipsum dolor sit. Amet topping sesame snaps fruitcake sesame snaps. Bonbon danish pudding liquorice bear claw croissant jelly-o lemon drops cupcake. Chupa chups jelly bear claw. Sweet roll cake candy macaroon applicake. Tiramisu chocolate cake sugar plum candy canes wypas pudding chocolate bar cheesecake. Wafer lemon drops ice cream sesame snaps chocolate toffee. Cupcake chupa chups gummi bears chocolate. Donut caramels dragée carrot cake donut candy. Sugar plum fruitcake sweet sugar plum cake.
+                        Cupcake toffee chocolate chocolate cake. Wafer chupa chups ice cream danish topping. Applicake chupa chups candy canes gingerbread donut. Jelly croissant tiramisu chocolate cake faworki ice cream chupa chups candy bear claw. Ice cream danish halvah bear claw pie halvah bonbon sweet roll. Jelly jelly marzipan brownie. Oat cake caramels sweet marzipan pudding sweet roll sugar plum biscuit. Pie pastry dessert ice cream.
+                        Cake jelly beans liquorice sesame snaps sesame snaps marshmallow. Cookie macaroon cupcake oat cake halvah gummies cheesecake. Danish sweet roll chupa chups cheesecake. Halvah faworki lemon drops sugar plum chocolate bear claw carrot cake. Cake caramels ice cream cupcake tootsie roll. Sugar plum pastry gummi bears tootsie roll pastry caramels.
+                        Candy canes fruitcake macaroon tiramisu tiramisu. Croissant candy canes croissant croissant danish carrot cake biscuit apple pie pudding. Marshmallow sesame snaps sesame snaps candy canes. Bonbon chocolate bar carrot cake brownie. Pudding candy canes danish apple pie jelly cake. Cookie dessert jelly beans dragée sweet donut candy canes gingerbread.
+                        Icing lemon drops halvah dragée icing sesame snaps wafer. Tootsie roll apple pie oat cake lemon drops soufflé. Bonbon jelly-o caramels bear claw applicake bonbon wypas halvah biscuit. Dessert jelly icing pudding powder cotton candy. Apple pie dragée carrot cake. Sesame snaps tiramisu cupcake cupcake applicake. Faworki chocolate sugar plum. Pie candy gummi bears topping. Cake oat cake fruitcake.
+                    </p>
+                {% endblock content %}
+            </div>
+            {% endblock container %}
+        </div>
+    </div>
+
+    <footer>
+        <div class="container{{ layout }}">
+            {% block footer %}
+            <p id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</p>
+            {% endblock footer %}
+        </div>
+    </footer>
+
+	{% block javascripts %}
+        {# 'http://code.jquery.com/jquery-1.8.3.min.js' #}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-1.8.3.min.js') }}"></script>
+        {% javascripts output='bundles/bootstrapp/js/bootstrap.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-transition.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-alert.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-modal.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-dropdown.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-scrollspy.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-tab.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-tooltip.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-popover.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-button.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-collapse.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-typeahead.js'
+            'bundles/bootstrapp/js/bootstrap/bootstrap-affix.js'
+        %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock javascripts %}
+
+    {% block assets_javascripts %}
+        {% for vendor in app.vendors %}
+            {{ assets.javascripts(vendor) }}
+        {% endfor %}
+    {% endblock assets_javascripts %}
+{% endblock body %}
+</body>
+</html>

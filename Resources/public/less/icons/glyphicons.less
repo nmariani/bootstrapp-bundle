@@ -1,0 +1,194 @@
+/*!
+ * glyphicons.less v1.0.0
+ *
+ * Mixins implementation of the bootstrap sprites.less
+ * See bootstrap/sprites.less for more informations
+ *
+ * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+.glyphicons(@x:14px, @y:14px) {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  .ie7-restore-right-whitespace();
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("@{iconSpritePath}");
+  background-position: @x @y;
+  background-repeat: no-repeat;
+  margin-top: 1px;
+  &:before {
+    content: "";
+  }
+
+  &.icon-white {
+    background-image: url("@{iconWhiteSpritePath}");
+  }
+}
+
+/* White icons with optional class, or on hover/active states of certain elements */
+.nav-tabs > .active > a > [class^="icon-"],
+.nav-tabs > .active > a > [class*=" icon-"],
+.nav-pills > .active > a > [class^="icon-"],
+.nav-pills > .active > a > [class*=" icon-"],
+.nav-list > .active > a > [class^="icon-"],
+.nav-list > .active > a > [class*=" icon-"],
+.navbar-inverse .nav > .active > a > [class^="icon-"],
+.navbar-inverse .nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("@{iconWhiteSpritePath}");
+}
+
+.glyphicons-glass()              { .glyphicons(0, 0); }
+.glyphicons-music()              { .glyphicons(-24px, 0); }
+.glyphicons-search()             { .glyphicons(-48px, 0); }
+.glyphicons-envelope()           { .glyphicons(-72px, 0); }
+.glyphicons-heart()              { .glyphicons(-96px, 0); }
+.glyphicons-star()               { .glyphicons(-120px, 0); }
+.glyphicons-star-empty()         { .glyphicons(-144px, 0); }
+.glyphicons-user()               { .glyphicons(-168px, 0); }
+.glyphicons-film()               { .glyphicons(-192px, 0); }
+.glyphicons-th-large()           { .glyphicons(-216px, 0); }
+.glyphicons-th()                 { .glyphicons(-240px, 0); }
+.glyphicons-th-list()            { .glyphicons(-264px, 0); }
+.glyphicons-ok()                 { .glyphicons(-288px, 0); }
+.glyphicons-remove()             { .glyphicons(-312px, 0); }
+.glyphicons-zoom-in()            { .glyphicons(-336px, 0); }
+.glyphicons-zoom-out()           { .glyphicons(-360px, 0); }
+.glyphicons-off()                { .glyphicons(-384px, 0); }
+.glyphicons-signal()             { .glyphicons(-408px, 0); }
+.glyphicons-cog()                { .glyphicons(-432px, 0); }
+.glyphicons-trash()              { .glyphicons(-456px, 0); }
+
+.glyphicons-home()               { .glyphicons(0, -24px); }
+.glyphicons-file()               { .glyphicons(-24px, -24px); }
+.glyphicons-time()               { .glyphicons(-48px, -24px); }
+.glyphicons-road()               { .glyphicons(-72px, -24px); }
+.glyphicons-download-alt()       { .glyphicons(-96px, -24px); }
+.glyphicons-download()           { .glyphicons(-120px, -24px); }
+.glyphicons-upload()             { .glyphicons(-144px, -24px); }
+.glyphicons-inbox()              { .glyphicons(-168px, -24px); }
+.glyphicons-play-circle()        { .glyphicons(-192px, -24px); }
+.glyphicons-repeat()             { .glyphicons(-216px, -24px); }
+.glyphicons-refresh()            { .glyphicons(-240px, -24px); }
+.glyphicons-list-alt()           { .glyphicons(-264px, -24px); }
+.glyphicons-lock()               { .glyphicons(-287px, -24px); }
+.glyphicons-flag()               { .glyphicons(-312px, -24px); }
+.glyphicons-headphones()         { .glyphicons(-336px, -24px); }
+.glyphicons-volume-off()         { .glyphicons(-360px, -24px); }
+.glyphicons-volume-down()        { .glyphicons(-384px, -24px); }
+.glyphicons-volume-up()          { .glyphicons(-408px, -24px); }
+.glyphicons-qrcode()             { .glyphicons(-432px, -24px); }
+.glyphicons-barcode()            { .glyphicons(-456px, -24px); }
+
+.glyphicons-tag()                { .glyphicons(0, -48px); }
+.glyphicons-tags()               { .glyphicons(-25px, -48px); }
+.glyphicons-book()               { .glyphicons(-48px, -48px); }
+.glyphicons-bookmark()           { .glyphicons(-72px, -48px); }
+.glyphicons-print()              { .glyphicons(-96px, -48px); }
+.glyphicons-camera()             { .glyphicons(-120px, -48px); }
+.glyphicons-font()               { .glyphicons(-144px, -48px); }
+.glyphicons-bold()               { .glyphicons(-167px, -48px); }
+.glyphicons-italic()             { .glyphicons(-192px, -48px); }
+.glyphicons-text-height()        { .glyphicons(-216px, -48px); }
+.glyphicons-text-width()         { .glyphicons(-240px, -48px); }
+.glyphicons-align-left()         { .glyphicons(-264px, -48px); }
+.glyphicons-align-center()       { .glyphicons(-288px, -48px); }
+.glyphicons-align-right()        { .glyphicons(-312px, -48px); }
+.glyphicons-align-justify()      { .glyphicons(-336px, -48px); }
+.glyphicons-list()               { .glyphicons(-360px, -48px); }
+.glyphicons-indent-left()        { .glyphicons(-384px, -48px); }
+.glyphicons-indent-right()       { .glyphicons(-408px, -48px); }
+.glyphicons-facetime-video()     { .glyphicons(-432px, -48px); }
+.glyphicons-picture()            { .glyphicons(-456px, -48px); }
+
+.glyphicons-pencil()             { .glyphicons(0, -72px); }
+.glyphicons-map-marker()         { .glyphicons(-24px, -72px); }
+.glyphicons-adjust()             { .glyphicons(-48px, -72px); }
+.glyphicons-tint()               { .glyphicons(-72px, -72px); }
+.glyphicons-edit()               { .glyphicons(-96px, -72px); }
+.glyphicons-share()              { .glyphicons(-120px, -72px); }
+.glyphicons-check()              { .glyphicons(-144px, -72px); }
+.glyphicons-move()               { .glyphicons(-168px, -72px); }
+.glyphicons-step-backward()      { .glyphicons(-192px, -72px); }
+.glyphicons-fast-backward()      { .glyphicons(-216px, -72px); }
+.glyphicons-backward()           { .glyphicons(-240px, -72px); }
+.glyphicons-play()               { .glyphicons(-264px, -72px); }
+.glyphicons-pause()              { .glyphicons(-288px, -72px); }
+.glyphicons-stop()               { .glyphicons(-312px, -72px); }
+.glyphicons-forward()            { .glyphicons(-336px, -72px); }
+.glyphicons-fast-forward()       { .glyphicons(-360px, -72px); }
+.glyphicons-step-forward()       { .glyphicons(-384px, -72px); }
+.glyphicons-eject()              { .glyphicons(-408px, -72px); }
+.glyphicons-chevron-left()       { .glyphicons(-432px, -72px); }
+.glyphicons-chevron-right()      { .glyphicons(-456px, -72px); }
+
+.glyphicons-plus-sign()          { .glyphicons(0, -96px); }
+.glyphicons-minus-sign()         { .glyphicons(-24px, -96px); }
+.glyphicons-remove-sign()        { .glyphicons(-48px, -96px); }
+.glyphicons-ok-sign()            { .glyphicons(-72px, -96px); }
+.glyphicons-question-sign()      { .glyphicons(-96px, -96px); }
+.glyphicons-info-sign()          { .glyphicons(-120px, -96px); }
+.glyphicons-screenshot()         { .glyphicons(-144px, -96px); }
+.glyphicons-remove-circle()      { .glyphicons(-168px, -96px); }
+.glyphicons-ok-circle()          { .glyphicons(-192px, -96px); }
+.glyphicons-ban-circle()         { .glyphicons(-216px, -96px); }
+.glyphicons-arrow-left()         { .glyphicons(-240px, -96px); }
+.glyphicons-arrow-right()        { .glyphicons(-264px, -96px); }
+.glyphicons-arrow-up()           { .glyphicons(-289px, -96px); }
+.glyphicons-arrow-down()         { .glyphicons(-312px, -96px); }
+.glyphicons-share-alt()          { .glyphicons(-336px, -96px); }
+.glyphicons-resize-full()        { .glyphicons(-360px, -96px); }
+.glyphicons-resize-small()       { .glyphicons(-384px, -96px); }
+.glyphicons-plus()               { .glyphicons(-408px, -96px); }
+.glyphicons-minus()              { .glyphicons(-433px, -96px); }
+.glyphicons-asterisk()           { .glyphicons(-456px, -96px); }
+
+.glyphicons-exclamation-sign()   { .glyphicons(0, -120px); }
+.glyphicons-gift()               { .glyphicons(-24px, -120px); }
+.glyphicons-leaf()               { .glyphicons(-48px, -120px); }
+.glyphicons-fire()               { .glyphicons(-72px, -120px); }
+.glyphicons-eye-open()           { .glyphicons(-96px, -120px); }
+.glyphicons-eye-close()          { .glyphicons(-120px, -120px); }
+.glyphicons-warning-sign()       { .glyphicons(-144px, -120px); }
+.glyphicons-plane()              { .glyphicons(-168px, -120px); }
+.glyphicons-calendar()           { .glyphicons(-192px, -120px); }
+.glyphicons-random()             { .glyphicons(-216px, -120px); width: 16px; }
+.glyphicons-comment()            { .glyphicons(-240px, -120px); }
+.glyphicons-magnet()             { .glyphicons(-264px, -120px); }
+.glyphicons-chevron-up()         { .glyphicons(-288px, -120px); }
+.glyphicons-chevron-down()       { .glyphicons(-313px, -119px); }
+.glyphicons-retweet()            { .glyphicons(-336px, -120px); }
+.glyphicons-shopping-cart()      { .glyphicons(-360px, -120px); }
+.glyphicons-folder-close()       { .glyphicons(-384px, -120px); }
+.glyphicons-folder-open()        { .glyphicons(-408px, -120px); width: 16px; }
+.glyphicons-resize-vertical()    { .glyphicons(-432px, -119px); }
+.glyphicons-resize-horizontal()  { .glyphicons(-456px, -118px); }
+
+.glyphicons-hdd()                     { .glyphicons(0, -144px); }
+.glyphicons-bullhorn()                { .glyphicons(-24px, -144px); }
+.glyphicons-bell()                    { .glyphicons(-48px, -144px); }
+.glyphicons-certificate()             { .glyphicons(-72px, -144px); }
+.glyphicons-thumbs-up()               { .glyphicons(-96px, -144px); }
+.glyphicons-thumbs-down()             { .glyphicons(-120px, -144px); }
+.glyphicons-hand-right()              { .glyphicons(-144px, -144px); }
+.glyphicons-hand-left()               { .glyphicons(-168px, -144px); }
+.glyphicons-hand-up()                 { .glyphicons(-192px, -144px); }
+.glyphicons-hand-down()               { .glyphicons(-216px, -144px); }
+.glyphicons-circle-arrow-right()      { .glyphicons(-240px, -144px); }
+.glyphicons-circle-arrow-left()       { .glyphicons(-264px, -144px); }
+.glyphicons-circle-arrow-up()         { .glyphicons(-288px, -144px); }
+.glyphicons-circle-arrow-down()       { .glyphicons(-312px, -144px); }
+.glyphicons-globe()                   { .glyphicons(-336px, -144px); }
+.glyphicons-wrench()                  { .glyphicons(-360px, -144px); }
+.glyphicons-tasks()                   { .glyphicons(-384px, -144px); }
+.glyphicons-filter()                  { .glyphicons(-408px, -144px); }
+.glyphicons-briefcase()               { .glyphicons(-432px, -144px); }
+.glyphicons-fullscreen()              { .glyphicons(-456px, -144px); }

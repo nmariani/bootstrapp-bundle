@@ -1,0 +1,79 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    "@BootstrappBundle/Resources/public/css/pickadate.css"
+    "@BootstrappBundle/Resources/public/less/jdewit-timepicker.less"
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    <style type="text/css">
+        .calendar {width: 400px;}
+        .calendar input[type=text]:focus,
+        .calendar .pickadate__holder {
+            height: auto;
+            position: relative;
+            z-index: 10;
+        }
+        .calendar .pickadate__calendar--wrap {
+            max-width: 100%;
+            max-height: none;
+            top: .5em;
+        }
+        .calendar .pickadate__calendar--wrap {
+            box-shadow: none;
+        }
+        .calendar .pickadate__calendar {
+            border-color: #eee;
+            border-width: 4px;
+            border-radius: 0;
+        }
+        .calendar .pickadate__month--nav {
+            font-size: .8em;
+        }
+        .calendar .pickadate__month--wrap {
+            float: left;
+            margin-left: 20%;
+            width: 30%;
+        }
+        .calendar .pickadate__year--wrap {
+            float: right;
+            margin-right: 20%;
+            width: 20%;
+        }
+        .calendar .pickadate__month--selector,
+        .calendar .pickadate__year--selector {
+            width: 100%;
+        }
+    </style>
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'pickadate', 'url':path('bootstrapp_pickadate')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <form action="{{ path('bootstrapp_pickadate') }}" method="post" {{ form_enctype(form) }}>
+    <h4>Date and time pickers</h4>
+    <h5>Pickadate by amsul : <a href="http://amsul.github.com/pickadate.js">http://amsul.github.com/pickadate.js</a></h5>
+    <div class="well">
+        {{ form_row(form.date) }}
+        {{ form_row(form.datetime) }}
+        <div class="calendar">
+            <input type="date" class="pickadate" style="display:none;"/>
+        </div>
+    </div>
+    {{ form_rest(form) }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-pickadate.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/pickadate.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jdewit-timepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jdewit.js') }}"></script>
+{% endblock javascripts %}

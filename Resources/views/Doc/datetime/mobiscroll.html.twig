@@ -1,0 +1,45 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='less' output='bundles/bootstrapp/css/mobiscroll.css'
+    "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.core.css"
+    "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.animation.css"
+    "@BootstrappBundle/Resources/public/less/mobiscroll.less"
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'mobiscroll', 'url':path('bootstrapp_mobiscroll')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <form action="{{ path('bootstrapp_mobiscroll') }}" method="post" {{ form_enctype(form) }}>
+    <h4>Date and time pickers</h4>
+    <h5>Mobiscroll date & time picker by acidb : <a href="http://mobiscroll.com">http://mobiscroll.com</a></h5>
+    <div class="well">
+        {{ form_row(form.date) }}
+        {{ form_row(form.time) }}
+        {{ form_row(form.datetime) }}
+    </div>
+    {{ form_rest(form) }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output='bundles/bootstrapp/js/mobiscroll.js'
+    'bundles/bootstrapp/js/mobiscroll/mobiscroll.core.js'
+    'bundles/bootstrapp/js/mobiscroll/mobiscroll.datetime.js'
+    'bundles/bootstrapp/js/mobiscroll/mobiscroll.select.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.core-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.datetime-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-mobiscroll.js') }}"></script>
+{% endblock javascripts %}

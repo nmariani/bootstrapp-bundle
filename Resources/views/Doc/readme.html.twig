@@ -1,0 +1,75 @@
+{% extends 'BootstrappBundle:Layout:app.html.twig' %}
+
+{% block headline %}Bootstrapp{% endblock %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'Readme', 'url':path('bootstrapp_readme')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <h4>What is BootstrappBundle?</h4>
+    BootstrappBundle is the best way to :
+    <ul>
+        <li>grab the latest [Twitter Bootstrap assets](http://twitter.github.com/bootstrap/)</li>
+        <li>start building [Symfony2](http://www.symfony.com) app with a nice UI by using the given twig templates</li>
+    </ul>
+
+    <h4>Features</h4>
+    <ul>
+        <li>Twitter bootstrap assets (less, js, img)</li>
+        <li>Twig templates for use with symfony2 Form component</li>
+        <li>render a form either via the form builder or the template engine</li>
+        <li>implement various bootstrap2 features</li>
+        <li>javascripts, stylesheets, and twig blocks for dynamic collections</li>
+        <li>A generic Navbar class to generate easily a customized Navbar from within your code (ex : depending on the user)</li>
+    </ul>
+    <p>You can see a short demonstration <a href="{{ path('bootstrapp_demo') }}">here</a>.</p>
+
+    <h4>Documentation</h4>
+    <p>The bulk of the documentation is stored in the `Resources/doc/index.md` file in this bundle.</p>
+
+    <h4>Requirements</h4>
+    <p>Symfony2.1 on PHP 5.3.3 required.</p>
+
+    <h4>Installation</h4>
+    <p>BootstrappBundle is not yet available via packagist.<br/>
+    But installing this bundle in your existing Symfony2 application is still simple as adding a few lines in your composer.json.
+        <pre>
+    {
+        "require": {
+        "nmariani/bootstrapp-bundle": "dev-master"
+        },
+        "repositories": [
+            {
+                "type": "package",
+                "package": {
+                    "name": "nmariani/bootstrapp-bundle",
+                    "version": "dev-master",
+                    "source": {
+                    "url": "https://github.com/nmariani/bootstrapp-bundle.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                    "dist": {
+                        "url": "https://github.com/nmariani/bootstrapp-bundle/zipball/master",
+                        "type": "zip"
+                    }
+                }
+            }
+        ]
+    }
+        </pre>
+    </p>
+    <p>Then, update your vendors to install BootstrappBundle and its dependencies : <code>php composer.phar update</code></p>
+
+    <h4>Contribute</h4>
+    <p>
+    If you want to contribute your code please be sure that your PR's are valid to Symfony2.1 Coding Standards.
+    You can automatically fix your code for that
+    with [PHP-CS-Fixer](http://cs.sensiolabs.org) tool.
+    <p>
+
+    <h4>License</h4>
+    <p>This bundle is under the MIT license. See the complete license in the bundle: [LICENCE](LICENCE).</p>
+{% endblock %}

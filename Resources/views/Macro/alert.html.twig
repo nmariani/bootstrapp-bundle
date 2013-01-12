@@ -1,0 +1,34 @@
+{# Displays an alert message #}
+{% macro message(type, message, close, use_raw, class) -%}
+    <div class="alert alert-{{ type }} {{ class|default('') }}">
+        {%- if close|default(false) -%}
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        {%- endif -%}
+
+        {%- if use_raw|default(false) -%}
+        {{ message|trans|raw }}
+        {%- else -%}
+        {{ message|trans }}
+        {%- endif -%}
+    </div>
+{%- endmacro %}
+
+
+{# Displays flashbag messages from the session #}
+{% macro session_flashbag(type, close, use_raw, class) %}
+    {% if type|default(false) %}
+        {% set types = [type] %}
+    {% else %}
+        {% set types = ['info', 'error', 'warning', 'notice', 'success'] %}
+    {% endif %}
+    {% for type in types %}
+        {% set flashes = app.session.flashbag.get(type) %}
+        {% if flashes|length > 0 %}
+            {% for flash in flashes %}
+                {% if flash|length %}
+                    {{ _self.message(type, flash, close, use_raw, class) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

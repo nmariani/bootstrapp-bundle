@@ -1,0 +1,14 @@
+# alert
+alert:
+    heading:
+        info: Information
+        warn: Warning
+        error: Error
+
+# modal
+modal:
+    header: Confirm your action.
+    body: Are you sure you want to perform this action?
+    button:
+        ok: Yes
+        cancel: Cancel

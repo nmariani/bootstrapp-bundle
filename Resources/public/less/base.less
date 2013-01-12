@@ -1,0 +1,162 @@
+/*!
+ * base.less v1.0.0
+ *
+ * Copyright 2012 n@mariani
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+
+/*------------------------------*
+ * Twitter Bootstrap less files *
+ *------------------------------*/
+@import "bootstrap/bootstrap.less";
+@import "bootstrap/responsive.less";
+
+/*------------------------------*
+ *      BootstrappBundle        *
+ *------------------------------*/
+// Define new variables or override bootstrap
+@import "variables.less";
+@import "mixins.less";
+
+
+// Common
+// --------------------
+div.inline-children > *,
+form.inline-children > * {
+    display: inline-block;
+    .ie7-inline-block();
+}
+div.inline {
+  display: inline-block;
+  .ie7-inline-block();
+}
+
+// Dropdown
+// --------------------
+.dropdown-menu {
+    min-width: 100px;
+    margin:0;
+}
+// Hover state
+.dropdown-menu a:hover,
+.dropdown-menu .active a,
+.dropdown-menu .active a:hover {
+    color: @white;
+    text-decoration: none;
+    background-color: @baseColor;
+}
+.dropdown-menu li a:hover > [class^="icon-"],
+.dropdown-menu li a:hover > [class*=" icon-"],
+.dropdown-menu .active a > [class^="icon-"],
+.dropdown-menu .active a > [class*=" icon-"],
+.dropdown-menu .active a:hover > [class^="icon-"],
+.dropdown-menu .active a:hover > [class*=" icon-"] {
+    color: @white;
+    background-image: url("@{iconWhiteSpritePath}");
+}
+// form
+.dropdown-menu li form {
+    margin:0;
+}
+
+.nav.locale-dropdown {
+    font-size: 13px;
+}
+.nav.locale-dropdown img {
+  margin-top:-2px;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: transparent;
+}
+
+.navbar-inverse li a > [class^="icon-"],
+.navbar-inverse li a > [class*=" icon-"] {
+  color: @white;
+  background-image: url("@{iconWhiteSpritePath}");
+}
+
+.nav img {
+  max-height: 18px;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    #gradient > .directional(#e5e5e5, #f2f2f2);
+    background-image: url("../../bootstrapp/images/patterns/whitey/whitey.png");
+    background-repeat: repeat;
+}
+
+body > .container,
+body > .container-fluid {
+    min-height: 100%;
+}
+
+body > .container > .row,
+body > .container-fluid > .row-fluid {
+    padding-top: 40px;
+    padding-bottom: 32px;
+}
+
+footer {
+    clear:both;
+    margin-top: -32px;
+    text-align: center;
+}
+
+footer > .container-fluid {
+    padding: 6px 12px;
+}
+
+p:last-child {
+    margin: 0;
+}
+
+// Forms
+// --------------------
+// read-only inputs not like disabled
+div.well input[readonly],
+div.well select[readonly],
+div.well textarea[readonly] {
+  cursor: default;
+  background-color: @inputBackground;
+}
+
+input.error {
+  border-color: @errorBorder;
+  color: @errorText;
+}
+
+.input-append,
+.input-prepend {
+  font-size: inherit;
+}
+
+[data-type="datetime"] {
+    .input-append:not(:first-of-type),
+    .input-prepend:not(:first-of-type) {
+        margin-left: -1px;
+    }
+
+    .input-prepend:not(:first-of-type),
+    .input-append:not(:last-of-type) {
+        .add-on {
+            .border-radius(0);
+        }
+    }
+
+    .input-prepend:not(:last-of-type),
+    .input-append:not(:first-of-type) {
+       input {
+         .border-radius(0);
+       }
+    }
+}

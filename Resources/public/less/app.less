@@ -1,0 +1,59 @@
+/*!
+ * app.less v1.0.0
+ *
+ * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+@import "base.less";
+
+th {
+    background-color: #f5f5f5;
+}
+tr.inactive {
+    background-color: #f5f5f5;
+    color: #969696;
+}
+tr.deleted {
+    background-color: #F2DEDE;
+    border-bottom: 1px solid #EED3D7;
+    color: #B94A48;
+}
+
+.navbar .nav > li > a:hover,
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
+    color: @baseColor;
+}
+
+#content {
+    background-color: #fff;
+    .border-radius(0 0 6px 6px);
+    .box-shadow(0 1px 3px rgba(0,0,0,.15));
+}
+#content-inner {
+    padding: 20px;
+}
+#sidebar {
+    span.nav-header {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+}
+#sidebar-header {
+    min-height: 120px;
+}
+#sidebar div.well {
+    padding: 6px;
+}
+.page-header {
+    background-color: @baseColor;
+    padding: 20px 0 20px 20px;
+    margin: -20px -20px 20px -20px;
+    color:@grayLighter;
+}
+.breadcrumb {
+    margin-left: -20px;
+    margin-right: -20px;
+}

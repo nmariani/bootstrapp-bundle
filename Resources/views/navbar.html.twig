@@ -1,0 +1,85 @@
+{% if navbar is not defined %}
+    {% set navbar = {'css':{'class':''}} %}
+{% endif %}
+
+<div class="navbar navbar-fixed-top {{ navbar.css.class }}">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            {% block navbar_brand %}
+            <a class="brand" href="{{ routes.home|default('#') }}">{{ brand|default('Bootstrapp Bundle') }}</a>
+            {% endblock navbar_brand %}
+
+            <ul class="nav pull-right">
+            {% block navbar_user_dropdown %}
+            {% if app.user %}
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="icon-user"></i> {% block navbar_username %}{{ app.user.username }}{% endblock navbar_username %}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% block navbar_user_dropdown_menu %}
+                    <li><a href="{{ routes.logout|default('#') }}">{% trans %}Sign out{% endtrans %}</a></li>
+                    {% endblock navbar_user_dropdown_menu %}
+                </ul>
+            </li>
+            {% endif %}
+            {% endblock navbar_user_dropdown %}
+            </ul>
+
+            <div class="nav-collapse collapse">
+                {% block navbar_collapse %}
+                <ul class="nav">
+                    {% block navbar_navigation %}
+                    <li class="active"><a href="{{ routes.home|default('#') }}">{% trans %}Home{% endtrans %}</a></li>
+                    {% if navigation is defined %}
+                    {% for item in navigation %}
+                        <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                    {% endfor %}
+                    {% endif %}
+                    {% endblock navbar_navigation %}
+                </ul>
+
+                {% render url('bootstrapp_locales', {
+                    'route':app.request.attributes.get('_route'),
+                    'routeParams':app.request.attributes.get('_route_params')|json_encode(),
+                    'locale':app.request.locale
+                }) %}
+
+                {% if menus is defined and menus|length > 0 %}
+                    {% for menu in menus %}
+                        {% if menu.items is defined and menu.items|length > 0 %}
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    {% if menu.icon is defined %}
+                                        <i class="{{ menu.icon }}"></i>
+                                    {% endif %}
+                                    {{ menu.caption|default('Caption') }} <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% block navbar_menu %}
+                                    {% for item in menu.items %}
+                                        {% if item.divider is defined %}
+                                            <li class="divider"></li>
+                                        {% endif %}
+                                        <li><a href="{{ item.href }}" target="{{ item.target|default('_self') }}">{{ item.caption }}</a></li>
+                                    {% endfor %}
+                                    {% endblock navbar_menu %}
+                                </ul>
+                            </li>
+                        </ul>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% endblock navbar_collapse %}
+            </div>
+        </div>
+    </div>
+</div>

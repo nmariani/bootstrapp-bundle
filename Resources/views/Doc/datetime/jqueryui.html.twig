@@ -1,0 +1,54 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {#
+    "@BootstrappBundle/Resources/public/css/jquery-ui/base/jquery.ui.core.css"
+    #}
+    {% stylesheets output='bundles/bootstrapp/css/jquery-ui/base/jquery-ui.css'
+    "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery-ui-1.9.2.custom.css"
+    "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery.ui.1.9.2.ie.css"
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+    {% stylesheets
+    "@BootstrappBundle/Resources/public/less/jdewit-timepicker.less"
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'jQuery', 'url':path('bootstrapp_jqueryui')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <h4>jQuery UI</h4>
+    <p>Resources
+    <ul>
+        <li>jQuery official website : <a href="http://jqueryui.com">http://jqueryui.com</a></li>
+        <li>Twitter Bootstrap theme for jQuery : <a href="http://addyosmani.github.com/jquery-ui-bootstrap">http://addyosmani.github.com/jquery-ui-bootstrap</a></li>
+    </ul>
+    </p>
+    <h5>jQuery UI datepicker</h5>
+    <div class="well">
+        {{ form_row(form.date) }}
+        {{ form_row(form.time) }}
+        {{ form_row(form.datetime) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output='bundles/bootstrapp/js/jquery-ui.js'
+    'bundles/bootstrapp/js/jquery-ui/jquery.ui.core.js'
+    'bundles/bootstrapp/js/jquery-ui/jquery.ui.datepicker.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/i18n/jquery.ui.datepicker-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jqueryui.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jdewit-timepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jdewit.js') }}"></script>
+{% endblock javascripts %}

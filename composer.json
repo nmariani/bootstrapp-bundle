@@ -1,0 +1,259 @@
+{
+    "name": "nmariani/bootstrapp-bundle",
+    "type": "symfony-bundle",
+    "description": "Bootstrap your Symfony2 application with ease.",
+    "keywords": ["bootstrapp", "bundle", "symfony2", "rad", "kick start", "kickstart", "kick off", "kickoff", "template", "twitter bootstrap"],
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Nathanaël Mariani",
+            "email": "github@nmariani.fr",
+            "homepage": "http://www.nmariani.fr/"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/config": ">=2.1.0",
+        "symfony/console": ">=2.1.0",
+        "symfony/dependency-injection": ">=2.1.0",
+        "symfony/finder": ">=2.1.0",
+        "symfony/form": ">=2.1.0",
+        "symfony/framework-bundle": ">=2.1.0",
+        "symfony/http-kernel": ">=2.1.0",
+        "symfony/locale": ">=2.1.0",
+        "symfony/options-resolver": ">=2.1.0",
+        "symfony/process": ">=2.1.0",
+
+        "sensio/framework-extra-bundle": ">=2.1.0",
+
+        "twitter/bootstrap": "dev-master",
+        "twitter/twitter-cldr-js": "dev-master",
+        "danielbruce/entypo": "dev-master",
+        "FortAwesome/Font-Awesome": "dev-master",
+        "jdewit/bootstrap-timepicker": "dev-master",
+        "eternicode/bootstrap-datepicker": "dev-master",
+        "vitalets/bootstrap-datepicker": "dev-master",
+        "acidb/mobiscroll": "dev-master",
+        "jquery/jquery-ui": "dev-master",
+        "addyosmani/jquery-ui-bootstrap": "dev-master",
+        "amsul/pickadate": "dev-master",
+        "dybskiy/redactor-js": "dev-master"
+    },
+
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/bootstrap",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/twitter/bootstrap.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/twitter/bootstrap/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/twitter-cldr-js",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/twitter/twitter-cldr-js.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/twitter/twitter-cldr-js/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "danielbruce/entypo",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/danielbruce/entypo.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/danielbruce/entypo/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "FortAwesome/Font-Awesome",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/FortAwesome/Font-Awesome/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "jdewit/bootstrap-timepicker",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/jdewit/bootstrap-timepicker.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/jdewit/bootstrap-timepicker/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "eternicode/bootstrap-datepicker",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/eternicode/bootstrap-datepicker.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/eternicode/bootstrap-datepicker/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "vitalets/bootstrap-datepicker",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/vitalets/bootstrap-datepicker.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/vitalets/bootstrap-datepicker/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "acidb/mobiscroll",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/acidb/mobiscroll.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/acidb/mobiscroll/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "jquery/jquery-ui",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/jquery/jquery-ui.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/jquery/jquery-ui/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "addyosmani/jquery-ui-bootstrap",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/addyosmani/jquery-ui-bootstrap.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/addyosmani/jquery-ui-bootstrap/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "amsul/pickadate",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/amsul/pickadate.js.git",
+                    "type": "git",
+                    "reference": "gh-pages"
+                },
+                "dist": {
+                    "url": "https://github.com/amsul/pickadate/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "dybskiy/redactor-js",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/dybskiy/redactor-js.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/dybskiy/redactor-js/zipball/master",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+
+    "autoload": {
+        "psr-0": { "nmariani\\BootstrappBundle": "" }
+    },
+
+    "target-dir": "nmariani/BootstrappBundle",
+
+    "scripts": {
+        "post-install-cmd": [
+            "nmariani\\BootstrappBundle\\Composer\\ScriptHandler::installAssets"
+        ],
+        "post-update-cmd": [
+        ]
+    },
+    
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

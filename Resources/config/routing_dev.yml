@@ -1,0 +1,28 @@
+bootstrapp_readme:
+    pattern:  /
+    defaults: { _controller: BootstrappBundle:Doc:readme }
+    requirements: { _method: GET }
+bootstrapp_demo:
+    pattern:  /demo
+    defaults: { _controller: BootstrappBundle:Doc:demo }
+    requirements: { _method: GET }
+bootstrapp_eyecon:
+    pattern:  /demo/eyecon
+    defaults: { _controller: BootstrappBundle:Doc:eyecon }
+    requirements: { _method: GET|POST }
+bootstrapp_jqueryui:
+    pattern:  /demo/jqueryui
+    defaults: { _controller: BootstrappBundle:Doc:jqueryui }
+    requirements: { _method: GET|POST }
+bootstrapp_pickadate:
+    pattern:  /demo/pickadate
+    defaults: { _controller: BootstrappBundle:Doc:pickadate }
+    requirements: { _method: GET|POST }
+bootstrapp_mobiscroll:
+    pattern:  /demo/mobiscroll
+    defaults: { _controller: BootstrappBundle:Doc:mobiscroll }
+    requirements: { _method: GET|POST }
+bootstrapp_redactor:
+    pattern:  /demo/redactor
+    defaults: { _controller: BootstrappBundle:Doc:redactor }
+    requirements: { _method: GET|POST }

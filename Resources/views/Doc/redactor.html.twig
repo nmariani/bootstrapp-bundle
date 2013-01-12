@@ -1,0 +1,43 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    "@BootstrappBundle/Resources/public/css/redactor.css"
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'Redactor', 'url':path('bootstrapp_redactor')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <h4>Text editors</h4>
+    <h5>Redactor : <a href="https://github.com/dybskiy/redactor-js">https://github.com/dybskiy/redactor-js</a></h5>
+    <div class="well">
+        <textarea class="redactor" name="content"></textarea>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output='bundles/bootstrapp/js/mobiscroll.js'
+    'bundles/bootstrapp/js/redactor.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(
+                function()
+                {
+                    $('.redactor').redactor({
+                        imageUpload: '{{ path('bootstrapp_redactor') }}',
+                        fileUpload: '{{ path('bootstrapp_redactor') }}'
+                    });
+                }
+        );
+    </script>
+{% endblock javascripts %}

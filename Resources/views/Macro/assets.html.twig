@@ -1,0 +1,92 @@
+{# Load Bootstrapp vendors assets #}
+
+{# Stylesheets manager #}
+{% macro stylesheets(vendor) %}
+{# date pickers #}
+    {% if vendor == 'eyecon' %}
+        {% stylesheets filter='less' output='bundles/bootstrapp/css/eyecon.css'
+        "@BootstrappBundle/Resources/public/less/vitalets-datepicker.less"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+
+    {% elseif vendor == 'pickadate' %}
+        {% stylesheets
+        "@BootstrappBundle/Resources/public/css/pickadate.css"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+
+    {% elseif vendor == 'jqueryui' %}
+        {#
+        "@BootstrappBundle/Resources/public/css/jquery-ui/base/jquery.ui.core.css"
+        #}
+        {% stylesheets output='bundles/bootstrapp/css/jquery-ui/base/jquery-ui.css'
+        "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery-ui-1.9.2.custom.css"
+        "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery.ui.1.9.2.ie.css"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+
+{# time pickers #}
+    {% elseif vendor == 'jdewit' %}
+        {% stylesheets filter='less' output='bundles/bootstrapp/css/jdewit.css'
+        "@BootstrappBundle/Resources/public/less/jdewit-timepicker.less"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+
+{# datetime pickers #}
+    {% elseif vendor == 'mobiscroll' %}
+        {% stylesheets filter='less' output='bundles/bootstrapp/css/mobiscroll.css'
+        "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.core.css"
+        "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.animation.css"
+        "@BootstrappBundle/Resources/public/less/mobiscroll.less"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+    {% endif %}
+{% endmacro %}
+
+
+{# Javascripts manager #}
+{% macro javascripts(vendor) %}
+{# date pickers #}
+    {% if vendor == 'eyecon' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets-datepicker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets-locales/bootstrap-datepicker.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-eyecon.js') }}"></script>
+
+    {% elseif vendor == 'pickadate' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-pickadate.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/pickadate.js') }}"></script>
+
+    {% elseif vendor == 'jqueryui' %}
+        {% javascripts output='bundles/bootstrapp/js/jquery-ui.js'
+        'bundles/bootstrapp/js/jquery-ui/jquery.ui.core.js'
+        'bundles/bootstrapp/js/jquery-ui/jquery.ui.datepicker.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/i18n/jquery.ui.datepicker-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jqueryui.js') }}"></script>
+
+{# time pickers #}
+    {% elseif vendor == 'jdewit' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jdewit-timepicker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jdewit.js') }}"></script>
+
+{# datetime pickers #}
+    {% elseif vendor == 'mobiscroll' %}
+        {% javascripts output='bundles/bootstrapp/js/mobiscroll.js'
+        'bundles/bootstrapp/js/mobiscroll/mobiscroll.core.js'
+        'bundles/bootstrapp/js/mobiscroll/mobiscroll.datetime.js'
+        'bundles/bootstrapp/js/mobiscroll/mobiscroll.select.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.core-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.datetime-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-mobiscroll.js') }}"></script>
+    {% endif %}
+{% endmacro %}

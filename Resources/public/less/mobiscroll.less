@@ -1,0 +1,191 @@
+/*!
+ * mobiscroll.less v1.0.0
+ *
+ * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*------------------------------*
+ * Twitter Bootstrap variables  *
+ *------------------------------*/
+@import "variables.less";
+@import "mixins.less";
+
+
+/*------------------------------*
+ *      mobiscrollBundle        *
+ *------------------------------*/
+
+.mobiscroll .dw {
+  padding: 0;
+  color: @baseColor;
+  background: @grayDarker;
+  border: 1px solid @inputBorder;
+}
+.mobiscroll .dwi {
+  margin: -1px 0;
+}
+.mobiscroll .dwwc, .mobiscroll .dwwl, .mobiscroll .dww, .mobiscroll .dwb {
+  background: none;
+}
+.mobiscroll .dwwr
+{
+  padding: 0;
+}
+.mobiscroll .dwc {
+  margin: 0;
+  padding: 30px 2px 0 2px;
+}
+[data-type="date"] .mobiscroll .dwc {
+  padding: 30px 5px 0 20px;
+}
+.mobiscroll .dwhl {
+  padding: 1px 10px;
+}
+.mobiscroll .dwv {
+  height: 36px;
+  line-height: 36px;
+  padding: 0;
+  border-bottom: 2px solid @baseColor;
+  font-size: 18px;
+}
+.mobiscroll .dwwl {
+  margin: 0 2px;
+}
+.mobiscroll .dww {
+  border: 0;
+}
+.mobiscroll .dwpm .dww {
+  border: 0;
+  background: none;
+}
+.mobiscroll .dww li {
+  color: @white;
+  font-size: 18px;
+  text-shadow: none;
+}
+.mobiscroll .dwwo {
+  background: linear-gradient(@grayDarker 0%,rgba(40,40,40,0) 52%, rgba(40,40,40,0) 48%, @grayDarker 100%);
+  background: -webkit-gradient(linear,left bottom,left top,from(#282828),color-stop(0.52, rgba(40,40,40,0)),color-stop(0.48, rgba(40,40,40,0)),to(@grayDarker));
+  background: -moz-linear-gradient(@grayDarker 0%,rgba(40,40,40,0) 52%, rgba(40,40,40,0) 48%, @grayDarker 100%);
+  background: -o-linear-gradient(@grayDarker 0%,rgba(40,40,40,0) 52%, rgba(40,40,40,0) 48%, @grayDarker 100%);
+}
+.mobiscroll .dwwb {
+  background: @grayDarker;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.mobiscroll .dwwb span {
+  display: none;
+}
+.mobiscroll .dwwb:after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -8px;
+  margin-left: -8px;
+  color: @grayLight;
+  width: 0;
+  height: 0;
+  border-width: 8px;
+  border-style: solid;
+  content: '';
+}
+.mobiscroll .dwwbm{
+  top: 0;
+  bottom: auto;
+}
+.mobiscroll .dwwbp{
+  bottom: 0;
+  top: auto;
+}
+.mobiscroll .dwwbm:after {
+  border-color: transparent transparent @grayLight transparent;
+}
+.mobiscroll .dwwbp:after {
+  border-color: @grayLight transparent transparent transparent;
+}
+.mobiscroll .dwwl .dwb-a {
+  background: @grayDarker;
+}
+.mobiscroll .dwwbm.dwb-a:after {
+  border-color: transparent transparent @baseColor transparent;
+}
+.mobiscroll .dwwbp.dwb-a:after {
+  border-color: @baseColor transparent transparent transparent;
+}
+.mobiscroll .dwwol {
+  width: 60%;
+  left: 20%;
+  height: 36px;
+  border-top: 2px solid @baseColor;
+  border-bottom: 2px solid @baseColor;
+  margin-top: -20px;
+  display: block;
+}
+.mobiscroll .dwbc {
+  border-top: 1px solid @gray;
+  padding: 0;
+}
+.mobiscroll .dwb {
+  height: 36px;
+  line-height: 36px;
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+  text-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -webkit-box-shadow: none;
+}
+.mobiscroll .dwb-a {
+  background: @baseColor;
+}
+.mobiscroll .dwb-s .dwb, .mobiscroll .dwb-n .dwb {
+  border-right: 1px solid @gray;
+}
+.mobiscroll.light .dw {
+  background: @grayLighter;
+}
+.mobiscroll.light .dww li {
+  color: @black;
+}
+.mobiscroll.light .dwwo {
+  background: linear-gradient(@formActionsBackground 0%,rgba(245,245,245,0) 52%, rgba(245,245,245,0) 48%, @formActionsBackground 100%);
+  background: -webkit-gradient(linear,left bottom,left top,from(@formActionsBackground),color-stop(0.52, rgba(245,245,245,0)),color-stop(0.48, rgba(245,245,245,0)),to(@formActionsBackground));
+  background: -moz-linear-gradient(@formActionsBackground 0%,rgba(245,245,245,0) 52%, rgba(245,245,245,0) 48%, @formActionsBackground 100%);
+  background: -o-linear-gradient(@formActionsBackground 0%,rgba(245,245,245,0) 52%, rgba(245,245,245,0) 48%, @formActionsBackground 100%);
+}
+.mobiscroll.light .dwwb {
+  background: @grayLighter;
+  color: @grayLighter;
+}
+.mobiscroll.light .dwbc {
+  border-top: 1px solid @grayLighter;
+}
+.mobiscroll.light .dwb {
+  color: @black;
+}
+.mobiscroll.light .dwb-a {
+  color: @white;
+}
+.mobiscroll.light .dwb-s .dwb, .mobiscroll.light .dwb-n .dwb {
+  border-right: 1px solid @grayLighter;
+}
+/* Bubble positioning */
+.mobiscroll .dw-bubble-bottom .dw-arr {
+  border-color: transparent transparent @grayDarker transparent;
+}
+.mobiscroll .dw-bubble-top .dw-arr {
+  border-color: @grayDarker transparent transparent transparent;
+}
+/* Bubble positioning */
+.mobiscroll.light .dw-bubble-bottom .dw-arr {
+  border-color: transparent transparent @formActionsBackground transparent;
+}
+.mobiscroll.light .dw-bubble-top .dw-arr {
+  border-color: @formActionsBackground transparent transparent transparent;
+}
