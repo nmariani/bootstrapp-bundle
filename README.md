@@ -1,13 +1,23 @@
-README
-======
+BootstrappBundle
+================
 
 What is BootstrappBundle?
------------------
+-------------------------
 
-BootstrappBundle is the best way to :
+BootstrappBundle is the best way to start building a [Symfony2](http://www.symfony.com) app with a nice UI including :
 
-* grab the latest [Twitter Bootstrap assets](http://twitter.github.com/bootstrap/)
-* start building [Symfony2](http://www.symfony.com) app with a nice UI by using the given twig templates
+* latest [Twitter Bootstrap assets](http://twitter.github.com/bootstrap/)
+* additional icons : [Entypo](http://github.com/danielbruce/entypo), [Font Awesome](http://github.com/FortAwesome/Font-Awesome)
+* [TwitterCldr](http://github.com/twitter/twitter-cldr-js) for Unicode's Common Locale Data Repository (CLDR) use in Javascript
+* date, time and datetime pickers integration with CLDR Date and time formatting
+* * [jdewit Timepicker for Twitter Bootstrap](http://github.com/jdewit/bootstrap-timepicker)
+* * [eternicode fork of Stefan Petre's Datepicker for Bootstrap](http://github.com/eternicode/bootstrap-datepicker)
+* * [vitalets fork of Stefan Petre's Datepicker for Bootstrap](http://github.com/vitalets/bootstrap-datepicker)
+* * [acidb Mobiscroll](http://github.com/acidb/mobiscroll)
+* * [jQuery UI](http://github.com/jquery/jquery-ui) with [jQuery UI Bootstrap](http://github.com/addyosmani/jquery-ui-bootstrap)
+* * [amsul pickadate.js ](http://github.com/amsul/pickadate.js)
+* text editors
+* * [dybskiy redactor-js ](http://github.com/dybskiy/redactor-js)
 
 Requirements
 ------------
@@ -22,37 +32,35 @@ The bulk of the documentation is stored in the `Resources/doc/index.md` file in 
 Installation
 ------------
 
-BootstrappBundle is not yet available via packagist.
-But installing this bundle in your existing Symfony2 application is still simple as adding a few lines in your composer.json.
+BootstrappBundle is available via packagist.
+Installing this bundle in your existing Symfony2 application is simple as adding the few lines below.
+
+Add dependency in you composer.json file to grab Bootstrapp as a vendor.
 
     {
         "require": {
             "nmariani/bootstrapp-bundle": "dev-master"
-        },
-        "repositories": [
-            {
-                "type": "package",
-                "package": {
-                    "name": "nmariani/bootstrapp-bundle",
-                    "version": "dev-master",
-                    "source": {
-                        "url": "https://github.com/nmariani/bootstrapp-bundle.git",
-                        "type": "git",
-                        "reference": "master"
-                    },
-                    "dist": {
-                        "url": "https://github.com/nmariani/bootstrapp-bundle/zipball/master",
-                        "type": "zip"
-                    }
-                }
-            }
-        ]
+        }
     }
-
 
 Then, use composer to install BootstrappBundle and its dependencies :
 
     php composer.phar install
+
+Import Bootstrapp internal routing in your routing.yml file.
+
+    bootstrapp:
+      resource: "@BootstrappBundle/Resources/config/routing.yml"
+
+Demo
+----
+
+You can import Bootstrapp demo routes in your routing_dev.yml
+    bootstrapp:
+      resource: "@BootstrappBundle/Resources/config/routing_dev.yml"
+      prefix:   /{_locale}/bootstrapp
+
+Then you can visit /bootstrapp/demo url to access demo page.
 
 Features
 -----------------
