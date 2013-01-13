@@ -33,7 +33,7 @@
         "psr-0": { "nmariani\\BootstrappBundle": "" }
     },
 
-    "target-dir": "nmariani/BootstrappBundle",
+    "target-dir": "nmariani/Bundle/BootstrappBundle",
 
     "scripts": {
         "post-install-cmd": [
