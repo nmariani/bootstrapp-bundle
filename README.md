@@ -33,7 +33,7 @@ Installation
 ------------
 
 BootstrappBundle is available via packagist.
-Installing this bundle in your existing Symfony2 application is simple as adding the few lines below.
+Installing this bundle is simple as adding the few lines below.
 
 Add dependency in you composer.json file to grab Bootstrapp as a vendor.
 
