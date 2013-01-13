@@ -10,14 +10,14 @@ BootstrappBundle is the best way to start building a [Symfony2](http://www.symfo
 * additional icons : [Entypo](http://github.com/danielbruce/entypo), [Font Awesome](http://github.com/FortAwesome/Font-Awesome)
 * [TwitterCldr](http://github.com/twitter/twitter-cldr-js) for Unicode's Common Locale Data Repository (CLDR) use in Javascript
 * date, time and datetime pickers integration with CLDR Date and time formatting
-** [jdewit Timepicker for Twitter Bootstrap](http://github.com/jdewit/bootstrap-timepicker)
-** [eternicode fork of Stefan Petre's Datepicker for Bootstrap](http://github.com/eternicode/bootstrap-datepicker)
-** [vitalets fork of Stefan Petre's Datepicker for Bootstrap](http://github.com/vitalets/bootstrap-datepicker)
-** [acidb Mobiscroll](http://github.com/acidb/mobiscroll)
-** [jQuery UI](http://github.com/jquery/jquery-ui) with [jQuery UI Bootstrap](http://github.com/addyosmani/jquery-ui-bootstrap)
-** [amsul pickadate.js ](http://github.com/amsul/pickadate.js)
+    * [jdewit Timepicker for Twitter Bootstrap](http://github.com/jdewit/bootstrap-timepicker)
+    * [eternicode fork of Stefan Petre's Datepicker for Bootstrap](http://github.com/eternicode/bootstrap-datepicker)
+    * [vitalets fork of Stefan Petre's Datepicker for Bootstrap](http://github.com/vitalets/bootstrap-datepicker)
+    * [acidb Mobiscroll](http://github.com/acidb/mobiscroll)
+    * [jQuery UI](http://github.com/jquery/jquery-ui) with [jQuery UI Bootstrap](http://github.com/addyosmani/jquery-ui-bootstrap)
+    * [amsul pickadate.js ](http://github.com/amsul/pickadate.js)
 * text editors
-** [dybskiy redactor-js ](http://github.com/dybskiy/redactor-js)
+    * [dybskiy redactor-js ](http://github.com/dybskiy/redactor-js)
 
 Requirements
 ------------
