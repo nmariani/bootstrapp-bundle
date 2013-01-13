@@ -1,6 +1,8 @@
 BootstrappBundle
 ================
 
+*WARNING : THIS BUNDLE IS STILL IN EARLY STAGE OF DEVELOPMENT. YOU CAN USE IT AS IS BUT I ENCOURAGE YOU TO WAIT UNTIL IT IS FINALIZED!  *
+
 What is BootstrappBundle?
 -------------------------
 
@@ -56,21 +58,12 @@ Demo
 ----
 
 You can import Bootstrapp demo routes in your routing_dev.yml
+
     bootstrapp:
       resource: "@BootstrappBundle/Resources/config/routing_dev.yml"
       prefix:   /{_locale}/bootstrapp
 
 Then you can visit /bootstrapp/demo url to access demo page.
-
-Features
------------------
-
-* Twitter bootstrap assets (less, js, img)
-* Twig templates for use with symfony2 Form component
-  * render a form either via the form builder or the template engine
-  * implement various bootstrap2 features
-  * javascripts, stylesheets, and twig blocks for dynamic collections
-* A generic Navbar class to generate easily a customized Navbar from within your code (ex : depending on the user)
 
 Contribute
 ----------
