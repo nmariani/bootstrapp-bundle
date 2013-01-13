@@ -30,14 +30,14 @@
     },
 
     "autoload": {
-        "psr-0": { "nmariani\\BootstrappBundle": "" }
+        "psr-0": { "nmariani\\Bundle\\BootstrappBundle": "" }
     },
 
     "target-dir": "nmariani/Bundle/BootstrappBundle",
 
     "scripts": {
         "post-install-cmd": [
-            "nmariani\\BootstrappBundle\\Composer\\ScriptHandler::installAssets"
+            "nmariani\\Bundle\\BootstrappBundle\\Composer\\ScriptHandler::installAssets"
         ],
         "post-update-cmd": [
         ]
