@@ -166,7 +166,7 @@
         {
             "type": "package",
             "package": {
-                "name": "amsul/pickadate",
+                "name": "amsul/pickadate.js",
                 "version": "dev-master",
                 "source": {
                     "url": "https://github.com/amsul/pickadate.js.git",
@@ -174,7 +174,7 @@
                     "reference": "gh-pages"
                 },
                 "dist": {
-                    "url": "https://github.com/amsul/pickadate/zipball/master",
+                    "url": "https://github.com/amsul/pickadate.js/zipball/master",
                     "type": "zip"
                 }
             }
@@ -210,7 +210,7 @@
         "acidb/mobiscroll": "dev-master",
         "jquery/jquery-ui": "dev-master",
         "addyosmani/jquery-ui-bootstrap": "dev-master",
-        "amsul/pickadate": "dev-master",
+        "amsul/pickadate.js": "dev-master",
         "dybskiy/redactor-js": "dev-master.1.*"
     }
 }

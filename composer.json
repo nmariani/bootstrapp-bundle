@@ -29,6 +29,10 @@
         "sensio/framework-extra-bundle": ">=2.1.0"
     },
 
+    "suggest": {
+        "atoum/atoum-bundle": "dev-master"
+    },
+
     "autoload": {
         "psr-0": { "nmariani\\Bundle\\BootstrappBundle": "" }
     },
