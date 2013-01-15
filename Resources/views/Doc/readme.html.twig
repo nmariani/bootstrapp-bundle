@@ -8,68 +8,65 @@
 {% endblock header %}
 
 {% block content %}
-    <h4>What is BootstrappBundle?</h4>
-    BootstrappBundle is the best way to :
-    <ul>
-        <li>grab the latest [Twitter Bootstrap assets](http://twitter.github.com/bootstrap/)</li>
-        <li>start building [Symfony2](http://www.symfony.com) app with a nice UI by using the given twig templates</li>
-    </ul>
+    <h3>BootstrappBundle</h3>
+    <p><strong>WARNING : THIS BUNDLE IS STILL IN EARLY STAGE OF DEVELOPMENT. YOU CAN USE IT AS IS BUT I ENCOURAGE YOU TO WAIT UNTIL IT IS FINALIZED!</strong></p>
 
-    <h4>Features</h4>
+    <h4>What is BootstrappBundle?</h4>
+    <p>BootstrappBundle is the best way to start building a <a href="http://www.symfony.com">Symfony2</a> app with a nice UI including :</p>
     <ul>
-        <li>Twitter bootstrap assets (less, js, img)</li>
-        <li>Twig templates for use with symfony2 Form component</li>
-        <li>render a form either via the form builder or the template engine</li>
-        <li>implement various bootstrap2 features</li>
-        <li>javascripts, stylesheets, and twig blocks for dynamic collections</li>
-        <li>A generic Navbar class to generate easily a customized Navbar from within your code (ex : depending on the user)</li>
+        <li>latest <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap assets</a></li>
+        <li>additional icons : <a href="http://github.com/danielbruce/entypo">Entypo</a>, <a href="http://github.com/FortAwesome/Font-Awesome">Font Awesome</a></li>
+        <li><a href="http://github.com/twitter/twitter-cldr-js">TwitterCldr</a> for Unicode's Common Locale Data Repository (CLDR) use in Javascript</li>
+        <li>date, time and datetime pickers integration with CLDR Date and time formatting<ul>
+            <li><a href="http://github.com/jdewit/bootstrap-timepicker">jdewit Timepicker for Twitter Bootstrap</a></li>
+            <li><a href="http://github.com/eternicode/bootstrap-datepicker">eternicode fork of Stefan Petre's Datepicker for Bootstrap</a></li>
+            <li><a href="http://github.com/vitalets/bootstrap-datepicker">vitalets fork of Stefan Petre's Datepicker for Bootstrap</a></li>
+            <li><a href="http://github.com/acidb/mobiscroll">acidb Mobiscroll</a></li>
+            <li><a href="http://github.com/jquery/jquery-ui">jQuery UI</a> with <a href="http://github.com/addyosmani/jquery-ui-bootstrap">jQuery UI Bootstrap</a></li>
+            <li><a href="http://github.com/amsul/pickadate.js">amsul pickadate.js </a></li>
+        </ul>
+        </li>
+        <li>text editors
+            <ul>
+                <li><a href="http://github.com/dybskiy/redactor-js">dybskiy redactor-js </a></li>
+            </ul>
+        </li>
     </ul>
     <p>You can see a short demonstration <a href="{{ path('bootstrapp_demo') }}">here</a>.</p>
-
-    <h4>Documentation</h4>
-    <p>The bulk of the documentation is stored in the `Resources/doc/index.md` file in this bundle.</p>
 
     <h4>Requirements</h4>
     <p>Symfony2.1 on PHP 5.3.3 required.</p>
 
+    <h4>Documentation</h4>
+    <p>The bulk of the documentation is stored in the <code>Resources/doc/index.md</code> file in this bundle.</p>
+
     <h4>Installation</h4>
-    <p>BootstrappBundle is not yet available via packagist.<br/>
-    But installing this bundle in your existing Symfony2 application is still simple as adding a few lines in your composer.json.
-        <pre>
-    {
-        "require": {
+    <p>BootstrappBundle is available via packagist.
+        Installing this bundle is simple as adding the few lines below.</p>
+    <p>Add dependency in you composer.json file to grab Bootstrapp as a vendor.</p>
+    <pre><code>{
+    "require": {
         "nmariani/bootstrapp-bundle": "dev-master"
-        },
-        "repositories": [
-            {
-                "type": "package",
-                "package": {
-                    "name": "nmariani/bootstrapp-bundle",
-                    "version": "dev-master",
-                    "source": {
-                    "url": "https://github.com/nmariani/bootstrapp-bundle.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                    "dist": {
-                        "url": "https://github.com/nmariani/bootstrapp-bundle/zipball/master",
-                        "type": "zip"
-                    }
-                }
-            }
-        ]
     }
-        </pre>
-    </p>
-    <p>Then, update your vendors to install BootstrappBundle and its dependencies : <code>php composer.phar update</code></p>
+}</code></pre>
+    <p>Then, use composer to install BootstrappBundle and its dependencies :</p>
+    <pre><code>php composer.phar install</code></pre>
+    <p>Import Bootstrapp internal routing in your routing.yml file.</p>
+    <pre><code>bootstrapp:
+    resource: "@BootstrappBundle/Resources/config/routing.yml"</code></pre>
+
+    <h4>Demo</h4>
+    <p>You can import Bootstrapp demo routes in your routing_dev.yml</p>
+    <pre><code>bootstrapp:
+    resource: "@BootstrappBundle/Resources/config/routing_dev.yml"
+    prefix: /{_locale}/bootstrapp</code></pre>
+    <p>Then you can visit /bootstrapp/demo url to access demo page.</p>
 
     <h4>Contribute</h4>
-    <p>
-    If you want to contribute your code please be sure that your PR's are valid to Symfony2.1 Coding Standards.
-    You can automatically fix your code for that
-    with [PHP-CS-Fixer](http://cs.sensiolabs.org) tool.
-    <p>
+    <p>If you want to contribute your code please be sure that your PR's are valid to Symfony2.1 Coding Standards.
+        You can automatically fix your code for that
+        with <a href="http://cs.sensiolabs.org">PHP-CS-Fixer</a> tool.</p>
 
     <h4>License</h4>
-    <p>This bundle is under the MIT license. See the complete license in the bundle: [LICENCE](LICENCE).</p>
+    <p>This bundle is under the MIT license. See the complete license in the bundle.</p>
 {% endblock %}

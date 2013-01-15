@@ -74,6 +74,4 @@ with [PHP-CS-Fixer](http://cs.sensiolabs.org) tool.
 License
 -------
 
-This bundle is under the MIT license. See the complete license in the bundle:
-
-    [LICENCE](LICENCE).
+This bundle is under the MIT license. See the complete license in the bundle.
