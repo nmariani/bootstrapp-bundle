@@ -5,6 +5,7 @@ parameters:
     form.type.time.widget: jdewit
     form.type.datetime.widget: mobiscroll
     templating.globals.class: nmariani\Bundle\BootstrappBundle\Templating\GlobalVariables
+    knp_menu.renderer.twig.class: nmariani\Bundle\BootstrappBundle\Menu\Renderer\TwigRenderer
     knp_menu.renderer.twig.template: BootstrappBundle:Menu:knp_menu.html.twig
 
 services:
