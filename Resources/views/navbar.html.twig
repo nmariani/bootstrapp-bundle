@@ -35,16 +35,16 @@
 
             <div class="nav-collapse collapse">
                 {% block navbar_collapse %}
+                {% block navbar_navigation %}
                 <ul class="nav">
-                    {% block navbar_navigation %}
                     <li class="active"><a href="{{ routes.home|default('#') }}">{% trans %}Home{% endtrans %}</a></li>
                     {% if navigation is defined %}
-                    {% for item in navigation %}
+                        {% for item in navigation %}
                         <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
-                    {% endfor %}
+                        {% endfor %}
                     {% endif %}
-                    {% endblock navbar_navigation %}
                 </ul>
+                {% endblock navbar_navigation %}
 
                 {% render url('bootstrapp_locales', {
                     'route':app.request.attributes.get('_route'),
