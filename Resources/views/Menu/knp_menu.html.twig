@@ -49,11 +49,9 @@
 {# displaying the item #}
 <li{{ macros.attributes(attributes) }}>
     {% if is_dropdown %}
-    {{ block('dropdownElement') }}
-    {% elseif item.uri is not empty and (not item.current or options.currentAsLink) %}
-        {{ block('linkElement') }}
+        {{ block('dropdownElement') }}
     {% else %}
-        {{ block('spanElement') }}
+        {{ block('linkElement') }}
     {% endif %}
     {# render the list of children#}
     {{ block('list') }}
@@ -74,16 +72,7 @@
 {% endblock %}
 
 {% block linkElement %}
-    <a href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>{% if item.attribute('icon') is not empty  %}<i class="{{ item.attribute('icon') }}"></i> {% endif %}{{ block('label') }}</a>
-{% endblock %}
-
-{% block spanElement %}
-    <span>{{ macros.attributes(item.labelAttributes) }}>
-        {% if item.attribute('icon') is not empty  %}
-            <i class="{{ item.attribute('icon') }}"></i>
-        {% endif %}
-        {{ block('label') }}
-	</span>
+    <a href="{{ item.uri|default('#') }}"{{ macros.attributes(item.linkAttributes) }}>{% if item.attribute('icon') is not empty  %}<i class="{{ item.attribute('icon') }}"></i> {% endif %}{{ block('label') }}</a>
 {% endblock %}
 
 {% block dropdownElement %}
