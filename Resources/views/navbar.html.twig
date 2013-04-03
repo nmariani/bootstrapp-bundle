@@ -11,6 +11,7 @@
                 <span class="icon-bar"></span>
             </a>
 
+            {% block navbar_content %}
             {% block navbar_brand %}
             <a class="brand" href="{{ routes.home|default('#') }}">{{ brand|default('Bootstrapp Bundle') }}</a>
             {% endblock navbar_brand %}
@@ -80,6 +81,7 @@
                 {% endif %}
                 {% endblock navbar_collapse %}
             </div>
+            {% endblock navbar_content %}
         </div>
     </div>
 </div>
