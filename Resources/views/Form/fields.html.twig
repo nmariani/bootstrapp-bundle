@@ -78,7 +78,7 @@
 
 {% block form_row %}
 {% spaceless %}
-    {% if form.hasChildren %}
+    {% if form.children|length %}
         {{ form_widget(form) }}
     {% else %}
         <div class="control-group{% if errors %} error{% endif %}">
