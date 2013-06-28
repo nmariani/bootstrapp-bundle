@@ -54,10 +54,10 @@ EOT
     {
         $this->path = $this->getContainer()->get('kernel')->getBundle('BootstrappBundle')->getPath();
         if (empty($this->assets)) {
-            $output->writeln('<info>Installing all assets...</info>');
+            $output->writeln('<comment>Installing all assets...</comment>');
             $this->assets = self::$availableAssets;
         } else {
-            $output->writeln('<info>Installing assets : ' . implode(', ', $this->assets) . '...</info>');
+            $output->writeln('<comment>Installing assets : ' . implode(', ', $this->assets) . '...</comment>');
         }
 
         if(in_array('TwitterBootstrap', $this->assets)) {
