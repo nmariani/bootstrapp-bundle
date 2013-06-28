@@ -11,102 +11,194 @@ use Symfony\Component\Finder\Finder;
 
 class AssetsInstallCommand extends ContainerAwareCommand
 {
+    static private $availableAssets = [
+        'TwitterBootstrap',
+        'TwitterCldr',
+        'Entypo',
+        'FontAwesome',
+        'Jdewit',
+        'Eternicode',
+        'Vitalets',
+        'Mobiscroll',
+        'JQueryUI',
+        'Addyosmani',
+        'Pickadate',
+        'Redactor',
+    ];
     private $path;
+    private $assets;
 
     protected function configure()
     {
         $this
             ->setName('bootstrapp:install')
             ->setDescription('Install bootstrapp assets into BootstrappBundle public folder')
-        ;
+            ->setDefinition(array(
+                new InputArgument(
+                    'assets',
+                    InputArgument::IS_ARRAY,
+                    'What do you want to install (separate multiple assets with a space) ?'
+                )
+            ))
+            ->setHelp(<<<EOT
+The <info>%command.name%</info> command install new bootstrapp assets version
+
+  <info>php %command.full_name% [assets]</info>
+
+You can specify an array of assets as argument or this interactive shell will ask you for these informations.
+EOT
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->path = $this->getContainer()->get('kernel')->getBundle('BootstrappBundle')->getPath();
-
-        $output->writeln('<comment>Installing Twitter Bootstrap assets...</comment>');
-        if(true === $this->getTwitterBootstrapAssets($output)) {
-            $output->writeln('<info>Success, Twitter Bootstrap assets installed!</info>');
+        if (empty($this->assets)) {
+            $output->writeln('<info>Installing all assets...</info>');
+            $this->assets = self::$availableAssets;
         } else {
-            $output->writeln('<error>Error : Twitter Bootstrap assets installation failed!</error>');
+            $output->writeln('<info>Installing assets : ' . implode(', ', $this->assets) . '...</info>');
         }
 
-        $output->writeln('<comment>Installing Twitter CLDR assets...</comment>');
-        if(true === $this->getTwitterCldrAssets($output)) {
-            $output->writeln('<info>Success, Twitter CLDR assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : Twitter CLDR assets installation failed!</error>');
+        if(in_array('TwitterBootstrap', $this->assets)) {
+            $output->writeln('<comment>Installing Twitter Bootstrap assets...</comment>');
+            if(true === $this->getTwitterBootstrapAssets($output)) {
+                $output->writeln('<info>Success, Twitter Bootstrap assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Twitter Bootstrap assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing Entypo assets...</comment>');
-        if(true === $this->getEntypoAssets($output)) {
-            $output->writeln('<info>Success, Entypo assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : Entypo assets installation failed!</error>');
+        if(in_array('TwitterCldr', $this->assets)) {
+            $output->writeln('<comment>Installing Twitter CLDR assets...</comment>');
+            if(true === $this->getTwitterCldrAssets($output)) {
+                $output->writeln('<info>Success, Twitter CLDR assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Twitter CLDR assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing FontAwesome assets...</comment>');
-        if(true === $this->getFontAwesomeAssets($output)) {
-            $output->writeln('<info>Success, FontAwesome assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : FontAwesome assets installation failed!</error>');
+        if(in_array('Entypo', $this->assets)) {
+            $output->writeln('<comment>Installing Entypo assets...</comment>');
+            if(true === $this->getEntypoAssets($output)) {
+                $output->writeln('<info>Success, Entypo assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Entypo assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing jdewit assets...</comment>');
-        if(true === $this->getJdewitAssets($output)) {
-            $output->writeln('<info>Success, jdewit assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : jdewit assets installation failed!</error>');
+        if(in_array('FontAwesome', $this->assets)) {
+            $output->writeln('<comment>Installing FontAwesome assets...</comment>');
+            if(true === $this->getFontAwesomeAssets($output)) {
+                $output->writeln('<info>Success, FontAwesome assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : FontAwesome assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing eternicode assets...</comment>');
-        if(true === $this->getEternicodeAssets($output)) {
-            $output->writeln('<info>Success, eternicode assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : eternicode assets installation failed!</error>');
+        if(in_array('Jdewit', $this->assets)) {
+            $output->writeln('<comment>Installing jdewit assets...</comment>');
+            if(true === $this->getJdewitAssets($output)) {
+                $output->writeln('<info>Success, jdewit assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : jdewit assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing vitalets assets...</comment>');
-        if(true === $this->getVitaletsAssets($output)) {
-            $output->writeln('<info>Success, vitalets assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : vitalets assets installation failed!</error>');
+        if(in_array('Eternicode', $this->assets)) {
+            $output->writeln('<comment>Installing eternicode assets...</comment>');
+            if(true === $this->getEternicodeAssets($output)) {
+                $output->writeln('<info>Success, eternicode assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : eternicode assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing mobiscroll assets...</comment>');
-        if(true === $this->getMobiscrollAssets($output)) {
-            $output->writeln('<info>Success, mobiscroll assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : mobiscroll assets installation failed!</error>');
+        if(in_array('Vitalets', $this->assets)) {
+            $output->writeln('<comment>Installing vitalets assets...</comment>');
+            if(true === $this->getVitaletsAssets($output)) {
+                $output->writeln('<info>Success, vitalets assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : vitalets assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing jquery-ui assets...</comment>');
-        if(true === $this->getJQueryUIAssets($output)) {
-            $output->writeln('<info>Success, jquery-ui assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : jquery-ui assets installation failed!</error>');
+        if(in_array('Mobiscroll', $this->assets)) {
+            $output->writeln('<comment>Installing mobiscroll assets...</comment>');
+            if(true === $this->getMobiscrollAssets($output)) {
+                $output->writeln('<info>Success, mobiscroll assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : mobiscroll assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing addyosmani assets...</comment>');
-        if(true === $this->getAddyosmaniAssets($output)) {
-            $output->writeln('<info>Success, addyosmani assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : addyosmani assets installation failed!</error>');
+        if(in_array('JQueryUI', $this->assets)) {
+            $output->writeln('<comment>Installing jquery-ui assets...</comment>');
+            if(true === $this->getJQueryUIAssets($output)) {
+                $output->writeln('<info>Success, jquery-ui assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : jquery-ui assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing pickadate assets...</comment>');
-        if(true === $this->getPickadateAssets($output)) {
-            $output->writeln('<info>Success, pickadate assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : pickadate assets installation failed!</error>');
+        if(in_array('Addyosmani', $this->assets)) {
+            $output->writeln('<comment>Installing addyosmani assets...</comment>');
+            if(true === $this->getAddyosmaniAssets($output)) {
+                $output->writeln('<info>Success, addyosmani assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : addyosmani assets installation failed!</error>');
+            }
         }
 
-        $output->writeln('<comment>Installing redactor assets...</comment>');
-        if(true === $this->getRedactorAssets($output)) {
-            $output->writeln('<info>Success, redactor assets installed!</info>');
-        } else {
-            $output->writeln('<error>Error : redactor assets installation failed!</error>');
+        if(in_array('Pickadate', $this->assets)) {
+            $output->writeln('<comment>Installing pickadate assets...</comment>');
+            if(true === $this->getPickadateAssets($output)) {
+                $output->writeln('<info>Success, pickadate assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : pickadate assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Redactor', $this->assets)) {
+            $output->writeln('<comment>Installing redactor assets...</comment>');
+            if(true === $this->getRedactorAssets($output)) {
+                $output->writeln('<info>Success, redactor assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : redactor assets installation failed!</error>');
+            }
+        }
+    }
+
+    /**
+     * @see Command
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        $this->assets = array_intersect($input->getArgument('assets'), self::$availableAssets);
+        if (empty($this->assets)) {
+            $dialog = $this->getHelper('dialog');
+            if (!$dialog->askConfirmation(
+                    $output,
+                    '<question>Install all assets ?</question>',
+                    false
+                )) {
+                $choices = self::$availableAssets;
+                $selected = $dialog->select(
+                    $output,
+                    'Select assets to install (TwitterBootstrap by default)',
+                    $choices,
+                    0,
+                    false,
+                    'La valeur "%s" est incorrecte',
+                    true // active l'option multiselect
+                );
+
+                $selected = array_map(function($c) use ($choices) {
+                    return $choices[$c];
+                }, $selected);
+
+                $this->assets = $selected;
+            }
         }
     }
 
