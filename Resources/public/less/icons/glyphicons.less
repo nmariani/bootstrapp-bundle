@@ -30,9 +30,7 @@
   }
 }
 
-/* White icons with optional class, or on hover/active states of certain elements */
-.nav-tabs > .active > a > [class^="icon-"],
-.nav-tabs > .active > a > [class*=" icon-"],
+/* White icons with optional class, or on hover/focus/active states of certain elements */
 .nav-pills > .active > a > [class^="icon-"],
 .nav-pills > .active > a > [class*=" icon-"],
 .nav-list > .active > a > [class^="icon-"],
@@ -40,9 +38,15 @@
 .navbar-inverse .nav > .active > a > [class^="icon-"],
 .navbar-inverse .nav > .active > a > [class*=" icon-"],
 .dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:focus > [class^="icon-"],
 .dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > li > a:focus > [class*=" icon-"],
 .dropdown-menu > .active > a > [class^="icon-"],
-.dropdown-menu > .active > a > [class*=" icon-"] {
+.dropdown-menu > .active > a > [class*=" icon-"],
+.dropdown-submenu:hover > a > [class^="icon-"],
+.dropdown-submenu:focus > a > [class^="icon-"],
+.dropdown-submenu:hover > a > [class*=" icon-"],
+.dropdown-submenu:focus > a > [class*=" icon-"] {
   background-image: url("@{iconWhiteSpritePath}");
 }
 
@@ -167,7 +171,7 @@
 .glyphicons-chevron-down()       { .glyphicons(-313px, -119px); }
 .glyphicons-retweet()            { .glyphicons(-336px, -120px); }
 .glyphicons-shopping-cart()      { .glyphicons(-360px, -120px); }
-.glyphicons-folder-close()       { .glyphicons(-384px, -120px); }
+.glyphicons-folder-close()       { .glyphicons(-384px, -120px); width: 16px; }
 .glyphicons-folder-open()        { .glyphicons(-408px, -120px); width: 16px; }
 .glyphicons-resize-vertical()    { .glyphicons(-432px, -119px); }
 .glyphicons-resize-horizontal()  { .glyphicons(-456px, -118px); }
