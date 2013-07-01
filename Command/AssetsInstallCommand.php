@@ -449,23 +449,39 @@ EOF
         # parse font-awesome.less
         $lessFile = file_get_contents($fontAwesomeDir.'less/font-awesome.less');
 
+        // replace @import by content
+        preg_match_all('/@import\s+"(.*)".*/', $lessFile, $matches, PREG_SET_ORDER);
+        if (!isset($matches[1])) {
+            return false;
+        }
+        foreach ($matches as $match) {
+            $lessFile = str_replace($match[0], file_get_contents($fontAwesomeDir.'less/'.$match[1]), $lessFile);
+        }
+
         // replace font path
         $lessFile = str_replace('"../font"', "'/bundles/bootstrapp/fonts'", $lessFile);
 
         // replace .icon-*:before {}
-        //$lessFile = preg_replace('/.icon((-\w*)+)(:before)/', '.fontawesome$1()', $lessFile);
-        $lessFile = preg_replace('/.icon((-\w*)+)(:before)([^{]*\{[^\n]*\})/', '.fontawesome$1()$4', $lessFile);
-        $lessFile = preg_replace('/content\s*:\s*(.*)\s*;/', '.fontawesome($1);', $lessFile);
+        do {
+            $lessFile = preg_replace_callback('/.icon([-\w]*):before,?\s*([^{]*)\{([^\n]*)\}/', function($m){
+                $replace = str_pad('.fontawesome' . $m[1] . "()", 38) . " { " . $m[3] . " }";
+                if (!empty($m[2])) {
+                    $replace .= "\n" . $m[2] . " { " . $m[3] . " }";
+                }
+                return $replace;
+            }, $lessFile, -1, $count);
+        } while ($count > 0);
+        $lessFile = preg_replace('/^(.fontawesome.*[{])\s*content\s*:\s*([^;]*)\s*;?\s*([^}]*})$/m', '$1 .fontawesome($2); $3', $lessFile);
 
+        // get [class^="icon-"], [class*=" icon-"] {}
+        preg_match_all('/^\[class.*=".*icon-"\][^{:]*\{((?:\s.*\s)*)\}/m', $lessFile, $matches);
+        $content = trim(implode('', $matches[1]), "\n\r");
         // get [class^="icon-"]:before, [class*=" icon-"]:before {}
-        preg_match('/\s?\[class.*=".*icon-"\]:before[^{]*\{(\s?((([^}"])*(".*")*)*))\}\s?/', $lessFile, $matches);
-        $before = isset($matches[1]) ? $matches[1] : null;
-        $lessFile = preg_replace('/\s?\[class.*=".*icon-"\]:before[^{]*\{\s?((([^}"])*(".*")*)*)\}\s?/', '', $lessFile, 1);
-
-        // replace [class^="icon-"], [class*=" icon-"] {}
-        $lessFile = preg_replace('/\[class.*=".*icon-"\][^{]*\{\s?((([^}"])*(".*")*)*)\}/', <<<EOF
+        preg_match_all('/^\[class.*=".*icon-"\][^{]*:before\s*\{((?:\s.*\s)*)\}/m', $lessFile, $matches);
+        $before = str_replace(' ', '  ', implode('', array_map('trim',$matches[1])));
+        $lessFile = preg_replace('/^\[class.*=".*icon-"\][^{:]*\{((?:\s.*\s)*)\}/m', <<<EOF
 .fontawesome(@content:"") {
-$1
+$content
 
   &:before {
     $before
@@ -478,13 +494,15 @@ $1
 }
 EOF
             , $lessFile, 1);
+        // remove [class^="icon-"], [class*=" icon-"] {}
+        $lessFile = preg_replace('/^(\/.*\s)?\[class.*=".*icon-"\][^{]*\{((?:\s.*\s)*)\}\s{1,2}/m', '', $lessFile);
 
         // Strip whitespaces
         $lessFile = trim($lessFile);
 
         file_put_contents($this->path . '/Resources/public/less/icons/fontawesome.less', <<<EOF
 /*!
- * fontawesome.less v1.0.0
+ * fontawesome.less v3.2.1
  *
  * Mixins implementation of the Font-Awesome less file
  * See vendor/FortAwesome/Font-Awesome/less/font-awesome.less for more informations
