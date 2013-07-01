@@ -2,11 +2,11 @@
  * jQuery UI Accordion @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Accordion#theming
+ * http://api.jqueryui.com/accordion/#theming
  */
 .ui-accordion .ui-accordion-header {
 	display: block;
@@ -18,9 +18,6 @@
 }
 .ui-accordion .ui-accordion-icons {
 	padding-left: 2.2em;
-}
-.ui-accordion .ui-accordion-noicons {
-	padding-left: .7em;
 }
 .ui-accordion .ui-accordion-icons .ui-accordion-icons {
 	padding-left: 2.2em;
