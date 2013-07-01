@@ -714,13 +714,13 @@ EOF
     {
         $success = true;
 
-        $pickadateDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/amsul/pickadate';
+        $pickadateDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/amsul/pickadate.js/lib';
         $filesystem = $this->getContainer()->get('filesystem');
 
         # css
         $this->createResourcesPublicCss();
         $finder = new Finder();
-        $finder->files()->in($pickadateDir)->name('*.css');
+        $finder->files()->in($pickadateDir.'/themes')->name('*.css');
         foreach ($finder as $file) {
             $filesystem->copy($file, $this->path . '/Resources/public/css/pickadate/' . $file->getBaseName());
         }
