@@ -65,14 +65,20 @@
             }
 
             // Set year-month-day order
-            var s = $.extend({}, defaults, html5def, inst.settings),
+            var i,
+                k,
+                keys,
+                values,
+                wg,
+                start,
+                end,
+                orig = $.extend({}, inst.settings),
+                s = $.extend(inst.settings, defaults, html5def, orig),
                 offset = 0,
                 wheels = [],
                 ord = [],
                 o = {},
-                i,
-                k,
-                f = { y: 'getFullYear', m: 'getMonth', d: 'getDate', h: getHour, i: getMinute, s: getSecond, ap: getAmPm },
+                f = { y: 'getFullYear', m: 'getMonth', d: 'getDate', h: getHour, i: getMinute, s: getSecond, a: getAmPm },
                 p = s.preset,
                 dord = s.dateOrder,
                 tord = s.timeWheels,
@@ -103,39 +109,48 @@
                     o[v.v] = i;
                 });
 
-                var w = {};
+                wg = [];
                 for (k = 0; k < 3; k++) {
                     if (k == o.y) {
                         offset++;
-                        w[s.yearText] = {};
-                        var start = mind.getFullYear(),
-                            end = maxd.getFullYear();
+                        values = [];
+                        keys = [];
+                        start = mind.getFullYear();
+                        end = maxd.getFullYear();
                         for (i = start; i <= end; i++) {
-                            w[s.yearText][i] = dord.match(/yy/i) ? i : (i + '').substr(2, 2);
+                            keys.push(i);
+                            values.push(dord.match(/yy/i) ? i : (i + '').substr(2, 2));
                         }
+                        addWheel(wg, keys, values, s.yearText);
                     } else if (k == o.m) {
                         offset++;
-                        w[s.monthText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < 12; i++) {
-                            var str = dord.replace(/[dy]/gi, '').replace(/mm/, i < 9 ? '0' + (i + 1) : i + 1).replace(/m/, i);
-                            w[s.monthText][i] = str.match(/MM/) ? str.replace(/MM/, '<span class="dw-mon">' + s.monthNames[i] + '</span>') : str.replace(/M/, '<span class="dw-mon">' + s.monthNamesShort[i]) + '</span>';
+                            var str = dord.replace(/[dy]/gi, '').replace(/mm/, i < 9 ? '0' + (i + 1) : i + 1).replace(/m/, (i + 1));
+                            keys.push(i);
+                            values.push(str.match(/MM/) ? str.replace(/MM/, '<span class="dw-mon">' + s.monthNames[i] + '</span>') : str.replace(/M/, '<span class="dw-mon">' + s.monthNamesShort[i] + '</span>'));
                         }
+                        addWheel(wg, keys, values, s.monthText);
                     } else if (k == o.d) {
                         offset++;
-                        w[s.dayText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 1; i < 32; i++) {
-                            w[s.dayText][i] = dord.match(/dd/i) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(dord.match(/dd/i) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.dayText);
                     }
                 }
-                wheels.push(w);
+                wheels.push(wg);
             }
 
             if (p.match(/time/i)) {
 
                 // Determine the order of hours, minutes, seconds wheels
                 ord = [];
-                $.each(['h', 'i', 's'], function (i, v) {
+                $.each(['h', 'i', 's', 'a'], function (i, v) {
                     i = tord.search(new RegExp(v, 'i'));
                     if (i > -1) {
                         ord.push({ o: i, v: v });
@@ -148,35 +163,43 @@
                     o[v.v] = offset + i;
                 });
 
-                w = {};
-                for (k = offset; k < offset + 3; k++) {
+                wg = [];
+                for (k = offset; k < offset + 4; k++) {
                     if (k == o.h) {
                         offset++;
-                        w[s.hourText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < (hampm ? 12 : 24); i += stepH) {
-                            w[s.hourText][i] = hampm && i == 0 ? 12 : tord.match(/hh/i) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(hampm && i == 0 ? 12 : tord.match(/hh/i) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.hourText);
                     } else if (k == o.i) {
                         offset++;
-                        w[s.minuteText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < 60; i += stepM) {
-                            w[s.minuteText][i] = tord.match(/ii/) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(tord.match(/ii/) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.minuteText);
                     } else if (k == o.s) {
                         offset++;
-                        w[s.secText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < 60; i += stepS) {
-                            w[s.secText][i] = tord.match(/ss/) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(tord.match(/ss/) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.secText);
+                    } else if (k == o.a) {
+                        offset++;
+                        var upper = tord.match(/A/);
+                        addWheel(wg, [0, 1], upper ? ['AM', 'PM'] : ['am', 'pm'], s.ampmText);
                     }
                 }
 
-                if (ampm) {
-                    o.ap = offset++; // ampm wheel order
-                    var upper = tord.match(/A/);
-                    w[s.ampmText] = { 0: upper ? 'AM' : 'am', 1: upper ? 'PM' : 'pm' };
-                }
-                wheels.push(w);
+                wheels.push(wg);
             }
 
             function get(d, i, def) {
@@ -187,6 +210,14 @@
                     return def;
                 }
                 return defd[f[i]] ? defd[f[i]]() : f[i](defd);
+            }
+
+            function addWheel(wg, k, v, lbl) {
+                wg.push({
+                    values: v,
+                    keys: k,
+                    label: lbl
+                });
             }
 
             function step(v, st) {
@@ -213,21 +244,40 @@
 
             function getDate(d) {
                 var hour = get(d, 'h', 0);
-                return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'ap') ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
+                return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'a') ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
             }
 
+            // Extended methods
+            // ---
+
+            /**
+             * Sets the selected date
+             *
+             * @param {Date} d Date to select.
+             * @param {Boolean} [fill=false] Also set the value of the associated input element. Default is true.
+             * @return {Object} jQuery object to maintain chainability
+             */
             inst.setDate = function (d, fill, time, temp) {
                 var i;
+
                 // Set wheels
                 for (i in o) {
-                    this.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
+                    inst.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
                 }
-                this.setValue(true, fill, time, temp);
+                inst.setValue(inst.temp, fill, time, temp);
             };
 
-            inst.getDate = function (d) {
-                return getDate(d);
+            /**
+             * Returns the currently selected date.
+             *
+             * @param {Boolean} [temp=false] If true, return the currently shown date on the picker, otherwise the last selected one
+             * @return {Date}
+             */
+            inst.getDate = function (temp) {
+                return getDate(temp ? inst.temp : inst.values);
             };
+
+            // ---
 
             return {
                 button3Text: s.showNow ? s.nowText : undefined,
@@ -269,18 +319,17 @@
                 */
                 validate: function (dw, i) {
                     var temp = inst.temp, //.slice(0),
-                        mins = { y: mind.getFullYear(), m: 0, d: 1, h: 0, i: 0, s: 0, ap: 0 },
-                        maxs = { y: maxd.getFullYear(), m: 11, d: 31, h: step(hampm ? 11 : 23, stepH), i: step(59, stepM), s: step(59, stepS), ap: 1 },
-                    //w = (mind || maxd) ? ['y', 'm', 'd', 'ap', 'h', 'i', 's'] : ((i == o.y || i == o.m || i === undefined) ? ['d'] : []), // Validate day only, if no min/max date set
+                        mins = { y: mind.getFullYear(), m: 0, d: 1, h: 0, i: 0, s: 0, a: 0 },
+                        maxs = { y: maxd.getFullYear(), m: 11, d: 31, h: step(hampm ? 11 : 23, stepH), i: step(59, stepM), s: step(59, stepS), a: 1 },
                         minprop = true,
                         maxprop = true;
-                    $.each(['y', 'm', 'd', 'ap', 'h', 'i', 's'], function (x, i) {
+                    $.each(['y', 'm', 'd', 'a', 'h', 'i', 's'], function (x, i) {
                         if (o[i] !== undefined) {
                             var min = mins[i],
                                 max = maxs[i],
                                 maxdays = 31,
                                 val = get(temp, i),
-                                t = $('ul', dw).eq(o[i]),
+                                t = $('.dw-ul', dw).eq(o[i]),
                                 y,
                                 m;
                             if (i == 'd') {
@@ -289,12 +338,12 @@
                                 maxdays = 32 - new Date(y, m, 32).getDate();
                                 max = maxdays;
                                 if (regen) {
-                                    $('li', t).each(function () {
+                                    $('.dw-li', t).each(function () {
                                         var that = $(this),
                                             d = that.data('val'),
                                             w = new Date(y, m, d).getDay(),
                                             str = dord.replace(/[my]/gi, '').replace(/dd/, d < 10 ? '0' + d : d).replace(/d/, d);
-                                        $('.dw-i', that).html(str.match(/DD/) ? str.replace(/DD/, '<span class="dw-day">' + s.dayNames[w] + '</span>') : str.replace(/D/, '<span class="dw-day">' + s.dayNamesShort[w]) + '</span>');
+                                        $('.dw-i', that).html(str.match(/DD/) ? str.replace(/DD/, '<span class="dw-day">' + s.dayNames[w] + '</span>') : str.replace(/D/, '<span class="dw-day">' + s.dayNamesShort[w] + '</span>'));
                                     });
                                 }
                             }
@@ -305,11 +354,11 @@
                                 max = maxd[f[i]] ? maxd[f[i]]() : f[i](maxd);
                             }
                             if (i != 'y') {
-                                var i1 = $('li[data-val="' + min + '"]', t).index(),
-                                    i2 = $('li[data-val="' + max + '"]', t).index();
-                                $('li', t).removeClass('dw-v').slice(i1, i2 + 1).addClass('dw-v');
+                                var i1 = $('.dw-li', t).index($('.dw-li[data-val="' + min + '"]', t)),
+                                    i2 = $('.dw-li', t).index($('.dw-li[data-val="' + max + '"]', t));
+                                $('.dw-li', t).removeClass('dw-v').slice(i1, i2 + 1).addClass('dw-v');
                                 if (i == 'd') { // Hide days not in month
-                                    $('li', t).removeClass('dw-h').slice(maxdays).addClass('dw-h');
+                                    $('.dw-li', t).removeClass('dw-h').slice(maxdays).addClass('dw-h');
                                 }
                             }
                             if (val < min) {
@@ -361,7 +410,7 @@
                                     });
                                 }
                                 $.each(idx, function (i, v) {
-                                    $('li', t).eq(v).removeClass('dw-v');
+                                    $('.dw-li', t).eq(v).removeClass('dw-v');
                                 });
                             }
 
@@ -369,43 +418,14 @@
                             temp[o[i]] = val;
                         }
                     });
-                },
-                methods: {
-                    /**
-                    * Returns the currently selected date.
-                    * @param {Boolean} temp - If true, return the currently shown date on the picker, otherwise the last selected one
-                    * @return {Date}
-                    */
-                    getDate: function (temp) {
-                        var inst = $(this).mobiscroll('getInst');
-                        if (inst) {
-                            return inst.getDate(temp ? inst.temp : inst.values);
-                        }
-                    },
-                    /**
-                    * Sets the selected date
-                    * @param {Date} d - Date to select.
-                    * @param {Boolean} [fill] - Also set the value of the associated input element. Default is true.
-                    * @return {Object} - jQuery object to maintain chainability
-                    */
-                    setDate: function (d, fill, time, temp) {
-                        if (fill == undefined) {
-                            fill = false;
-                        }
-                        return this.each(function () {
-                            var inst = $(this).mobiscroll('getInst');
-                            if (inst) {
-                                inst.setDate(d, fill, time, temp);
-                            }
-                        });
-                    }
                 }
             };
         };
 
-    ms.presets.date = preset;
-    ms.presets.datetime = preset;
-    ms.presets.time = preset;
+    $.each(['date', 'time', 'datetime'], function (i, v) {
+        ms.presets[v] = preset;
+        ms.presetShort(v);
+    });
 
     /**
     * Format a date into a string value with a specified format.
