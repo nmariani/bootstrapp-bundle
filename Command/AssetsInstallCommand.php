@@ -202,57 +202,40 @@ EOT
         }
     }
 
-    protected function createResourcesPublicCss() {
-        if (!is_dir($this->path . '/Resources/public/css/')) {
-            mkdir($this->path . '/Resources/public/css/', 0777, true);
+    protected function initializeDirectory($path, $clean=true) {
+        if (false === strpos($path, $this->path)) {
+            $path = $this->path . '/Resources/public/' . $path;
         }
-        return $this;
-    }
-
-    protected function createResourcesPublicFonts() {
-        if (!is_dir($this->path . '/Resources/public/fonts/')) {
-            mkdir($this->path . '/Resources/public/fonts/', 0777, true);
+        # create directory
+        $filesystem = $this->getContainer()->get('filesystem');
+        $filesystem->mkdir($path);
+        # clean directory
+        if (false != $clean) {
+            $finder = new Finder();
+            $finder->files()->in($path);
+            foreach ($finder as $file) {
+                $filesystem->remove($file);
+            }
         }
-        return $this;
-    }
-
-    protected function createResourcesPublicImages() {
-        if (!is_dir($this->path . '/Resources/public/images/')) {
-            mkdir($this->path . '/Resources/public/images/', 0777, true);
-        }
-        return $this;
-    }
-
-    protected function createResourcesPublicJs() {
-        if (!is_dir($this->path . '/Resources/public/js/')) {
-            mkdir($this->path . '/Resources/public/js/', 0777, true);
-        }
-        return $this;
-    }
-
-    protected function createResourcesPublicLess() {
-        if (!is_dir($this->path . '/Resources/public/less/')) {
-            mkdir($this->path . '/Resources/public/less/', 0777, true);
-        }
-        return $this;
+        return $path;
     }
 
     protected function getTwitterBootstrapAssets($output)
     {
         # images
-        $this->createResourcesPublicImages();
+        $imagesPath = $this->initializeDirectory('images/bootstrap');
         $rootDir = $this->getContainer()->get('kernel')->getRootDir();
         $finder = new Finder();
         $finder->depth('== 0');
         $finder->files()->in($rootDir.'/../vendor/twitter/bootstrap/img');
         $filesystem = $this->getContainer()->get('filesystem');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/images/bootstrap/' . $file->getBaseName());
+            $filesystem->copy($file, $imagesPath . '/' . $file->getBaseName());
         }
         $output->writeln('<info>Success, images files copied to @BootstrappBundle/Resources/public/img</info>');
 
         # js
-        $this->createResourcesPublicJs();
+        $jsPath = $this->initializeDirectory('js/bootstrap');
         $rootDir = $this->getContainer()->get('kernel')->getRootDir();
         $finder = new Finder();
         $finder->depth('== 0');
@@ -261,12 +244,12 @@ EOT
             ->name('*.js');
         $filesystem = $this->getContainer()->get('filesystem');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/js/bootstrap/' . $file->getBaseName());
+            $filesystem->copy($file, $jsPath . '/' . $file->getBaseName());
         }
         $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
 
         # less
-        $this->createResourcesPublicLess();
+        $lessPath = $this->initializeDirectory('less/bootstrap');
         $rootDir = $this->getContainer()->get('kernel')->getRootDir();
         $finder = new Finder();
         $finder->depth('== 0');
@@ -275,7 +258,7 @@ EOT
             ->name('*.less');
         $filesystem = $this->getContainer()->get('filesystem');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/less/bootstrap/' . $file->getBaseName());
+            $filesystem->copy($file, $lessPath . '/' . $file->getBaseName());
         }
         $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/less</info>');
 
@@ -309,7 +292,8 @@ EOF
         // Strip whitespaces
         $glyphicons = trim($glyphicons);
 
-        file_put_contents($this->path . '/Resources/public/less/icons/glyphicons.less', <<<EOF
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/glyphicons.less', <<<EOF
 /*!
  * glyphicons.less v1.0.0
  *
@@ -339,11 +323,11 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # js
-        $this->createResourcesPublicJs();
+        $jsPath = $this->initializeDirectory('js/twitter-cldr');
         $finder = new Finder();
         $finder->files()->in($cldrDir.'/javascripts/twitter_cldr')->name('*.js');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/js/twitter-cldr/' . $file->getBaseName());
+            $filesystem->copy($file, $jsPath . '/' . $file->getBaseName());
         }
 
         return $success;
@@ -355,7 +339,7 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # fonts
-        $this->createResourcesPublicFonts();
+        $fontsPath = $this->initializeDirectory('fonts/entypo');
         $files = [
             'entypo.eot',
             'entypo.svg',
@@ -363,21 +347,15 @@ EOF
             'entypo.woff',
         ];
         foreach($files as $file) {
-            $filesystem->copy($entypoDir.$file, $this->path . '/Resources/public/fonts/' . basename($file));
+            $filesystem->copy($entypoDir.$file, $fontsPath . '/' . basename($file));
         }
         $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
-
-        # css
-        #$outputFile = $this->path . '/Resources/public/css/entypo.css';
-        #$filesystem->copy($entypoDir.'entypo.css', $outputFile);
-        #$output->writeln('<info>Success, css files written in @BootstrappBundle/Resources/public/css</info>');
-
 
         # parse entypo.css
         $entypo = file_get_contents($entypoDir.'entypo.css');
 
         // replace font path
-        $entypo = str_replace("'entypo.", "'/bundles/bootstrapp/fonts/entypo.", $entypo);
+        $entypo = str_replace("'entypo.", "'/bundles/bootstrapp/fonts/entypo/entypo.", $entypo);
 
         // replace .icon-*:before {}
         $entypo = preg_replace('/.icon((-\w*)+)(:before)/', '.entypo$1()', $entypo);
@@ -406,7 +384,8 @@ EOF
         // Strip whitespaces
         $entypo = trim($entypo);
 
-        file_put_contents($this->path . '/Resources/public/less/icons/entypo.less', <<<EOF
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/entypo.less', <<<EOF
 /*!
  * entypo.less v1.0.0
  *
@@ -434,7 +413,7 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # fonts
-        $this->createResourcesPublicFonts();
+        $fontsPath = $this->initializeDirectory('fonts/fontawesome');
         $files = [
             'fontawesome-webfont.eot',
             'fontawesome-webfont.ttf',
@@ -442,7 +421,7 @@ EOF
             'FontAwesome.otf',
         ];
         foreach($files as $file) {
-            $filesystem->copy($fontAwesomeDir.'font/'.$file, $this->path . '/Resources/public/fonts/' . basename($file));
+            $filesystem->copy($fontAwesomeDir.'font/'.$file, $fontsPath . '/' . basename($file));
         }
         $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
 
@@ -459,7 +438,7 @@ EOF
         }
 
         // replace font path
-        $lessFile = str_replace('"../font"', "'/bundles/bootstrapp/fonts'", $lessFile);
+        $lessFile = str_replace('"../font"', "'/bundles/bootstrapp/fonts/fontawesome'", $lessFile);
 
         // replace .icon-*:before {}
         do {
@@ -500,7 +479,8 @@ EOF
         // Strip whitespaces
         $lessFile = trim($lessFile);
 
-        file_put_contents($this->path . '/Resources/public/less/icons/fontawesome.less', <<<EOF
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/fontawesome.less', <<<EOF
 /*!
  * fontawesome.less v3.2.1
  *
@@ -531,8 +511,8 @@ EOF
 
         # js
         if(is_file($jsFile = $jdewitDir.'/js/bootstrap-timepicker.js')) {
-            $this->createResourcesPublicJs();
-            $filesystem->copy($jsFile, $this->path . '/Resources/public/js/jdewit-timepicker.js');
+            $jsPath = $this->initializeDirectory('js', false);
+            $filesystem->copy($jsFile, $jsPath . '/jdewit-timepicker.js');
             $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
             $output->writeln('<error>Error, js files not found!</error>');
@@ -541,8 +521,8 @@ EOF
 
         # less
         if(is_file($lessFile = $jdewitDir.'/less/timepicker.less')) {
-            $this->createResourcesPublicLess();
-            $filesystem->copy($lessFile, $this->path . '/Resources/public/less/jdewit-timepicker.less');
+            $lessPath = $this->initializeDirectory('less', false);
+            $filesystem->copy($lessFile, $lessPath . '/jdewit-timepicker.less');
             $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
             $output->writeln('<error>Error, less files not found!</error>');
@@ -561,13 +541,11 @@ EOF
 
         # js
         if(is_file($jsFile = $eternicodeDir.'/js/bootstrap-datepicker.js')) {
-            $this->createResourcesPublicJs();
-            $filesystem->copy($jsFile, $this->path . '/Resources/public/js/eternicode-datepicker.js');
-            # copy locales files
+            $jsPath = $this->initializeDirectory('js/eternicode');
             $finder = new Finder();
-            $finder->files()->in($eternicodeDir.'/js/locales')->name('*.js')->depth('== 0');
+            $finder->files()->in($eternicodeDir.'/js')->name('*.js');
             foreach ($finder as $file) {
-                $filesystem->copy($file, $this->path . '/Resources/public/js/eternicode-locales/' . $file->getBaseName());
+                $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
             }
             $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
@@ -577,8 +555,8 @@ EOF
 
         # less
         if(is_file($lessFile = $eternicodeDir.'/less/datepicker.less')) {
-            $this->createResourcesPublicLess();
-            $filesystem->copy($lessFile, $this->path . '/Resources/public/less/eternicode-datepicker.less');
+            $lessPath = $this->initializeDirectory('less', false);
+            $filesystem->copy($lessFile, $lessPath . '/eternicode-datepicker.less');
             $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
             $output->writeln('<error>Error, less files not found!</error>');
@@ -597,13 +575,11 @@ EOF
 
         # js
         if(is_file($jsFile = $vitaletsDir.'/js/bootstrap-datepicker.js')) {
-            $this->createResourcesPublicJs();
-            $filesystem->copy($jsFile, $this->path . '/Resources/public/js/vitalets-datepicker.js');
-            # copy locales files
+            $jsPath = $this->initializeDirectory('js/vitalets');
             $finder = new Finder();
-            $finder->files()->in($vitaletsDir.'/js/locales')->name('*.js')->depth('== 0');
+            $finder->files()->in($vitaletsDir.'/js')->name('*.js');
             foreach ($finder as $file) {
-                $filesystem->copy($file, $this->path . '/Resources/public/js/vitalets-locales/' . $file->getBaseName());
+                $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
             }
             $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
@@ -613,8 +589,8 @@ EOF
 
         # less
         if(is_file($lessFile = $vitaletsDir.'/less/datepicker.less')) {
-            $this->createResourcesPublicLess();
-            $filesystem->copy($lessFile, $this->path . '/Resources/public/less/vitalets-datepicker.less');
+            $lessPath = $this->initializeDirectory('less', false);
+            $filesystem->copy($lessFile, $lessPath . '/vitalets-datepicker.less');
             $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
             $output->writeln('<error>Error, less files not found!</error>');
@@ -632,19 +608,19 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # css
-        $this->createResourcesPublicCss();
+        $cssPath = $this->initializeDirectory('css/mobiscroll');
         $finder = new Finder();
         $finder->files()->in($mobiscrollDir.'/css')->name('*.css')->depth('== 0');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/css/mobiscroll/' . $file->getBaseName());
+            $filesystem->copy($file, $cssPath . '/' . $file->getBaseName());
         }
 
         # js
-        $this->createResourcesPublicJs();
+        $jsPath = $this->initializeDirectory('js/mobiscroll');
         $finder = new Finder();
         $finder->files()->in($mobiscrollDir.'/js')->name('*.js');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/js/mobiscroll/' . $file->getRelativePathname());
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
         }
 
         return $success;
@@ -658,27 +634,27 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # css
-        $this->createResourcesPublicCss();
+        $cssPath = $this->initializeDirectory('css/jquery-ui');
         $finder = new Finder();
         $finder->files()->in($jqueryDir.'/themes')->name('*.css');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/css/jquery-ui/' . $file->getRelativePathname());
+            $filesystem->copy($file, $cssPath . '/' . $file->getRelativePathname());
         }
 
         # images
-        $this->createResourcesPublicImages();
+        $imagesPath = $this->initializeDirectory('images/jquery-ui/base');
         $finder = new Finder();
         $finder->files()->in($jqueryDir.'/themes/base/images');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/images/jquery-ui/base/' . $file->getBaseName());
+            $filesystem->copy($file, $imagesPath . '/' . $file->getBaseName());
         }
 
         # js
-        $this->createResourcesPublicJs();
+        $jsPath = $this->initializeDirectory('js/jquery-ui');
         $finder = new Finder();
         $finder->files()->in($jqueryDir.'/ui')->name('*.js');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/js/jquery-ui/' . $file->getRelativePathname());
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
         }
 
         return $success;
@@ -692,19 +668,19 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # css
-        $this->createResourcesPublicCss();
+        $cssPath = $this->initializeDirectory('css/jquery-ui/addyosmani/');
         $finder = new Finder();
         $finder->files()->in($addyosmaniDir.'/css/custom-theme')->name('*.css');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/css/jquery-ui/addyosmani/' . $file->getBaseName());
+            $filesystem->copy($file, $cssPath . '/' . $file->getBaseName());
         }
 
         # images
-        $this->createResourcesPublicImages();
+        $imagesPath = $this->initializeDirectory('images/jquery-ui/addyosmani');
         $finder = new Finder();
         $finder->files()->in($addyosmaniDir.'/css/custom-theme/images');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/images/jquery-ui/addyosmani/' . $file->getBaseName());
+            $filesystem->copy($file, $imagesPath . '/' . $file->getBaseName());
         }
 
         return $success;
@@ -718,19 +694,19 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # css
-        $this->createResourcesPublicCss();
+        $cssPath = $this->initializeDirectory('css/pickadate');
         $finder = new Finder();
         $finder->files()->in($pickadateDir.'/themes')->name('*.css');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/css/pickadate/' . $file->getBaseName());
+            $filesystem->copy($file, $cssPath. '/' . $file->getBaseName());
         }
 
         # js
-        $this->createResourcesPublicImages();
+        $jsPath = $this->initializeDirectory('js/pickadate');
         $finder = new Finder();
         $finder->files()->in($pickadateDir)->name('*.js');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/js/pickadate/' . $file->getRelativePathname());
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
         }
 
         return $success;
@@ -744,19 +720,19 @@ EOF
         $filesystem = $this->getContainer()->get('filesystem');
 
         # css
-        $this->createResourcesPublicCss();
+        $cssPath = $this->initializeDirectory('css/redactor');
         $finder = new Finder();
         $finder->files()->in($redactorDir)->name('*.css');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/css/' . $file->getBaseName());
+            $filesystem->copy($file, $cssPath . '/' . $file->getRelativePathname());
         }
 
         # js
-        $this->createResourcesPublicJs();
+        $jsPath = $this->initializeDirectory('js/redactor');
         $finder = new Finder();
         $finder->files()->in($redactorDir)->name('*.js');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $this->path . '/Resources/public/js/' . $file->getBaseName());
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
         }
 
         return $success;
