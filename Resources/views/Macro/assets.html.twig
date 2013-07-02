@@ -11,8 +11,10 @@
         {% endstylesheets %}
 
     {% elseif vendor == 'pickadate' %}
-        {% stylesheets
-        "@BootstrappBundle/Resources/public/css/pickadate.css"
+        {% stylesheets output='bundles/bootstrapp/css/pickadate.css'
+        "@BootstrappBundle/Resources/public/css/pickadate/classic.css"
+        "@BootstrappBundle/Resources/public/css/pickadate/classic.date.css"
+        "@BootstrappBundle/Resources/public/css/pickadate/classic.time.css"
         %}
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
         {% endstylesheets %}
@@ -53,13 +55,17 @@
 {% macro javascripts(vendor) %}
 {# date pickers #}
     {% if vendor == 'eyecon' %}
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets-datepicker.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets-locales/bootstrap-datepicker.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets/bootstrap-datepicker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets/locales/bootstrap-datepicker.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-eyecon.js') }}"></script>
 
     {% elseif vendor == 'pickadate' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-pickadate.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/pickadate.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/picker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/picker.date.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/picker.time.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/legacy.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/translations/' ~ app.request.locale ~ '.js') }}"></script>
 
     {% elseif vendor == 'jqueryui' %}
         {% javascripts output='bundles/bootstrapp/js/jquery-ui.js'
@@ -85,8 +91,7 @@
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.core-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.datetime-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.i18n.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-mobiscroll.js') }}"></script>
     {% endif %}
 {% endmacro %}
