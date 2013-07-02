@@ -17,33 +17,23 @@ Bootstrapp.Pickadate = (function() {
         this.date = null;
         // options
         this.options = jQuery.extend({
-            // Strings
-            monthsFull: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-            monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-            weekdaysFull: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
-            weekdaysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
-            monthPrev: '&#9664;',
-            monthNext: '&#9654;',
             // Display strings
-            showMonthsFull: true,
-            showWeekdaysShort: true,
+            showMonthsShort: false,
+            showWeekdaysFull: false,
             // Date format
-            //format: 'd mmmm, yyyy',
             format: 'yyyy-mm-dd',
             formatSubmit: false,
             hiddenSuffix: '_submit',
-            // First day of week
-            firstDay: 0,
-            // Month & year dropdown selectors
-            monthSelector: false,
-            yearSelector: false,
+            // First day of the week
+            firstDay: 1,
+            // Dropdown selectors
+            selectYears: true,
+            selectMonths: true,
             // Date ranges
-            dateMin: false,
-            dateMax: false,
+            min: false,
+            max: false,
             // Dates disabled
-            datesDisabled: false,
-            // Disable picker
-            disablePicker: false
+            disable: false // [true]
         }, options);
         // callbacks
         this.onStartCallbacks = [];
@@ -70,13 +60,13 @@ Bootstrapp.Pickadate = (function() {
                 onClose: function() {
                     instance.call(instance.onCloseCallbacks);
                 },
-                onSelect: function() {
+                onSet: function() {
                     // new date selected, refresh date value
                     instance.date = null;
                     instance.getDate();
                     instance.call(instance.onSelectCallbacks);
                 },
-                onChangeMonth: function() {
+                onRender: function() {
                     instance.call(instance.onChangeMonthCallbacks);
                 }
             }
@@ -93,8 +83,7 @@ Bootstrapp.Pickadate = (function() {
 
     Pickadate.prototype.getDate = function() {
         if(null == this.date) {
-            var dates = this.calendar.getDate().split('-');
-            this.date = new Date(dates[0], dates[1] - 1, dates[2], 0, 0, 0, 0);
+            this.date = this.calendar.get('select').obj;
         }
         return this.date;
     };
@@ -104,7 +93,7 @@ Bootstrapp.Pickadate = (function() {
             date.setHours(0, 0, 0, 0);
             if(!this.getDate() || date.getTime() != this.date.getTime()) {
                 this.date = null;
-                this.calendar.setDate(date.getFullYear(), date.getMonth()+1, date.getDate());
+                this.calendar.set('select', date);
                 this.getDate();
             }
         }

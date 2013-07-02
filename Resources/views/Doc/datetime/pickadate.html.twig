@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets
-    "@BootstrappBundle/Resources/public/css/pickadate.css"
     "@BootstrappBundle/Resources/public/less/jdewit-timepicker.less"
     %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
@@ -72,8 +71,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-pickadate.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/pickadate.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jdewit-timepicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jdewit.js') }}"></script>
 {% endblock javascripts %}
