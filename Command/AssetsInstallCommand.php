@@ -588,9 +588,23 @@ EOF
         }
 
         # less
-        if(is_file($lessFile = $vitaletsDir.'/less/datepicker.less')) {
-            $lessPath = $this->initializeDirectory('less', false);
-            $filesystem->copy($lessFile, $lessPath . '/vitalets-datepicker.less');
+		$lessFile = $vitaletsDir.'/less/datepicker.less';
+        if(is_file($lessFile)) {
+			# parse font-awesome.less
+			$lessFile = file_get_contents($lessFile);
+			$lessFile = preg_replace('/^\/\*.*(\s{2}\*.*)+\s*/', <<<EOF
+$0
+/*------------------------------*
+ * Twitter Bootstrap less files *
+ *------------------------------*/
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
+
+
+EOF
+            , $lessFile, 1);
+			$lessPath = $this->initializeDirectory('less', false);
+			file_put_contents($lessPath . '/vitalets-datepicker.less', $lessFile);
             $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
             $output->writeln('<error>Error, less files not found!</error>');
