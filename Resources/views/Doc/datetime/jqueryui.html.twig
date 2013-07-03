@@ -2,15 +2,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {#
-    "@BootstrappBundle/Resources/public/css/jquery-ui/base/jquery.ui.core.css"
-    #}
-    {% stylesheets output='bundles/bootstrapp/css/jquery-ui/base/jquery-ui.css'
-    "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery-ui-1.9.2.custom.css"
-    "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery.ui.1.9.2.ie.css"
-    %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
-    {% endstylesheets %}
     {% stylesheets
     "@BootstrappBundle/Resources/public/less/jdewit-timepicker.less"
     %}
@@ -41,14 +32,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output='bundles/bootstrapp/js/jquery-ui.js'
-    'bundles/bootstrapp/js/jquery-ui/jquery.ui.core.js'
-    'bundles/bootstrapp/js/jquery-ui/jquery.ui.datepicker.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/i18n/jquery.ui.datepicker-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jqueryui.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jdewit-timepicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jdewit.js') }}"></script>
 {% endblock javascripts %}

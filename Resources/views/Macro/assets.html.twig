@@ -74,7 +74,9 @@
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
+        {% if app.request.locale|slice(0,2)|lower != 'en' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/i18n/jquery.ui.datepicker-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        {% endif %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jqueryui.js') }}"></script>
 
 {# time pickers #}
@@ -91,7 +93,9 @@
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
+        {% if app.request.locale|slice(0,2)|lower != 'en' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/mobiscroll/i18n/mobiscroll.i18n.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        {% endif %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-mobiscroll.js') }}"></script>
     {% endif %}
 {% endmacro %}

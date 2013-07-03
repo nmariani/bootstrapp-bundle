@@ -588,11 +588,11 @@ EOF
         }
 
         # less
-		$lessFile = $vitaletsDir.'/less/datepicker.less';
+        $lessFile = $vitaletsDir.'/less/datepicker.less';
         if(is_file($lessFile)) {
-			# parse font-awesome.less
-			$lessFile = file_get_contents($lessFile);
-			$lessFile = preg_replace('/^\/\*.*(\s{2}\*.*)+\s*/', <<<EOF
+            # parse font-awesome.less
+            $lessFile = file_get_contents($lessFile);
+            $lessFile = preg_replace('/^\/\*.*(\s{2}\*.*)+\s*/', <<<EOF
 $0
 /*------------------------------*
  * Twitter Bootstrap less files *
@@ -603,8 +603,8 @@ $0
 
 EOF
             , $lessFile, 1);
-			$lessPath = $this->initializeDirectory('less', false);
-			file_put_contents($lessPath . '/vitalets-datepicker.less', $lessFile);
+            $lessPath = $this->initializeDirectory('less', false);
+            file_put_contents($lessPath . '/vitalets-datepicker.less', $lessFile);
             $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/js</info>');
         } else {
             $output->writeln('<error>Error, less files not found!</error>');
@@ -647,20 +647,32 @@ EOF
         $jqueryDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/jquery/jquery-ui';
         $filesystem = $this->getContainer()->get('filesystem');
 
-        # css
-        $cssPath = $this->initializeDirectory('css/jquery-ui');
+        # css & images
         $finder = new Finder();
-        $finder->files()->in($jqueryDir.'/themes')->name('*.css');
-        foreach ($finder as $file) {
-            $filesystem->copy($file, $cssPath . '/' . $file->getRelativePathname());
-        }
-
-        # images
-        $imagesPath = $this->initializeDirectory('images/jquery-ui/base');
-        $finder = new Finder();
-        $finder->files()->in($jqueryDir.'/themes/base/images');
-        foreach ($finder as $file) {
-            $filesystem->copy($file, $imagesPath . '/' . $file->getBaseName());
+        $iteratorThemes = $finder->directories()->in($jqueryDir.'/themes')->depth('== 0')->getIterator();
+        foreach ($iteratorThemes as $themeDirectory) {
+            # images
+            $imagesPath = $this->initializeDirectory('images/jquery-ui/' . $themeDirectory->getBasename());
+            $finder = new Finder();
+            $finder->files()->in($themeDirectory->getPathname() . '/images');
+            foreach ($finder as $file) {
+                $filesystem->copy($file, $imagesPath . '/' . $file->getRelativePathname());
+            }
+            # css
+            $cssPath = $this->initializeDirectory('css/jquery-ui/' . $themeDirectory->getBasename());
+            $finder = new Finder();
+            $finder->files()->in($themeDirectory->getPathname())->name('*.css');
+            foreach ($finder as $file) {
+                $destination = $cssPath . '/' . $file->getRelativePathname();
+                $filesystem->copy($file, $destination);
+                if ('jquery.ui.theme.css' === $file->getBaseName()) {
+                    // replace images path
+                    $themeFile = file_get_contents($destination);
+                    $imagesUrl = '/bundles/bootstrapp/images/jquery-ui/' . $themeDirectory->getBasename() . '/';
+                    $themeFile = str_replace('images/', $imagesUrl, $themeFile);
+                    file_put_contents($destination, $themeFile);
+                }
+            }
         }
 
         # js
@@ -686,7 +698,13 @@ EOF
         $finder = new Finder();
         $finder->files()->in($addyosmaniDir.'/css/custom-theme')->name('*.css');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $cssPath . '/' . $file->getBaseName());
+            $destination = $cssPath . '/' . $file->getBaseName();
+            $filesystem->copy($file, $destination);
+            // replace images path
+            $themeFile = file_get_contents($destination);
+            $imagesUrl = '/bundles/bootstrapp/images/jquery-ui/addyosmani/';
+            $themeFile = str_replace('images/', $imagesUrl, $themeFile);
+            file_put_contents($destination, $themeFile);
         }
 
         # images
