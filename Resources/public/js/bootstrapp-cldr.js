@@ -130,7 +130,7 @@
         } else {
             str = jQuery.trim(str);
             jQuery.each(TwitterCldr.Calendar.calendar.months.format.wide, function(index, month_str){
-                if(month_str.indexOf(str.toLowerCase()) > -1) {
+                if(month_str.toLowerCase().indexOf(str.toLowerCase()) > -1) {
                     value = index;
                     return false;
                 }
