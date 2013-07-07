@@ -211,6 +211,6 @@
         "jquery/jquery-ui": "dev-master",
         "addyosmani/jquery-ui-bootstrap": "dev-master",
         "amsul/pickadate.js": "dev-master",
-        "dybskiy/redactor-js": "dev-master.1.*"
+        "dybskiy/redactor-js": "dev-master"
     }
 }
