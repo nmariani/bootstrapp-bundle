@@ -12,44 +12,17 @@
             "homepage": "http://www.nmariani.fr/"
         }
     ],
-    "minimum-stability": "dev",
-
     "require": {
         "php": ">=5.3.3",
-        "symfony/config": ">=2.3.0",
-        "symfony/console": ">=2.3.0",
-        "symfony/dependency-injection": ">=2.3.0",
-        "symfony/finder": ">=2.3.0",
-        "symfony/form": ">=2.3.0",
-        "symfony/framework-bundle": ">=2.3.0",
-        "symfony/http-kernel": ">=2.3.0",
-        "symfony/locale": ">=2.3.0",
-        "symfony/options-resolver": ">=2.3.0",
-        "symfony/process": ">=2.3.0",
-        "sensio/framework-extra-bundle": ">=2.3.0"
+        "symfony/framework-bundle": ">=2.3.0"
     },
-
-    "suggest": {
-        "atoum/atoum-bundle": "dev-master"
-    },
-
     "autoload": {
         "psr-0": { "nmariani\\Bundle\\BootstrappBundle": "" }
     },
-
     "target-dir": "nmariani/Bundle/BootstrappBundle",
-
-    "scripts": {
-        "post-install-cmd": [
-            "nmariani\\Bundle\\BootstrappBundle\\Composer\\ScriptHandler::installAssets"
-        ],
-        "post-update-cmd": [
-        ]
-    },
-    
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "2.3.x-dev"
         }
     }
 }
