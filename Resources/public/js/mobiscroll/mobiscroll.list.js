@@ -324,6 +324,12 @@
                         inst.show();
                     });
                 }
+
+                if (s.showOnTap) {
+                    inst.tap(input, function () {
+                        inst.show();
+                    });
+                }
             }
 
             if (!s.wheelArray) {
@@ -356,7 +362,7 @@
                     }
                 },
                 onShow: function (dw) {
-                    $('.dwwl', dw).bind('mousedown touchstart', function () {
+                    $('.dwwl', dw).on('mousedown touchstart', function () {
                         clearTimeout(timer[$('.dwwl', dw).index(this)]);
                     });
                 },

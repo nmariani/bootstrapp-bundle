@@ -1,6 +1,6 @@
 /*jslint eqeq: true, plusplus: true, undef: true, sloppy: true, vars: true, forin: true, nomen: true */
 /*!
- * jQuery MobiScroll v2.6.0
+ * jQuery MobiScroll v2.6.2
  * http://mobiscroll.com
  *
  * Copyright 2010-2013, Acid Media
@@ -19,6 +19,7 @@
             rwh,
             mw, // Modal width
             mh, // Modal height
+            lock,
             anim,
             debounce,
             theme,
@@ -36,6 +37,7 @@
             index,
             timer,
             readOnly,
+            preventShow,
             that = this,
             ms = $.mobiscroll,
             e = elem,
@@ -69,7 +71,7 @@
                         target.closest('.dwwl').addClass('dwa');
                     }
 
-                    $(document).bind(MOVE_EVENT, onMove).bind(END_EVENT, onEnd);
+                    $(document).on(MOVE_EVENT, onMove).on(END_EVENT, onEnd);
                 }
             },
             onMove = function (e) {
@@ -127,29 +129,20 @@
                 move = false;
                 target = null;
 
-                $(document).unbind(MOVE_EVENT, onMove).unbind(END_EVENT, onEnd);
+                $(document).off(MOVE_EVENT, onMove).off(END_EVENT, onEnd);
             },
             onBtnStart = function (e) {
-                $(document).bind(END_EVENT, onBtnEnd);
+                var btn = $(this);
+                $(document).on(END_EVENT, onBtnEnd);
                 // Active button
-                if (!$(this).hasClass('dwb-d')) {
-                    $(this).addClass('dwb-a');
+                if (!btn.hasClass('dwb-d')) {
+                    btn.addClass('dwb-a');
                 }
+                setTimeout(function () { btn.blur(); }, 10);
                 // +/- buttons
-                if ($(this).hasClass('dwwb')) {
-                    var w = $(this).closest('.dwwl');
-                    if (testTouch(e) && !isReadOnly(w) && !w.hasClass('dwa')) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        click = true;
-                        // + Button
-                        var t = w.find('.dw-ul'),
-                            func = $(this).hasClass('dwwbp') ? plus : minus;
-
-                        setGlobals(t);
-                        clearInterval(timer);
-                        timer = setInterval(function () { func(t); }, s.delay);
-                        func(t);
+                if (btn.hasClass('dwwb')) {
+                    if (testTouch(e)) {
+                        step(e, btn.closest('.dwwl'), btn.hasClass('dwwbp') ? plus : minus);
                     }
                 }
             },
@@ -158,13 +151,26 @@
                     clearInterval(timer);
                     click = false;
                 }
-                $(document).unbind(END_EVENT, onBtnEnd);
+                $(document).off(END_EVENT, onBtnEnd);
                 $('.dwb-a', dw).removeClass('dwb-a');
+            },
+            onKeyDown = function (e) {
+                if (e.keyCode == 38) { // up
+                    step(e, $(this), minus);
+                } else if (e.keyCode == 40) { // down
+                    step(e, $(this), plus);
+                }
+            },
+            onKeyUp = function (e) {
+                if (click) {
+                    clearInterval(timer);
+                    click = false;
+                }
             },
             onScroll = function (e) {
                 if (!isReadOnly(this)) {
                     e.preventDefault();
-                    e = e.originalEvent;
+                    e = e.originalEvent || e;
                     var delta = e.wheelDelta ? (e.wheelDelta / 120) : (e.detail ? (-e.detail / 3) : 0),
                         t = $('.dw-ul', this);
 
@@ -174,6 +180,21 @@
             };
 
         // Private functions
+
+        function step(e, w, func) {
+            e.stopPropagation();
+            e.preventDefault();
+            if (!click && !isReadOnly(w) && !w.hasClass('dwa')) {
+                click = true;
+                // + Button
+                var t = w.find('.dw-ul');
+
+                setGlobals(t);
+                clearInterval(timer);
+                timer = setInterval(function () { func(t); }, s.delay);
+                func(t);
+            }
+        }
 
         function isReadOnly(wh) {
             if ($.isArray(s.readonly)) {
@@ -188,6 +209,7 @@
                 ww = wheels[i],
                 w = ww.values ? ww : convert(ww),
                 l = 1,
+                labels = w.labels || [],
                 values = w.values,
                 keys = w.keys || values;
 
@@ -195,7 +217,7 @@
                 if (l % 20 == 0) {
                     html += '</div><div class="dw-bf">';
                 }
-                html += '<div class="dw-li dw-v" data-val="' + keys[j] + '" style="height:' + hi + 'px;line-height:' + hi + 'px;"><div class="dw-i">' + v + '</div></div>';
+                html += '<div role="option" aria-selected="false" class="dw-li dw-v" data-val="' + keys[j] + '"' + (labels[j] ? ' aria-label="' + labels[j] + '"' : '') + ' style="height:' + hi + 'px;line-height:' + hi + 'px;"><div class="dw-i">' + v + '</div></div>';
                 l++;
             });
 
@@ -275,7 +297,7 @@
                 ready(t, index);
             }
 
-            if (time && active !== undefined) {
+            if (time && active) {
                 t.closest('.dwwl').addClass('dwa');
                 iv[index] = setTimeout(function () {
                     ready(t, index);
@@ -332,6 +354,12 @@
 
                         // Add selected class to cell
                         $('.dw-sel', t).removeClass('dw-sel');
+
+                        if (!s.multiple) {
+                            $('.dw-sel', t).removeAttr('aria-selected');
+                            cell.attr('aria-selected', 'true');
+                        }
+
                         cell.addClass('dw-sel');
 
                         // Scroll to position
@@ -380,7 +408,7 @@
 
             setTimeout(function () {
                 // Validate
-                scrollToPos(time, idx, true, dir, orig);
+                scrollToPos(time, idx, true, dir, orig !== undefined);
             }, 10);
         }
 
@@ -459,6 +487,8 @@
 
             mw = d.outerWidth();
             mh = d.outerHeight(true);
+
+            lock = mh <= wh && mw <= ww;
 
             if (s.display == 'modal') {
                 l = (ww - mw) / 2;
@@ -602,11 +632,11 @@
                 startY;
 
             if (s.tap) {
-                el.bind('touchstart', function (e) {
+                el.on('touchstart.dw', function (e) {
                     e.preventDefault();
                     startX = getCoord(e, 'X');
                     startY = getCoord(e, 'Y');
-                }).bind('touchend', function (e) {
+                }).on('touchend.dw', function (e) {
                     // If movement is less than 20px, fire the click event handler
                     if (Math.abs(getCoord(e, 'X') - startX) < 20 && Math.abs(getCoord(e, 'Y') - startY) < 20) {
                         handler.call(this, e);
@@ -618,7 +648,7 @@
                 });
             }
 
-            el.bind('click', function (e) {
+            el.on('click.dw', function (e) {
                 if (!tap) {
                     // If handler was not called on touchend, call it on click;
                     handler.call(this, e);
@@ -650,20 +680,22 @@
             event('onBeforeShow', []);
 
             // Create wheels
-            var l = 0,
+            var lbl,
+                l = 0,
                 mAnim = '';
 
             if (anim && !prevAnim) {
                 mAnim = 'dw-' + anim + ' dw-in';
             }
             // Create wheels containers
-            var html = '<div class="' + s.theme + ' dw-' + s.display + (prefix ? ' dw' + prefix : '') + '">' + (s.display == 'inline' ? '<div class="dw dwbg dwi"><div class="dwwr">' : '<div class="dw-persp">' + '<div class="dwo"></div><div class="dw dwbg ' + mAnim + '"><div class="dw-arrw"><div class="dw-arrw-i"><div class="dw-arr"></div></div></div><div class="dwwr">' + (s.headerText ? '<div class="dwv"></div>' : '')) + '<div class="dwcc">';
+            var html = '<div role="dialog" class="' + s.theme + ' dw-' + s.display + (prefix ? ' dw' + prefix : '') + '">' + (s.display == 'inline' ? '<div class="dw dwbg dwi"><div class="dwwr">' : '<div class="dw-persp"><div class="dwo"></div><div class="dw dwbg ' + mAnim + '"><div class="dw-arrw"><div class="dw-arrw-i"><div class="dw-arr"></div></div></div><div class="dwwr"><div aria-live="assertive" class="dwv' + (s.headerText ? '' : ' dw-hidden') + '"></div>') + '<div class="dwcc">';
 
             $.each(s.wheels, function (i, wg) { // Wheel groups
                 html += '<div class="dwc' + (s.mode != 'scroller' ? ' dwpm' : ' dwsc') + (s.showLabel ? '' : ' dwhl') + '"><div class="dwwc dwrc"><table cellpadding="0" cellspacing="0"><tr>';
                 $.each(wg, function (j, w) { // Wheels
                     wheels[l] = w;
-                    html += '<td><div class="dwwl dwrc dwwl' + l + '">' + (s.mode != 'scroller' ? '<div class="dwb-e dwwb dwwbp" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>+</span></div><div class="dwb-e dwwb dwwbm" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>&ndash;</span></div>' : '') + '<div class="dwl">' + (w.label || j) + '</div><div class="dwww"><div class="dww" style="height:' + (s.rows * hi) + 'px;min-width:' + s.width + 'px;"><div class="dw-ul">';
+                    lbl = w.label !== undefined ? w.label : j;
+                    html += '<td><div class="dwwl dwrc dwwl' + l + '">' + (s.mode != 'scroller' ? '<div class="dwb-e dwwb dwwbp" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>+</span></div><div class="dwb-e dwwb dwwbm" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>&ndash;</span></div>' : '') + '<div class="dwl">' + lbl + '</div><div tabindex="0" aria-live="off" aria-label="' + lbl + '" role="listbox" class="dwww"><div class="dww" style="height:' + (s.rows * hi) + 'px;min-width:' + s.width + 'px;"><div class="dw-ul">';
                     // Create wheel values
                     html += generateWheelItems(l);
                     html += '</div><div class="dwwol"></div></div><div class="dwwo"></div></div><div class="dwwol"></div></div></td>';
@@ -673,7 +705,7 @@
                 html += '</tr></table></div></div>';
             });
 
-            html += '</div>' + (s.display != 'inline' ? '<div class="dwbc' + (s.button3 ? ' dwbc-p' : '') + '"><span class="dwbw dwb-s"><span class="dwb dwb-e">' + s.setText + '</span></span>' + (s.button3 ? '<span class="dwbw dwb-n"><span class="dwb dwb-e">' + s.button3Text + '</span></span>' : '') + '<span class="dwbw dwb-c"><span class="dwb dwb-e">' + s.cancelText + '</span></span></div></div>' : '') + '</div></div></div>';
+            html += '</div>' + (s.display != 'inline' ? '<div class="dwbc' + (s.button3 ? ' dwbc-p' : '') + '"><span class="dwbw dwb-s"><span class="dwb dwb-e" role="button" tabindex="0">' + s.setText + '</span></span>' + (s.button3 ? '<span class="dwbw dwb-n"><span class="dwb dwb-e" role="button" tabindex="0">' + s.button3Text + '</span></span>' : '') + '<span class="dwbw dwb-c"><span class="dwb dwb-e" role="button" tabindex="0">' + s.cancelText + '</span></span></div></div>' : '') + '</div></div></div>';
             dw = $(html);
 
             scrollToPos();
@@ -706,10 +738,7 @@
             if (s.display != 'inline') {
                 // Init buttons
                 that.tap($('.dwb-s span', dw), function () {
-                    if (that.hide(false, 'set') !== false) {
-                        setVal(true, 0, true);
-                        event('onSelect', [that.val]);
-                    }
+                    that.select();
                 });
 
                 that.tap($('.dwb-c span', dw), function () {
@@ -720,10 +749,19 @@
                     that.tap($('.dwb-n span', dw), s.button3);
                 }
 
-                // prevent scrolling if not specified otherwise
+                // Enter / ESC
+                $(window).on('keydown.dw', function (e) {
+                    if (e.keyCode == 13) {
+                        that.select();
+                    } else if (e.keyCode == 27) {
+                        that.cancel();
+                    }
+                });
+
+                // Prevent scroll if not specified otherwise
                 if (s.scrollLock) {
-                    dw.bind('touchmove', function (e) {
-                        if (mh <= wh && mw <= ww) {
+                    dw.on('touchmove touchstart', function (e) {
+                        if (lock) {
                             e.preventDefault();
                         }
                     });
@@ -732,23 +770,43 @@
                 // Disable inputs to prevent bleed through (Android bug) and set autocomplete to off (for Firefox)
                 $('input,select,button').each(function () {
                     if (!this.disabled) {
-                        $(this).addClass('dwtd').prop('disabled', true).data('autocomplete', $(this).attr('autocomplete')).attr('autocomplete', 'off');
+                        if ($(this).attr('autocomplete')) {
+                            $(this).data('autocomplete', $(this).attr('autocomplete'));
+                        }
+                        $(this).addClass('dwtd').prop('disabled', true).attr('autocomplete', 'off');
                     }
                 });
 
                 // Set position
                 that.position();
-                $(window).bind('orientationchange.dw resize.dw', function () {
+                $(window).on('orientationchange.dw resize.dw scroll.dw', function (e) {
                     // Sometimes scrollTop is not correctly set, so we wait a little
                     clearTimeout(debounce);
                     debounce = setTimeout(function () {
-                        that.position(true);
+                        var scroll = e.type == 'scroll';
+                        if ((scroll && lock) || !scroll) {
+                            that.position(!scroll);
+                        }
                     }, 100);
                 });
+
+                that.alert(s.ariaDesc);
             }
 
             // Events
-            dw.delegate('.dwwl', 'DOMMouseScroll mousewheel', onScroll).delegate('.dwb-e', START_EVENT, onBtnStart).delegate('.dwwl', START_EVENT, onStart);
+            $('.dwwl', dw)
+                .on('DOMMouseScroll mousewheel', onScroll)
+                .on(START_EVENT, onStart)
+                .on('keydown', onKeyDown)
+                .on('keyup', onKeyUp);
+
+            dw.on(START_EVENT, '.dwb-e', onBtnStart).on('keydown', '.dwb-e', function (e) {
+                if (e.keyCode == 32) { // Space
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).click();
+                }
+            });
 
             event('onShow', [dw, v]);
         };
@@ -771,7 +829,6 @@
                     $(this).removeAttr('autocomplete');
                 }
             });
-            elm.blur();
 
             // Hide wheels and overlay
             if (dw) {
@@ -785,11 +842,31 @@
                     dw.remove();
                     dw = null;
                 }
-                visible = false;
-                pixels = {};
+
                 // Stop positioning on window resize
-                $(window).unbind('.dw');
+                $(window).off('.dw');
             }
+
+            pixels = {};
+            visible = false;
+            preventShow = true;
+
+            elm.focus();
+        };
+
+        that.select = function () {
+            if (that.hide(false, 'set') !== false) {
+                setVal(true, 0, true);
+                event('onSelect', [that.val]);
+            }
+        };
+
+        that.alert = function (txt) {
+            aria.text(txt);
+            clearTimeout(alertTimer);
+            alertTimer = setTimeout(function () {
+                aria.text('');
+            }, 5000);
         };
 
         /**
@@ -817,7 +894,7 @@
             that.settings = s;
 
             // Unbind all events (if re-init)
-            elm.unbind('.dw');
+            elm.off('.dw');
 
             var preset = ms.presets[s.preset];
 
@@ -839,14 +916,26 @@
                 that.show();
             } else {
                 read();
-                if (input && s.showOnFocus) {
+                if (input) {
                     // Set element readonly, save original state
                     if (readOnly === undefined) {
                         readOnly = e.readOnly;
                     }
                     e.readOnly = true;
                     // Init show datewheel
-                    elm.bind('focus.dw', function () { that.show(); });
+                    if (s.showOnFocus) {
+                        elm.on('focus.dw', function () {
+                            if (!preventShow) {
+                                that.show();
+                            }
+                            preventShow = false;
+                        });
+                    }
+                }
+                if (s.showOnTap) {
+                    that.tap(elm, function () {
+                        that.show();
+                    });
                 }
             }
         };
@@ -867,7 +956,7 @@
 
         that.destroy = function () {
             that.hide();
-            elm.unbind('.dw');
+            elm.off('.dw');
             delete scrollers[e.id];
             if (input) {
                 e.readOnly = readOnly;
@@ -980,6 +1069,8 @@
     var move,
         tap,
         touch,
+        alertTimer,
+        aria,
         date = new Date(),
         uuid = date.getTime(),
         scrollers = {},
@@ -1001,6 +1092,7 @@
             disabled: false,
             readonly: false,
             showOnFocus: true,
+            showOnTap: true,
             showLabel: true,
             wheels: [],
             theme: '',
@@ -1011,6 +1103,7 @@
             lang: 'en-US',
             setText: 'Set',
             cancelText: 'Cancel',
+            ariaDesc: 'Select a value',
             scrollLock: true,
             tap: true,
             speedUnit: 0.0012,
@@ -1040,7 +1133,11 @@
             }
         };
 
-    $(document).bind('mouseover mouseup mousedown click', function (e) { // Prevent standard behaviour on body click
+    $(function () {
+        aria = $('<div class="dw-hidden" role="alert"></div>').appendTo('body');
+    });
+
+    $(document).on('mouseover mouseup mousedown click', function (e) { // Prevent standard behaviour on body click
         if (tap) {
             e.stopPropagation();
             e.preventDefault();
@@ -1066,6 +1163,7 @@
                 return init(this, extend(method, { preset: name }), arguments);
             };
         },
+        has3d: has3d,
         shorts: {},
         presets: {},
         themes: {},
