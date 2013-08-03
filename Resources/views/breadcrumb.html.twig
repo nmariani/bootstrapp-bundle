@@ -3,11 +3,17 @@
 <ul class="breadcrumb">
     {% block breadcrumb_items %}
         {% for item in breadcrumb %}
+            {% set islink = item.url|default('')|length and item.url != app.request.requestUri %}
             <li>
-                {% if item.url|default('')|length and item.url != app.request.requestUri %}
-                    <a href="{{ item.url }}">{{ item.text|trans(item.parameters|default([]), domain|default(null), locale|default(null))|capitalize }}</a>
-                {% else %}
-                    {{ item.text|trans(item.parameters|default([]), domain|default(null), locale|default(null))|capitalize }}
+                {% if item.icon|default('')|length %}
+                    <i class="{{ item.icon }}"></i>
+                {% endif %}
+                {% if islink %}
+                    <a href="{{ item.url }}">
+                {% endif %}
+                {{ item.text|trans(item.parameters|default([]), domain|default(null), locale|default(null))|capitalize }}
+                {% if islink %}
+                    </a>
                 {% endif %}
                 {% if not loop.last %}<span class='divider'>{{ separator|default('/') }}</span>{% endif %}
             </li>
