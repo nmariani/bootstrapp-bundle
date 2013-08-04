@@ -30,8 +30,8 @@
     {% endblock stylesheets %}
 
     {% block assets_stylesheets %}
-        {% for vendor in app.vendors %}
-            {{ assets.stylesheets(vendor) }}
+        {% for vendor, components in app.vendors %}
+            {{ assets.stylesheets(vendor, components) }}
         {% endfor %}
     {% endblock assets_stylesheets %}
 
@@ -125,13 +125,14 @@
         %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
-    {% endblock javascripts %}
 
-    {% block assets_javascripts %}
-        {% for vendor in app.vendors %}
-            {{ assets.javascripts(vendor) }}
-        {% endfor %}
-    {% endblock assets_javascripts %}
+        {# Dynamically load assets #}
+        {% block assets_javascripts %}
+            {% for vendor, components in app.vendors %}
+                {{ assets.javascripts(vendor, components) }}
+            {% endfor %}
+        {% endblock assets_javascripts %}
+    {% endblock javascripts %}
 {% endblock body %}
 </body>
 </html>

@@ -66,7 +66,15 @@ class DateType extends BaseDateType
             default:
                 $view->vars['attr']['data-format'] = $this->getPattern($options['format']);
                 if(isset($options['widget']) && $this->assetsLoader) {
-                    $this->assetsLoader->addVendor($options['widget']);
+                    switch($options['widget']) {
+                        case 'jqueryui':
+                            $components = ['datepicker'];
+                            break;
+                        default:
+                            $components = [];
+                            break;
+                    }
+                    $this->assetsLoader->addVendor($options['widget'], $components);
                 }
                 break;
         }

@@ -72,7 +72,15 @@ class DateTimeType extends BaseDateTimeType
                 break;
             default:
                 if(isset($options['widget']) && $this->assetsLoader) {
-                    $this->assetsLoader->addVendor($options['widget']);
+                    switch($options['widget']) {
+                        case 'jqueryui':
+                            $components = ['datepicker'];
+                            break;
+                        default:
+                            $components = [];
+                            break;
+                    }
+                    $this->assetsLoader->addVendor($options['widget'], $components);
                 }
                 break;
         }
