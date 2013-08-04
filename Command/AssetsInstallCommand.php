@@ -24,6 +24,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'Addyosmani',
         'Pickadate',
         'Redactor',
+        'ElFinder',
     ];
     private $path;
     private $assets;
@@ -165,6 +166,15 @@ EOT
                 $output->writeln('<info>Success, redactor assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : redactor assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('ElFinder', $this->assets)) {
+            $output->writeln('<comment>Installing elFinder assets...</comment>');
+            if(true === $this->getElFinderAssets($output)) {
+                $output->writeln('<info>Success, elFinder installed!</info>');
+            } else {
+                $output->writeln('<error>Error : elFinder installation failed!</error>');
             }
         }
     }
@@ -765,6 +775,59 @@ EOF
         $finder->files()->in($redactorDir)->name('*.js');
         foreach ($finder as $file) {
             $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
+        }
+
+        return $success;
+    }
+
+    protected function getElFinderAssets($output)
+    {
+        $success = true;
+
+        $elfinderDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/studio-42/elfinder';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # css
+        $cssPath = $this->initializeDirectory('css/elfinder');
+        $finder = new Finder();
+        $finder->files()->in($elfinderDir.'/css')->name('*.css');
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getPathname());
+            // replace images url
+            $content = str_replace('../img', '/bundles/bootstrapp/images/elfinder', $content);
+            file_put_contents($cssPath . '/' . $file->getRelativePathname(), $content);
+        }
+
+        # images
+        $imagesPath = $this->initializeDirectory('images/elfinder');
+        $finder = new Finder();
+        $finder->files()->in($elfinderDir.'/img');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $imagesPath . '/' . $file->getRelativePathname());
+        }
+
+        # js
+        $jsPath = $this->initializeDirectory('js/elfinder');
+        $finder = new Finder();
+        $finder->files()->in($elfinderDir.'/js')->name('*.js');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
+        }
+
+        # php lib
+        $libPath = $this->initializeDirectory($this->path . '/Resources/lib/elfinder');
+        $finder = new Finder();
+        $finder->files()->in($elfinderDir.'/php');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $libPath . '/' . $file->getRelativePathname());
+        }
+
+        # sounds
+        $soundsPath = $this->initializeDirectory('sounds/elfinder');
+        $finder = new Finder();
+        $finder->files()->in($elfinderDir.'/sounds');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $soundsPath . '/' . $file->getRelativePathname());
         }
 
         return $success;
