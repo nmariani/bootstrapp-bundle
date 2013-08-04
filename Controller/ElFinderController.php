@@ -26,15 +26,23 @@ class ElFinderController extends Controller
      * @Method({"GET", "POST"})
      */
     public function connectorAction() {
+        $roots = [];
+        if ($this->container->hasParameter('bootstrapp.elfinder.roots')) {
+            foreach($this->container->getParameter('bootstrapp.elfinder.roots') as $root) {
+                if (is_array($root)) {
+                    if (!array_key_exists('driver', $root)) {
+                        $root['driver'] = 'LocalFileSystem';
+                    }
+                    if (!array_key_exists('accessControl', $root)) {
+                        $root['accessControl'] = 'access';
+                    }
+                    $roots[] = $root;
+                }
+            }
+        }
         $opts = array(
-            // 'debug' => true,
-            'roots' => array(
-                array(
-                    'driver'        => 'LocalFileSystem',                                               // driver for accessing file system (REQUIRED)
-                    'path'          => realpath($this->get('kernel')->getRootDir().'/../web/files/'),   // path to files (REQUIRED)
-                    'URL'           => '/files/',                                                       // URL to files (REQUIRED)starting files (OPTIONAL)
-                )
-            )
+            'debug' => $this->container->getParameter('kernel.debug'),
+            'roots' => $roots
         );
         include_once __DIR__.'/../Resources/lib/elfinder/connector.minimal.php';
     }

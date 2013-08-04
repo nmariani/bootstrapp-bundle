@@ -1,4 +1,6 @@
 parameters:
+    bootstrapp.elfinder.roots:
+        - {path: %kernel.root_dir%/../web/files/, URL: /files/}
     bootstrapp.locales: [en_US,fr_FR]
     form.type.date.widget: eyecon
     form.type.date.format: 1 # 16 juillet 1983
