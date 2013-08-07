@@ -56,6 +56,15 @@
         %}
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
         {% endstylesheets %}
+
+{# jquery-sortable #}
+    {% elseif vendor == 'jquery-sortable' %}
+        {% stylesheets filter='less' output='bundles/bootstrapp/css/jquery-sortable.css'
+        "@BootstrappBundle/Resources/public/less/jquery-sortable.less"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+
     {% endif %}
 {% endmacro %}
 
@@ -127,6 +136,11 @@
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/elfinder/i18n/elfinder.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/elfinder/i18n/elfinder.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>e="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-mobiscroll.js') }}"></script>
+
+{# jquery-sortable #}
+    {% elseif vendor == 'jquery-sortable' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-sortable/jquery-sortable.js') }}"></script>
+
     {% endif %}
 {% endmacro %}

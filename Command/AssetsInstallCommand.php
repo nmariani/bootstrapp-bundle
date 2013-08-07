@@ -25,6 +25,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'Pickadate',
         'Redactor',
         'ElFinder',
+        'JQuerySortable',
     ];
     private $path;
     private $assets;
@@ -175,6 +176,15 @@ EOT
                 $output->writeln('<info>Success, elFinder installed!</info>');
             } else {
                 $output->writeln('<error>Error : elFinder installation failed!</error>');
+            }
+        }
+
+        if(in_array('JQuerySortable', $this->assets)) {
+            $output->writeln('<comment>Installing jQuery Sortable assets...</comment>');
+            if(true === $this->getJQuerySortableAssets($output)) {
+                $output->writeln('<info>Success, jQuery Sortable assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : jQuery Sortable assets installation failed!</error>');
             }
         }
     }
@@ -828,6 +838,24 @@ EOF
         $finder->files()->in($elfinderDir.'/sounds');
         foreach ($finder as $file) {
             $filesystem->copy($file, $soundsPath . '/' . $file->getRelativePathname());
+        }
+
+        return $success;
+    }
+
+    protected function getJQuerySortableAssets($output)
+    {
+        $success = true;
+
+        $jQuerySortableDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/johnny/jquery-sortable/source';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # js
+        $jsPath = $this->initializeDirectory('js/jquery-sortable');
+        $finder = new Finder();
+        $finder->files()->in($jQuerySortableDir.'/js')->name('jquery-sortable*');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
         }
 
         return $success;
