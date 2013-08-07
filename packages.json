@@ -195,6 +195,38 @@
                 }
             }
         },
+        {
+            "type": "package",
+            "package": {
+                "name": "studio-42/elfinder",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/Studio-42/elFinder.git",
+                    "type": "git",
+                    "reference": "2.1"
+                },
+                "dist": {
+                    "url": "https://github.com/Studio-42/elFinder/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "johnny/jquery-sortable",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/johnny/jquery-sortable.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/johnny/jquery-sortable/zipball/master",
+                    "type": "zip"
+                }
+            }
+        }
     ],
 
     "require-all": true,
@@ -211,6 +243,8 @@
         "jquery/jquery-ui": "dev-master",
         "addyosmani/jquery-ui-bootstrap": "dev-master",
         "amsul/pickadate.js": "dev-master",
-        "dybskiy/redactor-js": "dev-master"
+        "dybskiy/redactor-js": "dev-master",
+        "studio-42/elfinder": "dev-master",
+        "johnny/jquery-sortable": "dev-master"
     }
 }
