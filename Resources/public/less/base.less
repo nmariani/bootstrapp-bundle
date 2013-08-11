@@ -123,18 +123,48 @@ body > .container-fluid {
 
 body > .container > .row,
 body > .container-fluid > .row-fluid {
-    padding-top: 40px;
-    padding-bottom: 32px;
+    padding-bottom: 40px;
+}
+@media screen and (min-width: @navbarCollapseDesktopWidth) {
+    body > .container > .row,
+    body > .container-fluid > .row-fluid {
+        padding-top: 40px;
+    }
 }
 
 body > footer {
     clear:both;
-    margin-top: -32px;
+    margin-top: -40px;
     text-align: center;
-}
+    font-size: 13px;
+    background: @white;
 
-body > footer > .container-fluid {
-    padding: 6px 12px;
+    > .container,
+    > .container-fluid {
+        background: @white;
+        padding: 10px 12px;
+    }
+
+    .locale-dropdown {
+        display: inline-block;
+        text-align: left;
+        font-size: 13px;
+        img {
+          margin-top: -4px;
+          max-height: 20px;
+        }
+        .dropdown-menu {
+            z-index: 0;
+            width:190px;
+            left: 0;
+            right: auto;
+            margin-bottom: 5px;
+            margin-left: -20px;
+            border-radius: 6px 6px 0 0;
+            border: none;
+            .box-shadow(none);
+        }
+    }
 }
 
 p:last-child {

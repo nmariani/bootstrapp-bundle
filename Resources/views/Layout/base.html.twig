@@ -101,7 +101,15 @@
     <footer>
         <div class="container{{ layout }}">
             {% block footer %}
-            <p id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</p>
+            <span id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</span>
+            <span class="dropdown dropup locale-dropdown">
+            {% render url('bootstrapp_locales', {
+                'route':app.request.attributes.get('_route'),
+                'routeParams':app.request.attributes.get('_route_params')|json_encode(),
+                'locale':app.request.locale
+            }) %}
+            </span>
+            </p>
             {% endblock footer %}
         </div>
     </footer>

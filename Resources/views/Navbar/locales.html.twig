@@ -1,21 +1,17 @@
 {% if locales|length > 1 %}
-<ul class="nav pull-right locale-dropdown">
-    <li class="dropdown">
-        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-            <img src="{{ asset('bundles/bootstrapp/images/flags/%locale%.png'|replace({'%locale%':locale|slice(-2)|lower})) }}" alt="flag" />
-            {{ locales[locale] }} <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-            {% for code, label in locales %}
-                {% if code != locale %}
-                    <li>
-                        <a href="{{ path(route, routeParams|merge({'_locale' : code})) }}">
-                        <img src="{{ asset('bundles/bootstrapp/images/flags/%locale%.png'|replace({'%locale%':code|slice(-2)|lower})) }}" alt="flag">
-                        {{ label }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </li>
-</ul>
+    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+        <img src="{{ asset('bundles/bootstrapp/images/flags/%locale%.png'|replace({'%locale%':locale|slice(-2)|lower})) }}" alt="flag" />
+        {{ locales[locale] }} <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        {% for code, label in locales %}
+            {% if code != locale %}
+                <li>
+                    <a href="{{ path(route, routeParams|merge({'_locale' : code})) }}">
+                    <img src="{{ asset('bundles/bootstrapp/images/flags/%locale%.png'|replace({'%locale%':code|slice(-2)|lower})) }}" alt="flag">
+                    {{ label }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 {% endif %}

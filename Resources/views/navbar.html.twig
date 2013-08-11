@@ -28,8 +28,41 @@
             {% endblock navbar_navigation %}
 
             <div class="nav-collapse collapse pull-right">
+                <ul class="nav">
                 {% block navbar_collapse %}
-                <ul class="nav pull-right">
+                    {% if menus is defined and menus|length > 0 %}
+                        {% for menu in menus %}
+                            {% if menu.items is defined and menu.items|length > 0 %}
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        {% if menu.icon is defined %}
+                                            <i class="{{ menu.icon }}"></i>
+                                        {% endif %}
+                                        {{ menu.caption|default('Caption') }} <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% block navbar_menu %}
+                                        {% for item in menu.items %}
+                                            {% if item.divider is defined %}
+                                                <li class="divider"></li>
+                                            {% endif %}
+                                            <li><a href="{{ item.href }}" target="{{ item.target|default('_self') }}">{{ item.caption }}</a></li>
+                                        {% endfor %}
+                                        {% endblock navbar_menu %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {#
+                    <li class="dropdown locale-dropdown">
+                    {% render url('bootstrapp_locales', {
+                        'route':app.request.attributes.get('_route'),
+                        'routeParams':app.request.attributes.get('_route_params')|json_encode(),
+                        'locale':app.request.locale
+                    }) %}
+                    </li>
+                    #}
                     {% block navbar_user_dropdown %}
                         {% if app.user %}
                             <li class="dropdown">
@@ -37,7 +70,7 @@
                                     <i class="icon-user"></i> {% block navbar_username %}{{ app.user.username }}{% endblock navbar_username %}
                                     <span class="caret"></span>
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu pull-right">
                                     {% block navbar_user_dropdown_menu %}
                                         <li><a href="{{ routes.logout|default('#') }}">{% trans %}Sign out{% endtrans %}</a></li>
                                     {% endblock navbar_user_dropdown_menu %}
@@ -45,41 +78,8 @@
                             </li>
                         {% endif %}
                     {% endblock navbar_user_dropdown %}
-                </ul>
-
-                {% render url('bootstrapp_locales', {
-                    'route':app.request.attributes.get('_route'),
-                    'routeParams':app.request.attributes.get('_route_params')|json_encode(),
-                    'locale':app.request.locale
-                }) %}
-
-                {% if menus is defined and menus|length > 0 %}
-                    {% for menu in menus %}
-                        {% if menu.items is defined and menu.items|length > 0 %}
-                        <ul class="nav pull-right">
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    {% if menu.icon is defined %}
-                                        <i class="{{ menu.icon }}"></i>
-                                    {% endif %}
-                                    {{ menu.caption|default('Caption') }} <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    {% block navbar_menu %}
-                                    {% for item in menu.items %}
-                                        {% if item.divider is defined %}
-                                            <li class="divider"></li>
-                                        {% endif %}
-                                        <li><a href="{{ item.href }}" target="{{ item.target|default('_self') }}">{{ item.caption }}</a></li>
-                                    {% endfor %}
-                                    {% endblock navbar_menu %}
-                                </ul>
-                            </li>
-                        </ul>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
                 {% endblock navbar_collapse %}
+                </ul>
             </div>
             {% endblock navbar_content %}
         </div>
