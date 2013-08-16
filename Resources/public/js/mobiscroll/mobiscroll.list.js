@@ -6,7 +6,7 @@
             showInput: true,
             inputClass: ''
         },
-        preset =  function (inst) {
+        preset = function (inst) {
             var orig = $.extend({}, inst.settings),
                 s = $.extend(inst.settings, defaults, orig),
                 elm = $(this),
@@ -207,8 +207,9 @@
                 while (ok) {
                     obj = getFirstValidItemObjOrInd(ndObjA);
                     t[i++] = obj.key;
-                    if (ok = obj.children) {
-                        ndObjA = obj.children;
+                    ok = obj.children;
+                    if (ok) {
+                        ndObjA = ok;
                     }
                 }
                 return t;
@@ -317,7 +318,7 @@
 
             if (s.showInput) {
                 input = $('<input type="text" id="' + id + '" value="" class="' + s.inputClass + '" readonly />').insertBefore(elm);
-                inst.settings.anchor = input; // give the core the input element for the bubble positioning
+                s.anchor = input; // give the core the input element for the bubble positioning
 
                 if (s.showOnFocus) {
                     input.focus(function () {
@@ -340,10 +341,13 @@
                 width: 50,
                 wheels: w,
                 headerText: false,
+                parseValue: function (value, inst) {
+                    return s.defaultValue || fwv;
+                },
                 onBeforeShow: function (dw) {
                     var t = inst.temp;
                     currWheelVector = t.slice(0);
-                    inst.settings.wheels = generateWheelsFromVector(t, lvl, lvl);
+                    s.wheels = generateWheelsFromVector(t, lvl, lvl);
                     prevent = true;
                 },
                 onSelect: function (v, inst) {
@@ -367,36 +371,44 @@
                     });
                 },
                 validate: function (dw, index, time) {
-                    var t = inst.temp;
+                    var args = [],
+                        t = inst.temp,
+                        i = (index || 0) + 1,
+                        o;
+
                     if ((index !== undefined && currWheelVector[index] != t[index]) || (index === undefined && !prevent)) {
-                        inst.settings.wheels = generateWheelsFromVector(t, null, index);
-                        var args = [],
-                            i = (index || 0) + 1,
-                            o = calcLevelOfVector2(t, index);
+                        s.wheels = generateWheelsFromVector(t, null, index);
+                        o = calcLevelOfVector2(t, index);
+
                         if (index !== undefined) {
                             inst.temp = o.nVector.slice(0);
                         }
+
                         while (i < o.lvl) {
                             args.push(i++);
                         }
+
                         hideWheels(dw, o.lvl);
                         currWheelVector = inst.temp.slice(0);
+
                         if (args.length) {
                             prevent = true;
-                            inst.settings.readonly = createROVector(lvl, index);
+                            s.readonly = createROVector(lvl, index);
                             clearTimeout(timer[index]);
                             timer[index] = setTimeout(function () {
-                                inst.changeWheel(args);
-                                inst.settings.readonly = false;
+                                inst.changeWheel(args, undefined, index !== undefined);
+                                s.readonly = false;
                             }, time * 1000);
                             return false;
                         }
+
                         setDisabled(dw, o.lvl, wa, inst.temp);
                     } else {
-                        var o = calcLevelOfVector2(t, t.length);
+                        o = calcLevelOfVector2(t, t.length);
                         setDisabled(dw, o.lvl, wa, t);
                         hideWheels(dw, o.lvl);
                     }
+
                     prevent = false;
                 }
             };

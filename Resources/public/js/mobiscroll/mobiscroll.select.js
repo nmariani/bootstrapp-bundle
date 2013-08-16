@@ -105,7 +105,7 @@
 
             if (fill) {
                 prevent = true;
-                elm.val(value).trigger('change');
+                elm.val(value).change();
             }
         }
 
@@ -153,7 +153,7 @@
 
         $('#' + id).remove();
 
-        input = $('<input type="text" id="' + id + '" class="' + s.inputClass + '" readonly />').insertBefore(elm),
+        input = $('<input type="text" id="' + id + '" class="' + s.inputClass + '" readonly />').insertBefore(elm);
 
         $('option', elm).each(function () {
             main[$(this).attr('value')] = $(this).text();
@@ -194,7 +194,7 @@
             inst._setValue = inst.setValue;
         }
 
-        inst.setValue = function (d, fill, time, noscroll, temp) {
+        inst.setValue = function (d, fill, time, noscroll, temp, manual) {
             var value,
                 v = $.isArray(d) ? d[0] : d;
 
@@ -214,14 +214,14 @@
                 value = s.rtl ? [option, group.index()] : [group.index(), option];
                 if (gr !== prev) { // Need to regenerate wheels, if group changed
                     s.wheels = genWheels();
-                    inst.changeWheel([optIdx]);
+                    inst.changeWheel([optIdx], undefined, manual);
                     prev = gr + '';
                 }
             } else {
                 value = [option];
             }
 
-            inst._setValue(value, fill, time, noscroll, temp);
+            inst._setValue(value, fill, time, noscroll, temp, manual);
 
             // Set input/select values
             if (fill) {
@@ -289,7 +289,7 @@
                             s.readonly = [s.rtl, !s.rtl];
                             clearTimeout(timer);
                             timer = setTimeout(function () {
-                                inst.changeWheel([optIdx]);
+                                inst.changeWheel([optIdx], undefined, true);
                                 s.readonly = roPre;
                                 prev = gr + '';
                             }, time * 1000);
@@ -357,7 +357,7 @@
                 if (s.display == 'inline' && !multiple) {
                     input.val(v);
                     prevent = true;
-                    elm.val(inst.temp[optIdx]).trigger('change');
+                    elm.val(inst.temp[optIdx]).change();
                 }
             },
             onClose: function () {

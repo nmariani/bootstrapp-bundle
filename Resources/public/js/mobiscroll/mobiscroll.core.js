@@ -1,6 +1,6 @@
 /*jslint eqeq: true, plusplus: true, undef: true, sloppy: true, vars: true, forin: true, nomen: true */
 /*!
- * jQuery MobiScroll v2.6.2
+ * jQuery MobiScroll v2.7.0
  * http://mobiscroll.com
  *
  * Copyright 2010-2013, Acid Media
@@ -37,6 +37,7 @@
             index,
             timer,
             readOnly,
+            preventChange,
             preventShow,
             that = this,
             ms = $.mobiscroll,
@@ -237,7 +238,7 @@
         }
 
         function read() {
-            that.temp = ((input && that.val !== null && that.val != elm.val()) || that.values === null) ? s.parseValue(elm.val() || '', that) : that.values.slice(0);
+            that.temp = that.values ? that.values.slice(0) : s.parseValue(elm.val() || '', that);
             setVal();
         }
 
@@ -269,7 +270,6 @@
         }
 
         function scroll(t, index, val, time, active) {
-
             var px = (m - val) * hi,
                 style = t[0].style,
                 i;
@@ -398,17 +398,18 @@
 
             var cell = $('.dw-li', t).eq(val),
                 o = orig === undefined ? val : orig,
+                active = orig !== undefined,
                 idx = index,
                 time = anim ? (val == o ? 0.1 : Math.abs((val - o) * s.timeUnit)) : 0;
 
             // Set selected scroller value
             that.temp[idx] = cell.attr('data-val');
 
-            scroll(t, idx, val, time, orig);
+            scroll(t, idx, val, time, active);
 
             setTimeout(function () {
                 // Validate
-                scrollToPos(time, idx, true, dir, orig !== undefined);
+                scrollToPos(time, idx, true, dir, active);
             }, 10);
         }
 
@@ -422,10 +423,10 @@
             calc(t, val < min ? max : val, 2, true);
         }
 
-        function setVal(fill, time, noscroll, temp) {
+        function setVal(fill, time, noscroll, temp, manual) {
 
             if (visible && !noscroll) {
-                scrollToPos(time);
+                scrollToPos(time, undefined, manual);
             }
 
             v = s.formatResult(that.temp);
@@ -435,10 +436,9 @@
                 that.val = v;
             }
 
-            if (fill) {
-                if (input) {
-                    elm.val(v).trigger('change');
-                }
+            if (fill && input) {
+                preventChange = true;
+                elm.val(v).change();
             }
         }
 
@@ -572,9 +572,9 @@
         * @param {Number} [time=0] - Animation time
         * @param {Boolean} [temp=false] - If true, then only set the temporary value.(only scroll there but not set the value)
         */
-        that.setValue = function (values, fill, time, temp) {
+        that.setValue = function (values, fill, time, temp, manual) {
             that.temp = $.isArray(values) ? values.slice(0) : s.parseValue.call(e, values + '', that);
-            setVal(fill, time, false, temp);
+            setVal(fill, time, false, temp, manual);
         };
 
         that.getValue = function () {
@@ -594,7 +594,7 @@
         /**
         * Changes the values of a wheel, and scrolls to the correct position
         */
-        that.changeWheel = function (idx, time) {
+        that.changeWheel = function (idx, time, manual) {
             if (dw) {
                 var i = 0,
                     nr = idx.length;
@@ -607,7 +607,7 @@
                             nr--;
                             if (!nr) {
                                 that.position();
-                                scrollToPos(time, undefined, true);
+                                scrollToPos(time, undefined, manual);
                                 return false;
                             }
                         }
@@ -632,7 +632,7 @@
                 startY;
 
             if (s.tap) {
-                el.on('touchstart.dw', function (e) {
+                el.on('touchstart.dw mousedown.dw', function (e) {
                     e.preventDefault();
                     startX = getCoord(e, 'X');
                     startY = getCoord(e, 'Y');
@@ -653,6 +653,7 @@
                     // If handler was not called on touchend, call it on click;
                     handler.call(this, e);
                 }
+                e.preventDefault();
             });
 
         };
@@ -695,7 +696,7 @@
                 $.each(wg, function (j, w) { // Wheels
                     wheels[l] = w;
                     lbl = w.label !== undefined ? w.label : j;
-                    html += '<td><div class="dwwl dwrc dwwl' + l + '">' + (s.mode != 'scroller' ? '<div class="dwb-e dwwb dwwbp" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>+</span></div><div class="dwb-e dwwb dwwbm" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>&ndash;</span></div>' : '') + '<div class="dwl">' + lbl + '</div><div tabindex="0" aria-live="off" aria-label="' + lbl + '" role="listbox" class="dwww"><div class="dww" style="height:' + (s.rows * hi) + 'px;min-width:' + s.width + 'px;"><div class="dw-ul">';
+                    html += '<td><div class="dwwl dwrc dwwl' + l + '">' + (s.mode != 'scroller' ? '<a href="#" tabindex="-1" class="dwb-e dwwb dwwbp" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>+</span></a><a href="#" tabindex="-1" class="dwb-e dwwb dwwbm" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>&ndash;</span></a>' : '') + '<div class="dwl">' + lbl + '</div><div tabindex="0" aria-live="off" aria-label="' + lbl + '" role="listbox" class="dwww"><div class="dww" style="height:' + (s.rows * hi) + 'px;min-width:' + s.width + 'px;"><div class="dw-ul">';
                     // Create wheel values
                     html += generateWheelItems(l);
                     html += '</div><div class="dwwol"></div></div><div class="dwwo"></div></div><div class="dwwol"></div></div></td>';
@@ -705,7 +706,7 @@
                 html += '</tr></table></div></div>';
             });
 
-            html += '</div>' + (s.display != 'inline' ? '<div class="dwbc' + (s.button3 ? ' dwbc-p' : '') + '"><span class="dwbw dwb-s"><span class="dwb dwb-e" role="button" tabindex="0">' + s.setText + '</span></span>' + (s.button3 ? '<span class="dwbw dwb-n"><span class="dwb dwb-e" role="button" tabindex="0">' + s.button3Text + '</span></span>' : '') + '<span class="dwbw dwb-c"><span class="dwb dwb-e" role="button" tabindex="0">' + s.cancelText + '</span></span></div></div>' : '') + '</div></div></div>';
+            html += '</div>' + (s.display != 'inline' ? '<div class="dwbc' + (s.button3 ? ' dwbc-p' : '') + '"><span class="dwbw dwb-s"><a href="#" class="dwb dwb-e" role="button">' + s.setText + '</a></span>' + (s.button3 ? '<span class="dwbw dwb-n"><a href="#" class="dwb dwb-e" role="button">' + s.button3Text + '</a></span>' : '') + '<span class="dwbw dwb-c"><a href="#" class="dwb dwb-e" role="button">' + s.cancelText + '</a></span></div></div>' : '') + '</div></div></div>';
             dw = $(html);
 
             scrollToPos();
@@ -737,16 +738,18 @@
 
             if (s.display != 'inline') {
                 // Init buttons
-                that.tap($('.dwb-s span', dw), function () {
+                that.tap($('.dwb-s .dwb', dw), function () {
                     that.select();
                 });
 
-                that.tap($('.dwb-c span', dw), function () {
+                that.tap($('.dwb-c .dwb', dw), function () {
                     that.cancel();
                 });
 
                 if (s.button3) {
-                    that.tap($('.dwb-n span', dw), s.button3);
+                    that.tap($('.dwb-n .dwb', dw), function (e) {
+                        s.button3.call(this, e, that);
+                    });
                 }
 
                 // Enter / ESC
@@ -794,19 +797,19 @@
             }
 
             // Events
-            $('.dwwl', dw)
-                .on('DOMMouseScroll mousewheel', onScroll)
-                .on(START_EVENT, onStart)
-                .on('keydown', onKeyDown)
-                .on('keyup', onKeyUp);
-
-            dw.on(START_EVENT, '.dwb-e', onBtnStart).on('keydown', '.dwb-e', function (e) {
-                if (e.keyCode == 32) { // Space
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(this).click();
-                }
-            });
+            dw.on('DOMMouseScroll mousewheel', '.dwwl', onScroll)
+                .on(START_EVENT, '.dwwl', onStart)
+                .on('keydown', '.dwwl', onKeyDown)
+                .on('keyup', '.dwwl', onKeyUp)
+                .on(START_EVENT, '.dwb-e', onBtnStart)
+                .on('click', '.dwb-e', function (e) { e.preventDefault(); })
+                .on('keydown', '.dwb-e', function (e) {
+                    if (e.keyCode == 32) { // Space
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(this).click();
+                    }
+                });
 
             event('onShow', [dw, v]);
         };
@@ -933,10 +936,19 @@
                     }
                 }
                 if (s.showOnTap) {
-                    that.tap(elm, function () {
+                    elm.on('click.dw', function () {
                         that.show();
                     });
                 }
+            }
+
+            if (input) {
+                elm.on('change.dw', function () {
+                    if (!preventChange) {
+                        that.setValue(elm.val(), false, 0.2);
+                    }
+                    preventChange = false;
+                });
             }
         };
 
@@ -961,6 +973,7 @@
             if (input) {
                 e.readOnly = readOnly;
             }
+            event('onDestroy', []);
         };
 
         that.getInst = function () {
@@ -1014,7 +1027,6 @@
         var org = e.originalEvent,
             ct = e.changedTouches;
         return ct || (org && org.changedTouches) ? (org ? org.changedTouches[0]['page' + c] : ct[0]['page' + c]) : e['page' + c];
-
     }
 
     function constrain(val, min, max) {
@@ -1163,7 +1175,10 @@
                 return init(this, extend(method, { preset: name }), arguments);
             };
         },
-        has3d: has3d,
+        util: {
+            prefix: prefix,
+            has3d: has3d
+        },
         shorts: {},
         presets: {},
         themes: {},
