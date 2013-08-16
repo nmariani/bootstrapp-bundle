@@ -40,7 +40,7 @@
                                         {% endif %}
                                         {{ menu.caption|default('Caption') }} <b class="caret"></b>
                                     </a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu pull-right">
                                         {% block navbar_menu %}
                                         {% for item in menu.items %}
                                             {% if item.divider is defined %}
