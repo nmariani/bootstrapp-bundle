@@ -140,6 +140,36 @@
                 {{ assets.javascripts(vendor, components) }}
             {% endfor %}
         {% endblock assets_javascripts %}
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                /**
+                 * Adjust container padding-top with navbar height
+                 */
+                function adjustContainerPadding() {
+                    var navbar = $('.navbar.navbar-fixed-top'),
+                        container = $('body > .container > .row, body > .container-fluid > .row-fluid');
+                    if (navbar.length > 0 && navbar.css('position') == 'fixed') {
+                        if (!container.data('spacer')) {
+                            container.data('spacer', parseInt(container.css('padding-top')) - navbar.height());
+                        }
+                        container.css('padding-top', navbar.height() + container.data('spacer'));
+                    } else {
+                        container.css('padding-top', '');
+                    }
+                }
+                /**
+                 * Adjust container padding-top with navbar height on window resize
+                 */
+                $(window).resize(function() {
+                    adjustContainerPadding();
+                });
+                /**
+                 * Initialize container padding-top with navbar height
+                 */
+                adjustContainerPadding();
+            });
+        </script>
     {% endblock javascripts %}
 {% endblock body %}
 </body>
