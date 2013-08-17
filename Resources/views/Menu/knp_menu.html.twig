@@ -83,7 +83,7 @@
     {% if not is_submenu %}
         {% set attributes = attributes|merge({'data-toggle': 'dropdown'}) %}
     {% endif %}
-    <a href="#"{{ macros.attributes(attributes) }}>{% if item.attribute('icon') is not empty  %}<i class="{{ item.attribute('icon') }}"></i> {% endif %}{{ block('label') }}{% if(not is_submenu) %}<b class="caret"></b>{% endif %}</a>
+    <a href="#"{{ macros.attributes(attributes) }}>{% if item.attribute('icon') is not empty  %}<i class="{{ item.attribute('icon') }}"></i> {% endif %}{{ block('label') }}{% if(not is_submenu) %} <b class="caret"></b>{% endif %}</a>
 {% endblock %}
 
 {% block label %}{{ item.label|trans }}{% endblock %}
