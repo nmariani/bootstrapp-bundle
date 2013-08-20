@@ -226,6 +226,22 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "ivaynberg/select2",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/ivaynberg/select2.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/ivaynberg/select2/zipball/master",
+                    "type": "zip"
+                }
+            }
         }
     ],
 
@@ -245,6 +261,7 @@
         "amsul/pickadate.js": "dev-master",
         "dybskiy/redactor-js": "dev-master",
         "studio-42/elfinder": "dev-master",
-        "johnny/jquery-sortable": "dev-master"
+        "johnny/jquery-sortable": "dev-master",
+        "ivaynberg/select2": "dev-master"
     }
 }

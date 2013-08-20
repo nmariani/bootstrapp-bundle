@@ -26,6 +26,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'Redactor',
         'ElFinder',
         'JQuerySortable',
+        'Select2'
     ];
     private $path;
     private $assets;
@@ -185,6 +186,15 @@ EOT
                 $output->writeln('<info>Success, jQuery Sortable assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : jQuery Sortable assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Select2', $this->assets)) {
+            $output->writeln('<comment>Installing Select2 assets...</comment>');
+            if(true === $this->getSelect2Assets($output)) {
+                $output->writeln('<info>Success, Select2 assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Select2 assets installation failed!</error>');
             }
         }
     }
@@ -854,6 +864,43 @@ EOF
         $jsPath = $this->initializeDirectory('js/jquery-sortable');
         $finder = new Finder();
         $finder->files()->in($jQuerySortableDir.'/js')->name('jquery-sortable*');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
+        }
+
+        return $success;
+    }
+
+    protected function getSelect2Assets($output)
+    {
+        $success = true;
+
+        $vendorDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/ivaynberg/select2';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # css
+        $cssPath = $this->initializeDirectory('css/select2');
+        $finder = new Finder();
+        $finder->files()->in($vendorDir)->name('*.css');
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getPathname());
+            // replace images url
+            $content = str_replace("url('", "url('/bundles/bootstrapp/images/select2/", $content);
+            file_put_contents($cssPath . '/' . $file->getRelativePathname(), $content);
+        }
+
+        # images
+        $imagesPath = $this->initializeDirectory('images/select2');
+        $finder = new Finder();
+        $finder->files()->in($vendorDir)->name('*.gif')->name('*.jpg')->name('*.png');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $imagesPath . '/' . $file->getRelativePathname());
+        }
+
+        # js
+        $jsPath = $this->initializeDirectory('js/select2');
+        $finder = new Finder();
+        $finder->files()->in($vendorDir)->name('*.js');
         foreach ($finder as $file) {
             $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
         }

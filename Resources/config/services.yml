@@ -2,6 +2,7 @@ parameters:
     bootstrapp.elfinder.roots:
         - {path: %kernel.root_dir%/../web/files/, URL: /files/}
     bootstrapp.locales: [en_US,fr_FR]
+    form.type.choice.widget: select2
     form.type.date.widget: eyecon
     form.type.date.format: 1 # 16 juillet 1983
     form.type.time.widget: jdewit
@@ -32,6 +33,13 @@ services:
         tags: [{ name: form.type, alias: datetime }]
         calls:
             - [ setDefaultWidget, [ %form.type.datetime.widget% ] ]
+            - [ setAssetsLoader, [ @assets_loader ] ]
+    form.type.choice:
+        class: nmariani\Bundle\BootstrappBundle\Form\Type\ChoiceType
+        #scope: prototype
+        tags: [{ name: form.type, alias: choice }]
+        calls:
+            - [ setDefaultWidget, [ %form.type.choice.widget% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
     assets_loader:
         class: nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader

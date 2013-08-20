@@ -65,6 +65,10 @@
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
         {% endstylesheets %}
 
+{# select2 #}
+    {% elseif vendor == 'select2' %}
+        <link href="{{ asset('bundles/bootstrapp/css/select2/select2.css') }}" type="text/css" rel="stylesheet" media="screen" />
+
     {% endif %}
 {% endmacro %}
 
@@ -141,6 +145,13 @@
 {# jquery-sortable #}
     {% elseif vendor == 'jquery-sortable' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-sortable/jquery-sortable.js') }}"></script>
+
+{# select2 #}
+    {% elseif vendor == 'select2' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/select2/select2.js') }}"></script>
+        {% if app.request.locale|slice(0,2)|lower != 'en' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/select2/select2_locale_' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        {% endif %}
 
     {% endif %}
 {% endmacro %}
