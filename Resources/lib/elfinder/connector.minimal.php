@@ -29,6 +29,7 @@ function access($attr, $path, $data, $volume) {
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+if (!isset($opts)) {
 $opts = array(
 	// 'debug' => true,
 	'roots' => array(
@@ -40,6 +41,7 @@ $opts = array(
 		)
 	)
 );
+}
 
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));
