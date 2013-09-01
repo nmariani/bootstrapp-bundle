@@ -81,10 +81,10 @@
     </div>
     <script type="text/javascript">
         window.addEventListener('load', function(){
-            var latitude = {{ form.latitude.vars.value|default(null) }},
-                longitude = {{ form.longitude.vars.value|default(null) }},
+            var latitude = {{ form.latitude.vars.value|default(0) }},
+                longitude = {{ form.longitude.vars.value|default(0) }},
                 marker = {visible: true};
-            if (null == latitude || null == longitude) {
+            if (0 == latitude && 0 == longitude) {
                 latitude = 46.227638;
                 longitude = 2.213749;
                 marker.visible = false;
