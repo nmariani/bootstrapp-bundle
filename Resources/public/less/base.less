@@ -217,3 +217,37 @@ input.error {
 .thumbnail {
     background-color: @white;
 }
+
+// Maps
+// --------------------
+.location_map {
+    width: 100%;
+    min-height: 400px;
+}
+
+// Forms
+// --------------------
+.input-block-level {
+    &.input-prepend {
+        position: relative;
+        .add-on:first-child, .btn:first-child {
+            position:absolute;
+            left: 0;
+            z-index: 3;
+        }
+        input.input-block-level {
+            padding-left: 32px;
+        }
+    }
+    &.input-append {
+        position: relative;
+        .add-on:last-child, .btn:last-child {
+            position:absolute;
+            right: 0;
+            z-index: 3;
+        }
+        input.input-block-level {
+            padding-right: 46px;
+        }
+    }
+}

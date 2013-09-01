@@ -153,5 +153,10 @@
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/select2/select2_locale_' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
         {% endif %}
 
+{# location-typeahead #}
+    {% elseif vendor == 'location-typeahead' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-location.js') }}"></script>
+        <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+
     {% endif %}
 {% endmacro %}

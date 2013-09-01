@@ -56,6 +56,91 @@
     {% endspaceless %}
 {% endblock datetime_widget %}
 
+{% block bootstrapp_bundle_location_widget %}
+    <div class="row-fluid">
+        <div class="span6">
+            {{ form_row(form.streetNumber) }}
+            {{ form_row(form.route) }}
+            {{ form_row(form.postalCode) }}
+            {{ form_row(form.locality) }}
+            {{ form_row(form.shortCountry) }}
+            {{ form_row(form.country) }}
+            {{ form_row(form.administrativeAreaLevel1) }}
+            {{ form_row(form.administrativeAreaLevel2) }}
+            <hr/>
+            {{ form_row(form.latitude) }}
+            {{ form_row(form.longitude) }}
+        </div>
+        <div class="span6">
+            <div class="input-append input-block-level">
+                {{ form_widget(form.address, {'attr':{'class':'input-block-level'}}) }}
+                <button id="{{ form.vars.id }}_locate" class="btn" type="button"><i class="icon-location"></i></button>
+            </div>
+            <div id="map" class="location_map"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.addEventListener('load', function(){
+            var latitude = {{ form.latitude.vars.value|default(null) }},
+                longitude = {{ form.longitude.vars.value|default(null) }},
+                marker = {visible: true};
+            if (null == latitude || null == longitude) {
+                latitude = 46.227638;
+                longitude = 2.213749;
+                marker.visible = false;
+            }
+            $('#{{ form.address.vars.id }}').locationTypeahead({
+                map: '#map',
+                draggableMarker: true,
+                mapOptions:{
+                    center: [latitude, longitude],
+                    scrollwheel: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    marker: marker
+                },
+                boundElements: {
+                    '#{{ form.address.vars.id }}': function (data) {
+                        return data.formatted_address;
+                    },
+                    '#{{ form.streetNumber.vars.id }}': 'street_number',
+                    '#{{ form.route.vars.id }}': 'route',
+                    '#{{ form.postalCode.vars.id }}': 'postal_code',
+                    '#{{ form.locality.vars.id }}': 'locality',
+                    '#{{ form.shortCountry.vars.id }}': function (data) {
+                        var result = '';
+                        $.each(data.address_components, function (index, value) {
+                            $.each(value.types, function (index, type) {
+                                if (type == 'country') {
+                                    result = value.short_name;
+                                }
+                            });
+                            if (result.length >0) {
+                                return false;
+                            }
+                        });
+                        return result;
+                    },
+                    '#{{ form.country.vars.id }}': 'country',
+                    '#{{ form.administrativeAreaLevel1.vars.id }}': 'administrative_area_level_1',
+                    '#{{ form.administrativeAreaLevel2.vars.id }}': 'administrative_area_level_2',
+                    '#{{ form.latitude.vars.id }}': function (data) {
+                        return data.geometry.location.lat();
+                    },
+                    '#{{ form.longitude.vars.id }}': function (data) {
+                        return data.geometry.location.lng();
+                    }
+                }
+            });
+            $('#bootstrapp_socialbundle_persontype_home_locate').click(function(e){
+                var typeahead = $('#{{ form.address.vars.id }}').data('locationTypeahead');
+                if (typeahead) {
+                    typeahead.geocode();
+                }
+            });
+        });
+    </script>
+{% endblock bootstrapp_bundle_location_widget %}
+
 {# Errors #}
 
 {% block form_errors %}

@@ -7,6 +7,7 @@ parameters:
     form.type.date.format: 1 # 16 juillet 1983
     form.type.time.widget: jdewit
     form.type.datetime.widget: mobiscroll
+    form.type.location.widget: location-typeahead
     templating.globals.class: nmariani\Bundle\BootstrappBundle\Templating\GlobalVariables
     knp_menu.renderer.twig.class: nmariani\Bundle\BootstrappBundle\Menu\Renderer\TwigRenderer
     knp_menu.renderer.twig.template: BootstrappBundle:Menu:knp_menu.html.twig
@@ -40,6 +41,13 @@ services:
         tags: [{ name: form.type, alias: choice }]
         calls:
             - [ setDefaultWidget, [ %form.type.choice.widget% ] ]
+            - [ setAssetsLoader, [ @assets_loader ] ]
+    form.type.location:
+        class: nmariani\Bundle\BootstrappBundle\Form\Type\LocationType
+        #scope: prototype
+        tags: [{ name: form.type, alias: bootstrapp_bundle_location }]
+        calls:
+            - [ setDefaultWidget, [ %form.type.location.widget% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
     assets_loader:
         class: nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
