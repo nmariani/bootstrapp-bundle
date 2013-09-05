@@ -21,7 +21,26 @@
                     <li class="active"><a href="{{ routes.home|default('#') }}">{% trans %}Home{% endtrans %}</a></li>
                     {% if navigation is defined %}
                         {% for item in navigation %}
-                        <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                            {% if item.items is defined and item.items|length > 0 %}
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        {% if item.icon is defined %}
+                                            <i class="{{ item.icon }}"></i>
+                                        {% endif %}
+                                        {{ item.caption }} <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        {% for subitem in item.items %}
+                                            {% if subitem.divider is defined %}
+                                                <li class="divider"></li>
+                                            {% endif %}
+                                            <li><a href="{{ subitem.href }}" target="{{ subitem.target|default('_self') }}">{{ subitem.caption }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% elseif item.href is defined %}
+                                <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 </ul>
