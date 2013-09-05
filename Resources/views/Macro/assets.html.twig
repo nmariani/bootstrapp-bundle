@@ -155,8 +155,13 @@
 
 {# location-typeahead #}
     {% elseif vendor == 'location-typeahead' %}
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-location.js') }}"></script>
         <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-location.js') }}"></script>
+
+{# gmaps #}
+    {% elseif vendor == 'gmaps' %}
+        <script src="http://maps.googleapis.com/maps/api/js?libraries=places,panoramio&sensor=false"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/gmaps.js') }}"></script>
 
     {% endif %}
 {% endmacro %}
