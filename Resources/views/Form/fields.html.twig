@@ -83,21 +83,22 @@
         window.addEventListener('load', function(){
             var latitude = {{ form.latitude.vars.value|default(0) }},
                 longitude = {{ form.longitude.vars.value|default(0) }},
-                marker = {visible: true};
+                mapOptions = {
+                    scrollwheel: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    marker: { visible: true }
+                };
             if (0 == latitude && 0 == longitude) {
                 latitude = 46.227638;
                 longitude = 2.213749;
-                marker.visible = false;
+                mapOptions.marker.visible = false;
+                mapOptions.zoom = 5;
             }
+            mapOptions.center = [latitude, longitude];
             $('#{{ form.address.vars.id }}').locationTypeahead({
                 map: '#map',
                 draggableMarker: true,
-                mapOptions:{
-                    center: [latitude, longitude],
-                    scrollwheel: true,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    marker: marker
-                },
+                mapOptions: mapOptions,
                 boundElements: {
                     '#{{ form.address.vars.id }}': function (data) {
                         return data.formatted_address;
