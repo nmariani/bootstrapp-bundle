@@ -164,21 +164,17 @@
 
 {% block form_row %}
 {% spaceless %}
-    {% if form.children|length %}
-        {{ form_widget(form) }}
-    {% else %}
-        <div class="control-group{% if errors %} error{% endif %}">
-            {{ form_label(form) }}
-            <div class="controls">
-                {{ form_widget(form) }}
-                {% if parent is defined %}
-                    {{ form_errors(parent) }}
-                {% else %}
-                    {{ form_errors(form) }}
-                {% endif %}
-            </div>
+    <div class="control-group{% if errors %} error{% endif %}">
+        {{ form_label(form) }}
+        <div class="controls">
+            {{ form_widget(form) }}
+            {% if parent is defined %}
+                {{ form_errors(parent) }}
+            {% else %}
+                {{ form_errors(form) }}
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
 {% endspaceless %}
 {% endblock form_row %}
 
