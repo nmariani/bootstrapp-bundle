@@ -76,13 +76,13 @@
                 {{ form_widget(form.address, {'attr':{'class':'input-block-level'}}) }}
                 <button id="{{ form.vars.id }}_locate" class="btn" type="button"><i class="icon-location"></i></button>
             </div>
-            <div id="map" class="map google-maps"></div>
+            <div id="{{ form.vars.id }}_map" class="map google-maps"></div>
         </div>
     </div>
     <script type="text/javascript">
         window.addEventListener('load', function(){
-            var latitude = {{ form.latitude.vars.value|default(0) }},
-                longitude = {{ form.longitude.vars.value|default(0) }},
+            var latitude = {{ form.latitude.vars.data|default(0) }},
+                longitude = {{ form.longitude.vars.data|default(0) }},
                 mapOptions = {
                     scrollwheel: true,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -96,7 +96,7 @@
             }
             mapOptions.center = [latitude, longitude];
             $('#{{ form.address.vars.id }}').locationTypeahead({
-                map: '#map',
+                map: '#{{ form.vars.id }}_map',
                 draggableMarker: true,
                 mapOptions: mapOptions,
                 boundElements: {
