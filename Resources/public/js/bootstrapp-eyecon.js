@@ -23,7 +23,7 @@ Bootstrapp.EyeconDatePicker = (function() {
             // vitalets
             startDate: null,
             endDate: null,
-            daysOfWeekDisabled: [0,6],
+            daysOfWeekDisabled: [],
             autoclose: true,
             startView: 'days',
             todayBtn: 'linked',
