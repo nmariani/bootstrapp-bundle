@@ -181,6 +181,14 @@ div.well textarea[readonly] {
   background-color: @inputBackground;
 }
 
+// override default bootstrap input, texterea & select width to fill the space available
+input,
+textarea,
+select,
+.uneditable-input {
+  width: 100%;
+}
+
 input.error {
   border-color: @errorBorder;
   color: @errorText;
