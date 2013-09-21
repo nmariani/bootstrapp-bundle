@@ -186,6 +186,27 @@ input.error {
   color: @errorText;
 }
 
+.form-horizontal {
+    input[type="radio"] {
+        margin: 0;
+        vertical-align: 1px;
+
+        &:not(:first-of-type) {
+            margin-left: 10px;
+        }
+
+        + .control-label {
+            display: inline-block;
+            margin-left: 5px;
+        }
+    }
+    .controls .control-label {
+        float: none;
+        width: auto;
+        text-align: left;
+    }
+}
+
 [data-type="datetime"] {
     .input-append:not(:first-of-type),
     .input-prepend:not(:first-of-type) {
