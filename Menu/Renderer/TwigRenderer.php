@@ -1,8 +1,10 @@
 <?php
 /**
- * (c) 2013 Alitheon SAS
+ * This file is part of the Bootstrapp project.
+
+ * (c) 2013 Nathanaël Mariani <github@nmariani.fr>
  *
- * @author nmariani
+ * @author nmariani <github@nmariani.fr>
  * @date 17/01/13 17:24
  *
  * For the full copyright and license information, please view the LICENSE
