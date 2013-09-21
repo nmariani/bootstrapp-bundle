@@ -256,6 +256,18 @@ input.error {
     }
 }
 
+legend {
+    font-size: @baseFontSize * 1.25;
+    margin-bottom: 0;
+    & + *:before {
+        content: ".";
+        display: block;
+        height: 0;
+        visibility: hidden;
+        margin-bottom: @baseLineHeight
+    }
+}
+
 // Thumbnails
 // --------------------
 .thumbnail {
