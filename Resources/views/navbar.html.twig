@@ -18,7 +18,6 @@
 
             {% block navbar_navigation %}
                 <ul class="nav">
-                    <li class="active"><a href="{{ routes.home|default('#') }}">{% trans %}Home{% endtrans %}</a></li>
                     {% if navigation is defined %}
                         {% for item in navigation %}
                             {% if item.items is defined and item.items|length > 0 %}
@@ -39,7 +38,14 @@
                                     </ul>
                                 </li>
                             {% elseif item.href is defined %}
-                                <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                                <li>
+                                    <a href="{{ item.href }}">
+                                    {% if item.icon is defined %}
+                                        <i class="{{ item.icon }}"></i>
+                                    {% endif %}
+                                    {{ item.caption }}
+                                    </a>
+                                </li>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
