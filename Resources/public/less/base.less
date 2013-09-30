@@ -201,7 +201,9 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  .input-block-level();
+  &:not([class*=input-]) {
+    .input-block-level();
+  }
 }
 
 input.error {
