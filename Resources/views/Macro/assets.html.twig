@@ -163,5 +163,16 @@
         <script src="http://maps.googleapis.com/maps/api/js?libraries=places,panoramio&sensor=false"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/gmaps.js') }}"></script>
 
+{# ckeditor #}
+    {% elseif vendor == 'ckeditor' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/ckeditor.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/config.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/styles.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/lang/' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+        <script type="text/javascript">
+            CKEDITOR.skinName = 'moono,{{ app.request.schemeAndHttpHost ~ '/bundles/bootstrapp/css/ckeditor/skins/moono/' }}';
+            CKEDITOR.config.skin = CKEDITOR.skinName;
+        </script>
+
     {% endif %}
 {% endmacro %}

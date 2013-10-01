@@ -18,7 +18,51 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('twitter_bootstrap');
+        $rootNode = $treeBuilder->root('bootstrapp');
+
+        $rootNode
+            ->children()
+                ->arrayNode('ckeditor')
+                    ->children()
+                        ->booleanNode('enable')->defaultTrue()->end()
+                        ->scalarNode('base_path')->defaultValue('bundles/bootstrapp/css/ckeditor/')->end()
+                        ->scalarNode('default_config')->end()
+                        ->arrayNode('configs')
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('plugins')
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->children()
+                                    ->scalarNode('path')->end()
+                                    ->scalarNode('filename')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('toolbars')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->arrayNode('configs')
+                                    ->useAttributeAsKey('name')
+                                    ->prototype('array')
+                                        ->prototype('variable')->end()
+                                    ->end()
+                                ->end()
+                                ->arrayNode('items')
+                                    ->useAttributeAsKey('name')
+                                    ->prototype('array')
+                                        ->prototype('variable')->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

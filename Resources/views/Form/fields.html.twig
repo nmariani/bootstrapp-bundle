@@ -142,6 +142,25 @@
     </script>
 {% endblock bootstrapp_bundle_location_widget %}
 
+{% block bootstrapp_bundle_ckeditor_widget %}
+    <textarea {{ block('widget_attributes') }}>{{ value | raw }}</textarea>
+    {% if enable %}
+        <script type="text/javascript">
+            window.addEventListener('load', function(){
+                if (CKEDITOR.instances['{{ id }}']) {
+                    delete CKEDITOR.instances['{{ id }}'];
+                }
+
+                {% for plugin_name, plugin in plugins %}
+                    CKEDITOR.plugins.addExternal('{{ plugin_name }}', '{{ plugin.path }}', '{{ plugin.filename }}');
+                {% endfor %}
+
+                CKEDITOR.replace('{{ id }}', {{ config | raw }});
+            });
+        </script>
+    {% endif %}
+{% endblock bootstrapp_bundle_ckeditor_widget %}
+
 {# Errors #}
 
 {% block form_errors %}

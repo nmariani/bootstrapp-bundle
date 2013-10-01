@@ -1,14 +1,24 @@
 parameters:
+    # CKEditor
+    bootstrapp.ckeditor.base_path: bundles/bootstrapp/css/ckeditor/
+    bootstrapp.ckeditor.class: nmariani\Bundle\BootstrappBundle\Form\Type\CKEditorType
+    bootstrapp.ckeditor.default_config: full
+    # elFinder
     bootstrapp.elfinder.roots:
         - {path: %kernel.root_dir%/../web/files/, URL: /files/}
     bootstrapp.locales: [en_US,fr_FR]
+    # choice
     form.type.choice.widget: select2
+    # datetime
     form.type.date.widget: eyecon
     form.type.date.format: 1 # 16 juillet 1983
     form.type.time.widget: jdewit
     form.type.datetime.widget: mobiscroll
+    # location
     form.type.location.widget: location-typeahead
+    # Global Variables
     templating.globals.class: nmariani\Bundle\BootstrappBundle\Templating\GlobalVariables
+    # KnpMenu
     knp_menu.renderer.twig.class: nmariani\Bundle\BootstrappBundle\Menu\Renderer\TwigRenderer
     knp_menu.renderer.twig.template: BootstrappBundle:Menu:knp_menu.html.twig
 
@@ -48,6 +58,13 @@ services:
         tags: [{ name: form.type, alias: bootstrapp_bundle_location }]
         calls:
             - [ setDefaultWidget, [ %form.type.location.widget% ] ]
+            - [ setAssetsLoader, [ @assets_loader ] ]
+    form.type.ckeditor:
+        class: %bootstrapp.ckeditor.class%
+        #scope: prototype
+        tags: [{ name: form.type, alias: bootstrapp_bundle_ckeditor }]
+        calls:
+            - [ setContainer, [ @service_container ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
     assets_loader:
         class: nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
