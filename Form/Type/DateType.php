@@ -32,7 +32,7 @@ class DateType extends BaseDateType
      */
     private $format = self::HTML5_FORMAT; // 'yyyy-MM-dd'
     /**
-     * @var nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
+     * @var \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
      */
     private $assetsLoader;
 
@@ -134,7 +134,7 @@ class DateType extends BaseDateType
 
     /**
      * Set the assets loader
-     * @param nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
+     * @param \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
      * @return DateType
      */
     public function setAssetsLoader(AssetsLoader $loader) {

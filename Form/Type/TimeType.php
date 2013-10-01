@@ -30,7 +30,7 @@ class TimeType extends BaseTimeType
      */
     private $format = \IntlDateFormatter::SHORT;
     /**
-     * @var nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
+     * @var \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
      */
     private $assetsLoader;
 
@@ -121,7 +121,7 @@ class TimeType extends BaseTimeType
 
     /**
      * Set the assets loader
-     * @param nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
+     * @param \mariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
      * @return TimeType
      */
     public function setAssetsLoader(AssetsLoader $loader) {

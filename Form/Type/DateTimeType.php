@@ -25,7 +25,7 @@ class DateTimeType extends BaseDateTimeType
      */
     private $widget;
     /**
-     * @var nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
+     * @var \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
      */
     private $assetsLoader;
 
@@ -102,7 +102,7 @@ class DateTimeType extends BaseDateTimeType
 
     /**
      * Set the assets loader
-     * @param nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
+     * @param \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
      * @return DateTimeType
      */
     public function setAssetsLoader(AssetsLoader $loader) {
