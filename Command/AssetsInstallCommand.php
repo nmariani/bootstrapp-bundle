@@ -26,7 +26,8 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'Redactor',
         'ElFinder',
         'JQuerySortable',
-        'Select2'
+        'Select2',
+        'CKEditor'
     ];
     private $path;
     private $assets;
@@ -195,6 +196,15 @@ EOT
                 $output->writeln('<info>Success, Select2 assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : Select2 assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('CKEditor', $this->assets)) {
+            $output->writeln('<comment>Installing CKEditor assets...</comment>');
+            if(true === $this->getCKEditorAssets($output)) {
+                $output->writeln('<info>Success, CKEditor assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : CKEditor assets installation failed!</error>');
             }
         }
     }
@@ -903,6 +913,56 @@ EOF
         $finder->files()->in($vendorDir)->name('*.js');
         foreach ($finder as $file) {
             $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
+        }
+
+        return $success;
+    }
+
+    protected function getCKEditorAssets($output)
+    {
+        $success = true;
+
+        $vendorDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/ckeditor/ckeditor-releases';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # css
+        $cssPath = $this->initializeDirectory('css/ckeditor');
+        $filesystem->copy($vendorDir.'/contents.css', $cssPath . '/contents.css');
+        $finder = new Finder();
+        $finder->files()->in($vendorDir.'/skins')->name('*.css');
+        foreach ($finder as $file) {
+            $dirname = $file->getRelativePath();
+            $output->writeln($dirname);
+            $filename = $cssPath . '/skins/' . $file->getRelativePathname();
+            $filesystem->mkdir(dirname($filename));
+            $content = file_get_contents($file->getPathname());
+            // replace images url
+            $content = str_replace('url(', 'url(/bundles/bootstrapp/images/ckeditor/skins/'.$dirname.'/', $content);
+            file_put_contents($filename, $content);
+        }
+
+        # images
+        $imagesPath = $this->initializeDirectory('images/ckeditor');
+        $finder = new Finder();
+        $finder->files()->in($vendorDir.'/skins')->name('*.gif')->name('*.jpg')->name('*.png');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $imagesPath . '/skins/' . $file->getRelativePathname());
+        }
+
+        # js
+        $jsPath = $this->initializeDirectory('js/ckeditor');
+        $filesystem->copy($vendorDir.'/ckeditor.js', $jsPath . '/ckeditor.js');
+        $filesystem->copy($vendorDir.'/config.js', $jsPath . '/config.js');
+        $filesystem->copy($vendorDir.'/styles.js', $jsPath . '/styles.js');
+        $finder = new Finder();
+        $finder->files()->in($vendorDir.'/lang')->name('*.js');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $jsPath . '/lang/' . $file->getRelativePathname());
+        }
+        $finder = new Finder();
+        $finder->files()->in($vendorDir.'/plugins')->name('*.js');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $jsPath . '/plugins/' . $file->getRelativePathname());
         }
 
         return $success;

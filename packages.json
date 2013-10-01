@@ -11,7 +11,7 @@
                 "source": {
                     "url": "https://github.com/twbs/bootstrap.git",
                     "type": "git",
-                    "reference": "master"
+                    "reference": "v2.3.2"
                 },
                 "dist": {
                     "url": "https://github.com/twbs/bootstrap/zipball/master",
@@ -242,6 +242,22 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "ckeditor/ckeditor-releases",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/ckeditor/ckeditor-releases.git",
+                    "type": "git",
+                    "reference": "latest/full"
+                },
+                "dist": {
+                    "url": "https://github.com/ckeditor/ckeditor-releases/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
         }
     ],
 
@@ -262,6 +278,7 @@
         "dybskiy/redactor-js": "dev-master",
         "studio-42/elfinder": "dev-master",
         "johnny/jquery-sortable": "dev-master",
-        "ivaynberg/select2": "dev-master"
+        "ivaynberg/select2": "dev-master",
+        "ckeditor/ckeditor-releases": "dev-master"
     }
 }
