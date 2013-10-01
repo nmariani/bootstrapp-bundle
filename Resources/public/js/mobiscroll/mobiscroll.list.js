@@ -319,18 +319,7 @@
             if (s.showInput) {
                 input = $('<input type="text" id="' + id + '" value="" class="' + s.inputClass + '" readonly />').insertBefore(elm);
                 s.anchor = input; // give the core the input element for the bubble positioning
-
-                if (s.showOnFocus) {
-                    input.focus(function () {
-                        inst.show();
-                    });
-                }
-
-                if (s.showOnTap) {
-                    inst.tap(input, function () {
-                        inst.show();
-                    });
-                }
+                inst.attachShow(input);
             }
 
             if (!s.wheelArray) {
@@ -356,19 +345,20 @@
                     }
                 },
                 onChange: function (v, inst) {
-                    if (input && s.display == 'inline') {
+                    if (input && inst.live) {
                         input.val(v);
-                    }
-                },
-                onClose: function () {
-                    if (input) {
-                        input.blur();
                     }
                 },
                 onShow: function (dw) {
                     $('.dwwl', dw).on('mousedown touchstart', function () {
                         clearTimeout(timer[$('.dwwl', dw).index(this)]);
                     });
+                },
+                onDestroy: function () {
+                    if (input) {
+                        input.remove();
+                    }
+                    elm.show();
                 },
                 validate: function (dw, index, time) {
                     var args = [],

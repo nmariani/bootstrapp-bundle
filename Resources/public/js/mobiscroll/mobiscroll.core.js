@@ -1,6 +1,6 @@
 /*jslint eqeq: true, plusplus: true, undef: true, sloppy: true, vars: true, forin: true, nomen: true */
 /*!
- * jQuery MobiScroll v2.7.0
+ * Mobiscroll v2.7.2
  * http://mobiscroll.com
  *
  * Copyright 2010-2013, Acid Media
@@ -9,6 +9,10 @@
  */
 (function ($) {
 
+    /**
+     * @class Mobiscroll
+     * Mobiscroll class
+     */
     function Scroller(elem, settings) {
         var m,
             hi,
@@ -21,10 +25,10 @@
             mh, // Modal height
             lock,
             anim,
-            debounce,
             theme,
             lang,
             click,
+            hasButtons,
             scrollable,
             moved,
             start,
@@ -33,12 +37,15 @@
             p,
             min,
             max,
+            modal,
             target,
             index,
             timer,
+            buttons,
             readOnly,
             preventChange,
             preventShow,
+            currElm,
             that = this,
             ms = $.mobiscroll,
             e = elem,
@@ -49,6 +56,7 @@
             pos = {},
             pixels = {},
             wheels = [],
+            elmList = [],
             input = elm.is('input'),
             visible = false,
             onStart = function (e) {
@@ -82,7 +90,9 @@
                     stop = getCoord(e, 'Y');
                     scroll(target, index, constrain(p + (start - stop) / hi, min - 1, max + 1));
                 }
-                moved = true;
+                if (start !== stop) {
+                    moved = true;
+                }
             },
             onEnd = function (e) {
                 var time = new Date() - startTime,
@@ -106,9 +116,8 @@
 
                 if (!dist && !moved) { // this is a "tap"
                     var idx = Math.floor((stop - ttop) / hi),
-                        li = $('.dw-li', target).eq(idx),
+                        li = $($('.dw-li', target)[idx]),
                         hl = scrollable;
-
                     if (event('onValueTap', [li]) !== false) {
                         tindex = idx;
                     } else {
@@ -369,9 +378,10 @@
 
                 // Reformat value if validation changed something
                 v = s.formatResult(that.temp);
-                if (s.display == 'inline') {
+                if (that.live) {
                     setVal(manual, 0, true);
-                } else {
+                }
+                if (modal) {
                     $('.dwv', dw).html(formatHeader(v));
                 }
 
@@ -442,11 +452,26 @@
             }
         }
 
+        function attachPosition(ev, checkLock) {
+            var debounce;
+            $(window).on(ev, function (e) {
+                clearTimeout(debounce);
+                debounce = setTimeout(function () {
+                    if ((lock && checkLock) || !checkLock) {
+                        that.position(!checkLock);
+                    }
+                }, 200);
+            });
+        }
+
         // Public functions
 
+        /**
+        * Positions the scroller on the screen.
+        */
         that.position = function (check) {
 
-            if (s.display == 'inline' || (ww === $(window).width() && rwh === $(window).height() && check) || (event('onPosition', [dw]) === false)) {
+            if (!modal || (ww === $(window).width() && rwh === $(window).height() && check) || (event('onPosition', [dw]) === false)) {
                 return;
             }
 
@@ -567,20 +592,26 @@
         /**
         * Gets the selected wheel values, formats it, and set the value of the scroller instance.
         * If input parameter is true, populates the associated input element.
-        * @param {Array} values - Wheel values.
-        * @param {Boolean} [fill=false] - Also set the value of the associated input element.
-        * @param {Number} [time=0] - Animation time
-        * @param {Boolean} [temp=false] - If true, then only set the temporary value.(only scroll there but not set the value)
+        * @param {Array} values Wheel values.
+        * @param {Boolean} [fill=false] Also set the value of the associated input element.
+        * @param {Number} [time=0] Animation time
+        * @param {Boolean} [temp=false] If true, then only set the temporary value.(only scroll there but not set the value)
         */
         that.setValue = function (values, fill, time, temp, manual) {
             that.temp = $.isArray(values) ? values.slice(0) : s.parseValue.call(e, values + '', that);
             setVal(fill, time, false, temp, manual);
         };
 
+        /**
+        * Return the selected wheel values.
+        */
         that.getValue = function () {
             return that.values;
         };
 
+        /**
+        * Return selected values, if in multiselect mode.
+        */
         that.getValues = function () {
             var ret = [],
                 i;
@@ -593,6 +624,9 @@
 
         /**
         * Changes the values of a wheel, and scrolls to the correct position
+        * @param {Array} idx Indexes of the wheels to change.
+        * @param {Number} [time=0] Animation time when scrolling to the selected value on the new wheel.
+        * @param {Boolean} [manual=false] Indicates that the change was triggered by the user or from code.
         */
         that.changeWheel = function (idx, time, manual) {
             if (dw) {
@@ -627,6 +661,9 @@
             return visible;
         };
 
+        /**
+        * Attach tap event to the given element.
+        */
         that.tap = function (el, handler) {
             var startX,
                 startY;
@@ -664,7 +701,7 @@
         */
         that.show = function (prevAnim) {
             if (s.disabled || visible) {
-                return false;
+                return;
             }
 
             if (s.display == 'top') {
@@ -689,7 +726,7 @@
                 mAnim = 'dw-' + anim + ' dw-in';
             }
             // Create wheels containers
-            var html = '<div role="dialog" class="' + s.theme + ' dw-' + s.display + (prefix ? ' dw' + prefix : '') + '">' + (s.display == 'inline' ? '<div class="dw dwbg dwi"><div class="dwwr">' : '<div class="dw-persp"><div class="dwo"></div><div class="dw dwbg ' + mAnim + '"><div class="dw-arrw"><div class="dw-arrw-i"><div class="dw-arr"></div></div></div><div class="dwwr"><div aria-live="assertive" class="dwv' + (s.headerText ? '' : ' dw-hidden') + '"></div>') + '<div class="dwcc">';
+            var html = '<div role="dialog" class="' + s.theme + ' dw-' + s.display + (prefix ? ' dw' + prefix : '') + (hasButtons ? '' : ' dw-nobtn') + '">' + (!modal ? '<div class="dw dwbg dwi"><div class="dwwr">' : '<div class="dw-persp"><div class="dwo"></div><div class="dw dwbg ' + mAnim + '"><div class="dw-arrw"><div class="dw-arrw-i"><div class="dw-arr"></div></div></div><div class="dwwr"><div aria-live="assertive" class="dwv' + (s.headerText ? '' : ' dw-hidden') + '"></div>') + '<div class="dwcc">';
 
             $.each(s.wheels, function (i, wg) { // Wheel groups
                 html += '<div class="dwc' + (s.mode != 'scroller' ? ' dwpm' : ' dwsc') + (s.showLabel ? '' : ' dwhl') + '"><div class="dwwc dwrc"><table cellpadding="0" cellspacing="0"><tr>';
@@ -706,7 +743,17 @@
                 html += '</tr></table></div></div>';
             });
 
-            html += '</div>' + (s.display != 'inline' ? '<div class="dwbc' + (s.button3 ? ' dwbc-p' : '') + '"><span class="dwbw dwb-s"><a href="#" class="dwb dwb-e" role="button">' + s.setText + '</a></span>' + (s.button3 ? '<span class="dwbw dwb-n"><a href="#" class="dwb dwb-e" role="button">' + s.button3Text + '</a></span>' : '') + '<span class="dwbw dwb-c"><a href="#" class="dwb dwb-e" role="button">' + s.cancelText + '</a></span></div></div>' : '') + '</div></div></div>';
+            html += '</div>';
+
+            if (modal && hasButtons) {
+                html += '<div class="dwbc">';
+                $.each(buttons, function (i, b) {
+                    html += '<span' + (s.btnWidth ? ' style="width:' + (100 / buttons.length) + '%"' : '') + ' class="dwbw ' + b.css + '"><a href="#" class="dwb dwb' + i + ' dwb-e" role="button">' + b.text + '</a></span>';
+                });
+                html += '</div>';
+            }
+            html += (modal ? '</div>' : '') + '</div></div></div>';
+
             dw = $(html);
 
             scrollToPos();
@@ -714,13 +761,15 @@
             event('onMarkupReady', [dw]);
 
             // Show
-            if (s.display != 'inline') {
+            if (modal) {
                 dw.appendTo('body');
                 if (anim && !prevAnim) {
                     dw.addClass('dw-trans');
                     // Remove animation class
                     setTimeout(function () {
-                        dw.removeClass('dw-trans').find('.dw').removeClass(mAnim);
+                        if (dw) {
+                            dw.removeClass('dw-trans').find('.dw').removeClass(mAnim);
+                        }
                     }, 350);
                 }
             } else if (elm.is('div')) {
@@ -736,19 +785,17 @@
             // Theme init
             theme.init(dw, that);
 
-            if (s.display != 'inline') {
+            if (modal) {
                 // Init buttons
-                that.tap($('.dwb-s .dwb', dw), function () {
-                    that.select();
+                $.each(buttons, function (i, b) {
+                    that.tap($('.dwb' + i, dw), function (e) {
+                        b.handler.call(this, e, that);
+                    });
                 });
 
-                that.tap($('.dwb-c .dwb', dw), function () {
-                    that.cancel();
-                });
-
-                if (s.button3) {
-                    that.tap($('.dwb-n .dwb', dw), function (e) {
-                        s.button3.call(this, e, that);
+                if (s.closeOnOverlay) {
+                    that.tap($('.dwo', dw), function () {
+                        that.cancel();
                     });
                 }
 
@@ -782,16 +829,8 @@
 
                 // Set position
                 that.position();
-                $(window).on('orientationchange.dw resize.dw scroll.dw', function (e) {
-                    // Sometimes scrollTop is not correctly set, so we wait a little
-                    clearTimeout(debounce);
-                    debounce = setTimeout(function () {
-                        var scroll = e.type == 'scroll';
-                        if ((scroll && lock) || !scroll) {
-                            that.position(!scroll);
-                        }
-                    }, 100);
-                });
+                attachPosition('orientationchange.dw resize.dw', false);
+                attachPosition('scroll.dw', true);
 
                 that.alert(s.ariaDesc);
             }
@@ -817,10 +856,10 @@
         /**
         * Hides the scroller instance.
         */
-        that.hide = function (prevAnim, btn) {
+        that.hide = function (prevAnim, btn, force) {
             // If onClose handler returns false, prevent hide
-            if (!visible || event('onClose', [v, btn]) === false) {
-                return false;
+            if (!visible || (!force && event('onClose', [v, btn]) === false)) {
+                return;
             }
 
             // Re-enable temporary disabled fields
@@ -835,16 +874,16 @@
 
             // Hide wheels and overlay
             if (dw) {
-                if (s.display != 'inline' && anim && !prevAnim) {
+                var doAnim = modal && anim && !prevAnim;
+                if (doAnim) {
                     dw.addClass('dw-trans').find('.dw').addClass('dw-' + anim + ' dw-out');
-                    setTimeout(function () {
+                }
+                setTimeout(function () {
+                    if (dw) {
                         dw.remove();
                         dw = null;
-                    }, 350);
-                } else {
-                    dw.remove();
-                    dw = null;
-                }
+                    }
+                }, doAnim ? 350 : 1);
 
                 // Stop positioning on window resize
                 $(window).off('.dw');
@@ -852,11 +891,16 @@
 
             pixels = {};
             visible = false;
-            preventShow = true;
 
-            elm.focus();
+            if (currElm) {
+                preventShow = true;
+                currElm.focus();
+            }
         };
 
+        /**
+        * Set button handler.
+        */
         that.select = function () {
             if (that.hide(false, 'set') !== false) {
                 setVal(true, 0, true);
@@ -864,12 +908,38 @@
             }
         };
 
+        /**
+        * Alert an accessibility message.
+        */
         that.alert = function (txt) {
             aria.text(txt);
             clearTimeout(alertTimer);
             alertTimer = setTimeout(function () {
                 aria.text('');
             }, 5000);
+        };
+
+        /**
+        * Show mobiscroll on focus and click event of the parameter.
+        * @param {jQuery} elm - Events will be attached to this element.
+        * @param {Function} [beforeShow=undefined] - Optional function to execute before showing mobiscroll.
+        */
+        that.attachShow = function (elm, beforeShow) {
+            elmList.push(elm);
+            if (s.display !== 'inline') {
+                elm.on((s.showOnFocus ? 'focus.dw' : '') + (s.showOnTap ? ' click.dw' : ''), function () {
+                    if (!preventShow) {
+                        if (beforeShow) {
+                            beforeShow();
+                        }
+                        currElm = elm;
+                        that.show();
+                    }
+                    setTimeout(function () {
+                        preventShow = false;
+                    }, 300); // With jQuery < 1.9 focus is fired twice in IE
+                });
+            }
         };
 
         /**
@@ -886,12 +956,13 @@
         */
         that.init = function (ss) {
             // Get theme defaults
-            theme = extend({ defaults: {}, init: empty }, ms.themes[ss.theme || s.theme]);
+            theme = extend({ defaults: {}, load: empty, init: empty }, ms.themes[ss.theme || s.theme]);
 
             // Get language defaults
             lang = ms.i18n[ss.lang || s.lang];
 
             extend(settings, ss); // Update original user settings
+            theme.load(lang, settings);
             extend(s, theme.defaults, lang, settings);
 
             that.settings = s;
@@ -910,14 +981,30 @@
             m = Math.floor(s.rows / 2);
             hi = s.height;
             anim = s.animate;
+            modal = s.display !== 'inline';
+            buttons = [];
+
+            that.live = !modal || !s.setText;
+
+            if (s.setText) {
+                buttons.push({ text: s.setText, css: 'dwb-s', handler: function () { that.select(); } });
+            }
+
+            if (s.button3) {
+                buttons.push({ text: s.button3Text, css: 'dwb-n', handler: s.button3 });
+            }
+
+            if (s.cancelText) {
+                buttons.push({ text: s.cancelText, css: 'dwb-c', handler: function () { that.cancel(); } });
+            }
+
+            hasButtons = buttons.length > 0;
 
             if (visible) {
                 that.hide();
             }
 
-            if (s.display == 'inline') {
-                that.show();
-            } else {
+            if (modal) {
                 read();
                 if (input) {
                     // Set element readonly, save original state
@@ -925,21 +1012,17 @@
                         readOnly = e.readOnly;
                     }
                     e.readOnly = true;
-                    // Init show datewheel
-                    if (s.showOnFocus) {
-                        elm.on('focus.dw', function () {
-                            if (!preventShow) {
-                                that.show();
-                            }
-                            preventShow = false;
-                        });
+                }
+                that.attachShow(elm);
+
+                // Blur element on window blur (e.g. tabchange) to prevent re-show on window focus
+                $(window).off('.dwa').on('focus.dwa', function () {
+                    if (currElm && document.activeElement == currElm[0]) {
+                        preventShow = true;
                     }
-                }
-                if (s.showOnTap) {
-                    elm.on('click.dw', function () {
-                        that.show();
-                    });
-                }
+                });
+            } else {
+                that.show();
             }
 
             if (input) {
@@ -952,10 +1035,16 @@
             }
         };
 
+        /**
+        * Triggers a mobiscroll event.
+        */
         that.trigger = function (name, params) {
             return event(name, params);
         };
 
+        /**
+        * Sets one ore more options.
+        */
         that.option = function (opt, value) {
             var obj = {};
             if (typeof opt === 'object') {
@@ -966,19 +1055,34 @@
             that.init(obj);
         };
 
+        /**
+        * Destroys the mobiscroll instance.
+        */
         that.destroy = function () {
-            that.hide();
-            elm.off('.dw');
-            delete scrollers[e.id];
+            that.hide(true, false, true);
+            // Remove all events from elements
+            $.each(elmList, function (i, v) {
+                v.off('.dw');
+            });
+            // Remove events from window
+            $(window).off('.dwa');
+            // Reset original readonly state
             if (input) {
                 e.readOnly = readOnly;
             }
+            // Delete scroller instance
+            delete scrollers[e.id];
             event('onDestroy', []);
         };
 
+        /**
+        * Returns the mobiscroll instance.
+        */
         that.getInst = function () {
             return that;
         };
+
+        scrollers[e.id] = that;
 
         that.values = null;
         that.val = null;
@@ -1055,7 +1159,10 @@
                     uuid += 1;
                     this.id = 'mobiscroll' + uuid;
                 }
-                scrollers[this.id] = new Scroller(this, options);
+                if (scrollers[this.id]) {
+                    scrollers[this.id].destroy();
+                }
+                new Scroller(this, options);
             });
         }
 
@@ -1103,6 +1210,7 @@
             delay: 300,
             disabled: false,
             readonly: false,
+            closeOnOverlay: true,
             showOnFocus: true,
             showOnTap: true,
             showLabel: true,
@@ -1118,6 +1226,7 @@
             ariaDesc: 'Select a value',
             scrollLock: true,
             tap: true,
+            btnWidth: true,
             speedUnit: 0.0012,
             timeUnit: 0.1,
             formatResult: function (d) {
