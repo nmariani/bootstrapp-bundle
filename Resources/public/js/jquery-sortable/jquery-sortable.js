@@ -67,11 +67,11 @@
     },
     // Executed before onDrop if placeholder is detached.
     // This happens if pullPlaceholder is set to false and the drop occurs outside a container.
-    onCancel: function ($item, container, _super) {
+    onCancel: function ($item, container, _super, event) {
     },
     // Executed at the beginning of a mouse move event.
     // The Placeholder has not been moved yet.
-    onDrag: function ($item, position, _super) {
+    onDrag: function ($item, position, _super, event) {
       $item.css(position)
     },
     // Called after the drag has been started,
@@ -79,7 +79,7 @@
     // the mouse is moving.
     // The container is the closest initialized container.
     // Therefore it might not be the container, that actually contains the item.
-    onDragStart: function ($item, container, _super) {
+    onDragStart: function ($item, container, _super, event) {
       $item.css({
         height: $item.height(),
         width: $item.width()
@@ -88,13 +88,14 @@
       $("body").addClass("dragging")
     },
     // Called when the mouse button is beeing released
-    onDrop: function ($item, container, _super) {
+    onDrop: function ($item, container, _super, event) {
       $item.removeClass("dragged").removeAttr("style")
       $("body").removeClass("dragging")
     },
-    // Called on mousedown.
-    onMousedown: function($item, event, _super) {
+    // Called on mousedown. If falsy value is returned, the dragging will not start.
+    onMousedown: function($item, _super, event) {
       event.preventDefault()
+      return true
     },
     // Template for the placeholder. Can be any valid jQuery input
     // e.g. a string, a DOM element.
@@ -200,12 +201,13 @@
   function ContainerGroup(options) {
     this.options = $.extend({}, groupDefaults, options)
     this.containers = []
-    this.scrollProxy = $.proxy(this.scroll, this)
-    this.dragProxy = $.proxy(this.drag, this)
-    this.dropProxy = $.proxy(this.drop, this)
 
     if(!this.options.parentContainer){
+      this.scrollProxy = $.proxy(this.scroll, this)
+      this.dragProxy = $.proxy(this.drag, this)
+      this.dropProxy = $.proxy(this.drop, this)
       this.placeholder = $(this.options.placeholder)
+      
       if(!options.isValidTarget)
         this.options.isValidTarget = undefined
     }
@@ -225,15 +227,15 @@
       this.$document = $(itemContainer.el[0].ownerDocument)
 
       if(itemContainer.enabled()){
-        this.toggleListeners('on')
-
         // get item to drag
         this.item = $(e.target).closest(this.options.itemSelector)
         this.itemContainer = itemContainer
 
-        this.setPointer(e)
+        if(!this.options.onMousedown(this.item, groupDefaults.onMousedown, e))
+          return
 
-        this.options.onMousedown(this.item, e, groupDefaults.onMousedown)
+        this.setPointer(e)
+        this.toggleListeners('on')
       } else {
         this.toggleListeners('on', ['drop'])
       }
@@ -245,7 +247,7 @@
         if(!this.distanceMet(e))
           return
 
-        this.options.onDragStart(this.item, this.itemContainer, groupDefaults.onDragStart)
+        this.options.onDragStart(this.item, this.itemContainer, groupDefaults.onDragStart, e)
         this.item.before(this.placeholder)
         this.dragging = true
       }
@@ -254,7 +256,8 @@
       // place item under the cursor
       this.options.onDrag(this.item,
                           getRelativePosition(this.pointer, this.item.offsetParent()),
-                          groupDefaults.onDrag)
+                          groupDefaults.onDrag,
+                          e)
 
       var x = e.pageX,
       y = e.pageY,
@@ -275,9 +278,9 @@
         if(this.placeholder.closest("html")[0])
           this.placeholder.before(this.item).detach()
         else
-          this.options.onCancel(this.item, this.itemContainer, groupDefaults.onCancel)
+          this.options.onCancel(this.item, this.itemContainer, groupDefaults.onCancel, e)
 
-        this.options.onDrop(this.item, this.getContainer(this.item), groupDefaults.onDrop)
+        this.options.onDrop(this.item, this.getContainer(this.item), groupDefaults.onDrop, e)
 
         // cleanup
         this.clearDimensions()
@@ -400,6 +403,11 @@
       while(i--){
         this.containers[i].clearDimensions()
       }
+    },
+    destroy: function () {
+      // TODO iterate over subgroups and destroy them
+      // TODO remove all events
+      containerGroups[this.options.group] = undefined
     }
   }
 
@@ -408,11 +416,14 @@
     this.options = $.extend( {}, containerDefaults, options)
 
     this.group = ContainerGroup.get(this.options)
-    this.rootGroup = this.options.rootGroup = this.options.rootGroup || this.group
+    this.rootGroup = this.options.rootGroup || this.group
     this.parentContainer = this.options.parentContainer
     this.handle = this.rootGroup.options.handle || this.rootGroup.options.itemSelector
 
-    this.el.on(eventNames.start, this.handle, $.proxy(this.dragInit, this))
+    var itemPath = this.rootGroup.options.itemPath,
+    target = itemPath ? this.el.find(itemPath) : this.el
+
+    target.on(eventNames.start, this.handle, $.proxy(this.dragInit, this))
 
     if(this.options.drop)
       this.group.containers.push(this)
@@ -519,6 +530,7 @@
         if(childContainers[0]){
           var options = $.extend({}, this.options, {
             parentContainer: this,
+            rootGroup: this.rootGroup,
             group: groupCounter ++
           })
           childGroup = childContainers[pluginName](options).data(pluginName).group
@@ -573,6 +585,9 @@
     },
     serialize: function () {
       return this._serialize(this.el, true)
+    },
+    destroy: function () {
+      this.rootGroup.destroy()
     }
   }
 
