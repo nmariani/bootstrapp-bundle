@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('ckeditor')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('enable')->defaultTrue()->end()
                         ->scalarNode('base_path')->defaultValue('bundles/bootstrapp/css/ckeditor/')->end()
