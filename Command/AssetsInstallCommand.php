@@ -927,12 +927,10 @@ EOF
 
         # css
         $cssPath = $this->initializeDirectory('css/ckeditor');
-        $filesystem->copy($vendorDir.'/contents.css', $cssPath . '/contents.css');
         $finder = new Finder();
         $finder->files()->in($vendorDir.'/skins')->name('*.css');
         foreach ($finder as $file) {
             $dirname = $file->getRelativePath();
-            $output->writeln($dirname);
             $filename = $cssPath . '/skins/' . $file->getRelativePathname();
             $filesystem->mkdir(dirname($filename));
             $content = file_get_contents($file->getPathname());
@@ -954,13 +952,14 @@ EOF
         $filesystem->copy($vendorDir.'/ckeditor.js', $jsPath . '/ckeditor.js');
         $filesystem->copy($vendorDir.'/config.js', $jsPath . '/config.js');
         $filesystem->copy($vendorDir.'/styles.js', $jsPath . '/styles.js');
+        $filesystem->copy($vendorDir.'/contents.css', $jsPath . '/contents.css');   // css loaded by CKEditor
         $finder = new Finder();
         $finder->files()->in($vendorDir.'/lang')->name('*.js');
         foreach ($finder as $file) {
             $filesystem->copy($file, $jsPath . '/lang/' . $file->getRelativePathname());
         }
         $finder = new Finder();
-        $finder->files()->in($vendorDir.'/plugins')->name('*.js');
+        $finder->files()->in($vendorDir.'/plugins');
         foreach ($finder as $file) {
             $filesystem->copy($file, $jsPath . '/plugins/' . $file->getRelativePathname());
         }
