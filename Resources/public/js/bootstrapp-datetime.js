@@ -94,7 +94,9 @@ Bootstrapp.DateTime = (function() {
             this.plugin.change(this.onPluginChange, this);
         }
 
-        this.element.change();
+        if (this.element.val()) {
+            this.element.change();
+        }
     }
 
     DateTime.prototype.getElement = function() {
@@ -104,11 +106,14 @@ Bootstrapp.DateTime = (function() {
     DateTime.prototype.onChange = function(event) {
         try {
             var date = this.fmt.parse(this.element.val(), this.format);
-            if(this.plugin)
-                this.plugin.setDate(date);
-            this.setDate(date);
-            this.element.removeClass('error');
-            this.element.tooltip('destroy');
+            if (null != date) {
+                if(this.plugin) {
+                    this.plugin.setDate(date);
+                }
+                this.setDate(date);
+                this.element.removeClass('error');
+                this.element.tooltip('destroy');
+            }
         } catch(e) {
             this.element.addClass('error');
             this.element.tooltip({

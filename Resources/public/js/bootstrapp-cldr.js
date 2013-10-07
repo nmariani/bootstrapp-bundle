@@ -7,6 +7,9 @@
  */
 (function() {
     TwitterCldr.DateTimeFormatter.prototype.parse = function(value, options) {
+        if (!value) {
+            return null;
+        }
         var i = 0,
             pattern,
             values = value.split(/[\s\/\-\.\,\_\:]+/),
