@@ -165,16 +165,31 @@
 
 {% block form_errors %}
 {% spaceless %}
-    {% if errors|length > 0 %}
-    <span class="help-inline">
-        {% for error in errors %}
-        <p>{{
-            error.messagePluralization is null
-                ? error.messageTemplate|trans(error.messageParameters, 'validators')
-                : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
-        }}</p>
-        {% endfor %}
-    </span>
+    {% if not form.vars.valid %}
+        {% if not form.parent %}
+            <div class="alert alert-error">
+                {{ 'alert.form.errors'|trans|raw }}
+                {% if form.vars.errors|length %}
+                    {% for error in form.vars.errors %}
+                        <p>{{
+                            error.messagePluralization is null
+                            ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                            }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% elseif errors|length > 0 %}
+            <span class="help-inline">
+                {% for error in errors %}
+                <p>{{
+                    error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                }}</p>
+                {% endfor %}
+            </span>
+        {% endif %}
     {% endif %}
 {% endspaceless %}
 {% endblock form_errors %}
