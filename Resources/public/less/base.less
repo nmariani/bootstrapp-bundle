@@ -177,32 +177,34 @@ div.well textarea[readonly] {
   background-color: @inputBackground;
 }
 
-// override default bootstrap input, texterea & select width to fill the space available
-input,
-textarea,
-select,
-.uneditable-input {
-  width: 100%;
-}
-
 // fix form-horizontal inputs sizing
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"],
-.uneditable-input {
-  &:not([class*=input-]) {
-    .input-block-level();
+div:not(.input-prepend):not(.input-append) {
+  // override default bootstrap input, texterea & select width to fill the space available
+  > input,
+  > textarea,
+  > select,
+  > .uneditable-input {
+    width: 100%;
+  }
+
+  > input[type="text"],
+  > input[type="password"],
+  > input[type="datetime"],
+  > input[type="datetime-local"],
+  > input[type="date"],
+  > input[type="month"],
+  > input[type="time"],
+  > input[type="week"],
+  > input[type="number"],
+  > input[type="email"],
+  > input[type="url"],
+  > input[type="search"],
+  > input[type="tel"],
+  > input[type="color"],
+  > .uneditable-input {
+    &:not([class*=input-]) {
+      .input-block-level();
+    }
   }
 }
 
