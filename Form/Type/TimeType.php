@@ -69,6 +69,8 @@ class TimeType extends BaseTimeType
                 break;
         }
 
+        $view->vars['attr']['autocomplete'] = 'off';
+
         parent::finishView($view, $form, $options);
     }
 

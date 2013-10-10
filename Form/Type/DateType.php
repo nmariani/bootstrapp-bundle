@@ -79,6 +79,8 @@ class DateType extends BaseDateType
                 break;
         }
 
+        $view->vars['attr']['autocomplete'] = 'off';
+
         parent::finishView($view, $form, $options);
     }
 
