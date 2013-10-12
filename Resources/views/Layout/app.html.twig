@@ -1,5 +1,13 @@
 {% extends 'BootstrappBundle:Layout:base.html.twig' %}
 
+{% if sidebar is not defined %}
+    {% set sidebar = { visible: true, subnav: true } %}
+{% endif %}
+{% if header is not defined %}
+    {% set header = { subnav: not sidebar.subnav } %}
+{% endif %}
+
+
 {% block stylesheets %}
 {% stylesheets filter='less' output='bundles/bootstrapp/css/app.css'
     "@BootstrappBundle/Resources/public/less/app.less"
@@ -50,33 +58,65 @@
 {% endblock body %}
 
 {% block container %}
+    {% if sidebar is defined and sidebar.visible == true %}
     <div id="sidebar" class="span2">
+        {% block sidebar %}
         <div id="sidebar-header">
             {% block sidebar_header %}
             {% endblock %}
         </div>
-        <div class="sidebar-nav well">
+        <div id="sidebar-content">
+            {% if sidebar is defined and sidebar.subnav == true %}
             {% block sidebar_nav %}
-            <ul class="nav nav-list">
-                <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
-                <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
-                <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
-                <li class="nav-header">{% trans %}My account{% endtrans %}</li>
-                <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
-                <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
-                <li class="divider"></li>
-                <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
-            </ul>
+            {% set subnavType = 'list' %}
+            {{ block('subnavbar') }}
             {% endblock %}
+            {% endif %}
         </div>
+        {% endblock sidebar %}
     </div>
     <div id="content" class="span10">
+    {% else %}
+    <div id="content" class="span12">
+    {% endif %}
         <div id="content-inner">
             {{ parent() }}
         </div>
     </div>
 </div>
 {% endblock container %}
+
+{% block header %}
+    {{ parent() }}
+    {% if header is defined and header.subnav == true %}
+        {% set subnavType = 'pills' %}
+        {{ block('subnavbar') }}
+    {% endif %}
+{% endblock header %}
+
+{% block subnavbar %}
+{% if subnavType is not defined %}
+    {% set subnavType = 'pills' %}
+{% endif %}
+<ul class="nav nav-{{ subnavType }}">
+    {% block subnavbar_items %}
+    {% if subnavType == 'pills' %}
+    <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
+    <li class="divider"></li>
+    <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+    {% elseif subnavType == 'list' %}
+    <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
+    <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
+    <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
+    <li class="nav-header">{% trans %}My account{% endtrans %}</li>
+    <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
+    <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
+    <li class="divider"></li>
+    <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+    {% endif %}
+    {% endblock subnavbar_items %}
+</ul>
+{% endblock subnavbar %}
 
 {% block javascripts %}
     {{ parent() }}

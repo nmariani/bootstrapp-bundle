@@ -36,32 +36,47 @@ tr.deleted {
     padding: 20px;
 }
 #sidebar {
-    span.nav-header {
-        padding-top: 6px;
-        padding-bottom: 6px;
+    div.well {
+        padding: 6px;
     }
 }
-#sidebar-header {
-    min-height: 100px;
+ul.nav-list,
+ul.nav-pills {
+    li.nav-header {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
 }
-#sidebar div.well {
-    padding: 6px;
-}
-.page-header {
-    background-color: @baseColor;
-    padding: 13px 15px;
+
+// Header
+// --------------------
+header {
+    position: relative;
+    overflow: hidden;
     margin: -20px -20px 20px -20px;
-    color:@grayLighter;
+    background-color: #f5f5f5;
 
-    *:first-child {
-        margin-top: 0;
+    .page-header {
+        background-color: @baseColor;
+        padding: 13px 15px;
+        margin: 0;
+        color:@grayLighter;
+
+        *:first-child {
+            margin-top: 0;
+        }
+
+        *:last-child {
+            margin-bottom: 0;
+        }
     }
-
-    *:last-child {
+    .breadcrumb {
+        float: left;
         margin-bottom: 0;
     }
-}
-.breadcrumb {
-    margin-left: -20px;
-    margin-right: -20px;
+    ul.nav-pills {
+        float: right;
+        margin-left: 20px;
+        margin-bottom: 0;
+    }
 }
