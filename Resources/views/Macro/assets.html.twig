@@ -152,6 +152,7 @@
         {% if app.request.locale|slice(0,2)|lower != 'en' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/select2/select2_locale_' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
         {% endif %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-select2.js') }}"></script>
 
 {# location-typeahead #}
     {% elseif vendor == 'location-typeahead' %}
