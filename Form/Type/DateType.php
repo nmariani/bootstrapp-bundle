@@ -65,6 +65,7 @@ class DateType extends BaseDateType
                 break;
             default:
                 $view->vars['attr']['data-format'] = $this->getPattern($options['format']);
+                $view->vars['javascript'] = $options['javascript'];
                 if(isset($options['widget']) && $this->assetsLoader) {
                     switch($options['widget']) {
                         case 'jqueryui':
@@ -75,6 +76,8 @@ class DateType extends BaseDateType
                             break;
                     }
                     $this->assetsLoader->addVendor($options['widget'], $components);
+                    $this->assetsLoader->addVendor('twitter-cldr');
+                    $this->assetsLoader->addVendor('bootstrapp-datetime');
                 }
                 break;
         }
@@ -93,7 +96,8 @@ class DateType extends BaseDateType
 
         $defaults = [
             'format'  => $this->format,
-            'compound' => function(Options $options){return $this->isCompound($options);}
+            'compound' => function(Options $options){return $this->isCompound($options);},
+            'javascript' => true
         ];
         if(null!==$this->widget) {
             $defaults['widget'] = $this->widget;

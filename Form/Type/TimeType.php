@@ -63,8 +63,11 @@ class TimeType extends BaseTimeType
                 break;
             default:
                 $view->vars['attr']['data-format'] = $this->getPattern($options['format']);
+                $view->vars['javascript'] = $options['javascript'];
                 if(isset($options['widget']) && $this->assetsLoader) {
                     $this->assetsLoader->addVendor($options['widget']);
+                    $this->assetsLoader->addVendor('twitter-cldr');
+                    $this->assetsLoader->addVendor('bootstrapp-datetime');
                 }
                 break;
         }
@@ -82,7 +85,8 @@ class TimeType extends BaseTimeType
         parent::setDefaultOptions($resolver);
 
         $defaults = [
-            'format'  => $this->format
+            'format'  => $this->format,
+            'javascript' => true
         ];
         if(null!==$this->widget) {
             $defaults['widget'] = $this->widget;

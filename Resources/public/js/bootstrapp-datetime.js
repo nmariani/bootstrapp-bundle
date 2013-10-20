@@ -11,7 +11,7 @@ if(typeof Bootstrapp == "undefined") {
 
 Bootstrapp.DateTime = (function() {
 
-    function DateTime(element, options, pluginGetter) {
+    function DateTime(element, options, plugin) {
         element = $(element);
         var parent = element.parent(),
             widget = parent.data('widget'),
@@ -71,8 +71,8 @@ Bootstrapp.DateTime = (function() {
         if(grandparent && 'datetime' == grandtype && widget == grandwidget) {
             parent = grandparent;
         }
-        if(!(this.plugin = parent.data('plugin')) && typeof pluginGetter == 'function') {
-            this.plugin = pluginGetter(element);
+        if(!(this.plugin = parent.data('plugin')) && typeof plugin == 'function') {
+            this.plugin = plugin(element, options);
             parent.data('plugin', this.plugin);
         }
 
@@ -177,13 +177,88 @@ Bootstrapp.DateTime = (function() {
     return DateTime;
 })();
 
-$.fn.datetime = function(options, pluginGetter) {
+Bootstrapp.DateTimePluginFactory = function(element, options) {
+    element = $(element);
+    var parent = element.parent(),
+        widget = parent.data('widget'),
+        type = parent.data('type'),
+        grandparent = parent.parent(),
+        grandwidget = grandparent.data('widget'),
+        grandtype = grandparent.data('type'),
+        plugin;
+
+    if(grandparent && 'datetime' == grandtype && widget == grandwidget) {
+        // composant datetime
+        parent = grandparent;
+        type = grandtype;
+    }
+
+    plugin = parent.data('plugin');
+    if(!plugin) {
+        var input = parent.children('input[class~="'+widget+'"]').first(),
+            lang = options.lang ? options.lang : 'en';
+        // get options in data- attributes
+        /*
+         $.each(options, function(index, value) {
+         var data = element.data(index);
+         if(data) {
+         options[index] = data;
+         }
+         });
+         */
+        switch(parent.data('widget')) {
+            case 'eyecon' :
+                var options = {
+                    language: lang
+                };
+                if(Bootstrapp.EyeconDatePicker)
+                    plugin =  new Bootstrapp.EyeconDatePicker(input, options);
+                break;
+            case 'pickadate' :
+                if(Bootstrapp.Pickadate)
+                    plugin = new Bootstrapp.Pickadate(input);
+                break;
+            case 'jqueryui' :
+                if(Bootstrapp.jQueryUIDatePicker)
+                    plugin = new Bootstrapp.jQueryUIDatePicker(input);
+                break;
+            case 'mobiscroll' :
+                var options = {
+                    preset: type,
+                    lang: lang,
+                    theme: 'mobiscroll light'
+                    //invalid: { daysOfWeek: [0, 6], daysOfMonth: ['5/1', '12/24', '12/25'] },
+                    //readonly: [false, false, true],
+                };
+                if(Bootstrapp.Mobiscroll)
+                    plugin = new Bootstrapp.Mobiscroll(input, options);
+                break;
+            case 'jdewit' :
+                var options = {
+                    lang: lang
+                };
+                if(Bootstrapp.JdewitTimepicker)
+                    plugin = new Bootstrapp.JdewitTimepicker(input, options);
+            default:
+                break;
+        }
+        if(plugin) {
+            parent.data('plugin', plugin);
+        }
+    }
+    return plugin;
+};
+
+$.fn.datetime = function(options, plugin) {
+    if (typeof plugin == 'undefined') {
+        plugin = Bootstrapp.DateTimePluginFactory;
+    }
+    options = $.extend({}, options);
     return this.each(function () {
         var $this = $(this),
-            data = $this.data('bootstrapp'),
-            options = {} || options;
+            data = $this.data('bootstrapp');
         if (!data) {
-            $this.data('bootstrapp',new Bootstrapp.DateTime(this, options, pluginGetter));
+            $this.data('bootstrapp', new Bootstrapp.DateTime(this, options, plugin));
         }
     });
 };
