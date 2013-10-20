@@ -1,4 +1,5 @@
 $.fn.bootstrappSelect2 = function(options) {
+    var select2;
     this.each(function(offset, element){
         var opts = $.extend({}, options);
         element = $(element);
@@ -15,6 +16,7 @@ $.fn.bootstrappSelect2 = function(options) {
                 element = $('#'+id);
             }
         }
-        element.select2(opts);
+        select2 = element.select2(opts);
     });
+    return select2;
 };
