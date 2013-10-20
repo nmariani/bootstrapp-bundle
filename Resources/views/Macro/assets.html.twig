@@ -75,8 +75,17 @@
 
 {# Javascripts manager #}
 {% macro javascripts(vendor, components) %}
+{# twitter cldr #}
+    {% if vendor == 'twitter-cldr' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/twitter-cldr/'~ app.request.locale|slice(0,2)|lower ~'.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-cldr.js') }}"></script>
+
+{# bootstrapp datetime #}
+    {% elseif vendor == 'bootstrapp-datetime' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-datetime.js') }}"></script>
+
 {# date pickers #}
-    {% if vendor == 'eyecon' %}
+    {% elseif vendor == 'eyecon' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets/bootstrap-datepicker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets/locales/bootstrap-datepicker.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-eyecon.js') }}"></script>
