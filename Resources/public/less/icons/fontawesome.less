@@ -868,7 +868,7 @@
   height: auto;
   line-height: normal;
   vertical-align: baseline;
-  background-image: none;
+  background-image: none !important;
   background-position: 0% 0%;
   background-repeat: repeat;
   margin-top: 0;
@@ -985,7 +985,7 @@ a {
 .dropdown-menu > .active > a > [class*=" icon-"],
 .dropdown-submenu:hover > a > [class^="icon-"],
 .dropdown-submenu:hover > a > [class*=" icon-"] {
-  background-image: none;
+  background-image: none !important;
 }
 
 
@@ -1514,3 +1514,30 @@ a {
 .fontawesome-vk()                      { .fontawesome(@vk); }
 .fontawesome-weibo()                   { .fontawesome(@weibo); }
 .fontawesome-renren()                  { .fontawesome(@renren); }
+
+// Alias
+// --------------------------
+.fontawesome-show() {
+	.fontawesome-eye-open();
+}
+.fontawesome-create() {
+	.fontawesome-plus();
+}
+.fontawesome-update() {
+	.fontawesome-pencil();
+}
+.fontawesome-delete() {
+    .fontawesome-trash();
+}
+.fontawesome-restore() {
+    .fontawesome-mail-reply();
+}
+.fontawesome-cancel() {
+    .fontawesome-remove();
+}
+.fontawesome-back() {
+    .fontawesome-chevron-left();
+}
+.fontawesome-help() {
+    .fontawesome-question();
+}

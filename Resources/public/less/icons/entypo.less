@@ -33,7 +33,7 @@
   margin-right: .1em;
   text-align: center;
 
-  background-image: none;
+  background-image: none !important;
 
   &:before {
     content: @content;
@@ -328,3 +328,44 @@
 .entypo-google-circles() { .entypo("\F351"); }
 .entypo-vk() { .entypo("\F354"); }
 .entypo-smashing() { .entypo("\F357"); }
+
+// Alias
+// --------------------------
+.entypo-show() {
+	.entypo-text-doc();
+}
+.entypo-create() {
+	.entypo-plus();
+}
+.entypo-update() {
+	.entypo-pencil();
+}
+.entypo-delete() {
+    .entypo-trash();
+}
+.entypo-restore() {
+    .entypo-reply();
+}
+.entypo-cancel() {
+    .entypo-cross();
+}
+.entypo-save() {
+    .entypo-check();
+}
+.entypo-back() {
+    .entypo-chevron-left();
+}
+/*
+.entypo-chevron-up() {
+    .entypo-chevron-small-up();
+}
+.entypo-chevron-right() {
+    .entypo-chevron-small-right();
+}
+.entypo-chevron-left() {
+    .entypo-chevron-small-left();
+}
+.entypo-chevron-down() {
+    .entypo-chevron-small-down();
+}
+*/
