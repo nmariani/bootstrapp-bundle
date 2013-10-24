@@ -104,10 +104,15 @@ class UseIconsCommand extends ContainerAwareCommand
     }
 
     protected function writeTargetFile(){
-        $path = $this->relativePath($this->targetPath, $this->sourcePath);
-        $import = '';
+        // relative path to icons less files
+        $iconsPath = $this->relativePath($this->targetPath, $this->sourcePath);
+        $variablesPath = $this->relativePath($this->targetPath, realpath($this->sourcePath.'/..'));
+
+        // import variables.less file to allow the use of common size, colors, ...
+        $import = '@import "'.$variablesPath.'/variables.less";';
         foreach($this->files as $file) {
-            $import .= "\n".'@import "'.$path.'/'.$file.'";';
+            // import icons set less file (glyphicons, entypo, fontawesome, metrize, ...)
+            $import .= "\n".'@import "'.$iconsPath.'/'.$file.'";';
         }
 
         $rules = '';
