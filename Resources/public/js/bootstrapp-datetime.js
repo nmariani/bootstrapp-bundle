@@ -79,7 +79,9 @@ Bootstrapp.DateTime = (function() {
         if(!(this.plugin = parent.data('plugin')) && typeof plugin == 'function') {
             this.plugin = plugin(element, options);
             parent.data('plugin', this.plugin);
-            this.plugin.setDate(this.date);
+            if (this.date) {
+                this.plugin.setDate(this.date);
+            }
         }
 
         if ($.type(options.readonly) === 'boolean') {
