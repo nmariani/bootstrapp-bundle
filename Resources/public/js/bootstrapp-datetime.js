@@ -76,15 +76,15 @@ Bootstrapp.DateTime = (function() {
             parent.data('plugin', this.plugin);
         }
 
+        if ($.type(options.readonly) === 'boolean') {
+            this.readonly(options.readonly);
+        }
+        if ($.type(options.disabled) === 'boolean') {
+            this.enable(!options.disabled);
+        }
+
         // events
-        this.element.on({
-            change: $.proxy(this.onChange, this),
-            focus: $.proxy(this.onFocus, this),
-            keydown: $.proxy(this.onKeyDown, this)
-        });
-        this.element.parent().click({instance:this}, function(event) {
-            event.data.instance.onClick(event);
-        });
+        this.resetEvents()
 
         if(this.plugin) {
             //var self = this;
@@ -99,8 +99,33 @@ Bootstrapp.DateTime = (function() {
         }
     }
 
+    DateTime.prototype.disable = function() {
+        this.enable(false)
+    }
+
+    DateTime.prototype.enable = function(boolean) {
+        if ($.type(boolean) == 'undefined') {
+            boolean = true;
+        }
+        if ((true == boolean) && (false === this.isEnabled())) {
+            this.element.prop('disabled', false);
+            this.resetEvents();
+        } else if ((false == boolean) && (true === this.isEnabled())) {
+            this.element.prop('disabled', true);
+            this.resetEvents();
+        }
+    }
+
     DateTime.prototype.getElement = function() {
         return this.element;
+    }
+
+    DateTime.prototype.isEnabled = function() {
+        return !this.element.prop('disabled');
+    }
+
+    DateTime.prototype.isReadonly = function() {
+        return this.element.prop('readonly');
     }
 
     DateTime.prototype.onChange = function(event) {
@@ -159,6 +184,10 @@ Bootstrapp.DateTime = (function() {
         this.element.val(this.fmt.format(this.date, this.format));
     }
 
+    DateTime.prototype.getDate = function() {
+        return this.date;
+    }
+
     DateTime.prototype.show = function() {
         if(this.plugin) {
             this.plugin.show();
@@ -171,6 +200,37 @@ Bootstrapp.DateTime = (function() {
         if(this.plugin) {
             var plugin = this.plugin;
             setTimeout(function(){plugin.hide();}, 0);
+        }
+    }
+
+    DateTime.prototype.readonly = function(boolean) {
+        if ($.type(boolean) == 'undefined') {
+            boolean = true;
+        }
+        if ((true == boolean) && (false === this.isReadonly())) {
+            this.element.prop('readonly', true);
+            this.resetEvents();
+        } else if ((false == boolean) && (true === this.isReadonly())) {
+            this.element.prop('readonly', false);
+            this.resetEvents();
+        }
+    }
+
+    DateTime.prototype.resetEvents = function() {
+        if (this.isEnabled() && !this.isReadonly()) {
+            this.element.on({
+                change: $.proxy(this.onChange, this),
+                focus: $.proxy(this.onFocus, this),
+                keydown: $.proxy(this.onKeyDown, this)
+            });
+            this.element.parent().on('click', $.proxy(this.onClick, this));
+        } else {
+            this.element.off({
+                change: $.proxy(this.onChange, this),
+                focus: $.proxy(this.onFocus, this),
+                keydown: $.proxy(this.onKeyDown, this),
+            });
+            this.element.parent().off('click', $.proxy(this.onClick, this));
         }
     }
 
