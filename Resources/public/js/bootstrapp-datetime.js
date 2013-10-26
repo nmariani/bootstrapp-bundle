@@ -22,10 +22,15 @@ Bootstrapp.DateTime = (function() {
 
         this.element = element;
         this.plugin = null;
-        this.date = null;
         this.format = {"format": "date", "type": "long"};
-        $this = this;
         this.fmt = new TwitterCldr.DateTimeFormatter();
+
+        // initialize date
+        try {
+            this.date = this.fmt.parse(this.element.val(), this.format);
+        } catch(e) {
+            this.date = null;
+        }
 
         // format
         var formatKey = '',
@@ -74,6 +79,7 @@ Bootstrapp.DateTime = (function() {
         if(!(this.plugin = parent.data('plugin')) && typeof plugin == 'function') {
             this.plugin = plugin(element, options);
             parent.data('plugin', this.plugin);
+            this.plugin.setDate(this.date);
         }
 
         if ($.type(options.readonly) === 'boolean') {
@@ -92,10 +98,6 @@ Bootstrapp.DateTime = (function() {
             //    self.onPluginChange();
             //});
             this.plugin.change(this.onPluginChange, this);
-        }
-
-        if (this.element.val()) {
-            this.element.change();
         }
     }
 
@@ -132,9 +134,6 @@ Bootstrapp.DateTime = (function() {
         try {
             var date = this.fmt.parse(this.element.val(), this.format);
             if (null != date) {
-                if(this.plugin) {
-                    this.plugin.setDate(date);
-                }
                 this.setDate(date);
                 this.element.removeClass('error');
                 this.element.tooltip('destroy');
@@ -175,13 +174,28 @@ Bootstrapp.DateTime = (function() {
     }
 
     DateTime.prototype.onPluginChange = function() {
-        if(this.plugin)
+        if(this.plugin) {
             this.setDate(this.plugin.getDate());
+        }
     }
 
     DateTime.prototype.setDate = function(date) {
-        this.date = date;
-        this.element.val(this.fmt.format(this.date, this.format));
+        var thisDateTime = $.type(this.date) === 'date' ? this.date.getTime() : null,
+            dateTime = $.type(date) === 'date' ? date.getTime() : null,
+            pluginDate = this.plugin ? this.plugin.getDate() : null,
+            pluginDateTime = $.type(pluginDate) === 'date' ? pluginDate.getTime() : null,
+            trigger = false;
+        if (thisDateTime != dateTime) {
+            this.date = date;
+            this.element.val(this.fmt.format(this.date, this.format));
+            trigger = true;
+        }
+        if(this.plugin && pluginDateTime != dateTime) {
+            this.plugin.setDate(this.date);
+        }
+        if (trigger) {
+            this.element.trigger('change')
+        }
     }
 
     DateTime.prototype.getDate = function() {
@@ -315,10 +329,8 @@ $.fn.datetime = function(options, plugin) {
     }
     options = $.extend({}, options);
     return this.each(function () {
-        var $this = $(this),
-            data = $this.data('bootstrapp');
-        if (!data) {
-            $this.data('bootstrapp', new Bootstrapp.DateTime(this, options, plugin));
+        if (!$(this).data('bootstrapp')) {
+            $(this).data('bootstrapp', new Bootstrapp.DateTime(this, options, plugin));
         }
     });
 };
