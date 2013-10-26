@@ -187,12 +187,16 @@ Bootstrapp.DateTime = (function() {
             pluginDate = this.plugin ? this.plugin.getDate() : null,
             pluginDateTime = $.type(pluginDate) === 'date' ? pluginDate.getTime() : null,
             trigger = false;
-        if (thisDateTime != dateTime) {
+        if (null === date || ($.isNumeric(dateTime) && thisDateTime != dateTime)) {
             this.date = date;
-            this.element.val(this.fmt.format(this.date, this.format));
+            if (null === date) {
+                this.element.val(null);
+            } else {
+                this.element.val(this.fmt.format(this.date, this.format));
+            }
             trigger = true;
         }
-        if(this.plugin && pluginDateTime != dateTime) {
+        if(this.plugin && $.isNumeric(dateTime) && pluginDateTime != dateTime) {
             this.plugin.setDate(this.date);
         }
         if (trigger) {
