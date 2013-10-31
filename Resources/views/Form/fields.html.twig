@@ -195,6 +195,75 @@
     {% endif %}
 {% endblock bootstrapp_bundle_ckeditor_widget %}
 
+{% block file_widget %}
+    {% set uploadtype = uploadtype|default('file') %}
+    {% if uploadtype == 'image' %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail"><img src="{{ url|default(placehold(placeholdWidth, placeholdHeight, placeholdText|trans)) }}" /></div>
+            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+            <div class="btn-group">
+                <span class="btn btn-small btn-file" type="button"><i class="icon-picture"></i> Select{{ parent() }}</span>
+                <span class="btn btn-small fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+            </div>
+        </div>
+    {% elseif uploadtype|default('file') == 'video' %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail">
+                <video id="video" controls width="{{ placeholdWidth }}" height="{{ placeholdHeight }}" preload="auto" data-setup="{}">
+                    <source type="video/{{ filetype }}" src="{{ url }}">
+                </video>
+            </div>
+            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+            <div class="btn-group">
+                <span class="btn btn-small btn-file" type="button"><i class="icon-film"></i> Select{{ parent() }}</span>
+                <span class="btn btn-small fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+            </div>
+        </div>
+    {% elseif uploadtype|default('file') == 'disabled-audio' %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail">
+                <audio>
+                    <source type="audio/{{ filetype }}" src="{{ url }}"></source>
+                </audio>
+            </div>
+            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+            <div class="btn-group">
+                <span class="btn btn-small btn-file" type="button"><i class="icon-music"></i> Select{{ parent() }}</span>
+                <span class="btn btn-small fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+            </div>
+        </div>
+    {% else %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="input-append">
+                <div class="uneditable-input span3"><i class="icon-file"></i>
+                    <span class="fileupload-preview">
+                        {% if url is not empty %}
+                            <a href="{{ url }}" target="_blank">{{ filename|default(null) }}</a>
+                        {% else %}
+                            {{ filename|default(null) }}
+                        {% endif %}
+                    </span>
+                </div>
+                <span class="button btn btn-file">Select file
+                    {{ block('form_widget') }}
+                </span>
+                <span class="button btn fileupload-exists" data-dismiss="fileupload" type="button">Remove</span>
+            </div>
+        </div>
+    {% endif %}
+    <script type="text/javascript">
+        {% if not app.request.isXmlHttpRequest %}
+        window.addEventListener('load', function(){
+        {% endif %}
+            $(function() {
+                $('#{{ id }}').fileupload();
+            });
+        {% if not app.request.isXmlHttpRequest %}
+        });
+        {% endif %}
+    </script>
+{% endblock file_widget %}
+
 {# Errors #}
 
 {% block form_errors %}

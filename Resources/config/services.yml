@@ -66,5 +66,11 @@ services:
         calls:
             - [ setContainer, [ @service_container ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
+    form.type.file:
+        class: nmariani\Bundle\BootstrappBundle\Form\Type\FileType
+        tags: [{ name: form.type, alias: file }]
+        calls:
+            - [ setAssetsLoader, [ @assets_loader ] ]
+            - [ setContainer, [ @service_container ] ]
     assets_loader:
         class: nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader

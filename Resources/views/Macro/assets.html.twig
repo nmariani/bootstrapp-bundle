@@ -184,5 +184,9 @@
             CKEDITOR.config.skin = CKEDITOR.skinName;
         </script>
 
+{# fileinput #}
+    {% elseif vendor == 'fileinput' %}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrap-fileupload.js') }}"></script>
+
     {% endif %}
 {% endmacro %}
