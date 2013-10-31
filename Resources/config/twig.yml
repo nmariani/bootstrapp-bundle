@@ -1,0 +1,5 @@
+services:
+    bootstrapp.twig.thumbnail_extension:
+        class: nmariani\Bundle\BootstrappBundle\Twig\Extension\ThumbnailExtension
+        tags:
+            - { name: twig.extension }
