@@ -43,7 +43,7 @@ $.fn.bootstrappSelect2 = function(options) {
             values = element.val().split(",");
         }
         select2 = element.select2(opts);
-        if (opts.selectSingleValue && values.length == 1) {
+        if (!element.val() && opts.selectSingleValue && values.length == 1) {
             element.select2('val', values[0], true);
         }
     });
