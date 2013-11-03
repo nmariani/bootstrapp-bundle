@@ -233,7 +233,7 @@
             </div>
         </div>
     {% else %}
-        <div class="fileupload fileupload-new" data-provides="fileupload">
+        <div class="fileupload {{ filename|default(null) is empty ? 'fileupload-new' : 'fileupload-exists' }}" data-provides="fileupload">
             <div class="input-append">
                 <div class="uneditable-input span3"><i class="icon-file"></i>
                     <span class="fileupload-preview">
