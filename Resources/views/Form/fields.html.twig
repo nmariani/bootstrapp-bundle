@@ -237,7 +237,7 @@
             <div class="input-append">
                 <div class="uneditable-input span3"><i class="icon-file"></i>
                     <span class="fileupload-preview">
-                        {% if url is not empty %}
+                        {% if url is defined and url is not empty %}
                             <a href="{{ url }}" target="_blank">{{ filename|default(null) }}</a>
                         {% else %}
                             {{ filename|default(null) }}
