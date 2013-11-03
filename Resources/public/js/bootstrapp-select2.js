@@ -19,11 +19,22 @@ $.fn.bootstrappSelect2 = function(options) {
                 case typeof(opts.tags) != 'undefined' :
                     var id = element.attr('id'),
                         name = element.attr('name'),
-                        value = element.val();
+                        value = element.val(),
+                        events = $._data(element.get(0), "events");
+                    // replace element by an hidden input
                     element.replaceWith(
                         $('<input type="hidden" id="' + id + '" name="'+ name +'" value="'+ value +'">')
                     );
+                    // retrieve new hidden input element
                     element = $('#'+id);
+                    // bind previously attached handlers to new element
+                    if ($.isPlainObject(events)) {
+                        $.each(events, function(event, handlers){
+                            $.each(handlers, function(index, handler) {
+                                element.on(event, handler);
+                            })
+                        });
+                    }
                     break;
                 default :
                     break;
