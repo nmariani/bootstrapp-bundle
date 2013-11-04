@@ -6,13 +6,6 @@
  * file that was distributed with this source code.
  */
 (function ( $ ) {
-/*
-    $('body').on('click.modal.data-api', '[data-modal^="#"]', function ( e ) {
-        var $this = $(this), $target = $($this.attr('data-modal'));
-        e.preventDefault();
-        $target.modal('show');
-    })
-*/
     $(document).ready(function() {
         $('[data-modal^="#"]').each(function () {
             var $this = $(this),
@@ -26,24 +19,35 @@
                 var $this = $(this),
                     modalButton = modal.find(".modal-footer a.btn-primary")
                 ;
+                if (!$this.data('modal-confirm')) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
 
-                // show modal
-                modal.modal('show');
+                    // show modal
+                    modal.modal('show');
 
-                // update modal body content
-                $($this.data('modal')+" .modal-body p").html($this.data('modal-body'));
+                    // update modal body content
+                    $($this.data('modal')+" .modal-body p").html($this.data('modal-body'));
 
-                // update modal button href and target attributes
-                modalButton.attr('href', $this.attr('href')||'#');
-                if($this.attr('target'))
-                    modalButton.attr('target', $this.attr('target'));
-                else modalButton.removeAttr('target');
+                    // update modal button href and target attributes
+                    modalButton.attr('href', $this.attr('href')||'#');
+                    if($this.attr('target')) {
+                        modalButton.attr('target', $this.attr('target'));
+                    } else {
+                        modalButton.removeAttr('target');
+                    }
 
-                // fire element click on modal button click
-                modalButton.click(function (e) {
-                    $this.data('modal-confirm', true);
-                    $this.click();
-                });
+                    // remove all handlers attached
+                    modalButton.off();
+
+                    // fire element click on modal button click
+                    modalButton.click(function (e) {
+                        $this.data('modal-confirm', true);
+                        modal.modal('hide');
+                        $this.click();
+                        $this.data('modal-confirm', false);
+                    });
+                }
             });
         });
 
