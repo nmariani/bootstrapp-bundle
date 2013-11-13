@@ -321,26 +321,48 @@ legend {
 .input-block-level {
     &.input-prepend {
         position: relative;
-        .add-on:first-child, .btn:first-child {
+
+        > .add-on:first-child,
+        > .btn:first-child,
+        > .btn-group:first-child {
             position:absolute;
-            left: 0;
+            top: 1px;
+            left: 1px;
             z-index: 3;
         }
+
         input.input-block-level {
             padding-left: 32px;
+            border-radius: 4px;
         }
     }
     &.input-append {
         position: relative;
-        .add-on:last-child, .btn:last-child {
+
+        > .add-on:last-child,
+        > .btn:last-child,
+        > .btn-group:last-child {
             position:absolute;
-            right: 0;
+            top: 1px;
+            right: 1px;
             z-index: 3;
         }
+
         input.input-block-level {
             padding-right: 46px;
+            border-radius: 4px;
         }
     }
+
+    > .btn-group {
+         > .btn {
+            border-width: 0;
+            border-left-width: 1px;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            margin-left: auto;
+         }
+     }
 }
 .select2-container {
     width: 100%;

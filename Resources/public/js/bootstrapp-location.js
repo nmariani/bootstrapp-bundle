@@ -55,7 +55,7 @@
                 },
                 geocoderOptions: {
                     appendAddressString: '',
-                    region: '',
+                    region: null,
                     reverse: true
                 },
                 typeaheadOptions: {
@@ -63,7 +63,8 @@
                     updater: methods.updater,
                     matcher: methods.matcher
                 },
-                boundElements: {}
+                callback: null,
+                components: {}
             }, options);
 
             $.each(this.settings.typeaheadOptions, function (key, method) {
@@ -71,6 +72,30 @@
                     self.settings.typeaheadOptions[key] = $.proxy(method, self);
                 }
             });
+
+            var components = this.settings.components;
+            $.each(components, function (component, properties) {
+                var element, restrict, callback;
+                if ($.type(properties) === "string") {
+                    element = $(properties);
+                } else if ($.isPlainObject(properties)) {
+                    if(properties.selector) {
+                        element = $(properties.selector);
+                    }
+                    if($.type(properties.restrict) === "boolean") {
+                        restrict = properties.restrict;
+                    }
+                    if($.isFunction(properties.callback)) {
+                        callback = properties.callback;
+                    }
+                }
+                components[component] = {
+                    element: element,
+                    restrict: restrict,
+                    callback: callback
+                };
+            });
+            this.settings.components = components;
 
             // hash to store geocoder results keyed by address
             this.addressMapping = {};
@@ -177,9 +202,10 @@
             );
         },
         updater: function (item) {
-            //this.geocode({ address: item }, $.proxy(this.parseGeocodeResult, this));
             if (this.placesService) {
                 this.placesService.getDetails(this.addressMapping[item], $.proxy(this.parsePlaceResult, this));
+            } else {
+                this.geocode({ address: item }, $.proxy(this.parseGeocodeResult, this));
             }
             return item;
         },
@@ -244,80 +270,91 @@
             return this.settings.mapOptions.zoom;
         },
         geocode: function (parameters, callback) {
-            if (!jQuery.type(parameters) === "object" || jQuery.isEmptyObject(parameters)) {
-                parameters = {address:this.$element.val()};
+            if (!$.type(parameters) === "object" || $.isEmptyObject(parameters)) {
+                parameters = {
+                    address: $.trim(this.$element.val())
+                };
             }
-            if (!jQuery.isFunction(callback)) {
+            if (!$.isFunction(callback)) {
                 callback = $.proxy(this.parseGeocodeResult, this);
             }
             if (parameters.address) {
                 parameters.address = parameters.address + this.settings.geocoderOptions.appendAddressString;
             }
             parameters = $.extend({
-                region: this.settings.geocoderOptions.region
+                    componentRestrictions: {}
                 },
                 parameters
             );
+            if (this.settings.geocoderOptions.region) {
+                parameters.region = this.settings.geocoderOptions.region;
+            }
+            var components = this.settings.components;
+            $.each(components, function (component, properties) {
+                if (properties.element && properties.element.length > 0 && true == properties.restrict) {
+                    var value = properties.element.val(),
+                        camelized = component.replace(/(\-|_|\s)+(.)?/g, function(match, sep, c) {
+                        return (c ? c.toUpperCase() : '');
+                    });
+                    if (value.length > 0) {
+                        switch(camelized) {
+                            case 'route':
+                            case 'locality':
+                            case 'administrativeArea':
+                            case 'postalCode':
+                            case 'country':
+                                parameters.componentRestrictions[camelized] = $.trim(value);
+                                break;
+                        }
+                    }
+                }
+            });
             this.geocoder.geocode(parameters, callback);
         },
         parseGeocodeResult: function (results, status) {
-            if (status != google.maps.GeocoderStatus.OK || results.length == 0) {
-                alert('Cannot find address');
-                return;
-            }
-            var self = this,
-                data = results[0];
-            this.addressMapping[data.formatted_address] = data;
-
-            if (this.$staticGmap) {
-                this.$staticGmap.trigger('center', {
-                    zoom: this.getZoom(data),
-                    markers: [data.geometry.location.lat(), data.geometry.location.lng()].join(' ')
-                });
-            }
-            if (this.gmarker) {
-                this.gmarker.setPosition(data.geometry.location);
-                this.gmarker.setVisible(true);
-                this.updateViewport(data);
-            }
-
-            $.each(this.settings.boundElements, function (selector, geocodeProperty) {
-                var newValue = $.isFunction(geocodeProperty)
-                    ? ($.proxy(geocodeProperty, self)(data))
-                    : findInfo(data, geocodeProperty);
-                newValue = newValue || '';
-                $(selector).val(newValue);
-            });
-
-            return this;
+            return this.parseData(results && results.length > 0 ? results[0] : null, status);
         },
         parsePlaceResult: function (place, status) {
-            if (status != google.maps.GeocoderStatus.OK || null == place) {
-                alert('Cannot find address');
-                return;
-            }
-            var self = this,
-                data = place;
-            this.addressMapping[data.formatted_address] = data;
-            if (this.$staticGmap) {
-                this.$staticGmap.trigger('center', {
-                    zoom: this.getZoom(data),
-                    markers: [data.geometry.location.lat(), data.geometry.location.lng()].join(' ')
+            return this.parseData(place, status);
+        },
+        parseData: function (data, status) {
+            if (status == google.maps.GeocoderStatus.OK && null != data) {
+                if (!$.isFunction(this.settings.callback)) {
+                    this.$element.removeClass('error');
+                }
+
+                this.addressMapping[data.formatted_address] = data;
+                if (this.$staticGmap) {
+                    this.$staticGmap.trigger('center', {
+                        zoom: this.getZoom(data),
+                        markers: [data.geometry.location.lat(), data.geometry.location.lng()].join(' ')
+                    });
+                }
+                if (this.gmarker) {
+                    this.gmarker.setPosition(data.geometry.location);
+                    this.gmarker.setVisible(true);
+                    this.updateViewport(data);
+                }
+
+                var self = this;
+                $.each(this.settings.components, function (component, properties) {
+                    if (properties.element && properties.element.length > 0) {
+                        var newValue = $.isFunction(properties.callback) ? ($.proxy(properties.callback, self)(data)) : findInfo(data, component);
+                        newValue = newValue || '';
+                        if (properties.element.data('select2')) {
+                            properties.element.select2('val', newValue);
+                        } else {
+                            properties.element.val(newValue);
+                        }
+                    }
                 });
-            }
-            if (this.gmarker) {
-                this.gmarker.setPosition(data.geometry.location);
-                this.gmarker.setVisible(true);
-                this.updateViewport(data);
+            } else if (!$.isFunction(this.settings.callback)) {
+                this.$element.addClass('error');
             }
 
-            $.each(this.settings.boundElements, function (selector, geocodeProperty) {
-                var newValue = $.isFunction(geocodeProperty)
-                    ? ($.proxy(geocodeProperty, self)(data))
-                    : findInfo(data, geocodeProperty);
-                newValue = newValue || '';
-                $(selector).val(newValue);
-            });
+            if ($.isFunction(this.settings.callback)) {
+                $.proxy(this.settings.callback, this)(data, status);
+            }
 
             return this;
         },
