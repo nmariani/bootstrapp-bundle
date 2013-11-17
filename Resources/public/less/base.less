@@ -314,6 +314,12 @@ legend {
 .map, .google-maps {
     width: 100%;
     height: 400px;
+
+    &[class^='span'], &[class*=' span'] {
+        position: absolute;
+        right: 0;
+        height: 100%;
+    }
 }
 
 // Forms

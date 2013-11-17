@@ -16,6 +16,8 @@ parameters:
     form.type.datetime.widget: mobiscroll
     # location
     form.type.location.widget: location-typeahead
+    form.type.location.preferred_countries: ['FR']
+    form.type.location.defaultCountry: 'FR'
     # Global Variables
     templating.globals.class: nmariani\Bundle\BootstrappBundle\Templating\GlobalVariables
     # KnpMenu
@@ -57,6 +59,7 @@ services:
         #scope: prototype
         tags: [{ name: form.type, alias: bootstrapp_bundle_location }]
         calls:
+            - [ setContainer, [ @service_container ] ]
             - [ setDefaultWidget, [ %form.type.location.widget% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
     form.type.ckeditor:

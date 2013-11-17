@@ -14,6 +14,7 @@
 namespace nmariani\Bundle\BootstrappBundle\Form\Type;
 
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\Form\FormInterface,
@@ -34,47 +35,154 @@ class LocationType  extends AbstractType
     private $assetsLoader;
 
     /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $fields = $options['fields'];
+        if (!is_array($fields) || empty($fields)) {
+            $fields = [
+                'address',
+                'streetNumber',
+                'route',
+                'postalCode',
+                'locality',
+                'shortCountry',
+                'country',
+                'administrativeAreaLevel1',
+                'administrativeAreaLevel2',
+            ];
+        }
+
         $builder
-            ->add('address', 'text', array(
-                    'attr' => ['placeholder' => 'Please enter the address to search'],
-                ))
             ->add('latitude', 'hidden')
             ->add('longitude', 'hidden')
-            ->add('streetNumber', 'text', array(
-                    'label' => 'N°',
-                    'attr' => ['placeholder' => 'N°'],
-                    'required' => false
-                )
-            )
-            ->add('route', 'text', array(
-                    'label' => 'Route',
-                    'attr' => ['placeholder' => 'Route'],
-                    'required' => false
-                )
-            )
-            ->add('postalCode', 'text', array(
-                    'label' => 'Postal code',
-                    'attr' => ['placeholder' => 'Postal code'],
-                    'required' => false
-                )
-            )
-            ->add('locality', 'text', array(
-                    'attr' => ['placeholder' => 'Locality'],
-                ))
-            ->add('shortCountry', 'country', array(
-                    'preferred_choices' => array('FR'),
-                    'required' => false,
-                    'label' => 'Country'
-                )
-            )
-            ->add('country', 'hidden')
-            ->add('administrativeAreaLevel1', 'hidden')
-            ->add('administrativeAreaLevel2', 'hidden')
         ;
+
+        foreach($fields as $index => $field) {
+            $params = [];
+            if (is_array($field)) {
+                if (isset($field['options'])) {
+                    $params = $field['options'];
+                }
+                if (isset($field['autocomplete'])) {
+                    if (!isset($params['attr'])) {
+                        $params['attr'] = [];
+                    }
+                    $params['attr']['data-autocomplete'] = true;
+                }
+                $field = $index;
+            }
+
+            $opts = [];
+            $type = 'text';
+            switch ($field) {
+                case 'address':
+                    $opts = [
+                        'attr' => [
+                            'placeholder' => 'Please enter the address to search',
+                            'data-location' => 'formatted_address',
+                            'data-autocomplete' => true
+                        ]
+                    ];
+                    break;
+                case 'streetNumber':
+                    $opts = [
+                        'label' => 'N°',
+                        'attr' => [
+                            'placeholder' => 'N°',
+                            'data-location' => 'street_number'
+                        ],
+                        'required' => false
+                    ];
+                    break;
+                case 'route':
+                    $opts = [
+                        'label' => 'Route',
+                        'attr' => [
+                            'placeholder' => 'Route',
+                            'data-location' => 'route',
+                            'data-autocomplete' => true,
+                            'data-restrict' => true
+                        ],
+                        'required' => false ];
+                    break;
+                case 'postalCode':
+                    $opts = [
+                        'label' => 'Postal code',
+                        'attr' => [
+                            'placeholder' => 'Postal code',
+                            'data-location' => 'postal_code',
+                            'data-autocomplete' => true,
+                            'data-restrict' => true
+                        ],
+                        'required' => false
+                    ];
+                    break;
+                case 'locality':
+                    $opts = [
+                        'attr' => [
+                            'placeholder' => 'Locality',
+                            'data-location' => 'locality',
+                            'data-autocomplete' => true,
+                            'data-restrict' => true
+                        ]
+                    ];
+                    break;
+                case 'shortCountry':
+                    $countries = $options['preferred_countries'];
+                    $country = $this->getDefaultCountry();
+                    if (!in_array($country, $countries)) {
+                        array_unshift($countries, $country);
+                    }
+                    $opts = [
+                        'preferred_choices' => $countries,
+                        'required' => false,
+                        'label' => 'Country',
+                        'attr' => [
+                            'data-location' => 'country',
+                            'data-format' => 'short',
+                            'data-restrict' => true
+                        ]
+                    ];
+                    $type = 'country';
+                    break;
+                case 'country':
+                    $type = 'hidden';
+                    $opts = [
+                        'attr' => [
+                            'data-location' => 'country',
+                            'data-format' => 'long'
+                        ]
+                    ];
+                    break;
+                case 'administrativeAreaLevel1':
+                    $type = 'hidden';
+                    $opts = [
+                        'attr' => [
+                            'data-location' => 'administrative_area_level_1',
+                        ]
+                    ];
+                    break;
+                case 'administrativeAreaLevel2':
+                    $type = 'hidden';
+                    $opts = [
+                        'attr' => [
+                            'data-location' => 'administrative_area_level_2',
+                        ]
+                    ];
+                    break;
+            }
+
+            $opts = array_merge_recursive($opts, $params);
+            $builder->add($field, $type, $opts);
+        }
+
     }
 
     /**
@@ -86,7 +194,9 @@ class LocationType  extends AbstractType
 
         $resolver->setDefaults([
             'data_class'    => 'nmariani\Bundle\BootstrappBundle\Form\Model\Location',
-            'widget'        => $this->widget
+            'widget'        => $this->widget,
+            'fields'        => [],
+            'preferred_countries'   => $this->container->getParameter('form.type.location.preferred_countries')
         ]);
 
         $resolver->addAllowedValues(array(
@@ -104,7 +214,19 @@ class LocationType  extends AbstractType
         if(isset($options['widget']) && $this->assetsLoader) {
             $this->assetsLoader->addVendor($options['widget']);
         }
+
+        $view->vars['defaultCountry'] = $this->getDefaultCountry();
+
         parent::buildView($view, $form, $options);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @return $this
+     */
+    public function setContainer(ContainerInterface $container) {
+        $this->container= $container;
+        return $this;
     }
 
     /**
@@ -127,6 +249,17 @@ class LocationType  extends AbstractType
     public function setAssetsLoader(AssetsLoader $loader) {
         $this->assetsLoader= $loader;
         return $this;
+    }
+
+    public function getDefaultCountry()
+    {
+        $defaultCountry = $this->container->getParameter('form.type.location.defaultCountry');
+        if (false === $defaultCountry) {
+            $defaultCountry = '';
+        } else if (empty($defaultCountry)) {
+            $defaultCountry = \Locale::getRegion($this->container->get('request')->getLocale());
+        }
+        return $defaultCountry;
     }
 
     public function getName()

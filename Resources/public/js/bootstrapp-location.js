@@ -8,39 +8,19 @@
  */
 (function ($) {
     "use strict";
-    var methods, geocoderTimeoutId, originalTypeaheadSelectFunction;
-
-    function indexOf(array, obj) {
-        var i;
-        for (i = 0; i < array.length; i += 1) {
-            if (array[i] === obj) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    function findInfo(result, type) {
-        var i, component;
-        if (type === 'lat' || type === 'lng') {
-            return result.geometry.location[type]();
-        }
-        if (result.address_components) {
-            for (i = 0; i < result.address_components.length; i += 1) {
-                component = result.address_components[i];
-                if (indexOf(component.types, type) !== -1) {
-                    return component.long_name;
-                }
-            }
-        }
-        return false;
-    }
+    var methods, geocoderTimeoutId;
 
     methods = {
-        init: function ($element, options) {
+        init: function (element, options) {
             var self = this;
-            this.$element = $element;
+            this.element = null;
+            this.elements = $(element).find('input[data-location], select[data-location]');
+            if ($(element).data('location')) {
+                this.elements.andSelf();
+            }
             this.settings = $.extend(true, {
+                api: 'place',           // geocode|place
+                country: '',
                 map: false,
                 mapStatic: false,
                 mapOptions: {
@@ -61,10 +41,11 @@
                 typeaheadOptions: {
                     source: methods.source,
                     updater: methods.updater,
-                    matcher: methods.matcher
+                    matcher: methods.matcher,
+                    items: 10
                 },
                 callback: null,
-                components: {}
+                elements: {}
             }, options);
 
             $.each(this.settings.typeaheadOptions, function (key, method) {
@@ -73,57 +54,132 @@
                 }
             });
 
-            var components = this.settings.components;
-            $.each(components, function (component, properties) {
-                var element, restrict, callback;
-                if ($.type(properties) === "string") {
-                    element = $(properties);
-                } else if ($.isPlainObject(properties)) {
-                    if(properties.selector) {
-                        element = $(properties.selector);
+            var elements = this.elements;
+            $.each(this.settings.elements, function (selector, properties) {
+                var element = $(selector);
+                if (element.length > 0) {
+                    if ($.type(properties) === "string") {
+                        element.data('location', properties);
+                    } else if ($.isPlainObject(properties)) {
+                        if(properties.location) {
+                            element.data('location', properties.location);
+                        }
+                        if($.type(properties.restrict) === "boolean") {
+                            element.data('restrict', properties.restrict);
+                        }
+                        if($.isFunction(properties.callback)) {
+                            element.data('callback', properties.callback);
+                        }
+                        if($.type(properties.autocomplete) === "boolean") {
+                            element.data('autocomplete', properties.autocomplete);
+                        }
                     }
-                    if($.type(properties.restrict) === "boolean") {
-                        restrict = properties.restrict;
-                    }
-                    if($.isFunction(properties.callback)) {
-                        callback = properties.callback;
+                    if (elements.find(element).length == 0) {
+                        elements = elements.add(element);
                     }
                 }
-                components[component] = {
-                    element: element,
-                    restrict: restrict,
-                    callback: callback
-                };
             });
-            this.settings.components = components;
+            this.elements = elements;
+
+            this.elements.each(function(index, element){
+                element = $(element);
+                if (true == element.data('autocomplete')) {
+                    element.attr('autocomplete', 'off').typeahead(self.settings.typeaheadOptions);
+                    element.on('focus',function(e){
+                        self.element = element;
+                    });
+                    element.on('keypress',function(e){
+                        if(e.keyCode == 13 || e.which==13){
+                            e.preventDefault();
+                            e.stopPropagation();
+                            self.geocode();
+                        }
+                    });
+                    if(element.data('location') == 'locality'){
+                        element.on('keyup',function(e){
+                            if(e.keyCode == 40 || e.which==40){
+                                // force autocomplete to load localities
+                                if (element.val().length == 0) {
+                                    element.val(' ');
+                                }
+                                element.keyup();
+                            }
+                        });
+                    }
+                }
+                element.blur(function(){
+                    var parameters = { address: [] };
+                    if (!$(this).is(self.element)) {
+                        self.elements.each(function(index, element) {
+                            element = $(element);
+                            var value = element.val();
+                            if (value.length > 0) {
+                                var location = element.data('location');
+                                switch (location) {
+                                    case 'street_number':
+                                        parameters.address.unshift(value);
+                                        break;
+                                    case 'route':
+                                        parameters.address.push(value);
+                                        break;
+                                }
+                            }
+                        });
+                        if (parameters.address.length > 0) {
+                            parameters.address = parameters.address.join(' ').trim();
+                        } else {
+                            parameters.address = null;
+                        }
+                        self.geocode(parameters);
+                    }
+                });
+            });
+            this.elements.filter('select[data-location=country]').first().change(function(){
+                var countries = $(this),
+                    country = countries.find('option:selected'),
+                    parameters = {
+                        address: country.text(),
+                        componentRestrictions: {}
+                    };
+                if (parameters.address.length > 0) {
+                    self.elements.each(function(){
+                        var element = $(this);
+                        if (!element.is(countries)) {
+                            if (element.data('select2')) {
+                                element.select2('val', '');
+                            } else {
+                                element.val('');
+                            }
+                        }
+                    });
+                    self.geocode(parameters);
+                }
+            });
 
             // hash to store geocoder results keyed by address
             this.addressMapping = {};
             this.currentItem = '';
             this.geocoder = new google.maps.Geocoder();
-            this.autocomplete = new google.maps.places.AutocompleteService();
+            this.autocomplete = null;
             this.placesService = null;
 
             if (this.settings.map) {
                 methods.initMap.apply(this, undefined);
-                this.placesService = new google.maps.places.PlacesService(this.gmap);
             }
 
-            this.$element
-                .attr('autocomplete', 'off')
-                .typeahead(this.settings.typeaheadOptions);
-            this.$element.live('keypress',function(e){
-                 if(e.which==13){
-                     e.preventDefault();
-                     e.stopPropagation();
-                     self.geocode();
-                 }
-             });
+            if (this.settings.api == 'place') {
+                this.autocomplete = new google.maps.places.AutocompleteService();
+                if (this.gmap) {
+                    this.placesService = new google.maps.places.PlacesService(this.gmap);
+                }
+            }
         },
         initMap: function () {
             if (!this.settings.map) {
                 return;
             }
+            // Enable the visual refresh
+            google.maps.visualRefresh = true;
             var mapOptions = $.extend({}, this.settings.mapOptions),
                 latLng = new google.maps.LatLng(mapOptions.center[0], mapOptions.center[1]),
                 zoom = this.getZoom({geometry:{location: latLng}}),
@@ -166,37 +222,100 @@
                         this.geocode({'latLng': latLng}, $.proxy(this.parseGeocodeResult, this));
                     }
                 }, this));
+                console.log(latLng);
+                if (0 == latLng.lat() && 0 == latLng.lng()) {
+                    var countries = this.elements.filter('select[data-location=country]').first(),
+                        country = countries.find('option[value=' + this.settings.country + ']'),
+                        parameters = {
+                            address: country.text(),
+                            componentRestrictions: {}
+                        };
+                    if (parameters.address.length > 0) {
+                        this.geocode(parameters, $.proxy(function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
+                                var data = results[0];
+                                if (this.$staticGmap) {
+                                    this.$staticGmap.trigger('center', {
+                                        zoom: this.getZoom(data)
+                                    });
+                                } else if (this.gmap) {
+                                    this.updateViewport(data);
+                                }
+                            }
+                        }, this));
+                    }
+                }
             }
         },
         source: function (query, process) {
-            var labels, self = this;
-
+            var labels,
+                self = this;
+            if(this.element.data('location') == 'locality'){
+                query = this.elements.filter('[data-location=postal_code]').first().val() + ' ' + query;
+            }
             if (geocoderTimeoutId) {
                 clearTimeout(geocoderTimeoutId);
-                geocoderTimeoutId = false;
             }
-            geocoderTimeoutId = setTimeout(
-                function geocodeString() {
-                    /*
-                    self.geocode({address:query}, function (geocoderResults) {
-                        self.addressMapping = {};
-                        labels = [];
-                        $.each(geocoderResults, function (index, element) {
-                            self.addressMapping[element.formatted_address] = element;
-                            labels.push(element.formatted_address);
-                        });
-                        return process(labels);
-                    });
-                    */
-                    self.autocomplete.getPlacePredictions({ input: query }, function(predictions, status) {
-                        self.addressMapping = {};
-                        if (status == google.maps.places.PlacesServiceStatus.OK) {
-                            process($.map(predictions, function(prediction) {
-                                self.addressMapping[prediction.description] = prediction;
-                                return prediction.description;
-                            }));
+            geocoderTimeoutId = setTimeout(function () {
+                    if (self.placesService) {
+                        var parameters = {
+                            input: query,
+                            types: ['geocode'],
+                            componentRestrictions: {}
+                        };
+                        switch (self.element.data('location')) {
+                            case 'locality':
+                            case 'postal_code':
+                            case 'country':
+                            case 'administrative_area_level_1':
+                            case 'administrative_area_level_2':
+                                parameters.types = ['(regions)'];
+                                break;
+                            default:
+                                parameters.types = ['geocode'];
+                                break;
                         }
-                    });
+                        self.elements.each(function (index, element) {
+                            element = $(element);
+                            var value = $.trim(element.val());
+                            if (element.data('restrict') && !element.is(self.element) && value.length > 0) {
+                                var camelized = element.data('location').replace(/(\-|_|\s)+(.)?/g, function(match, sep, c) {
+                                    return (c ? c.toUpperCase() : '');
+                                });
+                                switch(camelized) {
+                                    //case 'route':
+                                    //case 'postalCode':
+                                    //case 'locality':
+                                    //case 'administrativeArea':
+                                    case 'country':
+                                        parameters.componentRestrictions[camelized] = value;
+                                        break;
+                                }
+                            }
+                        });
+                        if (!parameters.componentRestrictions.country && self.settings.country.length > 0) {
+                            parameters.componentRestrictions.country = self.settings.country;
+                        }
+                        self.autocomplete.getPlacePredictions(parameters, function(predictions, status) {
+                            self.addressMapping = {};
+                            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                                process($.map(predictions, function(prediction) {
+                                    self.addressMapping[prediction.description] = prediction;
+                                    return prediction.description;
+                                }));
+                            }
+                        });
+                    } else {
+                        self.geocode({ address: query }, function (geocoderResults) {
+                            self.addressMapping = {};
+                            labels = [];
+                            $.each(geocoderResults, function (index, element) {
+                                self.addressMapping[element.formatted_address] = element;
+                                labels.push(element.formatted_address);
+                            });
+                            return process(labels);
+                        });
+                    }
                 },
                 250
             );
@@ -207,16 +326,9 @@
             } else {
                 this.geocode({ address: item }, $.proxy(this.parseGeocodeResult, this));
             }
-            return item;
         },
         matcher: function (item) {
             return true; // match is handled by the geocoder service
-        },
-        currentItemData: function () {
-            return this.dataByAddress(this.$element.val());
-        },
-        dataByAddress: function (address) {
-            return this.addressMapping[address] || {};
         },
         getZoom: function (item) {
             if (!jQuery.type(item) === "object" || !item.geometry) {
@@ -270,45 +382,44 @@
             return this.settings.mapOptions.zoom;
         },
         geocode: function (parameters, callback) {
+            var self = this;
             if (!$.type(parameters) === "object" || $.isEmptyObject(parameters)) {
                 parameters = {
-                    address: $.trim(this.$element.val())
+                    address: $.trim(this.element.val())
                 };
-            }
-            if (!$.isFunction(callback)) {
-                callback = $.proxy(this.parseGeocodeResult, this);
             }
             if (parameters.address) {
                 parameters.address = parameters.address + this.settings.geocoderOptions.appendAddressString;
             }
-            parameters = $.extend({
-                    componentRestrictions: {}
-                },
-                parameters
-            );
             if (this.settings.geocoderOptions.region) {
                 parameters.region = this.settings.geocoderOptions.region;
             }
-            var components = this.settings.components;
-            $.each(components, function (component, properties) {
-                if (properties.element && properties.element.length > 0 && true == properties.restrict) {
-                    var value = properties.element.val(),
-                        camelized = component.replace(/(\-|_|\s)+(.)?/g, function(match, sep, c) {
-                        return (c ? c.toUpperCase() : '');
-                    });
-                    if (value.length > 0) {
+            if (!parameters.componentRestrictions) {
+                parameters.componentRestrictions = {};
+                this.elements.each(function (index, element) {
+                    element = $(element);
+                    var value = $.trim(element.val());
+                    if (element.data('restrict') && !element.is(self.element) && value.length > 0) {
+                        var camelized = element.data('location').replace(/(\-|_|\s)+(.)?/g, function(match, sep, c) {
+                            return (c ? c.toUpperCase() : '');
+                        });
                         switch(camelized) {
                             case 'route':
                             case 'locality':
-                            case 'administrativeArea':
                             case 'postalCode':
                             case 'country':
-                                parameters.componentRestrictions[camelized] = $.trim(value);
+                                parameters.componentRestrictions[camelized] = value;
                                 break;
                         }
                     }
+                });
+                if (!parameters.componentRestrictions.country && this.settings.country.length > 0) {
+                    parameters.componentRestrictions.country = this.settings.country;
                 }
-            });
+            }
+            if (!$.isFunction(callback)) {
+                callback = $.proxy(this.parseGeocodeResult, this);
+            }
             this.geocoder.geocode(parameters, callback);
         },
         parseGeocodeResult: function (results, status) {
@@ -320,7 +431,7 @@
         parseData: function (data, status) {
             if (status == google.maps.GeocoderStatus.OK && null != data) {
                 if (!$.isFunction(this.settings.callback)) {
-                    this.$element.removeClass('error');
+                    this.element.removeClass('error');
                 }
 
                 this.addressMapping[data.formatted_address] = data;
@@ -336,22 +447,72 @@
                     this.updateViewport(data);
                 }
 
-                var self = this;
-                $.each(this.settings.components, function (component, properties) {
-                    if (properties.element && properties.element.length > 0) {
-                        var newValue = $.isFunction(properties.callback) ? ($.proxy(properties.callback, self)(data)) : findInfo(data, component);
-                        newValue = newValue || '';
-                        if (properties.element.data('select2')) {
-                            properties.element.select2('val', newValue);
+                var callback,
+                    location,
+                    value,
+                    components = {},
+                    self = this;
+                // components
+                if ($.isArray(data.address_components)) {
+                    $.each(data.address_components, function(index, component) {
+                        $.each(component.types, function(index, type) {
+                            components[type] = component;
+                        })
+                    })
+                }
+                this.elements.each(function(index, element){
+                    element = $(element);
+                    callback = element.data('callback');
+                    location = element.data('location');
+                    value = null;
+                    if ($.isFunction(callback)) {
+                        // callbacks
+                        $.proxy(callback, self)(data);
+                    } else {
+                        switch (location) {
+                            case 'lat':
+                                // latitude
+                                if (data.geometry && data.geometry.location) {
+                                    value = data.geometry.location.lat();
+                                }
+                                break;
+                            case 'lng':
+                                // longitude
+                                if (data.geometry && data.geometry.location) {
+                                    value = data.geometry.location.lng();
+                                }
+                                break;
+                            case 'formatted_address':
+                                // full address
+                                if (data.formatted_address) {
+                                    value = data.formatted_address;
+                                }
+                                break;
+                            default:
+                                // components
+                                if ($.type(components[location]) != 'undefined') {
+                                    if (element.data('format') == 'short') {
+                                        value = components[location].short_name;
+                                    } else {
+                                        value = components[location].long_name;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    if (value && $.type(value) != 'undefined') {
+                        if (element.data('select2')) {
+                            element.select2('val', value);
                         } else {
-                            properties.element.val(newValue);
+                            element.val(value);
                         }
                     }
                 });
             } else if (!$.isFunction(this.settings.callback)) {
-                this.$element.addClass('error');
+                this.element.addClass('error');
             }
 
+            // main callback
             if ($.isFunction(this.settings.callback)) {
                 $.proxy(this.settings.callback, this)(data, status);
             }

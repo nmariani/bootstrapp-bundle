@@ -84,8 +84,9 @@
 
 {% block bootstrapp_bundle_location_widget %}
     {% trans_default_domain "location" %}
-    <div class="row-fluid">
-        <div class="span7">
+    <div class="row-fluid" id ="{{ form.vars.id }}">
+        <div class="span8">
+            {% if form.address is defined %}
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
@@ -102,11 +103,20 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div class="controls">
+                {% if form.streetNumber is defined or form.route is defined %}
                 <div class="row-fluid">
+                    {% if form.streetNumber is defined and form.route is defined %}
                     <div class="span4">{{ form_row(form.streetNumber) }}</div>
                     <div class="span8">{{ form_row(form.route) }}</div>
+                    {% elseif form.streetNumber is defined %}
+                    <div class="span12">{{ form_row(form.streetNumber) }}</div>
+                    {% elseif form.route is defined %}
+                    <div class="span12">{{ form_row(form.route) }}</div>
+                    {% endif %}
                 </div>
+                {% endif %}
                 <div class="row-fluid">
                     <div class="span4">{{ form_row(form.postalCode) }}</div>
                     <div class="span8">{{ form_row(form.locality) }}</div>
@@ -118,14 +128,16 @@
                 </div>
             </div>
             {{ form_row(form.country) }}
+            {% if form.administrativeAreaLevel1 is defined %}
             {{ form_row(form.administrativeAreaLevel1) }}
+            {% endif %}
+            {% if form.administrativeAreaLevel2 is defined %}
             {{ form_row(form.administrativeAreaLevel2) }}
+            {% endif %}
             {{ form_row(form.latitude) }}
             {{ form_row(form.longitude) }}
         </div>
-        <div class="span5">
-            <div id="{{ form.vars.id }}_map" class="map google-maps"></div>
-        </div>
+        <div id="{{ form.vars.id }}_map" class="map google-maps span4"></div>
     </div>
     <script type="text/javascript">
         {% if not app.request.isXmlHttpRequest %}
@@ -138,20 +150,14 @@
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
                     marker: { visible: true }
                 };
-            if (0 == latitude && 0 == longitude) {
-                latitude = 46.227638;
-                longitude = 2.213749;
-                mapOptions.marker.visible = false;
-                mapOptions.zoom = 5;
-            }
             mapOptions.center = [latitude, longitude];
-            $('#{{ form.address.vars.id }}').locationTypeahead({
+            $('#{{ form.vars.id }}').locationTypeahead({
+                country: '{{ defaultCountry }}',
                 map: '#{{ form.vars.id }}_map',
                 draggableMarker: true,
                 mapOptions: mapOptions,
                 callback: function(data, status) {
                     if (status == google.maps.GeocoderStatus.OK && null != data) {
-                        $('#{{ form.address.vars.id }}').val(data.formatted_address);
                         $('#{{ form.latitude.vars.id }}').val(data.geometry.location.lat());
                         $('#{{ form.longitude.vars.id }}').val(data.geometry.location.lng());
                     } else {
@@ -161,89 +167,30 @@
                 geocoderOptions: {
                     region: '{{ app.request.locale|slice(3,2)|upper }}',
                     reverse: true
-                },
-                components: {
-                    street_number: '#{{ form.streetNumber.vars.id }}',
-                    route: {
-                        selector: '#{{ form.route.vars.id }}'
-                    },
-                    postal_code: {
-                        selector: '#{{ form.postalCode.vars.id }}',
-                        restrict: true
-                    },
-                    locality: {
-                        selector: '#{{ form.locality.vars.id }}',
-                        restrict: true
-                    },
-                    country: {
-                        selector: '#{{ form.shortCountry.vars.id }}',
-                        restrict: true,
-                        callback: function (data) {
-                            var result = '';
-                            $.each(data.address_components, function (index, value) {
-                                $.each(value.types, function (index, type) {
-                                    if (type == 'country') {
-                                        result = value.short_name;
-                                        $('#{{ form.country.vars.id }}').val(value.long_name);
-                                        $('#{{ form.shortCountry.vars.id }}').val(value.short_name);
-                                    }
-                                });
-                                if (result.length >0) {
-                                    return false;
-                                }
-                            });
-                            return result;
-                        }
-                    },
-                    administrative_area_level_1: '#{{ form.administrativeAreaLevel1.vars.id }}',
-                    administrative_area_level_2: '#{{ form.administrativeAreaLevel2.vars.id }}'
                 }
             });
+            {% if form.address is defined %}
             $('#{{ form.vars.id }}_locate').click(function(e){
-                var typeahead = $('#{{ form.address.vars.id }}').data('locationTypeahead');
+                var typeahead = $('#{{ form.vars.id }}').data('locationTypeahead');
                 if (typeahead) {
                     typeahead.geocode();
                 }
             });
             $('#{{ form.vars.id }}_clear').click(function(e){
-                $.each([
-                        $('#{{ form.address.vars.id }}'),
-                        $('#{{ form.streetNumber.vars.id }}'),
-                        $('#{{ form.route.vars.id }}'),
-                        $('#{{ form.postalCode.vars.id }}'),
-                        $('#{{ form.locality.vars.id }}'),
-                        $('#{{ form.shortCountry.vars.id }}')
-                    ], function(index, element) {
-                        if ($(element).data('select2')) {
-                            $(element).select2('val', '');
-                        } else {
-                            $(element).val('');
-                        }
+                $('#{{ form.vars.id }}').find('input, select').each(function(index, element) {
+                    if ($(element).data('select2')) {
+                        $(element).select2('val', '');
+                    } else {
+                        $(element).val('');
+                    }
                 });
             });
-            $.each([
-                    $('#{{ form.streetNumber.vars.id }}'),
-                    $('#{{ form.route.vars.id }}'),
-                    $('#{{ form.postalCode.vars.id }}'),
-                    $('#{{ form.locality.vars.id }}'),
-                    $('#{{ form.shortCountry.vars.id }}')
-                ], function(index, element) {
-                $(element).blur(function(){
-                    var address = $('#{{ form.address.vars.id }}'),
-                        typeahead = address.data('locationTypeahead');
-                    address.val(
-                          [$('#{{ form.streetNumber.vars.id }}').val(), $('#{{ form.route.vars.id }}').val()].join(' ')
-                        + ', '
-                        + [$('#{{ form.postalCode.vars.id }}').val(), $('#{{ form.locality.vars.id }}').val()].join(' ')
-                        + ', '
-                        + $('#{{ form.shortCountry.vars.id }} option:selected').text()
-                    );
-                    typeahead.geocode();
-                });
-            });
+            {% endif %}
+            {% if form.shortCountry is defined %}
             $('#{{ form.shortCountry.vars.id }}').bootstrappSelect2({
                 placeholder: '{{ 'Select the country'|trans }}'
             });
+            {% endif %}
         {% if not app.request.isXmlHttpRequest %}
         });
         {% endif %}
