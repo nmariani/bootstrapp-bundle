@@ -222,7 +222,6 @@
                         this.geocode({'latLng': latLng}, $.proxy(this.parseGeocodeResult, this));
                     }
                 }, this));
-                console.log(latLng);
                 if (0 == latLng.lat() && 0 == latLng.lng()) {
                     var countries = this.elements.filter('select[data-location=country]').first(),
                         country = countries.find('option[value=' + this.settings.country + ']'),
