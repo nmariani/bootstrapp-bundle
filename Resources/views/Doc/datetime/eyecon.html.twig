@@ -2,42 +2,21 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets filter='less' output='bundles/bootstrapp/css/datetimepicker.css'
-    "@BootstrappBundle/Resources/public/less/jdewit-timepicker.less"
-    "@BootstrappBundle/Resources/public/less/vitalets-datepicker.less"
-    %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
-    {% endstylesheets %}
     <style type="text/css">
         .page-header {
             padding-top: 80px;
         }
-        .watch{background-color:#000;height:80px;text-shadow:1px 1px 0 #000}
-        .watch .band{margin:-10px 20px -10px 10%;float:left;width:300px;background-color:#000;border:5px solid #f5f5f5;height:100px}
-        .watch .face{width:260px;height:260px;margin:-85px auto 0;background-color:#000;border:5px solid #f5f5f5;border-radius:130px;position:relative}
-        .watch .face:after{position:absolute;top:115px;left:115px;width:10px;height:10px;background-color:#000;border:5px solid #f5f5f5;border-radius:10px;content:"";display:block}
-        .watch .face:before{position:absolute;top:15px;left:15px;width:230px;height:230px;background:#f5f5f5;border-radius:115px;content:"";display:block}
-        .watch #hour{width:0;height:0;position:absolute;top:50%;left:50%;margin:-5px 0 -5px -70px;padding:5px 0 5px 70px;background:#222;-webkit-transform-origin:100% 50%;-moz-transform-origin:100% 50%;-ms-transform-origin:100% 50%;transform-origin:100% 50%}
-        .watch #minute{width:0;height:0;position:absolute;top:50%;left:50%;margin:-105px -5px 0;padding:105px 5px 0;background:#222;-webkit-transform-origin:50% 100%;-moz-transform-origin:50% 100%;-ms-transform-origin:50% 100%;transform-origin:50% 100%}
-        .watch #second{width:0;height:0;position:absolute;top:50%;left:50%;margin:-105px -1px 0 0;padding:105px 1px 0 0;background:#222;-webkit-transform-origin:50% 100%;-moz-transform-origin:50% 100%;-ms-transform-origin:50% 100%;transform-origin:50% 100%}
+        .watch{position:relative;background-color:#000;height:80px;text-shadow:1px 1px 0 #000}
+        .watch .band{position:relative;margin:0;padding:0; overflow:hidden;float:left;width:300px;background-color:#000;border:5px solid #f5f5f5;height:70px}
+        .watch .face{position:absolute;width:70px;height:70px;top:-5px;left:50%;margin-left:-35px;background-color:#000;border:5px solid #f5f5f5;border-radius:65px;}
+        .watch .face:after{position:absolute;top:50%;left:50%;margin:-4px;width:4px;height:4px;background-color:#000;border:2px solid #f5f5f5;border-radius:10px;content:"";display:block}
+        .watch .face:before{position:absolute;top:10px;left:10px;width:50px;height:50px;background:#f5f5f5;border-radius:50px;content:"";display:block}
+        .watch #hour{width:0;height:0;position:absolute;top:50%;left:50%;margin:-2px 0 -2px -14px;padding:2px 0 2px 14px;background:#222;-webkit-transform-origin:100% 50%;-moz-transform-origin:100% 50%;-ms-transform-origin:100% 50%;transform-origin:100% 50%}
+        .watch #minute{width:0;height:0;position:absolute;top:50%;left:50%;margin:-22px -2px 0;padding:22px 2px 0;background:#222;-webkit-transform-origin:50% 100%;-moz-transform-origin:50% 100%;-ms-transform-origin:50% 100%;transform-origin:50% 100%}
+        .watch #second{width:0;height:0;position:absolute;top:50%;left:50%;margin:-22px -1px 0 0;padding:22px 1px 0 0;background:#222;-webkit-transform-origin:50% 100%;-moz-transform-origin:50% 100%;-ms-transform-origin:50% 100%;transform-origin:50% 100%}
+
         .watch h1{line-height:80px;font-size:60px;margin:0;font-weight:100;color:#f5f5f5}
         .watch h1 span{font-size:30px;padding:0 10px;color:#666}
-
-        @media screen and (min-width: 481px) and (max-width: 768px){
-            .watch{height:60px}header .watch .band{margin:-10px 20px -10px 20px;width:200px;height:80px}
-            .watch .face{width:160px;height:160px;margin:-45px auto 0;border-radius:130px}
-            .watch .face:after{top:65px;left:65px;width:10px;height:10px;border-radius:10px}
-            .watch .face:before{top:15px;left:15px;width:120px;height:120px;border-radius:115px}
-            .watch #hour{margin:-5px 0 -5px -30px;padding:5px 0 5px 30px}
-            .watch #minute{margin:-55px -5px 0;padding:55px 5px 0}
-            .watch #second{margin:-55px -1px 0 0;padding:55px 1px 0 0}
-            .watch h1{line-height:60px;font-size:40px}
-        }
-        @media screen and (max-width: 480px){
-            .watch{position:relative;margin-bottom:100px}
-            .watch .band{margin:0 auto;position:relative;top:-10px;float:none}
-            .watch h1{position:absolute;top:-180px;left:0;right:0;text-align:center;color:#222;text-shadow:none}
-        }
     </style>
 {% endblock stylesheets %}
 
@@ -87,12 +66,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets-datepicker.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/vitalets-locales/bootstrap-datepicker.' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-eyecon.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jdewit-timepicker.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jdewit.js') }}"></script>
-
     <script type="text/javascript">
     $(document).ready(function() {
         function timeUpdate () {
