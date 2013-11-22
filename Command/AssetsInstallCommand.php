@@ -340,7 +340,7 @@ EOF
  * Mixins implementation of the bootstrap sprites.less
  * See bootstrap/sprites.less for more informations
  *
- * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -432,7 +432,7 @@ EOF
  * Mixins implementation of the entypo.css
  * See entypo.css for more informations
  *
- * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -461,7 +461,7 @@ EOF
             'FontAwesome.otf',
         ];
         foreach($files as $file) {
-            $filesystem->copy($fontAwesomeDir.'font/'.$file, $fontsPath . '/' . basename($file));
+            $filesystem->copy($fontAwesomeDir.'fonts/'.$file, $fontsPath . '/' . basename($file));
         }
         $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
 
@@ -474,36 +474,38 @@ EOF
             return false;
         }
         foreach ($matches as $match) {
-            $lessFile = str_replace($match[0], file_get_contents($fontAwesomeDir.'less/'.$match[1]), $lessFile);
+            $lessFile = str_replace($match[0], file_get_contents($fontAwesomeDir.'less/'.$match[1].'.less'), $lessFile);
         }
 
         // replace font path
-        $lessFile = str_replace('"../font"', "'/bundles/bootstrapp/fonts/fontawesome'", $lessFile);
+        $lessFile = str_replace('"../fonts"', "'/bundles/bootstrapp/fonts/fontawesome'", $lessFile);
 
-        // replace .icon-*:before {}
+        // replace font class prefix (icon instead of fa)
+        $lessFile = preg_replace('/(@fa-css-prefix:\s*)fa;/', '$1icon;', $lessFile);
+
+        // replace .@{fa-css-prefix}-*:before {}
         do {
-            $lessFile = preg_replace_callback('/.icon([-\w]*):before,?\s*([^{]*)\{([^\n]*)\}/', function($m){
-                $replace = str_pad('.fontawesome' . $m[1] . "()", 38) . " { " . $m[3] . " }";
+            $lessFile = preg_replace_callback('/.@\{fa-css-prefix\}([-\w]*):before,?\s*(.*)(?=\s+\{)\s+\{([^\n]*)\}/', function($m){
+                $replace = str_pad('.fontawesome' . $m[1] . "()", 38) . " { " . trim($m[3]) . " }";
                 if (!empty($m[2])) {
-                    $replace .= "\n" . $m[2] . " { " . $m[3] . " }";
+                    $replace .= "\n" . str_pad($m[2], 38) . " { " . trim($m[3]) . " }";
                 }
                 return $replace;
             }, $lessFile, -1, $count);
         } while ($count > 0);
         $lessFile = preg_replace('/^(.fontawesome.*[{])\s*content\s*:\s*([^;]*)\s*;?\s*([^}]*})$/m', '$1 .fontawesome($2); $3', $lessFile);
 
-        // get [class^="icon-"], [class*=" icon-"] {}
-        preg_match_all('/^\[class.*=".*icon-"\][^{:]*\{((?:\s.*\s)*)\}/m', $lessFile, $matches);
+        // get .@{fa-css-prefix} {}
+        preg_match_all('/^\.@\{fa-css-prefix\}\s*\{((?:\s.*\s)*)\}/m', $lessFile, $matches);
         $content = trim(implode('', $matches[1]), "\n\r");
-        // get [class^="icon-"]:before, [class*=" icon-"]:before {}
-        preg_match_all('/^\[class.*=".*icon-"\][^{]*:before\s*\{((?:\s.*\s)*)\}/m', $lessFile, $matches);
-        $before = str_replace(' ', '  ', implode('', array_map('trim',$matches[1])));
-        $lessFile = preg_replace('/^\[class.*=".*icon-"\][^{:]*\{((?:\s.*\s)*)\}/m', <<<EOF
+        $lessFile = preg_replace('/^\.@{fa-css-prefix}\s*\{((?:\s.*\s)*)\}/m', <<<EOF
 .fontawesome(@content:"") {
 $content
 
+  /* bootstrapp fix */
+  background: none !important;
+
   &:before {
-    $before
     content: @content;
   }
 
@@ -513,8 +515,8 @@ $content
 }
 EOF
             , $lessFile, 1);
-        // remove [class^="icon-"], [class*=" icon-"] {}
-        $lessFile = preg_replace('/^(\/.*\s)?\[class.*=".*icon-"\][^{]*\{((?:\s.*\s)*)\}\s{1,2}/m', '', $lessFile);
+        // remove .@{fa-css-prefix} {}
+        $lessFile = preg_replace('/^(\/.*\s)?\.@{fa-css-prefix}\s*\{((?:\s.*\s)*)\}\s{1,2}/m', '', $lessFile);
 
         // Strip whitespaces
         $lessFile = trim($lessFile);
@@ -522,18 +524,45 @@ EOF
         $lessPath = $this->initializeDirectory('less/icons', false);
         file_put_contents($lessPath . '/fontawesome.less', <<<EOF
 /*!
- * fontawesome.less v3.2.1
+ * fontawesome.less v4.0.3
  *
  * Mixins implementation of the Font-Awesome less file
  * See vendor/FortAwesome/Font-Awesome/less/font-awesome.less for more informations
  *
- * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 
 $lessFile
+
+// Alias
+// --------------------------
+.fontawesome-show() {
+	.fontawesome-eye();
+}
+.fontawesome-create() {
+	.fontawesome-plus();
+}
+.fontawesome-update() {
+	.fontawesome-pencil();
+}
+.fontawesome-delete() {
+    .fontawesome-trash-o();
+}
+.fontawesome-restore() {
+    .fontawesome-reply();
+}
+.fontawesome-cancel() {
+    .fontawesome-times();
+}
+.fontawesome-back() {
+    .fontawesome-chevron-left();
+}
+.fontawesome-help() {
+    .fontawesome-question();
+}
 EOF
         );
 

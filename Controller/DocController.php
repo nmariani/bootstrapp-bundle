@@ -175,12 +175,25 @@ class DocController extends Controller
     }
 
     /**
-     * @Route("/demo/redactor", name="text/bootstrapp_redactor")
+     * @Route("/demo/redactor", name="bootstrapp_redactor")
      * @Method({"GET", "Post"})
      * @Template("BootstrappBundle:Doc:redactor.html.twig")
      */
     public function redactorAction() {
         return array(
+        );
+    }
+
+    /**
+     * @Route("/demo/fontawesome", name="bootstrapp_fontawesome")
+     * @Method({"GET", "Post"})
+     * @Template("BootstrappBundle:Doc:icons/fontawesome.html.twig")
+     */
+    public function fontawesomeAction() {
+        $less = file_get_contents(__DIR__.'/../Resources/public/less/icons/demo/fontawesome.less');
+        preg_match_all('/icon-\S*/', $less, $matches, PREG_PATTERN_ORDER);
+        return array(
+            'icons' => $matches[0]
         );
     }
 }

@@ -37,9 +37,11 @@ class UseIconsCommand extends ContainerAwareCommand
         if(!$this->bundle = $this->getContainer()->get('kernel')->getBundle($input->getArgument('bundle'))) {
             throw new \InvalidArgumentException('Bundle "'.$input->getArgument('bundle').'" does not exist or it is not enabled.');
         }
-        $this->targetPath = $this->bundle->getPath().$input->getOption('path');
+        $targetPath = $this->bundle->getPath().'/'.$input->getOption('path');
+        $this->getContainer()->get('filesystem')->mkdir($targetPath);
+        $this->targetPath = realpath($targetPath);
         if(!is_dir($this->targetPath)) {
-            throw new \InvalidArgumentException('Invalid Path "'.$this->targetPath.'"! Please create path and relaunch.');
+            throw new \InvalidArgumentException('Invalid Path "'.$targetPath.'"! Please create path and relaunch.');
         }
         $filename = $input->getOption('filename');
         $iconsets = $input->getArgument('iconsets');
@@ -80,7 +82,7 @@ class UseIconsCommand extends ContainerAwareCommand
         if(true===$writeFile) {
             $this->writeTargetFile();
 
-            $output->writeln("<info>\nSuccess : you can now import the generated file in your main bundle less file!</info>");
+            $output->writeln("<info>Success : you can now import the generated file in your main bundle less file!</info>");
             $output->writeln('<comment>@import "'.basename($this->targetFile).'";</comment>');
         }
     }
@@ -105,7 +107,7 @@ class UseIconsCommand extends ContainerAwareCommand
 
     protected function writeTargetFile(){
         // relative path to icons less files
-        $iconsPath = $this->relativePath($this->targetPath, $this->sourcePath);
+        $iconsPath = $this->relativePath($this->targetPath, realpath($this->sourcePath));
         $variablesPath = $this->relativePath($this->targetPath, realpath($this->sourcePath.'/..'));
 
         // import variables.less file to allow the use of common size, colors, ...
@@ -183,6 +185,6 @@ EOF
             array_shift($arFrom);
             array_shift($arTo);
         }
-        return str_pad("", count($arFrom) * 3, '..'.$ps).implode($ps, $arTo);
+        return rtrim(str_pad("", count($arFrom) * 3, '..'.$ps).implode($ps, $arTo), '/');
     }
 }

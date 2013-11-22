@@ -1,0 +1,45 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    "@BootstrappBundle/Resources/public/less/icons/demo/fontawesome.less"
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+    <style>
+        ul.icons li {
+            display: inline-block;
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 30px;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'Font Awesome', 'url':path('bootstrapp_fontawesome')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <h4>Icons</h4>
+    <p>Resources</p>
+    <ul>
+        <li>Font Awesome official website : <a href="http://fontawesome.io">http://fontawesome.io</a></li>
+    </ul>
+    <h5>Font Awesome</h5>
+    <div class="well">
+        {% block icons %}
+            {% if icons is defined and icons|length > 0 %}
+                <ul class="icons unstyled">
+                {% for icon in icons %}
+                    <li><i class="{{ icon }}"></i> {{ icon }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endblock icons %}
+    </div>
+{% endblock %}

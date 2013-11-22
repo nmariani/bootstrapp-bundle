@@ -26,3 +26,7 @@ bootstrapp_redactor:
     pattern:  /demo/redactor
     defaults: { _controller: BootstrappBundle:Doc:redactor }
     requirements: { _method: GET|POST }
+bootstrapp_fontawesome:
+    pattern:  /demo/fontawesome
+    defaults: { _controller: BootstrappBundle:Doc:fontawesome }
+    requirements: { _method: GET|POST }
