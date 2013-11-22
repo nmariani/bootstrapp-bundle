@@ -1,824 +1,421 @@
 /*!
- * fontawesome.less v3.2.1
+ * fontawesome.less v4.0.3
  *
  * Mixins implementation of the Font-Awesome less file
  * See vendor/FortAwesome/Font-Awesome/less/font-awesome.less for more informations
  *
- * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 
 /*!
- *  Font Awesome 3.2.1
- *  the iconic font designed for Bootstrap
- *  ------------------------------------------------------------------------------
- *  The full suite of pictographic icons, examples, and documentation can be
- *  found at http://fontawesome.io.  Stay up to date on Twitter at
- *  http://twitter.com/fontawesome.
- *
- *  License
- *  ------------------------------------------------------------------------------
- *  - The Font Awesome font is licensed under SIL OFL 1.1 -
- *    http://scripts.sil.org/OFL
- *  - Font Awesome CSS, LESS, and SASS files are licensed under MIT License -
- *    http://opensource.org/licenses/mit-license.html
- *  - Font Awesome documentation licensed under CC BY 3.0 -
- *    http://creativecommons.org/licenses/by/3.0/
- *  - Attribution is no longer required in Font Awesome 3.0, but much appreciated:
- *    "Font Awesome by Dave Gandy - http://fontawesome.io"
- *
- *  Author - Dave Gandy
- *  ------------------------------------------------------------------------------
- *  Email: dave@fontawesome.io
- *  Twitter: http://twitter.com/davegandy
- *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
+ *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
 
 // Variables
 // --------------------------
 
-@FontAwesomePath:    '/bundles/bootstrapp/fonts/fontawesome';
-//@FontAwesomePath:    "//netdna.bootstrapcdn.com/font-awesome/3.2.1/font"; // for referencing Bootstrap CDN font files directly
-@FontAwesomeVersion: "3.2.1";
-@borderColor:        #eee;
-@iconMuted:          #eee;
-@iconLight:          #fff;
-@iconDark:           #333;
-@icons-li-width:     30/14em;
-
-
-  @glass: "\f000";
-
-  @music: "\f001";
-
-  @search: "\f002";
-
-  @envelope-alt: "\f003";
-
-  @heart: "\f004";
-
-  @star: "\f005";
-
-  @star-empty: "\f006";
-
-  @user: "\f007";
-
-  @film: "\f008";
-
-  @th-large: "\f009";
-
-  @th: "\f00a";
-
-  @th-list: "\f00b";
-
-  @ok: "\f00c";
-
-  @remove: "\f00d";
-
-  @zoom-in: "\f00e";
-
-  @zoom-out: "\f010";
-
-  @off: "\f011";
-
-  @signal: "\f012";
-
-  @cog: "\f013";
-
-  @trash: "\f014";
-
-  @home: "\f015";
-
-  @file-alt: "\f016";
-
-  @time: "\f017";
-
-  @road: "\f018";
-
-  @download-alt: "\f019";
-
-  @download: "\f01a";
-
-  @upload: "\f01b";
-
-  @inbox: "\f01c";
-
-  @play-circle: "\f01d";
-
-  @repeat: "\f01e";
-
-  @refresh: "\f021";
-
-  @list-alt: "\f022";
-
-  @lock: "\f023";
-
-  @flag: "\f024";
-
-  @headphones: "\f025";
-
-  @volume-off: "\f026";
-
-  @volume-down: "\f027";
-
-  @volume-up: "\f028";
-
-  @qrcode: "\f029";
-
-  @barcode: "\f02a";
-
-  @tag: "\f02b";
-
-  @tags: "\f02c";
-
-  @book: "\f02d";
-
-  @bookmark: "\f02e";
-
-  @print: "\f02f";
-
-  @camera: "\f030";
-
-  @font: "\f031";
-
-  @bold: "\f032";
-
-  @italic: "\f033";
-
-  @text-height: "\f034";
-
-  @text-width: "\f035";
-
-  @align-left: "\f036";
-
-  @align-center: "\f037";
-
-  @align-right: "\f038";
-
-  @align-justify: "\f039";
-
-  @list: "\f03a";
-
-  @indent-left: "\f03b";
-
-  @indent-right: "\f03c";
-
-  @facetime-video: "\f03d";
-
-  @picture: "\f03e";
-
-  @pencil: "\f040";
-
-  @map-marker: "\f041";
-
-  @adjust: "\f042";
-
-  @tint: "\f043";
-
-  @edit: "\f044";
-
-  @share: "\f045";
-
-  @check: "\f046";
-
-  @move: "\f047";
-
-  @step-backward: "\f048";
-
-  @fast-backward: "\f049";
-
-  @backward: "\f04a";
-
-  @play: "\f04b";
-
-  @pause: "\f04c";
-
-  @stop: "\f04d";
-
-  @forward: "\f04e";
-
-  @fast-forward: "\f050";
-
-  @step-forward: "\f051";
-
-  @eject: "\f052";
-
-  @chevron-left: "\f053";
-
-  @chevron-right: "\f054";
-
-  @plus-sign: "\f055";
-
-  @minus-sign: "\f056";
-
-  @remove-sign: "\f057";
-
-  @ok-sign: "\f058";
-
-  @question-sign: "\f059";
-
-  @info-sign: "\f05a";
-
-  @screenshot: "\f05b";
-
-  @remove-circle: "\f05c";
-
-  @ok-circle: "\f05d";
-
-  @ban-circle: "\f05e";
-
-  @arrow-left: "\f060";
-
-  @arrow-right: "\f061";
-
-  @arrow-up: "\f062";
-
-  @arrow-down: "\f063";
-
-  @share-alt: "\f064";
-
-  @resize-full: "\f065";
-
-  @resize-small: "\f066";
-
-  @plus: "\f067";
-
-  @minus: "\f068";
-
-  @asterisk: "\f069";
-
-  @exclamation-sign: "\f06a";
-
-  @gift: "\f06b";
-
-  @leaf: "\f06c";
-
-  @fire: "\f06d";
-
-  @eye-open: "\f06e";
-
-  @eye-close: "\f070";
-
-  @warning-sign: "\f071";
-
-  @plane: "\f072";
-
-  @calendar: "\f073";
-
-  @random: "\f074";
-
-  @comment: "\f075";
-
-  @magnet: "\f076";
-
-  @chevron-up: "\f077";
-
-  @chevron-down: "\f078";
-
-  @retweet: "\f079";
-
-  @shopping-cart: "\f07a";
-
-  @folder-close: "\f07b";
-
-  @folder-open: "\f07c";
-
-  @resize-vertical: "\f07d";
-
-  @resize-horizontal: "\f07e";
-
-  @bar-chart: "\f080";
-
-  @twitter-sign: "\f081";
-
-  @facebook-sign: "\f082";
-
-  @camera-retro: "\f083";
-
-  @key: "\f084";
-
-  @cogs: "\f085";
-
-  @comments: "\f086";
-
-  @thumbs-up-alt: "\f087";
-
-  @thumbs-down-alt: "\f088";
-
-  @star-half: "\f089";
-
-  @heart-empty: "\f08a";
-
-  @signout: "\f08b";
-
-  @linkedin-sign: "\f08c";
-
-  @pushpin: "\f08d";
-
-  @external-link: "\f08e";
-
-  @signin: "\f090";
-
-  @trophy: "\f091";
-
-  @github-sign: "\f092";
-
-  @upload-alt: "\f093";
-
-  @lemon: "\f094";
-
-  @phone: "\f095";
-
-  @check-empty: "\f096";
-
-  @bookmark-empty: "\f097";
-
-  @phone-sign: "\f098";
-
-  @twitter: "\f099";
-
-  @facebook: "\f09a";
-
-  @github: "\f09b";
-
-  @unlock: "\f09c";
-
-  @credit-card: "\f09d";
-
-  @rss: "\f09e";
-
-  @hdd: "\f0a0";
-
-  @bullhorn: "\f0a1";
-
-  @bell: "\f0a2";
-
-  @certificate: "\f0a3";
-
-  @hand-right: "\f0a4";
-
-  @hand-left: "\f0a5";
-
-  @hand-up: "\f0a6";
-
-  @hand-down: "\f0a7";
-
-  @circle-arrow-left: "\f0a8";
-
-  @circle-arrow-right: "\f0a9";
-
-  @circle-arrow-up: "\f0aa";
-
-  @circle-arrow-down: "\f0ab";
-
-  @globe: "\f0ac";
-
-  @wrench: "\f0ad";
-
-  @tasks: "\f0ae";
-
-  @filter: "\f0b0";
-
-  @briefcase: "\f0b1";
-
-  @fullscreen: "\f0b2";
-
-  @group: "\f0c0";
-
-  @link: "\f0c1";
-
-  @cloud: "\f0c2";
-
-  @beaker: "\f0c3";
-
-  @cut: "\f0c4";
-
-  @copy: "\f0c5";
-
-  @paper-clip: "\f0c6";
-
-  @save: "\f0c7";
-
-  @sign-blank: "\f0c8";
-
-  @reorder: "\f0c9";
-
-  @list-ul: "\f0ca";
-
-  @list-ol: "\f0cb";
-
-  @strikethrough: "\f0cc";
-
-  @underline: "\f0cd";
-
-  @table: "\f0ce";
-
-  @magic: "\f0d0";
-
-  @truck: "\f0d1";
-
-  @pinterest: "\f0d2";
-
-  @pinterest-sign: "\f0d3";
-
-  @google-plus-sign: "\f0d4";
-
-  @google-plus: "\f0d5";
-
-  @money: "\f0d6";
-
-  @caret-down: "\f0d7";
-
-  @caret-up: "\f0d8";
-
-  @caret-left: "\f0d9";
-
-  @caret-right: "\f0da";
-
-  @columns: "\f0db";
-
-  @sort: "\f0dc";
-
-  @sort-down: "\f0dd";
-
-  @sort-up: "\f0de";
-
-  @envelope: "\f0e0";
-
-  @linkedin: "\f0e1";
-
-  @undo: "\f0e2";
-
-  @legal: "\f0e3";
-
-  @dashboard: "\f0e4";
-
-  @comment-alt: "\f0e5";
-
-  @comments-alt: "\f0e6";
-
-  @bolt: "\f0e7";
-
-  @sitemap: "\f0e8";
-
-  @umbrella: "\f0e9";
-
-  @paste: "\f0ea";
-
-  @lightbulb: "\f0eb";
-
-  @exchange: "\f0ec";
-
-  @cloud-download: "\f0ed";
-
-  @cloud-upload: "\f0ee";
-
-  @user-md: "\f0f0";
-
-  @stethoscope: "\f0f1";
-
-  @suitcase: "\f0f2";
-
-  @bell-alt: "\f0f3";
-
-  @coffee: "\f0f4";
-
-  @food: "\f0f5";
-
-  @file-text-alt: "\f0f6";
-
-  @building: "\f0f7";
-
-  @hospital: "\f0f8";
-
-  @ambulance: "\f0f9";
-
-  @medkit: "\f0fa";
-
-  @fighter-jet: "\f0fb";
-
-  @beer: "\f0fc";
-
-  @h-sign: "\f0fd";
-
-  @plus-sign-alt: "\f0fe";
-
-  @double-angle-left: "\f100";
-
-  @double-angle-right: "\f101";
-
-  @double-angle-up: "\f102";
-
-  @double-angle-down: "\f103";
-
-  @angle-left: "\f104";
-
-  @angle-right: "\f105";
-
-  @angle-up: "\f106";
-
-  @angle-down: "\f107";
-
-  @desktop: "\f108";
-
-  @laptop: "\f109";
-
-  @tablet: "\f10a";
-
-  @mobile-phone: "\f10b";
-
-  @circle-blank: "\f10c";
-
-  @quote-left: "\f10d";
-
-  @quote-right: "\f10e";
-
-  @spinner: "\f110";
-
-  @circle: "\f111";
-
-  @reply: "\f112";
-
-  @github-alt: "\f113";
-
-  @folder-close-alt: "\f114";
-
-  @folder-open-alt: "\f115";
-
-  @expand-alt: "\f116";
-
-  @collapse-alt: "\f117";
-
-  @smile: "\f118";
-
-  @frown: "\f119";
-
-  @meh: "\f11a";
-
-  @gamepad: "\f11b";
-
-  @keyboard: "\f11c";
-
-  @flag-alt: "\f11d";
-
-  @flag-checkered: "\f11e";
-
-  @terminal: "\f120";
-
-  @code: "\f121";
-
-  @reply-all: "\f122";
-
-  @mail-reply-all: "\f122";
-
-  @star-half-empty: "\f123";
-
-  @location-arrow: "\f124";
-
-  @crop: "\f125";
-
-  @code-fork: "\f126";
-
-  @unlink: "\f127";
-
-  @question: "\f128";
-
-  @info: "\f129";
-
-  @exclamation: "\f12a";
-
-  @superscript: "\f12b";
-
-  @subscript: "\f12c";
-
-  @eraser: "\f12d";
-
-  @puzzle-piece: "\f12e";
-
-  @microphone: "\f130";
-
-  @microphone-off: "\f131";
-
-  @shield: "\f132";
-
-  @calendar-empty: "\f133";
-
-  @fire-extinguisher: "\f134";
-
-  @rocket: "\f135";
-
-  @maxcdn: "\f136";
-
-  @chevron-sign-left: "\f137";
-
-  @chevron-sign-right: "\f138";
-
-  @chevron-sign-up: "\f139";
-
-  @chevron-sign-down: "\f13a";
-
-  @html5: "\f13b";
-
-  @css3: "\f13c";
-
-  @anchor: "\f13d";
-
-  @unlock-alt: "\f13e";
-
-  @bullseye: "\f140";
-
-  @ellipsis-horizontal: "\f141";
-
-  @ellipsis-vertical: "\f142";
-
-  @rss-sign: "\f143";
-
-  @play-sign: "\f144";
-
-  @ticket: "\f145";
-
-  @minus-sign-alt: "\f146";
-
-  @check-minus: "\f147";
-
-  @level-up: "\f148";
-
-  @level-down: "\f149";
-
-  @check-sign: "\f14a";
-
-  @edit-sign: "\f14b";
-
-  @external-link-sign: "\f14c";
-
-  @share-sign: "\f14d";
-
-  @compass: "\f14e";
-
-  @collapse: "\f150";
-
-  @collapse-top: "\f151";
-
-  @expand: "\f152";
-
-  @eur: "\f153";
-
-  @gbp: "\f154";
-
-  @usd: "\f155";
-
-  @inr: "\f156";
-
-  @jpy: "\f157";
-
-  @cny: "\f158";
-
-  @krw: "\f159";
-
-  @btc: "\f15a";
-
-  @file: "\f15b";
-
-  @file-text: "\f15c";
-
-  @sort-by-alphabet: "\f15d";
-
-  @sort-by-alphabet-alt: "\f15e";
-
-  @sort-by-attributes: "\f160";
-
-  @sort-by-attributes-alt: "\f161";
-
-  @sort-by-order: "\f162";
-
-  @sort-by-order-alt: "\f163";
-
-  @thumbs-up: "\f164";
-
-  @thumbs-down: "\f165";
-
-  @youtube-sign: "\f166";
-
-  @youtube: "\f167";
-
-  @xing: "\f168";
-
-  @xing-sign: "\f169";
-
-  @youtube-play: "\f16a";
-
-  @dropbox: "\f16b";
-
-  @stackexchange: "\f16c";
-
-  @instagram: "\f16d";
-
-  @flickr: "\f16e";
-
-  @adn: "\f170";
-
-  @bitbucket: "\f171";
-
-  @bitbucket-sign: "\f172";
-
-  @tumblr: "\f173";
-
-  @tumblr-sign: "\f174";
-
-  @long-arrow-down: "\f175";
-
-  @long-arrow-up: "\f176";
-
-  @long-arrow-left: "\f177";
-
-  @long-arrow-right: "\f178";
-
-  @apple: "\f179";
-
-  @windows: "\f17a";
-
-  @android: "\f17b";
-
-  @linux: "\f17c";
-
-  @dribbble: "\f17d";
-
-  @skype: "\f17e";
-
-  @foursquare: "\f180";
-
-  @trello: "\f181";
-
-  @female: "\f182";
-
-  @male: "\f183";
-
-  @gittip: "\f184";
-
-  @sun: "\f185";
-
-  @moon: "\f186";
-
-  @archive: "\f187";
-
-  @bug: "\f188";
-
-  @vk: "\f189";
-
-  @weibo: "\f18a";
-
-  @renren: "\f18b";
+@fa-font-path:        '/bundles/bootstrapp/fonts/fontawesome';
+//@fa-font-path:        "//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts"; // for referencing Bootstrap CDN font files directly
+@fa-css-prefix:       icon;
+@fa-version:          "4.0.3";
+@fa-border-color:     #eee;
+@fa-inverse:          #fff;
+@fa-li-width:         (30em / 14);
+
+@fa-var-glass: "\f000";
+@fa-var-music: "\f001";
+@fa-var-search: "\f002";
+@fa-var-envelope-o: "\f003";
+@fa-var-heart: "\f004";
+@fa-var-star: "\f005";
+@fa-var-star-o: "\f006";
+@fa-var-user: "\f007";
+@fa-var-film: "\f008";
+@fa-var-th-large: "\f009";
+@fa-var-th: "\f00a";
+@fa-var-th-list: "\f00b";
+@fa-var-check: "\f00c";
+@fa-var-times: "\f00d";
+@fa-var-search-plus: "\f00e";
+@fa-var-search-minus: "\f010";
+@fa-var-power-off: "\f011";
+@fa-var-signal: "\f012";
+@fa-var-cog: "\f013";
+@fa-var-trash-o: "\f014";
+@fa-var-home: "\f015";
+@fa-var-file-o: "\f016";
+@fa-var-clock-o: "\f017";
+@fa-var-road: "\f018";
+@fa-var-download: "\f019";
+@fa-var-arrow-circle-o-down: "\f01a";
+@fa-var-arrow-circle-o-up: "\f01b";
+@fa-var-inbox: "\f01c";
+@fa-var-play-circle-o: "\f01d";
+@fa-var-repeat: "\f01e";
+@fa-var-refresh: "\f021";
+@fa-var-list-alt: "\f022";
+@fa-var-lock: "\f023";
+@fa-var-flag: "\f024";
+@fa-var-headphones: "\f025";
+@fa-var-volume-off: "\f026";
+@fa-var-volume-down: "\f027";
+@fa-var-volume-up: "\f028";
+@fa-var-qrcode: "\f029";
+@fa-var-barcode: "\f02a";
+@fa-var-tag: "\f02b";
+@fa-var-tags: "\f02c";
+@fa-var-book: "\f02d";
+@fa-var-bookmark: "\f02e";
+@fa-var-print: "\f02f";
+@fa-var-camera: "\f030";
+@fa-var-font: "\f031";
+@fa-var-bold: "\f032";
+@fa-var-italic: "\f033";
+@fa-var-text-height: "\f034";
+@fa-var-text-width: "\f035";
+@fa-var-align-left: "\f036";
+@fa-var-align-center: "\f037";
+@fa-var-align-right: "\f038";
+@fa-var-align-justify: "\f039";
+@fa-var-list: "\f03a";
+@fa-var-outdent: "\f03b";
+@fa-var-indent: "\f03c";
+@fa-var-video-camera: "\f03d";
+@fa-var-picture-o: "\f03e";
+@fa-var-pencil: "\f040";
+@fa-var-map-marker: "\f041";
+@fa-var-adjust: "\f042";
+@fa-var-tint: "\f043";
+@fa-var-pencil-square-o: "\f044";
+@fa-var-share-square-o: "\f045";
+@fa-var-check-square-o: "\f046";
+@fa-var-arrows: "\f047";
+@fa-var-step-backward: "\f048";
+@fa-var-fast-backward: "\f049";
+@fa-var-backward: "\f04a";
+@fa-var-play: "\f04b";
+@fa-var-pause: "\f04c";
+@fa-var-stop: "\f04d";
+@fa-var-forward: "\f04e";
+@fa-var-fast-forward: "\f050";
+@fa-var-step-forward: "\f051";
+@fa-var-eject: "\f052";
+@fa-var-chevron-left: "\f053";
+@fa-var-chevron-right: "\f054";
+@fa-var-plus-circle: "\f055";
+@fa-var-minus-circle: "\f056";
+@fa-var-times-circle: "\f057";
+@fa-var-check-circle: "\f058";
+@fa-var-question-circle: "\f059";
+@fa-var-info-circle: "\f05a";
+@fa-var-crosshairs: "\f05b";
+@fa-var-times-circle-o: "\f05c";
+@fa-var-check-circle-o: "\f05d";
+@fa-var-ban: "\f05e";
+@fa-var-arrow-left: "\f060";
+@fa-var-arrow-right: "\f061";
+@fa-var-arrow-up: "\f062";
+@fa-var-arrow-down: "\f063";
+@fa-var-share: "\f064";
+@fa-var-expand: "\f065";
+@fa-var-compress: "\f066";
+@fa-var-plus: "\f067";
+@fa-var-minus: "\f068";
+@fa-var-asterisk: "\f069";
+@fa-var-exclamation-circle: "\f06a";
+@fa-var-gift: "\f06b";
+@fa-var-leaf: "\f06c";
+@fa-var-fire: "\f06d";
+@fa-var-eye: "\f06e";
+@fa-var-eye-slash: "\f070";
+@fa-var-exclamation-triangle: "\f071";
+@fa-var-plane: "\f072";
+@fa-var-calendar: "\f073";
+@fa-var-random: "\f074";
+@fa-var-comment: "\f075";
+@fa-var-magnet: "\f076";
+@fa-var-chevron-up: "\f077";
+@fa-var-chevron-down: "\f078";
+@fa-var-retweet: "\f079";
+@fa-var-shopping-cart: "\f07a";
+@fa-var-folder: "\f07b";
+@fa-var-folder-open: "\f07c";
+@fa-var-arrows-v: "\f07d";
+@fa-var-arrows-h: "\f07e";
+@fa-var-bar-chart-o: "\f080";
+@fa-var-twitter-square: "\f081";
+@fa-var-facebook-square: "\f082";
+@fa-var-camera-retro: "\f083";
+@fa-var-key: "\f084";
+@fa-var-cogs: "\f085";
+@fa-var-comments: "\f086";
+@fa-var-thumbs-o-up: "\f087";
+@fa-var-thumbs-o-down: "\f088";
+@fa-var-star-half: "\f089";
+@fa-var-heart-o: "\f08a";
+@fa-var-sign-out: "\f08b";
+@fa-var-linkedin-square: "\f08c";
+@fa-var-thumb-tack: "\f08d";
+@fa-var-external-link: "\f08e";
+@fa-var-sign-in: "\f090";
+@fa-var-trophy: "\f091";
+@fa-var-github-square: "\f092";
+@fa-var-upload: "\f093";
+@fa-var-lemon-o: "\f094";
+@fa-var-phone: "\f095";
+@fa-var-square-o: "\f096";
+@fa-var-bookmark-o: "\f097";
+@fa-var-phone-square: "\f098";
+@fa-var-twitter: "\f099";
+@fa-var-facebook: "\f09a";
+@fa-var-github: "\f09b";
+@fa-var-unlock: "\f09c";
+@fa-var-credit-card: "\f09d";
+@fa-var-rss: "\f09e";
+@fa-var-hdd-o: "\f0a0";
+@fa-var-bullhorn: "\f0a1";
+@fa-var-bell: "\f0f3";
+@fa-var-certificate: "\f0a3";
+@fa-var-hand-o-right: "\f0a4";
+@fa-var-hand-o-left: "\f0a5";
+@fa-var-hand-o-up: "\f0a6";
+@fa-var-hand-o-down: "\f0a7";
+@fa-var-arrow-circle-left: "\f0a8";
+@fa-var-arrow-circle-right: "\f0a9";
+@fa-var-arrow-circle-up: "\f0aa";
+@fa-var-arrow-circle-down: "\f0ab";
+@fa-var-globe: "\f0ac";
+@fa-var-wrench: "\f0ad";
+@fa-var-tasks: "\f0ae";
+@fa-var-filter: "\f0b0";
+@fa-var-briefcase: "\f0b1";
+@fa-var-arrows-alt: "\f0b2";
+@fa-var-users: "\f0c0";
+@fa-var-link: "\f0c1";
+@fa-var-cloud: "\f0c2";
+@fa-var-flask: "\f0c3";
+@fa-var-scissors: "\f0c4";
+@fa-var-files-o: "\f0c5";
+@fa-var-paperclip: "\f0c6";
+@fa-var-floppy-o: "\f0c7";
+@fa-var-square: "\f0c8";
+@fa-var-bars: "\f0c9";
+@fa-var-list-ul: "\f0ca";
+@fa-var-list-ol: "\f0cb";
+@fa-var-strikethrough: "\f0cc";
+@fa-var-underline: "\f0cd";
+@fa-var-table: "\f0ce";
+@fa-var-magic: "\f0d0";
+@fa-var-truck: "\f0d1";
+@fa-var-pinterest: "\f0d2";
+@fa-var-pinterest-square: "\f0d3";
+@fa-var-google-plus-square: "\f0d4";
+@fa-var-google-plus: "\f0d5";
+@fa-var-money: "\f0d6";
+@fa-var-caret-down: "\f0d7";
+@fa-var-caret-up: "\f0d8";
+@fa-var-caret-left: "\f0d9";
+@fa-var-caret-right: "\f0da";
+@fa-var-columns: "\f0db";
+@fa-var-sort: "\f0dc";
+@fa-var-sort-asc: "\f0dd";
+@fa-var-sort-desc: "\f0de";
+@fa-var-envelope: "\f0e0";
+@fa-var-linkedin: "\f0e1";
+@fa-var-undo: "\f0e2";
+@fa-var-gavel: "\f0e3";
+@fa-var-tachometer: "\f0e4";
+@fa-var-comment-o: "\f0e5";
+@fa-var-comments-o: "\f0e6";
+@fa-var-bolt: "\f0e7";
+@fa-var-sitemap: "\f0e8";
+@fa-var-umbrella: "\f0e9";
+@fa-var-clipboard: "\f0ea";
+@fa-var-lightbulb-o: "\f0eb";
+@fa-var-exchange: "\f0ec";
+@fa-var-cloud-download: "\f0ed";
+@fa-var-cloud-upload: "\f0ee";
+@fa-var-user-md: "\f0f0";
+@fa-var-stethoscope: "\f0f1";
+@fa-var-suitcase: "\f0f2";
+@fa-var-bell-o: "\f0a2";
+@fa-var-coffee: "\f0f4";
+@fa-var-cutlery: "\f0f5";
+@fa-var-file-text-o: "\f0f6";
+@fa-var-building-o: "\f0f7";
+@fa-var-hospital-o: "\f0f8";
+@fa-var-ambulance: "\f0f9";
+@fa-var-medkit: "\f0fa";
+@fa-var-fighter-jet: "\f0fb";
+@fa-var-beer: "\f0fc";
+@fa-var-h-square: "\f0fd";
+@fa-var-plus-square: "\f0fe";
+@fa-var-angle-double-left: "\f100";
+@fa-var-angle-double-right: "\f101";
+@fa-var-angle-double-up: "\f102";
+@fa-var-angle-double-down: "\f103";
+@fa-var-angle-left: "\f104";
+@fa-var-angle-right: "\f105";
+@fa-var-angle-up: "\f106";
+@fa-var-angle-down: "\f107";
+@fa-var-desktop: "\f108";
+@fa-var-laptop: "\f109";
+@fa-var-tablet: "\f10a";
+@fa-var-mobile: "\f10b";
+@fa-var-circle-o: "\f10c";
+@fa-var-quote-left: "\f10d";
+@fa-var-quote-right: "\f10e";
+@fa-var-spinner: "\f110";
+@fa-var-circle: "\f111";
+@fa-var-reply: "\f112";
+@fa-var-github-alt: "\f113";
+@fa-var-folder-o: "\f114";
+@fa-var-folder-open-o: "\f115";
+@fa-var-smile-o: "\f118";
+@fa-var-frown-o: "\f119";
+@fa-var-meh-o: "\f11a";
+@fa-var-gamepad: "\f11b";
+@fa-var-keyboard-o: "\f11c";
+@fa-var-flag-o: "\f11d";
+@fa-var-flag-checkered: "\f11e";
+@fa-var-terminal: "\f120";
+@fa-var-code: "\f121";
+@fa-var-reply-all: "\f122";
+@fa-var-mail-reply-all: "\f122";
+@fa-var-star-half-o: "\f123";
+@fa-var-location-arrow: "\f124";
+@fa-var-crop: "\f125";
+@fa-var-code-fork: "\f126";
+@fa-var-chain-broken: "\f127";
+@fa-var-question: "\f128";
+@fa-var-info: "\f129";
+@fa-var-exclamation: "\f12a";
+@fa-var-superscript: "\f12b";
+@fa-var-subscript: "\f12c";
+@fa-var-eraser: "\f12d";
+@fa-var-puzzle-piece: "\f12e";
+@fa-var-microphone: "\f130";
+@fa-var-microphone-slash: "\f131";
+@fa-var-shield: "\f132";
+@fa-var-calendar-o: "\f133";
+@fa-var-fire-extinguisher: "\f134";
+@fa-var-rocket: "\f135";
+@fa-var-maxcdn: "\f136";
+@fa-var-chevron-circle-left: "\f137";
+@fa-var-chevron-circle-right: "\f138";
+@fa-var-chevron-circle-up: "\f139";
+@fa-var-chevron-circle-down: "\f13a";
+@fa-var-html5: "\f13b";
+@fa-var-css3: "\f13c";
+@fa-var-anchor: "\f13d";
+@fa-var-unlock-alt: "\f13e";
+@fa-var-bullseye: "\f140";
+@fa-var-ellipsis-h: "\f141";
+@fa-var-ellipsis-v: "\f142";
+@fa-var-rss-square: "\f143";
+@fa-var-play-circle: "\f144";
+@fa-var-ticket: "\f145";
+@fa-var-minus-square: "\f146";
+@fa-var-minus-square-o: "\f147";
+@fa-var-level-up: "\f148";
+@fa-var-level-down: "\f149";
+@fa-var-check-square: "\f14a";
+@fa-var-pencil-square: "\f14b";
+@fa-var-external-link-square: "\f14c";
+@fa-var-share-square: "\f14d";
+@fa-var-compass: "\f14e";
+@fa-var-caret-square-o-down: "\f150";
+@fa-var-caret-square-o-up: "\f151";
+@fa-var-caret-square-o-right: "\f152";
+@fa-var-eur: "\f153";
+@fa-var-gbp: "\f154";
+@fa-var-usd: "\f155";
+@fa-var-inr: "\f156";
+@fa-var-jpy: "\f157";
+@fa-var-rub: "\f158";
+@fa-var-krw: "\f159";
+@fa-var-btc: "\f15a";
+@fa-var-file: "\f15b";
+@fa-var-file-text: "\f15c";
+@fa-var-sort-alpha-asc: "\f15d";
+@fa-var-sort-alpha-desc: "\f15e";
+@fa-var-sort-amount-asc: "\f160";
+@fa-var-sort-amount-desc: "\f161";
+@fa-var-sort-numeric-asc: "\f162";
+@fa-var-sort-numeric-desc: "\f163";
+@fa-var-thumbs-up: "\f164";
+@fa-var-thumbs-down: "\f165";
+@fa-var-youtube-square: "\f166";
+@fa-var-youtube: "\f167";
+@fa-var-xing: "\f168";
+@fa-var-xing-square: "\f169";
+@fa-var-youtube-play: "\f16a";
+@fa-var-dropbox: "\f16b";
+@fa-var-stack-overflow: "\f16c";
+@fa-var-instagram: "\f16d";
+@fa-var-flickr: "\f16e";
+@fa-var-adn: "\f170";
+@fa-var-bitbucket: "\f171";
+@fa-var-bitbucket-square: "\f172";
+@fa-var-tumblr: "\f173";
+@fa-var-tumblr-square: "\f174";
+@fa-var-long-arrow-down: "\f175";
+@fa-var-long-arrow-up: "\f176";
+@fa-var-long-arrow-left: "\f177";
+@fa-var-long-arrow-right: "\f178";
+@fa-var-apple: "\f179";
+@fa-var-windows: "\f17a";
+@fa-var-android: "\f17b";
+@fa-var-linux: "\f17c";
+@fa-var-dribbble: "\f17d";
+@fa-var-skype: "\f17e";
+@fa-var-foursquare: "\f180";
+@fa-var-trello: "\f181";
+@fa-var-female: "\f182";
+@fa-var-male: "\f183";
+@fa-var-gittip: "\f184";
+@fa-var-sun-o: "\f185";
+@fa-var-moon-o: "\f186";
+@fa-var-archive: "\f187";
+@fa-var-bug: "\f188";
+@fa-var-vk: "\f189";
+@fa-var-weibo: "\f18a";
+@fa-var-renren: "\f18b";
+@fa-var-pagelines: "\f18c";
+@fa-var-stack-exchange: "\f18d";
+@fa-var-arrow-circle-o-right: "\f18e";
+@fa-var-arrow-circle-o-left: "\f190";
+@fa-var-caret-square-o-left: "\f191";
+@fa-var-dot-circle-o: "\f192";
+@fa-var-wheelchair: "\f193";
+@fa-var-vimeo-square: "\f194";
+@fa-var-try: "\f195";
+@fa-var-plus-square-o: "\f196";
 
 
 // Mixins
 // --------------------------
 
-.icon(@icon) {
-  .icon-FontAwesome();
-  content: @icon;
+.fa-icon-rotate(@degrees, @rotation) {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=@rotation);
+  -webkit-transform: rotate(@degrees);
+     -moz-transform: rotate(@degrees);
+      -ms-transform: rotate(@degrees);
+       -o-transform: rotate(@degrees);
+          transform: rotate(@degrees);
 }
 
-.icon-FontAwesome() {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em; // fixes ie7 issues
-}
-
-.border-radius(@radius) {
-  -webkit-border-radius: @radius;
-  -moz-border-radius: @radius;
-  border-radius: @radius;
-}
-
-.icon-stack(@width: 2em, @height: 2em, @top-font-size: 1em, @base-font-size: 2em) {
-  .icon-stack {
-    position: relative;
-    display: inline-block;
-    width: @width;
-    height: @height;
-    line-height: @width;
-    vertical-align: -35%;
-    [class^="icon-"],
-    [class*=" icon-"] {
-      display: block;
-      text-align: center;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      font-size: @top-font-size;
-      line-height: inherit;
-      *line-height: @height;
-    }
-    .icon-stack-base {
-      font-size: @base-font-size;
-      *line-height: @height / @base-font-size;
-    }
-  }
+.fa-icon-flip(@horiz, @vert, @rotation) {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=@rotation, mirror=1);
+  -webkit-transform: scale(@horiz, @vert);
+     -moz-transform: scale(@horiz, @vert);
+      -ms-transform: scale(@horiz, @vert);
+       -o-transform: scale(@horiz, @vert);
+          transform: scale(@horiz, @vert);
 }
 
 /* FONT PATH
@@ -826,57 +423,35 @@
 
 @font-face {
   font-family: 'FontAwesome';
-  src: url('@{FontAwesomePath}/fontawesome-webfont.eot?v=@{FontAwesomeVersion}');
-  src: url('@{FontAwesomePath}/fontawesome-webfont.eot?#iefix&v=@{FontAwesomeVersion}') format('embedded-opentype'),
-    url('@{FontAwesomePath}/fontawesome-webfont.woff?v=@{FontAwesomeVersion}') format('woff'),
-    url('@{FontAwesomePath}/fontawesome-webfont.ttf?v=@{FontAwesomeVersion}') format('truetype'),
-    url('@{FontAwesomePath}/fontawesome-webfont.svg#fontawesomeregular?v=@{FontAwesomeVersion}') format('svg');
-//  src: url('@{FontAwesomePath}/FontAwesome.otf') format('opentype'); // used when developing fonts
+  src: url('@{fa-font-path}/fontawesome-webfont.eot?v=@{fa-version}');
+  src: url('@{fa-font-path}/fontawesome-webfont.eot?#iefix&v=@{fa-version}') format('embedded-opentype'),
+    url('@{fa-font-path}/fontawesome-webfont.woff?v=@{fa-version}') format('woff'),
+    url('@{fa-font-path}/fontawesome-webfont.ttf?v=@{fa-version}') format('truetype'),
+    url('@{fa-font-path}/fontawesome-webfont.svg?v=@{fa-version}#fontawesomeregular') format('svg');
+//  src: url('@{fa-font-path}/FontAwesome.otf') format('opentype'); // used when developing fonts
   font-weight: normal;
   font-style: normal;
 }
 
-/* FONT AWESOME CORE
- * -------------------------- */
+// Base Class Definition
+// -------------------------
 
 .fontawesome(@content:"") {
-  .icon-FontAwesome();
+  display: inline-block;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-  &.icon-fixed-width {
-    display: inline-block;
-    width: 16/14em;
-    text-align: right;
-    padding-right: 4/14em;
-    &.icon-large {
-      width: 20/14em;
-    }
-  }
+  &.pull-left { margin-right: .3em; }
+  &.pull-right { margin-left: .3em; }
 
-  &.hide {
-    display: none;
-  }
-
-  &.pull-left {
-    margin-right: .3em;
-  }
-  &.pull-right {
-    margin-left: .3em;
-  }
-
-  display: inline;
-  width: auto;
-  height: auto;
-  line-height: normal;
-  vertical-align: baseline;
-  background-image: none !important;
-  background-position: 0% 0%;
-  background-repeat: repeat;
-  margin-top: 0;
+  /* bootstrapp fix */
+  background: none !important;
 
   &:before {
-    text-decoration:  inherit;
-    display:  inline-block;
-    speak:  none;
     content: @content;
   }
 
@@ -885,180 +460,67 @@
   }
 }
 
-/* makes the font 33% larger relative to the icon container */
-.icon-large:before {
-  vertical-align: -10%;
-  font-size: 4/3em;
-}
-
-/* makes sure icons active on rollover in links */
-a {
-  [class^="icon-"],
-  [class*=" icon-"] {
-    display: inline;
-  }
-}
-
-.icons-ul {
-  margin-left: @icons-li-width;
-  list-style-type: none;
-
-  > li { position: relative; }
-
-  .icon-li {
-    position: absolute;
-    left: -@icons-li-width;
-    width: @icons-li-width;
-    text-align: center;
-    line-height: inherit;
-  }
-}
-
-.icon-muted { color: @iconMuted; }
-.icon-light { color: @iconLight; }
-.icon-dark { color: @iconDark; }
-
-// Icon Borders
-// -------------------------
-
-.icon-border {
-  border: solid 1px @borderColor;
-  padding: .2em .25em .15em;
-  .border-radius(3px);
-}
-
 // Icon Sizes
 // -------------------------
 
-.icon-2x {
-  font-size: 2em;
-  &.icon-border {
-    border-width: 2px;
-    .border-radius(4px);
-  }
+/* makes the font 33% larger relative to the icon container */
+.@{fa-css-prefix}-lg {
+  font-size: (4em / 3);
+  line-height: (3em / 4);
+  vertical-align: -15%;
 }
-.icon-3x {
-  font-size: 3em;
-  &.icon-border {
-    border-width: 3px;
-    .border-radius(5px);
-  }
-}
-.icon-4x {
-  font-size: 4em;
-  &.icon-border {
-    border-width: 4px;
-    .border-radius(6px);
-  }
+.@{fa-css-prefix}-2x { font-size: 2em; }
+.@{fa-css-prefix}-3x { font-size: 3em; }
+.@{fa-css-prefix}-4x { font-size: 4em; }
+.@{fa-css-prefix}-5x { font-size: 5em; }
+
+// Fixed Width Icons
+// -------------------------
+.@{fa-css-prefix}-fw {
+  width: (18em / 14);
+  text-align: center;
 }
 
-.icon-5x {
-  font-size: 5em;
-  &.icon-border {
-    border-width: 5px;
-    .border-radius(7px);
-  }
-}
-
-
-// Floats & Margins
+// List Icons
 // -------------------------
 
-// Quick floats
+.@{fa-css-prefix}-ul {
+  padding-left: 0;
+  margin-left: @fa-li-width;
+  list-style-type: none;
+  > li { position: relative; }
+}
+.@{fa-css-prefix}-li {
+  position: absolute;
+  left: -@fa-li-width;
+  width: @fa-li-width;
+  top: (2em / 14);
+  text-align: center;
+  &.@{fa-css-prefix}-lg {
+    left: -@fa-li-width + (4em / 14);
+  }
+}
+
+// Bordered & Pulled
+// -------------------------
+
+.@{fa-css-prefix}-border {
+  padding: .2em .25em .15em;
+  border: solid .08em @fa-border-color;
+  border-radius: .1em;
+}
+
 .pull-right { float: right; }
 .pull-left { float: left; }
 
-/* BOOTSTRAP SPECIFIC CLASSES
- * -------------------------- */
+// Spinning Icons
+// --------------------------
 
-/* more sprites.less reset */
-.icon-white,
-.nav-pills > .active > a > [class^="icon-"],
-.nav-pills > .active > a > [class*=" icon-"],
-.nav-list > .active > a > [class^="icon-"],
-.nav-list > .active > a > [class*=" icon-"],
-.navbar-inverse .nav > .active > a > [class^="icon-"],
-.navbar-inverse .nav > .active > a > [class*=" icon-"],
-.dropdown-menu > li > a:hover > [class^="icon-"],
-.dropdown-menu > li > a:hover > [class*=" icon-"],
-.dropdown-menu > .active > a > [class^="icon-"],
-.dropdown-menu > .active > a > [class*=" icon-"],
-.dropdown-submenu:hover > a > [class^="icon-"],
-.dropdown-submenu:hover > a > [class*=" icon-"] {
-  background-image: none !important;
-}
-
-
-/* keeps Bootstrap styles with and without icons the same */
-.btn, .nav {
-  [class^="icon-"],
-  [class*=" icon-"] {
-//    display: inline;
-    &.icon-large { line-height: .9em; }
-    &.icon-spin { display: inline-block; }
-  }
-}
-.nav-tabs, .nav-pills {
-  [class^="icon-"],
-  [class*=" icon-"] {
-    &, &.icon-large { line-height: .9em; }
-  }
-}
-.btn {
-  [class^="icon-"],
-  [class*=" icon-"] {
-    &.pull-left, &.pull-right {
-      &.icon-2x { margin-top: .18em; }
-    }
-    &.icon-spin.icon-large { line-height: .8em; }
-  }
-}
-.btn.btn-small {
-  [class^="icon-"],
-  [class*=" icon-"] {
-    &.pull-left, &.pull-right {
-      &.icon-2x { margin-top: .25em; }
-    }
-  }
-}
-.btn.btn-large {
-  [class^="icon-"],
-  [class*=" icon-"] {
-    margin-top: 0; // overrides bootstrap default
-    &.pull-left, &.pull-right {
-      &.icon-2x { margin-top: .05em; }
-    }
-    &.pull-left.icon-2x { margin-right: .2em; }
-    &.pull-right.icon-2x { margin-left: .2em; }
-  }
-}
-
-/* Fixes alignment in nav lists */
-.nav-list [class^="icon-"],
-.nav-list [class*=" icon-"] {
-  line-height: inherit;
-}
-
-/* EXTRAS
- * -------------------------- */
-
-/* Stacked and layered icon */
-.icon-stack();
-
-/* Animated rotating icon */
-.icon-spin {
-  display: inline-block;
+.@{fa-css-prefix}-spin {
+  -webkit-animation: spin 2s infinite linear;
   -moz-animation: spin 2s infinite linear;
   -o-animation: spin 2s infinite linear;
-  -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
-}
-
-/* Prevent stack and spinners from being taken inline when inside a link */
-a .icon-stack,
-a .icon-spin {
-  display: inline-block;
-  text-decoration: none;
 }
 
 @-moz-keyframes spin {
@@ -1082,443 +544,454 @@ a .icon-spin {
   100% { transform: rotate(359deg); }
 }
 
-/* Icon rotations and mirroring */
-.icon-rotate-90:before {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-}
+// Rotated & Flipped Icons
+// -------------------------
 
-.icon-rotate-180:before {
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-}
+.@{fa-css-prefix}-rotate-90  { .fa-icon-rotate(90deg, 1);  }
+.@{fa-css-prefix}-rotate-180 { .fa-icon-rotate(180deg, 2); }
+.@{fa-css-prefix}-rotate-270 { .fa-icon-rotate(270deg, 3); }
 
-.icon-rotate-270:before {
-  -webkit-transform: rotate(270deg);
-  -moz-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  -o-transform: rotate(270deg);
-  transform: rotate(270deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
+.@{fa-css-prefix}-flip-horizontal { .fa-icon-flip(-1, 1, 0); }
+.@{fa-css-prefix}-flip-vertical   { .fa-icon-flip(1, -1, 2); }
 
-.icon-flip-horizontal:before {
-  -webkit-transform: scale(-1, 1);
-  -moz-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  transform: scale(-1, 1);
-}
+// Stacked Icons
+// -------------------------
 
-.icon-flip-vertical:before {
-  -webkit-transform: scale(1, -1);
-  -moz-transform: scale(1, -1);
-  -ms-transform: scale(1, -1);
-  -o-transform: scale(1, -1);
-  transform: scale(1, -1);
+.@{fa-css-prefix}-stack {
+  position: relative;
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  vertical-align: middle;
 }
-
-/* ensure rotation occurs inside anchor tags */
-a {
-  .icon-rotate-90, .icon-rotate-180, .icon-rotate-270, .icon-flip-horizontal, .icon-flip-vertical {
-    &:before { display: inline-block; }
-  }
+.@{fa-css-prefix}-stack-1x, .@{fa-css-prefix}-stack-2x {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
+.@{fa-css-prefix}-stack-1x { line-height: inherit; }
+.@{fa-css-prefix}-stack-2x { font-size: 2em; }
+.@{fa-css-prefix}-inverse { color: @fa-inverse; }
 
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
    readers do not read off random characters that represent icons */
 
-.fontawesome-glass()                   { .fontawesome(@glass); }
-.fontawesome-music()                   { .fontawesome(@music); }
-.fontawesome-search()                  { .fontawesome(@search); }
-.fontawesome-envelope-alt()            { .fontawesome(@envelope-alt); }
-.fontawesome-heart()                   { .fontawesome(@heart); }
-.fontawesome-star()                    { .fontawesome(@star); }
-.fontawesome-star-empty()              { .fontawesome(@star-empty); }
-.fontawesome-user()                    { .fontawesome(@user); }
-.fontawesome-film()                    { .fontawesome(@film); }
-.fontawesome-th-large()                { .fontawesome(@th-large); }
-.fontawesome-th()                      { .fontawesome(@th); }
-.fontawesome-th-list()                 { .fontawesome(@th-list); }
-.fontawesome-ok()                      { .fontawesome(@ok); }
-.fontawesome-remove()                  { .fontawesome(@remove); }
-.fontawesome-zoom-in()                 { .fontawesome(@zoom-in); }
-.fontawesome-zoom-out()                { .fontawesome(@zoom-out); }
-.fontawesome-power-off()               { .fontawesome(@off); }
-.fontawesome-off()                     { .fontawesome(@off); }
-.fontawesome-signal()                  { .fontawesome(@signal); }
-.fontawesome-gear()                    { .fontawesome(@cog); }
-.fontawesome-cog()                     { .fontawesome(@cog); }
-.fontawesome-trash()                   { .fontawesome(@trash); }
-.fontawesome-home()                    { .fontawesome(@home); }
-.fontawesome-file-alt()                { .fontawesome(@file-alt); }
-.fontawesome-time()                    { .fontawesome(@time); }
-.fontawesome-road()                    { .fontawesome(@road); }
-.fontawesome-download-alt()            { .fontawesome(@download-alt); }
-.fontawesome-download()                { .fontawesome(@download); }
-.fontawesome-upload()                  { .fontawesome(@upload); }
-.fontawesome-inbox()                   { .fontawesome(@inbox); }
-.fontawesome-play-circle()             { .fontawesome(@play-circle); }
-.fontawesome-rotate-right()            { .fontawesome(@repeat); }
-.fontawesome-repeat()                  { .fontawesome(@repeat); }
-.fontawesome-refresh()                 { .fontawesome(@refresh); }
-.fontawesome-list-alt()                { .fontawesome(@list-alt); }
-.fontawesome-lock()                    { .fontawesome(@lock); }
-.fontawesome-flag()                    { .fontawesome(@flag); }
-.fontawesome-headphones()              { .fontawesome(@headphones); }
-.fontawesome-volume-off()              { .fontawesome(@volume-off); }
-.fontawesome-volume-down()             { .fontawesome(@volume-down); }
-.fontawesome-volume-up()               { .fontawesome(@volume-up); }
-.fontawesome-qrcode()                  { .fontawesome(@qrcode); }
-.fontawesome-barcode()                 { .fontawesome(@barcode); }
-.fontawesome-tag()                     { .fontawesome(@tag); }
-.fontawesome-tags()                    { .fontawesome(@tags); }
-.fontawesome-book()                    { .fontawesome(@book); }
-.fontawesome-bookmark()                { .fontawesome(@bookmark); }
-.fontawesome-print()                   { .fontawesome(@print); }
-.fontawesome-camera()                  { .fontawesome(@camera); }
-.fontawesome-font()                    { .fontawesome(@font); }
-.fontawesome-bold()                    { .fontawesome(@bold); }
-.fontawesome-italic()                  { .fontawesome(@italic); }
-.fontawesome-text-height()             { .fontawesome(@text-height); }
-.fontawesome-text-width()              { .fontawesome(@text-width); }
-.fontawesome-align-left()              { .fontawesome(@align-left); }
-.fontawesome-align-center()            { .fontawesome(@align-center); }
-.fontawesome-align-right()             { .fontawesome(@align-right); }
-.fontawesome-align-justify()           { .fontawesome(@align-justify); }
-.fontawesome-list()                    { .fontawesome(@list); }
-.fontawesome-indent-left()             { .fontawesome(@indent-left); }
-.fontawesome-indent-right()            { .fontawesome(@indent-right); }
-.fontawesome-facetime-video()          { .fontawesome(@facetime-video); }
-.fontawesome-picture()                 { .fontawesome(@picture); }
-.fontawesome-pencil()                  { .fontawesome(@pencil); }
-.fontawesome-map-marker()              { .fontawesome(@map-marker); }
-.fontawesome-adjust()                  { .fontawesome(@adjust); }
-.fontawesome-tint()                    { .fontawesome(@tint); }
-.fontawesome-edit()                    { .fontawesome(@edit); }
-.fontawesome-share()                   { .fontawesome(@share); }
-.fontawesome-check()                   { .fontawesome(@check); }
-.fontawesome-move()                    { .fontawesome(@move); }
-.fontawesome-step-backward()           { .fontawesome(@step-backward); }
-.fontawesome-fast-backward()           { .fontawesome(@fast-backward); }
-.fontawesome-backward()                { .fontawesome(@backward); }
-.fontawesome-play()                    { .fontawesome(@play); }
-.fontawesome-pause()                   { .fontawesome(@pause); }
-.fontawesome-stop()                    { .fontawesome(@stop); }
-.fontawesome-forward()                 { .fontawesome(@forward); }
-.fontawesome-fast-forward()            { .fontawesome(@fast-forward); }
-.fontawesome-step-forward()            { .fontawesome(@step-forward); }
-.fontawesome-eject()                   { .fontawesome(@eject); }
-.fontawesome-chevron-left()            { .fontawesome(@chevron-left); }
-.fontawesome-chevron-right()           { .fontawesome(@chevron-right); }
-.fontawesome-plus-sign()               { .fontawesome(@plus-sign); }
-.fontawesome-minus-sign()              { .fontawesome(@minus-sign); }
-.fontawesome-remove-sign()             { .fontawesome(@remove-sign); }
-.fontawesome-ok-sign()                 { .fontawesome(@ok-sign); }
-.fontawesome-question-sign()           { .fontawesome(@question-sign); }
-.fontawesome-info-sign()               { .fontawesome(@info-sign); }
-.fontawesome-screenshot()              { .fontawesome(@screenshot); }
-.fontawesome-remove-circle()           { .fontawesome(@remove-circle); }
-.fontawesome-ok-circle()               { .fontawesome(@ok-circle); }
-.fontawesome-ban-circle()              { .fontawesome(@ban-circle); }
-.fontawesome-arrow-left()              { .fontawesome(@arrow-left); }
-.fontawesome-arrow-right()             { .fontawesome(@arrow-right); }
-.fontawesome-arrow-up()                { .fontawesome(@arrow-up); }
-.fontawesome-arrow-down()              { .fontawesome(@arrow-down); }
-.fontawesome-mail-forward()            { .fontawesome(@share-alt); }
-.fontawesome-share-alt()               { .fontawesome(@share-alt); }
-.fontawesome-resize-full()             { .fontawesome(@resize-full); }
-.fontawesome-resize-small()            { .fontawesome(@resize-small); }
-.fontawesome-plus()                    { .fontawesome(@plus); }
-.fontawesome-minus()                   { .fontawesome(@minus); }
-.fontawesome-asterisk()                { .fontawesome(@asterisk); }
-.fontawesome-exclamation-sign()        { .fontawesome(@exclamation-sign); }
-.fontawesome-gift()                    { .fontawesome(@gift); }
-.fontawesome-leaf()                    { .fontawesome(@leaf); }
-.fontawesome-fire()                    { .fontawesome(@fire); }
-.fontawesome-eye-open()                { .fontawesome(@eye-open); }
-.fontawesome-eye-close()               { .fontawesome(@eye-close); }
-.fontawesome-warning-sign()            { .fontawesome(@warning-sign); }
-.fontawesome-plane()                   { .fontawesome(@plane); }
-.fontawesome-calendar()                { .fontawesome(@calendar); }
-.fontawesome-random()                  { .fontawesome(@random); }
-.fontawesome-comment()                 { .fontawesome(@comment); }
-.fontawesome-magnet()                  { .fontawesome(@magnet); }
-.fontawesome-chevron-up()              { .fontawesome(@chevron-up); }
-.fontawesome-chevron-down()            { .fontawesome(@chevron-down); }
-.fontawesome-retweet()                 { .fontawesome(@retweet); }
-.fontawesome-shopping-cart()           { .fontawesome(@shopping-cart); }
-.fontawesome-folder-close()            { .fontawesome(@folder-close); }
-.fontawesome-folder-open()             { .fontawesome(@folder-open); }
-.fontawesome-resize-vertical()         { .fontawesome(@resize-vertical); }
-.fontawesome-resize-horizontal()       { .fontawesome(@resize-horizontal); }
-.fontawesome-bar-chart()               { .fontawesome(@bar-chart); }
-.fontawesome-twitter-sign()            { .fontawesome(@twitter-sign); }
-.fontawesome-facebook-sign()           { .fontawesome(@facebook-sign); }
-.fontawesome-camera-retro()            { .fontawesome(@camera-retro); }
-.fontawesome-key()                     { .fontawesome(@key); }
-.fontawesome-gears()                   { .fontawesome(@cogs); }
-.fontawesome-cogs()                    { .fontawesome(@cogs); }
-.fontawesome-comments()                { .fontawesome(@comments); }
-.fontawesome-thumbs-up-alt()           { .fontawesome(@thumbs-up-alt); }
-.fontawesome-thumbs-down-alt()         { .fontawesome(@thumbs-down-alt); }
-.fontawesome-star-half()               { .fontawesome(@star-half); }
-.fontawesome-heart-empty()             { .fontawesome(@heart-empty); }
-.fontawesome-signout()                 { .fontawesome(@signout); }
-.fontawesome-linkedin-sign()           { .fontawesome(@linkedin-sign); }
-.fontawesome-pushpin()                 { .fontawesome(@pushpin); }
-.fontawesome-external-link()           { .fontawesome(@external-link); }
-.fontawesome-signin()                  { .fontawesome(@signin); }
-.fontawesome-trophy()                  { .fontawesome(@trophy); }
-.fontawesome-github-sign()             { .fontawesome(@github-sign); }
-.fontawesome-upload-alt()              { .fontawesome(@upload-alt); }
-.fontawesome-lemon()                   { .fontawesome(@lemon); }
-.fontawesome-phone()                   { .fontawesome(@phone); }
-.fontawesome-unchecked()               { .fontawesome(@check-empty); }
-.fontawesome-check-empty()             { .fontawesome(@check-empty); }
-.fontawesome-bookmark-empty()          { .fontawesome(@bookmark-empty); }
-.fontawesome-phone-sign()              { .fontawesome(@phone-sign); }
-.fontawesome-twitter()                 { .fontawesome(@twitter); }
-.fontawesome-facebook()                { .fontawesome(@facebook); }
-.fontawesome-github()                  { .fontawesome(@github); }
-.fontawesome-unlock()                  { .fontawesome(@unlock); }
-.fontawesome-credit-card()             { .fontawesome(@credit-card); }
-.fontawesome-rss()                     { .fontawesome(@rss); }
-.fontawesome-hdd()                     { .fontawesome(@hdd); }
-.fontawesome-bullhorn()                { .fontawesome(@bullhorn); }
-.fontawesome-bell()                    { .fontawesome(@bell); }
-.fontawesome-certificate()             { .fontawesome(@certificate); }
-.fontawesome-hand-right()              { .fontawesome(@hand-right); }
-.fontawesome-hand-left()               { .fontawesome(@hand-left); }
-.fontawesome-hand-up()                 { .fontawesome(@hand-up); }
-.fontawesome-hand-down()               { .fontawesome(@hand-down); }
-.fontawesome-circle-arrow-left()       { .fontawesome(@circle-arrow-left); }
-.fontawesome-circle-arrow-right()      { .fontawesome(@circle-arrow-right); }
-.fontawesome-circle-arrow-up()         { .fontawesome(@circle-arrow-up); }
-.fontawesome-circle-arrow-down()       { .fontawesome(@circle-arrow-down); }
-.fontawesome-globe()                   { .fontawesome(@globe); }
-.fontawesome-wrench()                  { .fontawesome(@wrench); }
-.fontawesome-tasks()                   { .fontawesome(@tasks); }
-.fontawesome-filter()                  { .fontawesome(@filter); }
-.fontawesome-briefcase()               { .fontawesome(@briefcase); }
-.fontawesome-fullscreen()              { .fontawesome(@fullscreen); }
-.fontawesome-group()                   { .fontawesome(@group); }
-.fontawesome-link()                    { .fontawesome(@link); }
-.fontawesome-cloud()                   { .fontawesome(@cloud); }
-.fontawesome-beaker()                  { .fontawesome(@beaker); }
-.fontawesome-cut()                     { .fontawesome(@cut); }
-.fontawesome-copy()                    { .fontawesome(@copy); }
-.fontawesome-paperclip()               { .fontawesome(@paper-clip); }
-.fontawesome-paper-clip()              { .fontawesome(@paper-clip); }
-.fontawesome-save()                    { .fontawesome(@save); }
-.fontawesome-sign-blank()              { .fontawesome(@sign-blank); }
-.fontawesome-reorder()                 { .fontawesome(@reorder); }
-.fontawesome-list-ul()                 { .fontawesome(@list-ul); }
-.fontawesome-list-ol()                 { .fontawesome(@list-ol); }
-.fontawesome-strikethrough()           { .fontawesome(@strikethrough); }
-.fontawesome-underline()               { .fontawesome(@underline); }
-.fontawesome-table()                   { .fontawesome(@table); }
-.fontawesome-magic()                   { .fontawesome(@magic); }
-.fontawesome-truck()                   { .fontawesome(@truck); }
-.fontawesome-pinterest()               { .fontawesome(@pinterest); }
-.fontawesome-pinterest-sign()          { .fontawesome(@pinterest-sign); }
-.fontawesome-google-plus-sign()        { .fontawesome(@google-plus-sign); }
-.fontawesome-google-plus()             { .fontawesome(@google-plus); }
-.fontawesome-money()                   { .fontawesome(@money); }
-.fontawesome-caret-down()              { .fontawesome(@caret-down); }
-.fontawesome-caret-up()                { .fontawesome(@caret-up); }
-.fontawesome-caret-left()              { .fontawesome(@caret-left); }
-.fontawesome-caret-right()             { .fontawesome(@caret-right); }
-.fontawesome-columns()                 { .fontawesome(@columns); }
-.fontawesome-sort()                    { .fontawesome(@sort); }
-.fontawesome-sort-down()               { .fontawesome(@sort-down); }
-.fontawesome-sort-up()                 { .fontawesome(@sort-up); }
-.fontawesome-envelope()                { .fontawesome(@envelope); }
-.fontawesome-linkedin()                { .fontawesome(@linkedin); }
-.fontawesome-rotate-left()             { .fontawesome(@undo); }
-.fontawesome-undo()                    { .fontawesome(@undo); }
-.fontawesome-legal()                   { .fontawesome(@legal); }
-.fontawesome-dashboard()               { .fontawesome(@dashboard); }
-.fontawesome-comment-alt()             { .fontawesome(@comment-alt); }
-.fontawesome-comments-alt()            { .fontawesome(@comments-alt); }
-.fontawesome-bolt()                    { .fontawesome(@bolt); }
-.fontawesome-sitemap()                 { .fontawesome(@sitemap); }
-.fontawesome-umbrella()                { .fontawesome(@umbrella); }
-.fontawesome-paste()                   { .fontawesome(@paste); }
-.fontawesome-lightbulb()               { .fontawesome(@lightbulb); }
-.fontawesome-exchange()                { .fontawesome(@exchange); }
-.fontawesome-cloud-download()          { .fontawesome(@cloud-download); }
-.fontawesome-cloud-upload()            { .fontawesome(@cloud-upload); }
-.fontawesome-user-md()                 { .fontawesome(@user-md); }
-.fontawesome-stethoscope()             { .fontawesome(@stethoscope); }
-.fontawesome-suitcase()                { .fontawesome(@suitcase); }
-.fontawesome-bell-alt()                { .fontawesome(@bell-alt); }
-.fontawesome-coffee()                  { .fontawesome(@coffee); }
-.fontawesome-food()                    { .fontawesome(@food); }
-.fontawesome-file-text-alt()           { .fontawesome(@file-text-alt); }
-.fontawesome-building()                { .fontawesome(@building); }
-.fontawesome-hospital()                { .fontawesome(@hospital); }
-.fontawesome-ambulance()               { .fontawesome(@ambulance); }
-.fontawesome-medkit()                  { .fontawesome(@medkit); }
-.fontawesome-fighter-jet()             { .fontawesome(@fighter-jet); }
-.fontawesome-beer()                    { .fontawesome(@beer); }
-.fontawesome-h-sign()                  { .fontawesome(@h-sign); }
-.fontawesome-plus-sign-alt()           { .fontawesome(@plus-sign-alt); }
-.fontawesome-double-angle-left()       { .fontawesome(@double-angle-left); }
-.fontawesome-double-angle-right()      { .fontawesome(@double-angle-right); }
-.fontawesome-double-angle-up()         { .fontawesome(@double-angle-up); }
-.fontawesome-double-angle-down()       { .fontawesome(@double-angle-down); }
-.fontawesome-angle-left()              { .fontawesome(@angle-left); }
-.fontawesome-angle-right()             { .fontawesome(@angle-right); }
-.fontawesome-angle-up()                { .fontawesome(@angle-up); }
-.fontawesome-angle-down()              { .fontawesome(@angle-down); }
-.fontawesome-desktop()                 { .fontawesome(@desktop); }
-.fontawesome-laptop()                  { .fontawesome(@laptop); }
-.fontawesome-tablet()                  { .fontawesome(@tablet); }
-.fontawesome-mobile-phone()            { .fontawesome(@mobile-phone); }
-.fontawesome-circle-blank()            { .fontawesome(@circle-blank); }
-.fontawesome-quote-left()              { .fontawesome(@quote-left); }
-.fontawesome-quote-right()             { .fontawesome(@quote-right); }
-.fontawesome-spinner()                 { .fontawesome(@spinner); }
-.fontawesome-circle()                  { .fontawesome(@circle); }
-.fontawesome-mail-reply()              { .fontawesome(@reply); }
-.fontawesome-reply()                   { .fontawesome(@reply); }
-.fontawesome-github-alt()              { .fontawesome(@github-alt); }
-.fontawesome-folder-close-alt()        { .fontawesome(@folder-close-alt); }
-.fontawesome-folder-open-alt()         { .fontawesome(@folder-open-alt); }
-.fontawesome-expand-alt()              { .fontawesome(@expand-alt); }
-.fontawesome-collapse-alt()            { .fontawesome(@collapse-alt); }
-.fontawesome-smile()                   { .fontawesome(@smile); }
-.fontawesome-frown()                   { .fontawesome(@frown); }
-.fontawesome-meh()                     { .fontawesome(@meh); }
-.fontawesome-gamepad()                 { .fontawesome(@gamepad); }
-.fontawesome-keyboard()                { .fontawesome(@keyboard); }
-.fontawesome-flag-alt()                { .fontawesome(@flag-alt); }
-.fontawesome-flag-checkered()          { .fontawesome(@flag-checkered); }
-.fontawesome-terminal()                { .fontawesome(@terminal); }
-.fontawesome-code()                    { .fontawesome(@code); }
-.fontawesome-reply-all()               { .fontawesome(@reply-all); }
-.fontawesome-mail-reply-all()          { .fontawesome(@mail-reply-all); }
-.fontawesome-star-half-full()          { .fontawesome(@star-half-empty); }
-.fontawesome-star-half-empty()         { .fontawesome(@star-half-empty); }
-.fontawesome-location-arrow()          { .fontawesome(@location-arrow); }
-.fontawesome-crop()                    { .fontawesome(@crop); }
-.fontawesome-code-fork()               { .fontawesome(@code-fork); }
-.fontawesome-unlink()                  { .fontawesome(@unlink); }
-.fontawesome-question()                { .fontawesome(@question); }
-.fontawesome-info()                    { .fontawesome(@info); }
-.fontawesome-exclamation()             { .fontawesome(@exclamation); }
-.fontawesome-superscript()             { .fontawesome(@superscript); }
-.fontawesome-subscript()               { .fontawesome(@subscript); }
-.fontawesome-eraser()                  { .fontawesome(@eraser); }
-.fontawesome-puzzle-piece()            { .fontawesome(@puzzle-piece); }
-.fontawesome-microphone()              { .fontawesome(@microphone); }
-.fontawesome-microphone-off()          { .fontawesome(@microphone-off); }
-.fontawesome-shield()                  { .fontawesome(@shield); }
-.fontawesome-calendar-empty()          { .fontawesome(@calendar-empty); }
-.fontawesome-fire-extinguisher()       { .fontawesome(@fire-extinguisher); }
-.fontawesome-rocket()                  { .fontawesome(@rocket); }
-.fontawesome-maxcdn()                  { .fontawesome(@maxcdn); }
-.fontawesome-chevron-sign-left()       { .fontawesome(@chevron-sign-left); }
-.fontawesome-chevron-sign-right()      { .fontawesome(@chevron-sign-right); }
-.fontawesome-chevron-sign-up()         { .fontawesome(@chevron-sign-up); }
-.fontawesome-chevron-sign-down()       { .fontawesome(@chevron-sign-down); }
-.fontawesome-html5()                   { .fontawesome(@html5); }
-.fontawesome-css3()                    { .fontawesome(@css3); }
-.fontawesome-anchor()                  { .fontawesome(@anchor); }
-.fontawesome-unlock-alt()              { .fontawesome(@unlock-alt); }
-.fontawesome-bullseye()                { .fontawesome(@bullseye); }
-.fontawesome-ellipsis-horizontal()     { .fontawesome(@ellipsis-horizontal); }
-.fontawesome-ellipsis-vertical()       { .fontawesome(@ellipsis-vertical); }
-.fontawesome-rss-sign()                { .fontawesome(@rss-sign); }
-.fontawesome-play-sign()               { .fontawesome(@play-sign); }
-.fontawesome-ticket()                  { .fontawesome(@ticket); }
-.fontawesome-minus-sign-alt()          { .fontawesome(@minus-sign-alt); }
-.fontawesome-check-minus()             { .fontawesome(@check-minus); }
-.fontawesome-level-up()                { .fontawesome(@level-up); }
-.fontawesome-level-down()              { .fontawesome(@level-down); }
-.fontawesome-check-sign()              { .fontawesome(@check-sign); }
-.fontawesome-edit-sign()               { .fontawesome(@edit-sign); }
-.fontawesome-external-link-sign()      { .fontawesome(@external-link-sign); }
-.fontawesome-share-sign()              { .fontawesome(@share-sign); }
-.fontawesome-compass()                 { .fontawesome(@compass); }
-.fontawesome-collapse()                { .fontawesome(@collapse); }
-.fontawesome-collapse-top()            { .fontawesome(@collapse-top); }
-.fontawesome-expand()                  { .fontawesome(@expand); }
-.fontawesome-euro()                    { .fontawesome(@eur); }
-.fontawesome-eur()                     { .fontawesome(@eur); }
-.fontawesome-gbp()                     { .fontawesome(@gbp); }
-.fontawesome-dollar()                  { .fontawesome(@usd); }
-.fontawesome-usd()                     { .fontawesome(@usd); }
-.fontawesome-rupee()                   { .fontawesome(@inr); }
-.fontawesome-inr()                     { .fontawesome(@inr); }
-.fontawesome-yen()                     { .fontawesome(@jpy); }
-.fontawesome-jpy()                     { .fontawesome(@jpy); }
-.fontawesome-renminbi()                { .fontawesome(@cny); }
-.fontawesome-cny()                     { .fontawesome(@cny); }
-.fontawesome-won()                     { .fontawesome(@krw); }
-.fontawesome-krw()                     { .fontawesome(@krw); }
-.fontawesome-bitcoin()                 { .fontawesome(@btc); }
-.fontawesome-btc()                     { .fontawesome(@btc); }
-.fontawesome-file()                    { .fontawesome(@file); }
-.fontawesome-file-text()               { .fontawesome(@file-text); }
-.fontawesome-sort-by-alphabet()        { .fontawesome(@sort-by-alphabet); }
-.fontawesome-sort-by-alphabet-alt()    { .fontawesome(@sort-by-alphabet-alt); }
-.fontawesome-sort-by-attributes()      { .fontawesome(@sort-by-attributes); }
-.fontawesome-sort-by-attributes-alt()  { .fontawesome(@sort-by-attributes-alt); }
-.fontawesome-sort-by-order()           { .fontawesome(@sort-by-order); }
-.fontawesome-sort-by-order-alt()       { .fontawesome(@sort-by-order-alt); }
-.fontawesome-thumbs-up()               { .fontawesome(@thumbs-up); }
-.fontawesome-thumbs-down()             { .fontawesome(@thumbs-down); }
-.fontawesome-youtube-sign()            { .fontawesome(@youtube-sign); }
-.fontawesome-youtube()                 { .fontawesome(@youtube); }
-.fontawesome-xing()                    { .fontawesome(@xing); }
-.fontawesome-xing-sign()               { .fontawesome(@xing-sign); }
-.fontawesome-youtube-play()            { .fontawesome(@youtube-play); }
-.fontawesome-dropbox()                 { .fontawesome(@dropbox); }
-.fontawesome-stackexchange()           { .fontawesome(@stackexchange); }
-.fontawesome-instagram()               { .fontawesome(@instagram); }
-.fontawesome-flickr()                  { .fontawesome(@flickr); }
-.fontawesome-adn()                     { .fontawesome(@adn); }
-.fontawesome-bitbucket()               { .fontawesome(@bitbucket); }
-.fontawesome-bitbucket-sign()          { .fontawesome(@bitbucket-sign); }
-.fontawesome-tumblr()                  { .fontawesome(@tumblr); }
-.fontawesome-tumblr-sign()             { .fontawesome(@tumblr-sign); }
-.fontawesome-long-arrow-down()         { .fontawesome(@long-arrow-down); }
-.fontawesome-long-arrow-up()           { .fontawesome(@long-arrow-up); }
-.fontawesome-long-arrow-left()         { .fontawesome(@long-arrow-left); }
-.fontawesome-long-arrow-right()        { .fontawesome(@long-arrow-right); }
-.fontawesome-apple()                   { .fontawesome(@apple); }
-.fontawesome-windows()                 { .fontawesome(@windows); }
-.fontawesome-android()                 { .fontawesome(@android); }
-.fontawesome-linux()                   { .fontawesome(@linux); }
-.fontawesome-dribbble()                { .fontawesome(@dribbble); }
-.fontawesome-skype()                   { .fontawesome(@skype); }
-.fontawesome-foursquare()              { .fontawesome(@foursquare); }
-.fontawesome-trello()                  { .fontawesome(@trello); }
-.fontawesome-female()                  { .fontawesome(@female); }
-.fontawesome-male()                    { .fontawesome(@male); }
-.fontawesome-gittip()                  { .fontawesome(@gittip); }
-.fontawesome-sun()                     { .fontawesome(@sun); }
-.fontawesome-moon()                    { .fontawesome(@moon); }
-.fontawesome-archive()                 { .fontawesome(@archive); }
-.fontawesome-bug()                     { .fontawesome(@bug); }
-.fontawesome-vk()                      { .fontawesome(@vk); }
-.fontawesome-weibo()                   { .fontawesome(@weibo); }
-.fontawesome-renren()                  { .fontawesome(@renren); }
+.fontawesome-glass()                   { .fontawesome(@fa-var-glass); }
+.fontawesome-music()                   { .fontawesome(@fa-var-music); }
+.fontawesome-search()                  { .fontawesome(@fa-var-search); }
+.fontawesome-envelope-o()              { .fontawesome(@fa-var-envelope-o); }
+.fontawesome-heart()                   { .fontawesome(@fa-var-heart); }
+.fontawesome-star()                    { .fontawesome(@fa-var-star); }
+.fontawesome-star-o()                  { .fontawesome(@fa-var-star-o); }
+.fontawesome-user()                    { .fontawesome(@fa-var-user); }
+.fontawesome-film()                    { .fontawesome(@fa-var-film); }
+.fontawesome-th-large()                { .fontawesome(@fa-var-th-large); }
+.fontawesome-th()                      { .fontawesome(@fa-var-th); }
+.fontawesome-th-list()                 { .fontawesome(@fa-var-th-list); }
+.fontawesome-check()                   { .fontawesome(@fa-var-check); }
+.fontawesome-times()                   { .fontawesome(@fa-var-times); }
+.fontawesome-search-plus()             { .fontawesome(@fa-var-search-plus); }
+.fontawesome-search-minus()            { .fontawesome(@fa-var-search-minus); }
+.fontawesome-power-off()               { .fontawesome(@fa-var-power-off); }
+.fontawesome-signal()                  { .fontawesome(@fa-var-signal); }
+.fontawesome-gear()                    { .fontawesome(@fa-var-cog); }
+.fontawesome-cog()                     { .fontawesome(@fa-var-cog); }
+.fontawesome-trash-o()                 { .fontawesome(@fa-var-trash-o); }
+.fontawesome-home()                    { .fontawesome(@fa-var-home); }
+.fontawesome-file-o()                  { .fontawesome(@fa-var-file-o); }
+.fontawesome-clock-o()                 { .fontawesome(@fa-var-clock-o); }
+.fontawesome-road()                    { .fontawesome(@fa-var-road); }
+.fontawesome-download()                { .fontawesome(@fa-var-download); }
+.fontawesome-arrow-circle-o-down()     { .fontawesome(@fa-var-arrow-circle-o-down); }
+.fontawesome-arrow-circle-o-up()       { .fontawesome(@fa-var-arrow-circle-o-up); }
+.fontawesome-inbox()                   { .fontawesome(@fa-var-inbox); }
+.fontawesome-play-circle-o()           { .fontawesome(@fa-var-play-circle-o); }
+.fontawesome-rotate-right()            { .fontawesome(@fa-var-repeat); }
+.fontawesome-repeat()                  { .fontawesome(@fa-var-repeat); }
+.fontawesome-refresh()                 { .fontawesome(@fa-var-refresh); }
+.fontawesome-list-alt()                { .fontawesome(@fa-var-list-alt); }
+.fontawesome-lock()                    { .fontawesome(@fa-var-lock); }
+.fontawesome-flag()                    { .fontawesome(@fa-var-flag); }
+.fontawesome-headphones()              { .fontawesome(@fa-var-headphones); }
+.fontawesome-volume-off()              { .fontawesome(@fa-var-volume-off); }
+.fontawesome-volume-down()             { .fontawesome(@fa-var-volume-down); }
+.fontawesome-volume-up()               { .fontawesome(@fa-var-volume-up); }
+.fontawesome-qrcode()                  { .fontawesome(@fa-var-qrcode); }
+.fontawesome-barcode()                 { .fontawesome(@fa-var-barcode); }
+.fontawesome-tag()                     { .fontawesome(@fa-var-tag); }
+.fontawesome-tags()                    { .fontawesome(@fa-var-tags); }
+.fontawesome-book()                    { .fontawesome(@fa-var-book); }
+.fontawesome-bookmark()                { .fontawesome(@fa-var-bookmark); }
+.fontawesome-print()                   { .fontawesome(@fa-var-print); }
+.fontawesome-camera()                  { .fontawesome(@fa-var-camera); }
+.fontawesome-font()                    { .fontawesome(@fa-var-font); }
+.fontawesome-bold()                    { .fontawesome(@fa-var-bold); }
+.fontawesome-italic()                  { .fontawesome(@fa-var-italic); }
+.fontawesome-text-height()             { .fontawesome(@fa-var-text-height); }
+.fontawesome-text-width()              { .fontawesome(@fa-var-text-width); }
+.fontawesome-align-left()              { .fontawesome(@fa-var-align-left); }
+.fontawesome-align-center()            { .fontawesome(@fa-var-align-center); }
+.fontawesome-align-right()             { .fontawesome(@fa-var-align-right); }
+.fontawesome-align-justify()           { .fontawesome(@fa-var-align-justify); }
+.fontawesome-list()                    { .fontawesome(@fa-var-list); }
+.fontawesome-dedent()                  { .fontawesome(@fa-var-outdent); }
+.fontawesome-outdent()                 { .fontawesome(@fa-var-outdent); }
+.fontawesome-indent()                  { .fontawesome(@fa-var-indent); }
+.fontawesome-video-camera()            { .fontawesome(@fa-var-video-camera); }
+.fontawesome-picture-o()               { .fontawesome(@fa-var-picture-o); }
+.fontawesome-pencil()                  { .fontawesome(@fa-var-pencil); }
+.fontawesome-map-marker()              { .fontawesome(@fa-var-map-marker); }
+.fontawesome-adjust()                  { .fontawesome(@fa-var-adjust); }
+.fontawesome-tint()                    { .fontawesome(@fa-var-tint); }
+.fontawesome-edit()                    { .fontawesome(@fa-var-pencil-square-o); }
+.fontawesome-pencil-square-o()         { .fontawesome(@fa-var-pencil-square-o); }
+.fontawesome-share-square-o()          { .fontawesome(@fa-var-share-square-o); }
+.fontawesome-check-square-o()          { .fontawesome(@fa-var-check-square-o); }
+.fontawesome-arrows()                  { .fontawesome(@fa-var-arrows); }
+.fontawesome-step-backward()           { .fontawesome(@fa-var-step-backward); }
+.fontawesome-fast-backward()           { .fontawesome(@fa-var-fast-backward); }
+.fontawesome-backward()                { .fontawesome(@fa-var-backward); }
+.fontawesome-play()                    { .fontawesome(@fa-var-play); }
+.fontawesome-pause()                   { .fontawesome(@fa-var-pause); }
+.fontawesome-stop()                    { .fontawesome(@fa-var-stop); }
+.fontawesome-forward()                 { .fontawesome(@fa-var-forward); }
+.fontawesome-fast-forward()            { .fontawesome(@fa-var-fast-forward); }
+.fontawesome-step-forward()            { .fontawesome(@fa-var-step-forward); }
+.fontawesome-eject()                   { .fontawesome(@fa-var-eject); }
+.fontawesome-chevron-left()            { .fontawesome(@fa-var-chevron-left); }
+.fontawesome-chevron-right()           { .fontawesome(@fa-var-chevron-right); }
+.fontawesome-plus-circle()             { .fontawesome(@fa-var-plus-circle); }
+.fontawesome-minus-circle()            { .fontawesome(@fa-var-minus-circle); }
+.fontawesome-times-circle()            { .fontawesome(@fa-var-times-circle); }
+.fontawesome-check-circle()            { .fontawesome(@fa-var-check-circle); }
+.fontawesome-question-circle()         { .fontawesome(@fa-var-question-circle); }
+.fontawesome-info-circle()             { .fontawesome(@fa-var-info-circle); }
+.fontawesome-crosshairs()              { .fontawesome(@fa-var-crosshairs); }
+.fontawesome-times-circle-o()          { .fontawesome(@fa-var-times-circle-o); }
+.fontawesome-check-circle-o()          { .fontawesome(@fa-var-check-circle-o); }
+.fontawesome-ban()                     { .fontawesome(@fa-var-ban); }
+.fontawesome-arrow-left()              { .fontawesome(@fa-var-arrow-left); }
+.fontawesome-arrow-right()             { .fontawesome(@fa-var-arrow-right); }
+.fontawesome-arrow-up()                { .fontawesome(@fa-var-arrow-up); }
+.fontawesome-arrow-down()              { .fontawesome(@fa-var-arrow-down); }
+.fontawesome-mail-forward()            { .fontawesome(@fa-var-share); }
+.fontawesome-share()                   { .fontawesome(@fa-var-share); }
+.fontawesome-expand()                  { .fontawesome(@fa-var-expand); }
+.fontawesome-compress()                { .fontawesome(@fa-var-compress); }
+.fontawesome-plus()                    { .fontawesome(@fa-var-plus); }
+.fontawesome-minus()                   { .fontawesome(@fa-var-minus); }
+.fontawesome-asterisk()                { .fontawesome(@fa-var-asterisk); }
+.fontawesome-exclamation-circle()      { .fontawesome(@fa-var-exclamation-circle); }
+.fontawesome-gift()                    { .fontawesome(@fa-var-gift); }
+.fontawesome-leaf()                    { .fontawesome(@fa-var-leaf); }
+.fontawesome-fire()                    { .fontawesome(@fa-var-fire); }
+.fontawesome-eye()                     { .fontawesome(@fa-var-eye); }
+.fontawesome-eye-slash()               { .fontawesome(@fa-var-eye-slash); }
+.fontawesome-warning()                 { .fontawesome(@fa-var-exclamation-triangle); }
+.fontawesome-exclamation-triangle()    { .fontawesome(@fa-var-exclamation-triangle); }
+.fontawesome-plane()                   { .fontawesome(@fa-var-plane); }
+.fontawesome-calendar()                { .fontawesome(@fa-var-calendar); }
+.fontawesome-random()                  { .fontawesome(@fa-var-random); }
+.fontawesome-comment()                 { .fontawesome(@fa-var-comment); }
+.fontawesome-magnet()                  { .fontawesome(@fa-var-magnet); }
+.fontawesome-chevron-up()              { .fontawesome(@fa-var-chevron-up); }
+.fontawesome-chevron-down()            { .fontawesome(@fa-var-chevron-down); }
+.fontawesome-retweet()                 { .fontawesome(@fa-var-retweet); }
+.fontawesome-shopping-cart()           { .fontawesome(@fa-var-shopping-cart); }
+.fontawesome-folder()                  { .fontawesome(@fa-var-folder); }
+.fontawesome-folder-open()             { .fontawesome(@fa-var-folder-open); }
+.fontawesome-arrows-v()                { .fontawesome(@fa-var-arrows-v); }
+.fontawesome-arrows-h()                { .fontawesome(@fa-var-arrows-h); }
+.fontawesome-bar-chart-o()             { .fontawesome(@fa-var-bar-chart-o); }
+.fontawesome-twitter-square()          { .fontawesome(@fa-var-twitter-square); }
+.fontawesome-facebook-square()         { .fontawesome(@fa-var-facebook-square); }
+.fontawesome-camera-retro()            { .fontawesome(@fa-var-camera-retro); }
+.fontawesome-key()                     { .fontawesome(@fa-var-key); }
+.fontawesome-gears()                   { .fontawesome(@fa-var-cogs); }
+.fontawesome-cogs()                    { .fontawesome(@fa-var-cogs); }
+.fontawesome-comments()                { .fontawesome(@fa-var-comments); }
+.fontawesome-thumbs-o-up()             { .fontawesome(@fa-var-thumbs-o-up); }
+.fontawesome-thumbs-o-down()           { .fontawesome(@fa-var-thumbs-o-down); }
+.fontawesome-star-half()               { .fontawesome(@fa-var-star-half); }
+.fontawesome-heart-o()                 { .fontawesome(@fa-var-heart-o); }
+.fontawesome-sign-out()                { .fontawesome(@fa-var-sign-out); }
+.fontawesome-linkedin-square()         { .fontawesome(@fa-var-linkedin-square); }
+.fontawesome-thumb-tack()              { .fontawesome(@fa-var-thumb-tack); }
+.fontawesome-external-link()           { .fontawesome(@fa-var-external-link); }
+.fontawesome-sign-in()                 { .fontawesome(@fa-var-sign-in); }
+.fontawesome-trophy()                  { .fontawesome(@fa-var-trophy); }
+.fontawesome-github-square()           { .fontawesome(@fa-var-github-square); }
+.fontawesome-upload()                  { .fontawesome(@fa-var-upload); }
+.fontawesome-lemon-o()                 { .fontawesome(@fa-var-lemon-o); }
+.fontawesome-phone()                   { .fontawesome(@fa-var-phone); }
+.fontawesome-square-o()                { .fontawesome(@fa-var-square-o); }
+.fontawesome-bookmark-o()              { .fontawesome(@fa-var-bookmark-o); }
+.fontawesome-phone-square()            { .fontawesome(@fa-var-phone-square); }
+.fontawesome-twitter()                 { .fontawesome(@fa-var-twitter); }
+.fontawesome-facebook()                { .fontawesome(@fa-var-facebook); }
+.fontawesome-github()                  { .fontawesome(@fa-var-github); }
+.fontawesome-unlock()                  { .fontawesome(@fa-var-unlock); }
+.fontawesome-credit-card()             { .fontawesome(@fa-var-credit-card); }
+.fontawesome-rss()                     { .fontawesome(@fa-var-rss); }
+.fontawesome-hdd-o()                   { .fontawesome(@fa-var-hdd-o); }
+.fontawesome-bullhorn()                { .fontawesome(@fa-var-bullhorn); }
+.fontawesome-bell()                    { .fontawesome(@fa-var-bell); }
+.fontawesome-certificate()             { .fontawesome(@fa-var-certificate); }
+.fontawesome-hand-o-right()            { .fontawesome(@fa-var-hand-o-right); }
+.fontawesome-hand-o-left()             { .fontawesome(@fa-var-hand-o-left); }
+.fontawesome-hand-o-up()               { .fontawesome(@fa-var-hand-o-up); }
+.fontawesome-hand-o-down()             { .fontawesome(@fa-var-hand-o-down); }
+.fontawesome-arrow-circle-left()       { .fontawesome(@fa-var-arrow-circle-left); }
+.fontawesome-arrow-circle-right()      { .fontawesome(@fa-var-arrow-circle-right); }
+.fontawesome-arrow-circle-up()         { .fontawesome(@fa-var-arrow-circle-up); }
+.fontawesome-arrow-circle-down()       { .fontawesome(@fa-var-arrow-circle-down); }
+.fontawesome-globe()                   { .fontawesome(@fa-var-globe); }
+.fontawesome-wrench()                  { .fontawesome(@fa-var-wrench); }
+.fontawesome-tasks()                   { .fontawesome(@fa-var-tasks); }
+.fontawesome-filter()                  { .fontawesome(@fa-var-filter); }
+.fontawesome-briefcase()               { .fontawesome(@fa-var-briefcase); }
+.fontawesome-arrows-alt()              { .fontawesome(@fa-var-arrows-alt); }
+.fontawesome-group()                   { .fontawesome(@fa-var-users); }
+.fontawesome-users()                   { .fontawesome(@fa-var-users); }
+.fontawesome-chain()                   { .fontawesome(@fa-var-link); }
+.fontawesome-link()                    { .fontawesome(@fa-var-link); }
+.fontawesome-cloud()                   { .fontawesome(@fa-var-cloud); }
+.fontawesome-flask()                   { .fontawesome(@fa-var-flask); }
+.fontawesome-cut()                     { .fontawesome(@fa-var-scissors); }
+.fontawesome-scissors()                { .fontawesome(@fa-var-scissors); }
+.fontawesome-copy()                    { .fontawesome(@fa-var-files-o); }
+.fontawesome-files-o()                 { .fontawesome(@fa-var-files-o); }
+.fontawesome-paperclip()               { .fontawesome(@fa-var-paperclip); }
+.fontawesome-save()                    { .fontawesome(@fa-var-floppy-o); }
+.fontawesome-floppy-o()                { .fontawesome(@fa-var-floppy-o); }
+.fontawesome-square()                  { .fontawesome(@fa-var-square); }
+.fontawesome-bars()                    { .fontawesome(@fa-var-bars); }
+.fontawesome-list-ul()                 { .fontawesome(@fa-var-list-ul); }
+.fontawesome-list-ol()                 { .fontawesome(@fa-var-list-ol); }
+.fontawesome-strikethrough()           { .fontawesome(@fa-var-strikethrough); }
+.fontawesome-underline()               { .fontawesome(@fa-var-underline); }
+.fontawesome-table()                   { .fontawesome(@fa-var-table); }
+.fontawesome-magic()                   { .fontawesome(@fa-var-magic); }
+.fontawesome-truck()                   { .fontawesome(@fa-var-truck); }
+.fontawesome-pinterest()               { .fontawesome(@fa-var-pinterest); }
+.fontawesome-pinterest-square()        { .fontawesome(@fa-var-pinterest-square); }
+.fontawesome-google-plus-square()      { .fontawesome(@fa-var-google-plus-square); }
+.fontawesome-google-plus()             { .fontawesome(@fa-var-google-plus); }
+.fontawesome-money()                   { .fontawesome(@fa-var-money); }
+.fontawesome-caret-down()              { .fontawesome(@fa-var-caret-down); }
+.fontawesome-caret-up()                { .fontawesome(@fa-var-caret-up); }
+.fontawesome-caret-left()              { .fontawesome(@fa-var-caret-left); }
+.fontawesome-caret-right()             { .fontawesome(@fa-var-caret-right); }
+.fontawesome-columns()                 { .fontawesome(@fa-var-columns); }
+.fontawesome-unsorted()                { .fontawesome(@fa-var-sort); }
+.fontawesome-sort()                    { .fontawesome(@fa-var-sort); }
+.fontawesome-sort-down()               { .fontawesome(@fa-var-sort-asc); }
+.fontawesome-sort-asc()                { .fontawesome(@fa-var-sort-asc); }
+.fontawesome-sort-up()                 { .fontawesome(@fa-var-sort-desc); }
+.fontawesome-sort-desc()               { .fontawesome(@fa-var-sort-desc); }
+.fontawesome-envelope()                { .fontawesome(@fa-var-envelope); }
+.fontawesome-linkedin()                { .fontawesome(@fa-var-linkedin); }
+.fontawesome-rotate-left()             { .fontawesome(@fa-var-undo); }
+.fontawesome-undo()                    { .fontawesome(@fa-var-undo); }
+.fontawesome-legal()                   { .fontawesome(@fa-var-gavel); }
+.fontawesome-gavel()                   { .fontawesome(@fa-var-gavel); }
+.fontawesome-dashboard()               { .fontawesome(@fa-var-tachometer); }
+.fontawesome-tachometer()              { .fontawesome(@fa-var-tachometer); }
+.fontawesome-comment-o()               { .fontawesome(@fa-var-comment-o); }
+.fontawesome-comments-o()              { .fontawesome(@fa-var-comments-o); }
+.fontawesome-flash()                   { .fontawesome(@fa-var-bolt); }
+.fontawesome-bolt()                    { .fontawesome(@fa-var-bolt); }
+.fontawesome-sitemap()                 { .fontawesome(@fa-var-sitemap); }
+.fontawesome-umbrella()                { .fontawesome(@fa-var-umbrella); }
+.fontawesome-paste()                   { .fontawesome(@fa-var-clipboard); }
+.fontawesome-clipboard()               { .fontawesome(@fa-var-clipboard); }
+.fontawesome-lightbulb-o()             { .fontawesome(@fa-var-lightbulb-o); }
+.fontawesome-exchange()                { .fontawesome(@fa-var-exchange); }
+.fontawesome-cloud-download()          { .fontawesome(@fa-var-cloud-download); }
+.fontawesome-cloud-upload()            { .fontawesome(@fa-var-cloud-upload); }
+.fontawesome-user-md()                 { .fontawesome(@fa-var-user-md); }
+.fontawesome-stethoscope()             { .fontawesome(@fa-var-stethoscope); }
+.fontawesome-suitcase()                { .fontawesome(@fa-var-suitcase); }
+.fontawesome-bell-o()                  { .fontawesome(@fa-var-bell-o); }
+.fontawesome-coffee()                  { .fontawesome(@fa-var-coffee); }
+.fontawesome-cutlery()                 { .fontawesome(@fa-var-cutlery); }
+.fontawesome-file-text-o()             { .fontawesome(@fa-var-file-text-o); }
+.fontawesome-building-o()              { .fontawesome(@fa-var-building-o); }
+.fontawesome-hospital-o()              { .fontawesome(@fa-var-hospital-o); }
+.fontawesome-ambulance()               { .fontawesome(@fa-var-ambulance); }
+.fontawesome-medkit()                  { .fontawesome(@fa-var-medkit); }
+.fontawesome-fighter-jet()             { .fontawesome(@fa-var-fighter-jet); }
+.fontawesome-beer()                    { .fontawesome(@fa-var-beer); }
+.fontawesome-h-square()                { .fontawesome(@fa-var-h-square); }
+.fontawesome-plus-square()             { .fontawesome(@fa-var-plus-square); }
+.fontawesome-angle-double-left()       { .fontawesome(@fa-var-angle-double-left); }
+.fontawesome-angle-double-right()      { .fontawesome(@fa-var-angle-double-right); }
+.fontawesome-angle-double-up()         { .fontawesome(@fa-var-angle-double-up); }
+.fontawesome-angle-double-down()       { .fontawesome(@fa-var-angle-double-down); }
+.fontawesome-angle-left()              { .fontawesome(@fa-var-angle-left); }
+.fontawesome-angle-right()             { .fontawesome(@fa-var-angle-right); }
+.fontawesome-angle-up()                { .fontawesome(@fa-var-angle-up); }
+.fontawesome-angle-down()              { .fontawesome(@fa-var-angle-down); }
+.fontawesome-desktop()                 { .fontawesome(@fa-var-desktop); }
+.fontawesome-laptop()                  { .fontawesome(@fa-var-laptop); }
+.fontawesome-tablet()                  { .fontawesome(@fa-var-tablet); }
+.fontawesome-mobile-phone()            { .fontawesome(@fa-var-mobile); }
+.fontawesome-mobile()                  { .fontawesome(@fa-var-mobile); }
+.fontawesome-circle-o()                { .fontawesome(@fa-var-circle-o); }
+.fontawesome-quote-left()              { .fontawesome(@fa-var-quote-left); }
+.fontawesome-quote-right()             { .fontawesome(@fa-var-quote-right); }
+.fontawesome-spinner()                 { .fontawesome(@fa-var-spinner); }
+.fontawesome-circle()                  { .fontawesome(@fa-var-circle); }
+.fontawesome-mail-reply()              { .fontawesome(@fa-var-reply); }
+.fontawesome-reply()                   { .fontawesome(@fa-var-reply); }
+.fontawesome-github-alt()              { .fontawesome(@fa-var-github-alt); }
+.fontawesome-folder-o()                { .fontawesome(@fa-var-folder-o); }
+.fontawesome-folder-open-o()           { .fontawesome(@fa-var-folder-open-o); }
+.fontawesome-smile-o()                 { .fontawesome(@fa-var-smile-o); }
+.fontawesome-frown-o()                 { .fontawesome(@fa-var-frown-o); }
+.fontawesome-meh-o()                   { .fontawesome(@fa-var-meh-o); }
+.fontawesome-gamepad()                 { .fontawesome(@fa-var-gamepad); }
+.fontawesome-keyboard-o()              { .fontawesome(@fa-var-keyboard-o); }
+.fontawesome-flag-o()                  { .fontawesome(@fa-var-flag-o); }
+.fontawesome-flag-checkered()          { .fontawesome(@fa-var-flag-checkered); }
+.fontawesome-terminal()                { .fontawesome(@fa-var-terminal); }
+.fontawesome-code()                    { .fontawesome(@fa-var-code); }
+.fontawesome-reply-all()               { .fontawesome(@fa-var-reply-all); }
+.fontawesome-mail-reply-all()          { .fontawesome(@fa-var-mail-reply-all); }
+.fontawesome-star-half-empty()         { .fontawesome(@fa-var-star-half-o); }
+.fontawesome-star-half-full()          { .fontawesome(@fa-var-star-half-o); }
+.fontawesome-star-half-o()             { .fontawesome(@fa-var-star-half-o); }
+.fontawesome-location-arrow()          { .fontawesome(@fa-var-location-arrow); }
+.fontawesome-crop()                    { .fontawesome(@fa-var-crop); }
+.fontawesome-code-fork()               { .fontawesome(@fa-var-code-fork); }
+.fontawesome-unlink()                  { .fontawesome(@fa-var-chain-broken); }
+.fontawesome-chain-broken()            { .fontawesome(@fa-var-chain-broken); }
+.fontawesome-question()                { .fontawesome(@fa-var-question); }
+.fontawesome-info()                    { .fontawesome(@fa-var-info); }
+.fontawesome-exclamation()             { .fontawesome(@fa-var-exclamation); }
+.fontawesome-superscript()             { .fontawesome(@fa-var-superscript); }
+.fontawesome-subscript()               { .fontawesome(@fa-var-subscript); }
+.fontawesome-eraser()                  { .fontawesome(@fa-var-eraser); }
+.fontawesome-puzzle-piece()            { .fontawesome(@fa-var-puzzle-piece); }
+.fontawesome-microphone()              { .fontawesome(@fa-var-microphone); }
+.fontawesome-microphone-slash()        { .fontawesome(@fa-var-microphone-slash); }
+.fontawesome-shield()                  { .fontawesome(@fa-var-shield); }
+.fontawesome-calendar-o()              { .fontawesome(@fa-var-calendar-o); }
+.fontawesome-fire-extinguisher()       { .fontawesome(@fa-var-fire-extinguisher); }
+.fontawesome-rocket()                  { .fontawesome(@fa-var-rocket); }
+.fontawesome-maxcdn()                  { .fontawesome(@fa-var-maxcdn); }
+.fontawesome-chevron-circle-left()     { .fontawesome(@fa-var-chevron-circle-left); }
+.fontawesome-chevron-circle-right()    { .fontawesome(@fa-var-chevron-circle-right); }
+.fontawesome-chevron-circle-up()       { .fontawesome(@fa-var-chevron-circle-up); }
+.fontawesome-chevron-circle-down()     { .fontawesome(@fa-var-chevron-circle-down); }
+.fontawesome-html5()                   { .fontawesome(@fa-var-html5); }
+.fontawesome-css3()                    { .fontawesome(@fa-var-css3); }
+.fontawesome-anchor()                  { .fontawesome(@fa-var-anchor); }
+.fontawesome-unlock-alt()              { .fontawesome(@fa-var-unlock-alt); }
+.fontawesome-bullseye()                { .fontawesome(@fa-var-bullseye); }
+.fontawesome-ellipsis-h()              { .fontawesome(@fa-var-ellipsis-h); }
+.fontawesome-ellipsis-v()              { .fontawesome(@fa-var-ellipsis-v); }
+.fontawesome-rss-square()              { .fontawesome(@fa-var-rss-square); }
+.fontawesome-play-circle()             { .fontawesome(@fa-var-play-circle); }
+.fontawesome-ticket()                  { .fontawesome(@fa-var-ticket); }
+.fontawesome-minus-square()            { .fontawesome(@fa-var-minus-square); }
+.fontawesome-minus-square-o()          { .fontawesome(@fa-var-minus-square-o); }
+.fontawesome-level-up()                { .fontawesome(@fa-var-level-up); }
+.fontawesome-level-down()              { .fontawesome(@fa-var-level-down); }
+.fontawesome-check-square()            { .fontawesome(@fa-var-check-square); }
+.fontawesome-pencil-square()           { .fontawesome(@fa-var-pencil-square); }
+.fontawesome-external-link-square()    { .fontawesome(@fa-var-external-link-square); }
+.fontawesome-share-square()            { .fontawesome(@fa-var-share-square); }
+.fontawesome-compass()                 { .fontawesome(@fa-var-compass); }
+.fontawesome-toggle-down()             { .fontawesome(@fa-var-caret-square-o-down); }
+.fontawesome-caret-square-o-down()     { .fontawesome(@fa-var-caret-square-o-down); }
+.fontawesome-toggle-up()               { .fontawesome(@fa-var-caret-square-o-up); }
+.fontawesome-caret-square-o-up()       { .fontawesome(@fa-var-caret-square-o-up); }
+.fontawesome-toggle-right()            { .fontawesome(@fa-var-caret-square-o-right); }
+.fontawesome-caret-square-o-right()    { .fontawesome(@fa-var-caret-square-o-right); }
+.fontawesome-euro()                    { .fontawesome(@fa-var-eur); }
+.fontawesome-eur()                     { .fontawesome(@fa-var-eur); }
+.fontawesome-gbp()                     { .fontawesome(@fa-var-gbp); }
+.fontawesome-dollar()                  { .fontawesome(@fa-var-usd); }
+.fontawesome-usd()                     { .fontawesome(@fa-var-usd); }
+.fontawesome-rupee()                   { .fontawesome(@fa-var-inr); }
+.fontawesome-inr()                     { .fontawesome(@fa-var-inr); }
+.fontawesome-cny()                     { .fontawesome(@fa-var-jpy); }
+.fontawesome-rmb()                     { .fontawesome(@fa-var-jpy); }
+.fontawesome-yen()                     { .fontawesome(@fa-var-jpy); }
+.fontawesome-jpy()                     { .fontawesome(@fa-var-jpy); }
+.fontawesome-ruble()                   { .fontawesome(@fa-var-rub); }
+.fontawesome-rouble()                  { .fontawesome(@fa-var-rub); }
+.fontawesome-rub()                     { .fontawesome(@fa-var-rub); }
+.fontawesome-won()                     { .fontawesome(@fa-var-krw); }
+.fontawesome-krw()                     { .fontawesome(@fa-var-krw); }
+.fontawesome-bitcoin()                 { .fontawesome(@fa-var-btc); }
+.fontawesome-btc()                     { .fontawesome(@fa-var-btc); }
+.fontawesome-file()                    { .fontawesome(@fa-var-file); }
+.fontawesome-file-text()               { .fontawesome(@fa-var-file-text); }
+.fontawesome-sort-alpha-asc()          { .fontawesome(@fa-var-sort-alpha-asc); }
+.fontawesome-sort-alpha-desc()         { .fontawesome(@fa-var-sort-alpha-desc); }
+.fontawesome-sort-amount-asc()         { .fontawesome(@fa-var-sort-amount-asc); }
+.fontawesome-sort-amount-desc()        { .fontawesome(@fa-var-sort-amount-desc); }
+.fontawesome-sort-numeric-asc()        { .fontawesome(@fa-var-sort-numeric-asc); }
+.fontawesome-sort-numeric-desc()       { .fontawesome(@fa-var-sort-numeric-desc); }
+.fontawesome-thumbs-up()               { .fontawesome(@fa-var-thumbs-up); }
+.fontawesome-thumbs-down()             { .fontawesome(@fa-var-thumbs-down); }
+.fontawesome-youtube-square()          { .fontawesome(@fa-var-youtube-square); }
+.fontawesome-youtube()                 { .fontawesome(@fa-var-youtube); }
+.fontawesome-xing()                    { .fontawesome(@fa-var-xing); }
+.fontawesome-xing-square()             { .fontawesome(@fa-var-xing-square); }
+.fontawesome-youtube-play()            { .fontawesome(@fa-var-youtube-play); }
+.fontawesome-dropbox()                 { .fontawesome(@fa-var-dropbox); }
+.fontawesome-stack-overflow()          { .fontawesome(@fa-var-stack-overflow); }
+.fontawesome-instagram()               { .fontawesome(@fa-var-instagram); }
+.fontawesome-flickr()                  { .fontawesome(@fa-var-flickr); }
+.fontawesome-adn()                     { .fontawesome(@fa-var-adn); }
+.fontawesome-bitbucket()               { .fontawesome(@fa-var-bitbucket); }
+.fontawesome-bitbucket-square()        { .fontawesome(@fa-var-bitbucket-square); }
+.fontawesome-tumblr()                  { .fontawesome(@fa-var-tumblr); }
+.fontawesome-tumblr-square()           { .fontawesome(@fa-var-tumblr-square); }
+.fontawesome-long-arrow-down()         { .fontawesome(@fa-var-long-arrow-down); }
+.fontawesome-long-arrow-up()           { .fontawesome(@fa-var-long-arrow-up); }
+.fontawesome-long-arrow-left()         { .fontawesome(@fa-var-long-arrow-left); }
+.fontawesome-long-arrow-right()        { .fontawesome(@fa-var-long-arrow-right); }
+.fontawesome-apple()                   { .fontawesome(@fa-var-apple); }
+.fontawesome-windows()                 { .fontawesome(@fa-var-windows); }
+.fontawesome-android()                 { .fontawesome(@fa-var-android); }
+.fontawesome-linux()                   { .fontawesome(@fa-var-linux); }
+.fontawesome-dribbble()                { .fontawesome(@fa-var-dribbble); }
+.fontawesome-skype()                   { .fontawesome(@fa-var-skype); }
+.fontawesome-foursquare()              { .fontawesome(@fa-var-foursquare); }
+.fontawesome-trello()                  { .fontawesome(@fa-var-trello); }
+.fontawesome-female()                  { .fontawesome(@fa-var-female); }
+.fontawesome-male()                    { .fontawesome(@fa-var-male); }
+.fontawesome-gittip()                  { .fontawesome(@fa-var-gittip); }
+.fontawesome-sun-o()                   { .fontawesome(@fa-var-sun-o); }
+.fontawesome-moon-o()                  { .fontawesome(@fa-var-moon-o); }
+.fontawesome-archive()                 { .fontawesome(@fa-var-archive); }
+.fontawesome-bug()                     { .fontawesome(@fa-var-bug); }
+.fontawesome-vk()                      { .fontawesome(@fa-var-vk); }
+.fontawesome-weibo()                   { .fontawesome(@fa-var-weibo); }
+.fontawesome-renren()                  { .fontawesome(@fa-var-renren); }
+.fontawesome-pagelines()               { .fontawesome(@fa-var-pagelines); }
+.fontawesome-stack-exchange()          { .fontawesome(@fa-var-stack-exchange); }
+.fontawesome-arrow-circle-o-right()    { .fontawesome(@fa-var-arrow-circle-o-right); }
+.fontawesome-arrow-circle-o-left()     { .fontawesome(@fa-var-arrow-circle-o-left); }
+.fontawesome-toggle-left()             { .fontawesome(@fa-var-caret-square-o-left); }
+.fontawesome-caret-square-o-left()     { .fontawesome(@fa-var-caret-square-o-left); }
+.fontawesome-dot-circle-o()            { .fontawesome(@fa-var-dot-circle-o); }
+.fontawesome-wheelchair()              { .fontawesome(@fa-var-wheelchair); }
+.fontawesome-vimeo-square()            { .fontawesome(@fa-var-vimeo-square); }
+.fontawesome-turkish-lira()            { .fontawesome(@fa-var-try); }
+.fontawesome-try()                     { .fontawesome(@fa-var-try); }
+.fontawesome-plus-square-o()           { .fontawesome(@fa-var-plus-square-o); }
 
 // Alias
 // --------------------------
 .fontawesome-show() {
-	.fontawesome-eye-open();
+	.fontawesome-eye();
 }
 .fontawesome-create() {
 	.fontawesome-plus();
@@ -1527,13 +1000,13 @@ a {
 	.fontawesome-pencil();
 }
 .fontawesome-delete() {
-    .fontawesome-trash();
+    .fontawesome-trash-o();
 }
 .fontawesome-restore() {
-    .fontawesome-mail-reply();
+    .fontawesome-reply();
 }
 .fontawesome-cancel() {
-    .fontawesome-remove();
+    .fontawesome-times();
 }
 .fontawesome-back() {
     .fontawesome-chevron-left();
