@@ -196,4 +196,14 @@ class DocController extends Controller
             'icons' => $matches[0]
         );
     }
+
+    /**
+     * @Route("/demo/select2", name="bootstrapp_select2")
+     * @Method({"GET", "Post"})
+     * @Template("BootstrappBundle:Doc:forms/select2.html.twig")
+     */
+    public function select2Action() {
+        return array(
+        );
+    }
 }

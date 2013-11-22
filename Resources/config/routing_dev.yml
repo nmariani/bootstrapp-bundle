@@ -30,3 +30,7 @@ bootstrapp_fontawesome:
     pattern:  /demo/fontawesome
     defaults: { _controller: BootstrappBundle:Doc:fontawesome }
     requirements: { _method: GET|POST }
+bootstrapp_select2:
+    pattern:  /demo/select2
+    defaults: { _controller: BootstrappBundle:Doc:select2 }
+    requirements: { _method: GET|POST }
