@@ -61,9 +61,8 @@ class DocController extends Controller
 
         $request = $this->getRequest();
         if($request->isMethod('POST')) {
-            $form->bind($request);
-            if ($form->isValid()) {
-            } else {
+            $form->submit($request);
+            if (!$form->isValid()) {
                 $this->get('session')->getFlashBag()->add('error', $form->getErrorsAsString());
             }
         }
@@ -93,9 +92,8 @@ class DocController extends Controller
 
         $request = $this->getRequest();
         if($request->isMethod('POST')) {
-            $form->bind($request);
-            if ($form->isValid()) {
-            } else {
+            $form->submit($request);
+            if (!$form->isValid()) {
                 $this->get('session')->getFlashBag()->add('error', $form->getErrorsAsString());
             }
         }
@@ -126,9 +124,8 @@ class DocController extends Controller
 
         $request = $this->getRequest();
         if($request->isMethod('POST')) {
-            $form->bind($request);
-            if ($form->isValid()) {
-            } else {
+            $form->submit($request);
+            if (!$form->isValid()) {
                 $this->get('session')->getFlashBag()->add('error', $form->getErrorsAsString());
             }
         }
@@ -159,12 +156,35 @@ class DocController extends Controller
 
         $request = $this->getRequest();
         if($request->isMethod('POST')) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                #echo "<pre>";
-                #var_dump($form->getData());
-                #echo "</pre>";
-            } else {
+            $form->submit($request);
+            if (!$form->isValid()) {
+                $this->get('session')->getFlashBag()->add('error', $form->getErrorsAsString());
+            }
+        }
+
+        return array(
+            'form' => $form->createView()
+        );
+    }
+
+    /**
+     * @Route("/demo/ckeditor", name="bootstrapp_ckeditor")
+     * @Method({"GET", "Post"})
+     * @Template("BootstrappBundle:Doc:editor/ckeditor.html.twig")
+     */
+    public function ckeditorAction() {
+        $values = array(
+            'article'=> ''
+        );
+
+        $form = $this->createFormBuilder($values)
+            ->add('article', 'bootstrapp_bundle_ckeditor')
+            ->getForm();
+
+        $request = $this->getRequest();
+        if($request->isMethod('POST')) {
+            $form->submit($request);
+            if (!$form->isValid()) {
                 $this->get('session')->getFlashBag()->add('error', $form->getErrorsAsString());
             }
         }
@@ -177,7 +197,7 @@ class DocController extends Controller
     /**
      * @Route("/demo/redactor", name="bootstrapp_redactor")
      * @Method({"GET", "Post"})
-     * @Template("BootstrappBundle:Doc:redactor.html.twig")
+     * @Template("BootstrappBundle:Doc:editor/redactor.html.twig")
      */
     public function redactorAction() {
         return array(
@@ -187,7 +207,7 @@ class DocController extends Controller
     /**
      * @Route("/demo/fontawesome", name="bootstrapp_fontawesome")
      * @Method({"GET", "Post"})
-     * @Template("BootstrappBundle:Doc:icons/fontawesome.html.twig")
+     * @Template("BootstrappBundle:Doc:icon/fontawesome.html.twig")
      */
     public function fontawesomeAction() {
         $less = file_get_contents(__DIR__.'/../Resources/public/less/icons/demo/fontawesome.less');
@@ -200,7 +220,7 @@ class DocController extends Controller
     /**
      * @Route("/demo/select2", name="bootstrapp_select2")
      * @Method({"GET", "Post"})
-     * @Template("BootstrappBundle:Doc:forms/select2.html.twig")
+     * @Template("BootstrappBundle:Doc:form/select2.html.twig")
      */
     public function select2Action() {
         return array(

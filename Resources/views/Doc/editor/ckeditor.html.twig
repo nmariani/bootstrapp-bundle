@@ -1,0 +1,14 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'CKEditor', 'url':path('bootstrapp_ckeditor')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <h4>Editors (Text, Html & WYSIWYG)</h4>
+    <h5>CKEditor : <a href="http://ckeditor.com">http://ckeditor.com</a></h5>
+    <div class="well">
+        {{ form_rest(form) }}
+    </div>
+{% endblock %}

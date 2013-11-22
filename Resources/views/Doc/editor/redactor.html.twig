@@ -3,7 +3,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets
-    "@BootstrappBundle/Resources/public/css/redactor.css"
+    "@BootstrappBundle/Resources/public/css/redactor/redactor.css"
     %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
     {% endstylesheets %}
@@ -15,7 +15,7 @@
 {% endblock header %}
 
 {% block content %}
-    <h4>Text editors</h4>
+    <h4>Editors (Text, Html & WYSIWYG)</h4>
     <h5>Redactor : <a href="https://github.com/dybskiy/redactor-js">https://github.com/dybskiy/redactor-js</a></h5>
     <div class="well">
         <textarea class="redactor" name="content"></textarea>
@@ -24,8 +24,8 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output='bundles/bootstrapp/js/mobiscroll.js'
-    'bundles/bootstrapp/js/redactor.min.js'
+    {% javascripts output='bundles/bootstrapp/js/redactor.js'
+    'bundles/bootstrapp/js/redactor/redactor.min.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

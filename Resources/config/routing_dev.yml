@@ -22,6 +22,10 @@ bootstrapp_mobiscroll:
     pattern:  /demo/mobiscroll
     defaults: { _controller: BootstrappBundle:Doc:mobiscroll }
     requirements: { _method: GET|POST }
+bootstrapp_ckeditor:
+    pattern:  /demo/ckeditor
+    defaults: { _controller: BootstrappBundle:Doc:ckeditor }
+    requirements: { _method: GET|POST }
 bootstrapp_redactor:
     pattern:  /demo/redactor
     defaults: { _controller: BootstrappBundle:Doc:redactor }
