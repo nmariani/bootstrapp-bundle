@@ -207,14 +207,10 @@ div.well textarea[readonly] {
 }
 
 // fix form-horizontal inputs sizing
-*:not(.input-prepend):not(.input-append) {
+div.controls {
   // override default bootstrap input, texterea & select width to fill the space available
   > textarea,
   > select,
-  > .uneditable-input {
-    width: 100%;
-  }
-
   > input[type="text"],
   > input[type="password"],
   > input[type="datetime"],
