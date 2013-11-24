@@ -86,7 +86,7 @@ $.widget( "ui.autocomplete", {
 				suppressInput = false;
 				suppressKeyPressRepeat = false;
 				var keyCode = $.ui.keyCode;
-				switch( event.keyCode ) {
+				switch ( event.keyCode ) {
 				case keyCode.PAGE_UP:
 					suppressKeyPress = true;
 					this._move( "previousPage", event );
@@ -149,7 +149,7 @@ $.widget( "ui.autocomplete", {
 
 				// replicate some key handlers to allow them to repeat in Firefox and Opera
 				var keyCode = $.ui.keyCode;
-				switch( event.keyCode ) {
+				switch ( event.keyCode ) {
 				case keyCode.PAGE_UP:
 					this._move( "previousPage", event );
 					break;
@@ -294,7 +294,7 @@ $.widget( "ui.autocomplete", {
 				"aria-live": "polite"
 			})
 			.addClass( "ui-helper-hidden-accessible" )
-			.insertBefore( this.element );
+			.appendTo( this.document[ 0 ].body );
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
@@ -523,9 +523,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderItem: function( ul, item ) {
-		return $( "<li>" )
-			.append( $( "<a>" ).text( item.label ) )
-			.appendTo( ul );
+		return $( "<li>" ).text( item.label ).appendTo( ul );
 	},
 
 	_move: function( direction, event ) {
@@ -571,7 +569,6 @@ $.extend( $.ui.autocomplete, {
 		});
 	}
 });
-
 
 // live region extension, adding a `messages` option
 // NOTE: This is an experimental API. We are still investigating

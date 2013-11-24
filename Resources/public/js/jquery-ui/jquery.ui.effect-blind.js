@@ -13,12 +13,11 @@
  */
 (function( $, undefined ) {
 
-var rvertical = /up|down|vertical/,
-	rpositivemotion = /up|left|vertical|horizontal/;
-
 $.effects.effect.blind = function( o, done ) {
 	// Create element
 	var el = $( this ),
+		rvertical = /up|down|vertical/,
+		rpositivemotion = /up|left|vertical|horizontal/,
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
 		direction = o.direction || "up",
@@ -57,7 +56,7 @@ $.effects.effect.blind = function( o, done ) {
 	// start at 0 if we are showing
 	if ( show ) {
 		wrapper.css( ref, 0 );
-		if ( ! motion ) {
+		if ( !motion ) {
 			wrapper.css( ref2, margin + distance );
 		}
 	}
@@ -76,7 +75,6 @@ $.effects.effect.blind = function( o, done ) {
 			done();
 		}
 	});
-
 };
 
 })(jQuery);
