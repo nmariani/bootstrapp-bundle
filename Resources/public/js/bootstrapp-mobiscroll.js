@@ -100,23 +100,24 @@ Bootstrapp.Mobiscroll = (function() {
     Mobiscroll.prototype.setDate = function(date) {
         if(date.getTime) {
             if(!this.getDate() || date.getTime() != this.date.getTime()) {
-                this.date = null;
                 this.input.scroller('setDate', date, true, 1);
-                this.getDate();
+                this.date = this.input.scroller("getDate");
             }
         }
         return this;
     };
 
     Mobiscroll.prototype.show = function() {
-        if(this.input)
+        if(this.input) {
             this.input.scroller("show");
+        }
         return this;
     };
 
     Mobiscroll.prototype.hide = function() {
-        if(this.input)
+        if(this.input) {
             this.input.scroller("hide");
+        }
         return this;
     };
 
@@ -130,9 +131,9 @@ Bootstrapp.Mobiscroll = (function() {
 
     Mobiscroll.prototype.call = function(handlers) {
         $(handlers).each(function(index, handler) {
-            if(jQuery.isFunction(handler)) {
+            if($.isFunction(handler)) {
                 handler.call();
-            } else if(jQuery.isFunction(handler.handler)) {
+            } else if(handler && $.isFunction(handler.handler)) {
                 var context = handler.context || null;
                 handler = handler.handler;
                 handler.call(context);

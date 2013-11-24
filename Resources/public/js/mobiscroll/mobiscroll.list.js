@@ -343,10 +343,14 @@
                     if (input) {
                         input.val(v);
                     }
+                    elm.change();
                 },
                 onChange: function (v, inst) {
-                    if (input && inst.live) {
-                        input.val(v);
+                    if (inst.live) {
+                        if (input) {
+                            input.val(v);
+                        }
+                        elm.change();
                     }
                 },
                 onShow: function (dw) {
@@ -360,7 +364,7 @@
                     }
                     elm.show();
                 },
-                validate: function (dw, index, time) {
+                validate: function (dw, index, time, manual) {
                     var args = [],
                         t = inst.temp,
                         i = (index || 0) + 1,
@@ -378,17 +382,16 @@
                             args.push(i++);
                         }
 
-                        hideWheels(dw, o.lvl);
-                        currWheelVector = inst.temp.slice(0);
-
                         if (args.length) {
-                            prevent = true;
                             s.readonly = createROVector(lvl, index);
                             clearTimeout(timer[index]);
                             timer[index] = setTimeout(function () {
-                                inst.changeWheel(args, undefined, index !== undefined);
+                                prevent = true;
+                                hideWheels(dw, o.lvl);
+                                currWheelVector = inst.temp.slice(0);
+                                inst.changeWheel(args, index === undefined ? time : 0, manual);
                                 s.readonly = false;
-                            }, time * 1000);
+                            }, index === undefined ? 0 : time * 1000);
                             return false;
                         }
 

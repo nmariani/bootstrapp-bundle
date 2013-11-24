@@ -3,6 +3,8 @@
         // Core
         setText: '确定',
         cancelText: '取消',
+        clearText: '明确',
+        selectedText: '选',
         // Datetime component
         dateFormat: 'dd/mm/yy',
         dateOrder: 'ddmmyy',

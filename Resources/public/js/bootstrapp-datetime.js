@@ -25,13 +25,6 @@ Bootstrapp.DateTime = (function() {
         this.format = {"format": "date", "type": "long"};
         this.fmt = new TwitterCldr.DateTimeFormatter();
 
-        // initialize date
-        try {
-            this.date = this.fmt.parse(this.element.val(), this.format);
-        } catch(e) {
-            this.date = null;
-        }
-
         // format
         var formatKey = '',
             formatValue = this.element.data('format'),
@@ -72,6 +65,13 @@ Bootstrapp.DateTime = (function() {
             this.format = {"format": "date_time", "type": "long"};
         }
 
+        // initialize date
+        try {
+            this.date = this.fmt.parse(this.element.val(), this.format);
+        } catch(e) {
+            this.date = null;
+        }
+
         // plugin
         if(grandparent && 'datetime' == grandtype && widget == grandwidget) {
             parent = grandparent;
@@ -80,7 +80,8 @@ Bootstrapp.DateTime = (function() {
             this.plugin = plugin(element, options);
             parent.data('plugin', this.plugin);
             if (this.date) {
-                this.plugin.setDate(this.date);
+                this.plugin.setDate(this.date, false);
+                this.date = this.plugin.getDate();
             }
         }
 
@@ -136,7 +137,7 @@ Bootstrapp.DateTime = (function() {
         try {
             var date = this.fmt.parse(this.element.val(), this.format);
             if (null != date) {
-                this.setDate(date);
+                this.setDate(date, false);
                 this.element.removeClass('error');
                 this.element.tooltip('destroy');
             }
@@ -177,16 +178,15 @@ Bootstrapp.DateTime = (function() {
 
     DateTime.prototype.onPluginChange = function() {
         if(this.plugin) {
-            this.setDate(this.plugin.getDate());
+            this.setDate(this.plugin.getDate(), false);
         }
     }
 
-    DateTime.prototype.setDate = function(date) {
+    DateTime.prototype.setDate = function(date, trigger) {
         var thisDateTime = $.type(this.date) === 'date' ? this.date.getTime() : null,
             dateTime = $.type(date) === 'date' ? date.getTime() : null,
             pluginDate = this.plugin ? this.plugin.getDate() : null,
-            pluginDateTime = $.type(pluginDate) === 'date' ? pluginDate.getTime() : null,
-            trigger = false;
+            pluginDateTime = $.type(pluginDate) === 'date' ? pluginDate.getTime() : null;
         if (null === date || ($.isNumeric(dateTime) && thisDateTime != dateTime)) {
             this.date = date;
             if (null === date) {
@@ -194,7 +194,9 @@ Bootstrapp.DateTime = (function() {
             } else {
                 this.element.val(this.fmt.format(this.date, this.format));
             }
-            trigger = true;
+            if ($.type(trigger) == 'undefined') {
+                trigger = true;
+            }
         }
         if(this.plugin && $.isNumeric(dateTime) && pluginDateTime != dateTime) {
             this.plugin.setDate(this.date);

@@ -3,6 +3,8 @@
         // Core
         setText: 'Instellen',
         cancelText: 'Annuleren',
+        clearText: 'Duidelijk',
+        selectedText: 'Gekozen',
         // Datetime component
         dateFormat: 'dd/mm/yy',
         dateOrder: 'ddmmyy',

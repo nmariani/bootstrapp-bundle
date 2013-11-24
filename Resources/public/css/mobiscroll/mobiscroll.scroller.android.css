@@ -1,23 +1,29 @@
 /* Android Skin */
 .android .dw {
-    padding: 0;
-    background: #000;
     border: 2px solid #555;
-    color: #fff;
 }
 .android .dwv {
     padding: 10px;
+    margin: 0;
+    background: none;
     border-bottom: 1px solid #333;
-}
-.android .dw-hidden {
-    padding: 0;
-    border: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
 }
 .android .dwwr {
     padding: 0;
+    color: #fff;
+    background: #000;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
 }
-.android .dww {
-    top: 0;
+.android .dwc {
+    padding: 32px 2px 6px 2px;
+    display: inline-block;
+}
+.android .dwhl {
+    padding-top: 6px;
 }
 .android .dwwc {
     background: #000;
@@ -27,6 +33,9 @@
     border: 0;
     background: #fff;
 }
+.android .dwwl {
+    margin: 0 2px;
+}
 .android .dw .dwpm .dww {
     margin: 0;
 }
@@ -35,29 +44,27 @@
     text-shadow: none;
 }
 .android .dwbc {
-    padding: 5px 0;
+    padding: 4px 2px;
     background: #9c9c9c;
 }
-.android .dw .dwb {
-    margin: 0 5px;
+.android .dw .dwwr .dwb {
     background: #ccc;
-    background: linear-gradient(#eee,#ccc);
     background: -webkit-gradient(linear,left bottom,left top,from(#ccc),to(#eee));
+    background: -webkit-linear-gradient(#eee,#ccc);
     background: -moz-linear-gradient(#eee,#ccc);
-    background: -o-linear-gradient(#eee,#ccc);
+    background: linear-gradient(#eee,#ccc);
     color: #000;
     font-weight: normal;
     text-shadow: none;
-    border-radius: 0;
-    -moz-border-radius: 0;
     -webkit-border-radius: 0;
+    border-radius: 0;
 }
-.android .dw .dwb-a, .android .dw .dwwl .dwb-a {
+.android .dw .dwwr .dwb-a, .android .dw .dwwl .dwb-a {
     background: #ffb25a;
-    background: linear-gradient(#ffb25a,#ef6100);
     background: -webkit-gradient(linear,left bottom,left top,from(#ef6100),to(#ffb25a));
+    background: -webkit-linear-gradient(#ffb25a,#ef6100);
     background: -moz-linear-gradient(#ffb25a,#ef6100);
-    background: -o-linear-gradient(#ffb25a,#ef6100);
+    background: linear-gradient(#ffb25a,#ef6100);
 }
 /* Bubble positioning */
 .android .dw-bubble-bottom .dw-arr {

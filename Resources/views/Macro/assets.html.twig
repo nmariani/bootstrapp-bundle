@@ -42,7 +42,7 @@
 {# datetime pickers #}
     {% elseif vendor == 'mobiscroll' %}
         {% stylesheets filter='less' output='bundles/bootstrapp/css/mobiscroll.css'
-        "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.core.css"
+        "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.scroller.css"
         "@BootstrappBundle/Resources/public/css/mobiscroll/mobiscroll.animation.css"
         "@BootstrappBundle/Resources/public/less/mobiscroll.less"
         %}
@@ -123,6 +123,7 @@
     {% elseif vendor == 'mobiscroll' %}
         {% javascripts output='bundles/bootstrapp/js/mobiscroll.js'
         'bundles/bootstrapp/js/mobiscroll/mobiscroll.core.js'
+        'bundles/bootstrapp/js/mobiscroll/mobiscroll.scroller.js'
         'bundles/bootstrapp/js/mobiscroll/mobiscroll.datetime.js'
         'bundles/bootstrapp/js/mobiscroll/mobiscroll.select.js'
         %}

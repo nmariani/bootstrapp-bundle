@@ -77,6 +77,8 @@
                 wg,
                 start,
                 end,
+                invalid,
+                hasTime,
                 orig = $.extend({}, inst.settings),
                 s = $.extend(inst.settings, defaults, html5def, orig),
                 offset = 0,
@@ -152,6 +154,7 @@
             }
 
             if (p.match(/time/i)) {
+                hasTime = true;
 
                 // Determine the order of hours, minutes, seconds wheels
                 ord = [];
@@ -252,6 +255,20 @@
                 return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'a') ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
             }
 
+            function getIndex(t, v) {
+                return $('.dw-li', t).index($('.dw-li[data-val="' + v + '"]', t));
+            }
+
+            function getValidIndex(t, v, max, add) {
+                if (v < 0) {
+                    return 0;
+                }
+                if (v > max) {
+                    return $('.dw-li', t).length;
+                }
+                return getIndex(t, v) + add;
+            }
+
             // Extended methods
             // ---
 
@@ -264,14 +281,14 @@
              * @param {Boolean} [temp=false] Set temporary value only.
              * @param {Boolean} [manual=false] Indicates that the action was triggered by the user or from code.
              */
-            inst.setDate = function (d, fill, time, temp, manual) {
+            inst.setDate = function (d, fill, time, temp) {
                 var i;
 
                 // Set wheels
                 for (i in o) {
                     inst.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
                 }
-                inst.setValue(inst.temp, fill, time, temp, manual);
+                inst.setValue(inst.temp, fill, time, temp);
             };
 
             /**
@@ -307,16 +324,21 @@
             };
 
             inst.format = hformat;
+            inst.buttons.now = { text: s.nowText, css: 'dwb-n', handler: function () { inst.setDate(new Date(), false, 0.3, true, true); } };
+
+            if (s.showNow) {
+                s.buttons.splice($.inArray('set', s.buttons) + 1, 0, 'now');
+            }
+
+            invalid = s.invalid ? inst.convert(s.invalid) : false;
 
             // ---
 
             return {
-                button3Text: s.showNow ? s.nowText : undefined,
-                button3: s.showNow ? function () { inst.setDate(new Date(), false, 0.3, true, true); } : undefined,
                 wheels: wheels,
-                headerText: function (v) {
+                headerText: s.headerText ? function (v) {
                     return ms.formatDate(hformat, getDate(inst.temp), s);
-                },
+                } : false,
                 formatResult: function (d) {
                     return ms.formatDate(format, getDate(d), s);
                 },
@@ -331,24 +353,25 @@
                     }
                     return result;
                 },
-                validate: function (dw, i) {
+                validate: function (dw, i, time, dir) {
                     var temp = inst.temp, //.slice(0),
                         mins = { y: mind.getFullYear(), m: 0, d: 1, h: 0, i: 0, s: 0, a: 0 },
                         maxs = { y: maxd.getFullYear(), m: 11, d: 31, h: step(hampm ? 11 : 23, stepH), i: step(59, stepM), s: step(59, stepS), a: 1 },
+                        steps = { h: stepH, i: stepM, s: stepS, a: 1 },
+                        y = get(temp, 'y'),
+                        m = get(temp, 'm'),
                         minprop = true,
                         maxprop = true;
+
                     $.each(['y', 'm', 'd', 'a', 'h', 'i', 's'], function (x, i) {
                         if (o[i] !== undefined) {
                             var min = mins[i],
                                 max = maxs[i],
                                 maxdays = 31,
                                 val = get(temp, i),
-                                t = $('.dw-ul', dw).eq(o[i]),
-                                y,
-                                m;
+                                t = $('.dw-ul', dw).eq(o[i]);
+
                             if (i == 'd') {
-                                y = get(temp, 'y');
-                                m = get(temp, 'm');
                                 maxdays = 32 - new Date(y, m, 32).getDate();
                                 max = maxdays;
                                 if (regen) {
@@ -368,8 +391,8 @@
                                 max = maxd[f[i]] ? maxd[f[i]]() : f[i](maxd);
                             }
                             if (i != 'y') {
-                                var i1 = $('.dw-li', t).index($('.dw-li[data-val="' + min + '"]', t)),
-                                    i2 = $('.dw-li', t).index($('.dw-li[data-val="' + max + '"]', t));
+                                var i1 = getIndex(t, min),
+                                    i2 = getIndex(t, max);
                                 $('.dw-li', t).removeClass('dw-v').slice(i1, i2 + 1).addClass('dw-v');
                                 if (i == 'd') { // Hide days not in month
                                     $('.dw-li', t).removeClass('dw-h').slice(maxdays).addClass('dw-h');
@@ -388,31 +411,34 @@
                                 maxprop = val == max;
                             }
                             // Disable some days
-                            if (s.invalid && i == 'd') {
+                            if (invalid && i == 'd') {
                                 var d, j, k, v,
                                     first = new Date(y, m, 1).getDay(),
-                                    idx = [],
-                                    invalid = inst.convert(s.invalid);
+                                    idx = [];
 
                                 for (j = 0; j < invalid.length; j++) {
                                     d = invalid[j];
                                     v = d + '';
-                                    if (d.getTime && d.getFullYear() == y && d.getMonth() == m) { // Exact date
-                                        idx.push(d.getDate() - 1);
-                                    } else if (!v.match(/w/i)) { // Day of month
-                                        v = v.split('/');
-                                        if (v[1]) {
-                                            if (v[0] - 1 == m) {
-                                                idx.push(v[1] - 1);
+                                    if (!d.start) {
+                                        if (d.getTime) { // Exact date
+                                            if (d.getFullYear() == y && d.getMonth() == m) {
+                                                idx.push(d.getDate() - 1);
                                             }
-                                        } else {
-                                            idx.push(v[0] - 1);
-                                        }
-                                    } else { // Day of week
-                                        v = +v.replace('w', '');
-                                        for (k = v - first; k < maxdays; k += 7) {
-                                            if (k >= 0) {
-                                                idx.push(k);
+                                        } else if (!v.match(/w/i)) { // Day of month
+                                            v = v.split('/');
+                                            if (v[1]) {
+                                                if (v[0] - 1 == m) {
+                                                    idx.push(v[1] - 1);
+                                                }
+                                            } else {
+                                                idx.push(v[0] - 1);
+                                            }
+                                        } else { // Day of week
+                                            v = +v.replace('w', '');
+                                            for (k = v - first; k < maxdays; k += 7) {
+                                                if (k >= 0) {
+                                                    idx.push(k);
+                                                }
                                             }
                                         }
                                     }
@@ -420,12 +446,121 @@
                                 $.each(idx, function (i, v) {
                                     $('.dw-li', t).eq(v).removeClass('dw-v');
                                 });
+
+                                val = inst.getValidCell(val, t, dir).val;
                             }
 
                             // Set modified value
                             temp[o[i]] = val;
                         }
                     });
+
+                    // Invalid times
+                    if (hasTime && invalid) {
+
+                        var dd, v, val, str, parts1, parts2, j, v1, v2, i1, i2, prop1, prop2, target, add, remove,
+                            spec = {},
+                            d = get(temp, 'd'),
+                            day = new Date(y, m, d),
+                            w = ['a', 'h', 'i', 's'];
+
+                        $.each(invalid, function (i, obj) {
+                            if (obj.start) {
+                                obj.apply = false;
+                                dd = obj.d;
+                                v = dd + '';
+                                str = v.split('/');
+                                if (dd && ((dd.getTime && y == dd.getFullYear() && m == dd.getMonth() && d == dd.getDate()) || // Exact date
+                                    (!v.match(/w/i) && ((str[1] && d == str[1] && m == str[0] - 1) || (!str[1] && d == str[0]))) || // Day of month
+                                    (v.match(/w/i) && day.getDay() == +v.replace('w', '')) // Day of week
+                                    )) {
+                                    obj.apply = true;
+                                    spec[day] = true; // Prevent applying generic rule on day, if specific exists
+                                }
+                            }
+                        });
+
+                        $.each(invalid, function (i, obj) {
+                            if (obj.start && (obj.apply || (!obj.d && !spec[day]))) {
+
+                                parts1 = obj.start.split(':');
+                                parts2 = obj.end.split(':');
+
+                                for (j = 0; j < 3; j++) {
+                                    if (parts1[j] === undefined) {
+                                        parts1[j] = 0;
+                                    }
+                                    if (parts2[j] === undefined) {
+                                        parts2[j] = 59;
+                                    }
+                                    parts1[j] = +parts1[j];
+                                    parts2[j] = +parts2[j];
+                                }
+
+                                parts1.unshift(parts1[0] > 11 ? 1 : 0);
+                                parts2.unshift(parts2[0] > 11 ? 1 : 0);
+
+                                if (hampm) {
+                                    if (parts1[1] >= 12) {
+                                        parts1[1] = parts1[1] - 12;
+                                    }
+
+                                    if (parts2[1] >= 12) {
+                                        parts2[1] = parts2[1] - 12;
+                                    }
+                                }
+
+                                prop1 = true;
+                                prop2 = true;
+                                $.each(w, function (i, v) {
+                                    if (o[v] !== undefined) {
+                                        val = get(temp, v);
+                                        add = 0;
+                                        remove = 0;
+                                        i1 = 0;
+                                        i2 = undefined;
+                                        target = $('.dw-ul', dw).eq(o[v]);
+
+                                        // Look ahead if next wheels should be disabled completely
+                                        for (j = i + 1; j < 4; j++) {
+                                            if (parts1[j] > 0) {
+                                                add = steps[v];
+                                            }
+                                            if (parts2[j] < maxs[w[j]]) {
+                                                remove = steps[v];
+                                            }
+                                        }
+
+                                        // Calculate min and max values
+                                        v1 = step(parts1[i] + add, steps[v]);
+                                        v2 = step(parts2[i] - remove, steps[v]);
+
+                                        if (prop1) {
+                                            i1 = getValidIndex(target, v1, maxs[v], 0);
+                                        }
+
+                                        if (prop2) {
+                                            i2 = getValidIndex(target, v2, maxs[v], 1);
+                                        }
+
+                                        // Disable values
+                                        if (prop1 || prop2) {
+                                            $('.dw-li', target).slice(i1, i2).removeClass('dw-v');
+                                        }
+
+                                        // Get valid value
+                                        val = inst.getValidCell(val, target, dir).val;
+
+                                        prop1 = prop1 && val == step(parts1[i], steps[v]);
+                                        prop2 = prop2 && val == step(parts2[i], steps[v]);
+
+                                        // Set modified value
+                                        temp[o[v]] = val;
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             };
         };
@@ -575,7 +710,6 @@
                 if (!num) {
                     return 0;
                 }
-                //throw 'Missing number at position ' + iValue;
                 iValue += num[0].length;
                 return parseInt(num[0], 10);
             },
@@ -590,11 +724,8 @@
                     }
                 }
                 return 0;
-                //throw 'Unknown name at position ' + iValue;
             },
             checkLiteral = function () {
-                //if (value.charAt(iValue) != format.charAt(iFormat))
-                //throw 'Unexpected literal at position ' + iValue;
                 iValue++;
             },
             iValue = 0,
