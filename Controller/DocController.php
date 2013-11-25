@@ -226,4 +226,14 @@ class DocController extends Controller
         return array(
         );
     }
+
+    /**
+     * @Route("/demo/elfinder", name="bootstrapp_elfinder_demo")
+     * @Method({"GET", "Post"})
+     * @Template("BootstrappBundle:Doc:file/elfinder.html.twig")
+     */
+    public function elfinderAction() {
+        return array(
+        );
+    }
 }

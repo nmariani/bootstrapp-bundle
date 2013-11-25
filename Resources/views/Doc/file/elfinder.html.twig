@@ -1,0 +1,31 @@
+{% extends 'BootstrappBundle:Doc:demo.html.twig' %}
+{% import 'BootstrappBundle:Macro:assets.html.twig' as assets %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ assets.stylesheets('elfinder') }}
+{% endblock stylesheets %}
+
+{% block header %}
+    {% set breadcrumb = [{'text':'elFinder', 'url':path('bootstrapp_elfinder_demo')}]|merge(breadcrumb) %}
+    {{ parent() }}
+{% endblock header %}
+
+{% block content %}
+    <h4>File Managers</h4>
+    <p>Resources</p>
+    <ul>
+        <li>elFinder official website : <a href="http://elfinder.org/">http://elfinder.org</a></li>
+    </ul>
+    <h5>elFinder</h5>
+    <div class="well">
+        <div class="row-fluid">
+            <iframe src="{{ path('bootstrapp_elfinder') }}" class="span12" height="400px"></iframe>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ assets.javascripts('elfinder') }}
+{% endblock javascripts %}

@@ -38,3 +38,7 @@ bootstrapp_select2:
     pattern:  /demo/select2
     defaults: { _controller: BootstrappBundle:Doc:select2 }
     requirements: { _method: GET|POST }
+bootstrapp_elfinder_demo:
+    pattern:  /demo/elfinder
+    defaults: { _controller: BootstrappBundle:Doc:elfinder }
+    requirements: { _method: GET|POST }

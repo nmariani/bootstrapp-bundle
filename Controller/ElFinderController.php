@@ -18,6 +18,9 @@ class ElFinderController extends Controller
      * @Template()
      */
     public function indexAction() {
+        if ($profiler = $this->get('profiler')) {
+            $profiler->disable();
+        }
         return [];
     }
 
@@ -26,6 +29,9 @@ class ElFinderController extends Controller
      * @Method({"GET", "POST"})
      */
     public function connectorAction() {
+        if ($profiler = $this->get('profiler')) {
+            $profiler->disable();
+        }
         $roots = [];
         if ($this->container->hasParameter('bootstrapp.elfinder.roots')) {
             foreach($this->container->getParameter('bootstrapp.elfinder.roots') as $root) {
