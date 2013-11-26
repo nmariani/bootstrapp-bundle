@@ -1,0 +1,389 @@
+/*!
+ * elusive.less v1.0.0
+ *
+ * Mixins implementation of the Elusive Open-Source Iconfont
+ * See elusive.css for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@import "../bootstrap/mixins.less";
+
+@elusiveWebfontPath: '/bundles/bootstrapp/fonts/elusive/';
+@Elusive-iconfontVersion: 2;
+@font-face {
+	font-family: 'Elusive-Icons';
+	src:url('@{elusiveWebfontPath}Elusive-Icons.eot?v=@{Elusive-iconfontVersion}');
+	src:url('@{elusiveWebfontPath}Elusive-Icons.eot?#iefix&v=@{Elusive-iconfontVersion}') format('embedded-opentype'),
+		url('@{elusiveWebfontPath}Elusive-Icons.svg#Elusive-Icons?v=@{Elusive-iconfontVersion}') format('svg'),
+		url('@{elusiveWebfontPath}Elusive-Icons.woff?v=@{Elusive-iconfontVersion}') format('woff'),
+		url('@{elusiveWebfontPath}Elusive-Icons.ttf?v=@{Elusive-iconfontVersion}') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.elusive(@content:"") {
+	font-family: 'Elusive-Icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+    /* bootstrapp fix */
+    background: none !important;
+
+    &:before {
+        content: @content;
+    }
+
+    &.icon-white {
+        color: @white;
+    }
+}
+
+.elusive-zoom-out()                           { .elusive("\e600"); }
+.elusive-zoom-in()                            { .elusive("\e601"); }
+.elusive-youtube()                            { .elusive("\e602"); }
+.elusive-wrench-alt()                         { .elusive("\e603"); }
+.elusive-wrench()                             { .elusive("\e604"); }
+.elusive-wordpress()                          { .elusive("\e605"); }
+.elusive-wheelchair()                         { .elusive("\e606"); }
+.elusive-website-alt()                        { .elusive("\e607"); }
+.elusive-website()                            { .elusive("\e608"); }
+.elusive-warning-sign()                       { .elusive("\e609"); }
+.elusive-w3c()                                { .elusive("\e60a"); }
+.elusive-volume-up()                          { .elusive("\e60b"); }
+.elusive-volume-off()                         { .elusive("\e60c"); }
+.elusive-volume-down()                        { .elusive("\e60d"); }
+.elusive-vkontakte()                          { .elusive("\e60e"); }
+.elusive-vimeo()                              { .elusive("\e60f"); }
+.elusive-view-mode()                          { .elusive("\e610"); }
+.elusive-video-chat()                         { .elusive("\e611"); }
+.elusive-video-alt()                          { .elusive("\e612"); }
+.elusive-video()                              { .elusive("\e613"); }
+.elusive-viadeo()                             { .elusive("\e614"); }
+.elusive-user()                               { .elusive("\e615"); }
+.elusive-usd()                                { .elusive("\e616"); }
+.elusive-upload()                             { .elusive("\e617"); }
+.elusive-unlock-alt()                         { .elusive("\e618"); }
+.elusive-unlock()                             { .elusive("\e619"); }
+.elusive-universal-access()                   { .elusive("\e61a"); }
+.elusive-twitter()                            { .elusive("\e61b"); }
+.elusive-tumblr()                             { .elusive("\e61c"); }
+.elusive-trash-alt()                          { .elusive("\e61d"); }
+.elusive-trash()                              { .elusive("\e61e"); }
+.elusive-torso()                              { .elusive("\e61f"); }
+.elusive-tint()                               { .elusive("\e620"); }
+.elusive-time-alt()                           { .elusive("\e621"); }
+.elusive-time()                               { .elusive("\e622"); }
+.elusive-thumbs-up()                          { .elusive("\e623"); }
+.elusive-thumbs-down()                        { .elusive("\e624"); }
+.elusive-th-list()                            { .elusive("\e625"); }
+.elusive-th-large()                           { .elusive("\e626"); }
+.elusive-th()                                 { .elusive("\e627"); }
+.elusive-text-width()                         { .elusive("\e628"); }
+.elusive-text-height()                        { .elusive("\e629"); }
+.elusive-tasks()                              { .elusive("\e62a"); }
+.elusive-tags()                               { .elusive("\e62b"); }
+.elusive-tag()                                { .elusive("\e62c"); }
+.elusive-stumbleupon()                        { .elusive("\e62d"); }
+.elusive-stop-alt()                           { .elusive("\e62e"); }
+.elusive-stop()                               { .elusive("\e62f"); }
+.elusive-step-forward()                       { .elusive("\e630"); }
+.elusive-step-backward()                      { .elusive("\e631"); }
+.elusive-star-empty()                         { .elusive("\e632"); }
+.elusive-star-alt()                           { .elusive("\e633"); }
+.elusive-star()                               { .elusive("\e634"); }
+.elusive-stackoverflow()                      { .elusive("\e635"); }
+.elusive-spotify()                            { .elusive("\e636"); }
+.elusive-speaker()                            { .elusive("\e637"); }
+.elusive-soundcloud()                         { .elusive("\e638"); }
+.elusive-smiley-alt()                         { .elusive("\e639"); }
+.elusive-smiley()                             { .elusive("\e63a"); }
+.elusive-slideshare()                         { .elusive("\e63b"); }
+.elusive-skype()                              { .elusive("\e63c"); }
+.elusive-signal()                             { .elusive("\e63d"); }
+.elusive-shopping-cart-sign()                 { .elusive("\e63e"); }
+.elusive-shopping-cart()                      { .elusive("\e63f"); }
+.elusive-share-alt()                          { .elusive("\e640"); }
+.elusive-share()                              { .elusive("\e641"); }
+.elusive-search-alt()                         { .elusive("\e642"); }
+.elusive-search()                             { .elusive("\e643"); }
+.elusive-screenshot()                         { .elusive("\e644"); }
+.elusive-screen-alt()                         { .elusive("\e645"); }
+.elusive-screen()                             { .elusive("\e646"); }
+.elusive-scissors()                           { .elusive("\e647"); }
+.elusive-rss()                                { .elusive("\e648"); }
+.elusive-road()                               { .elusive("\e649"); }
+.elusive-reverse-alt()                        { .elusive("\e64a"); }
+.elusive-retweet()                            { .elusive("\e64b"); }
+.elusive-return-key()                         { .elusive("\e64c"); }
+.elusive-resize-vertical()                    { .elusive("\e64d"); }
+.elusive-resize-small()                       { .elusive("\e64e"); }
+.elusive-resize-horizontal()                  { .elusive("\e64f"); }
+.elusive-resize-full()                        { .elusive("\e650"); }
+.elusive-repeat-alt()                         { .elusive("\e651"); }
+.elusive-repeat()                             { .elusive("\e652"); }
+.elusive-remove-sign()                        { .elusive("\e653"); }
+.elusive-remove-circle()                      { .elusive("\e654"); }
+.elusive-remove()                             { .elusive("\e655"); }
+.elusive-refresh()                            { .elusive("\e656"); }
+.elusive-reddit()                             { .elusive("\e657"); }
+.elusive-record()                             { .elusive("\e658"); }
+.elusive-random()                             { .elusive("\e659"); }
+.elusive-quotes-alt()                         { .elusive("\e65a"); }
+.elusive-quotes()                             { .elusive("\e65b"); }
+.elusive-question-sign()                      { .elusive("\e65c"); }
+.elusive-question()                           { .elusive("\e65d"); }
+.elusive-qrcode()                             { .elusive("\e65e"); }
+.elusive-puzzle()                             { .elusive("\e65f"); }
+.elusive-print()                              { .elusive("\e660"); }
+.elusive-podcast()                            { .elusive("\e661"); }
+.elusive-plus-sign()                          { .elusive("\e662"); }
+.elusive-plus()                               { .elusive("\e663"); }
+.elusive-play-circle()                        { .elusive("\e664"); }
+.elusive-play-alt()                           { .elusive("\e665"); }
+.elusive-play()                               { .elusive("\e666"); }
+.elusive-plane()                              { .elusive("\e667"); }
+.elusive-pinterest()                          { .elusive("\e668"); }
+.elusive-picture()                            { .elusive("\e669"); }
+.elusive-picasa()                             { .elusive("\e66a"); }
+.elusive-photo-alt()                          { .elusive("\e66b"); }
+.elusive-photo()                              { .elusive("\e66c"); }
+.elusive-phone-alt()                          { .elusive("\e66d"); }
+.elusive-phone()                              { .elusive("\e66e"); }
+.elusive-earphone()                           { .elusive("\e66e"); }
+.elusive-person()                             { .elusive("\e66f"); }
+.elusive-pencil-alt()                         { .elusive("\e670"); }
+.elusive-pencil()                             { .elusive("\e671"); }
+.elusive-pause-alt()                          { .elusive("\e672"); }
+.elusive-pause()                              { .elusive("\e673"); }
+.elusive-path()                               { .elusive("\e674"); }
+.elusive-paper-clip-alt()                     { .elusive("\e675"); }
+.elusive-paperclip-alt()                      { .elusive("\e675"); }
+.elusive-paper-clip()                         { .elusive("\e676"); }
+.elusive-paperclip()                          { .elusive("\e676"); }
+.elusive-opensource()                         { .elusive("\e677"); }
+.elusive-ok-sign()                            { .elusive("\e678"); }
+.elusive-ok-circle()                          { .elusive("\e679"); }
+.elusive-ok()                                 { .elusive("\e67a"); }
+.elusive-off()                                { .elusive("\e67b"); }
+.elusive-network()                            { .elusive("\e67c"); }
+.elusive-myspace()                            { .elusive("\e67d"); }
+.elusive-music()                              { .elusive("\e67e"); }
+.elusive-move()                               { .elusive("\e67f"); }
+.elusive-minus-sign()                         { .elusive("\e680"); }
+.elusive-minus()                              { .elusive("\e681"); }
+.elusive-mic-alt()                            { .elusive("\e682"); }
+.elusive-mic()                                { .elusive("\e683"); }
+.elusive-map-marker-alt()                     { .elusive("\e684"); }
+.elusive-map-marker()                         { .elusive("\e685"); }
+.elusive-male()                               { .elusive("\e686"); }
+.elusive-magnet()                             { .elusive("\e687"); }
+.elusive-magic()                              { .elusive("\e688"); }
+.elusive-lock-alt()                           { .elusive("\e689"); }
+.elusive-lock()                               { .elusive("\e68a"); }
+.elusive-livejournal()                        { .elusive("\e68b"); }
+.elusive-list-alt()                           { .elusive("\e68c"); }
+.elusive-list()                               { .elusive("\e68d"); }
+.elusive-linkedin()                           { .elusive("\e68e"); }
+.elusive-link()                               { .elusive("\e68f"); }
+.elusive-lines()                              { .elusive("\e690"); }
+.elusive-leaf()                               { .elusive("\e691"); }
+.elusive-lastfm()                             { .elusive("\e692"); }
+.elusive-laptop-alt()                         { .elusive("\e693"); }
+.elusive-laptop()                             { .elusive("\e694"); }
+.elusive-key()                                { .elusive("\e695"); }
+.elusive-italic()                             { .elusive("\e696"); }
+.elusive-iphone-home()                        { .elusive("\e697"); }
+.elusive-instagram()                          { .elusive("\e698"); }
+.elusive-info-sign()                          { .elusive("\e699"); }
+.elusive-indent-right()                       { .elusive("\e69a"); }
+.elusive-indent-left()                        { .elusive("\e69b"); }
+.elusive-inbox-box()                          { .elusive("\e69c"); }
+.elusive-inbox-alt()                          { .elusive("\e69d"); }
+.elusive-inbox()                              { .elusive("\e69e"); }
+.elusive-idea-alt()                           { .elusive("\e69f"); }
+.elusive-idea()                               { .elusive("\e6a0"); }
+.elusive-hourglass()                          { .elusive("\e6a1"); }
+.elusive-home-alt()                           { .elusive("\e6a2"); }
+.elusive-home()                               { .elusive("\e6a3"); }
+.elusive-heart-empty()                        { .elusive("\e6a4"); }
+.elusive-heart-alt()                          { .elusive("\e6a5"); }
+.elusive-heart()                              { .elusive("\e6a6"); }
+.elusive-hearing-impaired()                   { .elusive("\e6a7"); }
+.elusive-headphones()                         { .elusive("\e6a8"); }
+.elusive-hdd()                                { .elusive("\e6a9"); }
+.elusive-hand-up()                            { .elusive("\e6aa"); }
+.elusive-hand-right()                         { .elusive("\e6ab"); }
+.elusive-hand-left()                          { .elusive("\e6ac"); }
+.elusive-hand-down()                          { .elusive("\e6ad"); }
+.elusive-guidedog()                           { .elusive("\e6ae"); }
+.elusive-group-alt()                          { .elusive("\e6af"); }
+.elusive-group()                              { .elusive("\e6b0"); }
+.elusive-graph-alt()                          { .elusive("\e6b1"); }
+.elusive-graph()                              { .elusive("\e6b2"); }
+.elusive-googleplus()                         { .elusive("\e6b3"); }
+.elusive-globe-alt()                          { .elusive("\e6b4"); }
+.elusive-globe()                              { .elusive("\e6b5"); }
+.elusive-glasses()                            { .elusive("\e6b6"); }
+.elusive-glass()                              { .elusive("\e6b7"); }
+.elusive-github-text()                        { .elusive("\e6b8"); }
+.elusive-github()                             { .elusive("\e6b9"); }
+.elusive-gift()                               { .elusive("\e6ba"); }
+.elusive-gbp()                                { .elusive("\e6bb"); }
+.elusive-fullscreen()                         { .elusive("\e6bc"); }
+.elusive-friendfeed-rect()                    { .elusive("\e6bd"); }
+.elusive-friendfeed()                         { .elusive("\e6be"); }
+.elusive-foursquare()                         { .elusive("\e6bf"); }
+.elusive-forward-alt()                        { .elusive("\e6c0"); }
+.elusive-forward()                            { .elusive("\e6c1"); }
+.elusive-fork()                               { .elusive("\e6c2"); }
+.elusive-fontsize()                           { .elusive("\e6c3"); }
+.elusive-font()                               { .elusive("\e6c4"); }
+.elusive-folder-sign()                        { .elusive("\e6c5"); }
+.elusive-folder-open()                        { .elusive("\e6c6"); }
+.elusive-folder-close()                       { .elusive("\e6c7"); }
+.elusive-folder()                             { .elusive("\e6c8"); }
+.elusive-flickr()                             { .elusive("\e6c9"); }
+.elusive-flag-alt()                           { .elusive("\e6ca"); }
+.elusive-flag()                               { .elusive("\e6cb"); }
+.elusive-fire()                               { .elusive("\e6cc"); }
+.elusive-filter()                             { .elusive("\e6cd"); }
+.elusive-film()                               { .elusive("\e6ce"); }
+.elusive-file-new-alt()                       { .elusive("\e6cf"); }
+.elusive-file-new()                           { .elusive("\e6d0"); }
+.elusive-file-edit-alt()                      { .elusive("\e6d1"); }
+.elusive-file-edit()                          { .elusive("\e6d2"); }
+.elusive-file-alt()                           { .elusive("\e6d3"); }
+.elusive-file()                               { .elusive("\e6d4"); }
+.elusive-female()                             { .elusive("\e6d5"); }
+.elusive-fast-forward()                       { .elusive("\e6d6"); }
+.elusive-fast-backward()                      { .elusive("\e6d7"); }
+.elusive-facetime-video()                     { .elusive("\e6d8"); }
+.elusive-facebook()                           { .elusive("\e6d9"); }
+.elusive-eye-open()                           { .elusive("\e6da"); }
+.elusive-eye-close()                          { .elusive("\e6db"); }
+.elusive-exclamation-sign()                   { .elusive("\e6dc"); }
+.elusive-eur()                                { .elusive("\e6dd"); }
+.elusive-error-alt()                          { .elusive("\e6de"); }
+.elusive-error()                              { .elusive("\e6df"); }
+.elusive-envelope-alt()                       { .elusive("\e6e0"); }
+.elusive-envelope()                           { .elusive("\e6e1"); }
+.elusive-eject()                              { .elusive("\e6e2"); }
+.elusive-edit()                               { .elusive("\e6e3"); }
+.elusive-dribbble()                           { .elusive("\e6e4"); }
+.elusive-download-alt()                       { .elusive("\e6e5"); }
+.elusive-download()                           { .elusive("\e6e6"); }
+.elusive-digg()                               { .elusive("\e6e7"); }
+.elusive-deviantart()                         { .elusive("\e6e8"); }
+.elusive-delicious()                          { .elusive("\e6e9"); }
+.elusive-dashboard()                          { .elusive("\e6ea"); }
+.elusive-css()                                { .elusive("\e6eb"); }
+.elusive-credit-card()                        { .elusive("\e6ec"); }
+.elusive-compass-alt()                        { .elusive("\e6ed"); }
+.elusive-compass()                            { .elusive("\e6ee"); }
+.elusive-comment-alt()                        { .elusive("\e6ef"); }
+.elusive-comment()                            { .elusive("\e6f0"); }
+.elusive-cogs()                               { .elusive("\e6f1"); }
+.elusive-cog-alt()                            { .elusive("\e6f2"); }
+.elusive-cog()                                { .elusive("\e6f3"); }
+.elusive-cloud-alt()                          { .elusive("\e6f4"); }
+.elusive-cloud()                              { .elusive("\e6f5"); }
+.elusive-circle-arrow-up()                    { .elusive("\e6f6"); }
+.elusive-circle-arrow-right()                 { .elusive("\e6f7"); }
+.elusive-circle-arrow-left()                  { .elusive("\e6f8"); }
+.elusive-circle-arrow-down()                  { .elusive("\e6f9"); }
+.elusive-child()                              { .elusive("\e6fa"); }
+.elusive-chevron-up()                         { .elusive("\e6fb"); }
+.elusive-chevron-right()                      { .elusive("\e6fc"); }
+.elusive-chevron-left()                       { .elusive("\e6fd"); }
+.elusive-chevron-down()                       { .elusive("\e6fe"); }
+.elusive-check-empty()                        { .elusive("\e6ff"); }
+.elusive-unchecked()                          { .elusive("\e6ff"); }
+.elusive-check()                              { .elusive("\e700"); }
+.elusive-certificate()                        { .elusive("\e701"); }
+.elusive-cc()                                 { .elusive("\e702"); }
+.elusive-caret-up()                           { .elusive("\e703"); }
+.elusive-caret-right()                        { .elusive("\e704"); }
+.elusive-caret-left()                         { .elusive("\e705"); }
+.elusive-caret-down()                         { .elusive("\e706"); }
+.elusive-car()                                { .elusive("\e707"); }
+.elusive-camera()                             { .elusive("\e708"); }
+.elusive-calendar-sign()                      { .elusive("\e709"); }
+.elusive-calendar()                           { .elusive("\e70a"); }
+.elusive-bullhorn()                           { .elusive("\e70b"); }
+.elusive-bulb()                               { .elusive("\e70c"); }
+.elusive-brush()                              { .elusive("\e70d"); }
+.elusive-broom()                              { .elusive("\e70e"); }
+.elusive-briefcase()                          { .elusive("\e70f"); }
+.elusive-braille()                            { .elusive("\e710"); }
+.elusive-bookmark-empty()                     { .elusive("\e711"); }
+.elusive-bookmark()                           { .elusive("\e712"); }
+.elusive-book()                               { .elusive("\e713"); }
+.elusive-bold()                               { .elusive("\e714"); }
+.elusive-blogger()                            { .elusive("\e715"); }
+.elusive-blind()                              { .elusive("\e716"); }
+.elusive-bell()                               { .elusive("\e717"); }
+.elusive-behance()                            { .elusive("\e718"); }
+.elusive-barcode()                            { .elusive("\e719"); }
+.elusive-ban-circle()                         { .elusive("\e71a"); }
+.elusive-backward()                           { .elusive("\e71b"); }
+.elusive-asl()                                { .elusive("\e71c"); }
+.elusive-arrow-up()                           { .elusive("\e71d"); }
+.elusive-arrow-right()                        { .elusive("\e71e"); }
+.elusive-arrow-left()                         { .elusive("\e71f"); }
+.elusive-arrow-down()                         { .elusive("\e720"); }
+.elusive-align-right()                        { .elusive("\e721"); }
+.elusive-align-left()                         { .elusive("\e722"); }
+.elusive-align-justify()                      { .elusive("\e723"); }
+.elusive-align-center()                       { .elusive("\e724"); }
+.elusive-adult()                              { .elusive("\e725"); }
+.elusive-adjust-alt()                         { .elusive("\e726"); }
+.elusive-adjust()                             { .elusive("\e727"); }
+.elusive-address-book-alt()                   { .elusive("\e728"); }
+.elusive-address-book()                       { .elusive("\e729"); }
+.elusive-asterisk()                           { .elusive("\e72a"); }
+
+// Alias
+// --------------------------
+.elusive-settings() {
+    .elusive-cog();
+}
+.elusive-show() {
+	.elusive-eye-open();
+}
+.elusive-create() {
+	.elusive-plus();
+}
+.elusive-update() {
+	.elusive-pencil();
+}
+.elusive-delete() {
+    .elusive-trash-alt();
+}
+.elusive-restore() {
+    .elusive-share-alt();
+    .skew(0,180deg);
+}
+.elusive-cancel() {
+    .elusive-remove-circle();
+}
+.elusive-save() {
+    .elusive-ok-circle();
+}
+.elusive-back() {
+    .elusive-chevron-left();
+}
+.elusive-help() {
+    .elusive-question();
+}

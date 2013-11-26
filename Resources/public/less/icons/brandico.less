@@ -1,0 +1,103 @@
+/*!
+ * brandico.less v1.0.0
+ *
+ * Mixins implementation of the opensource iconic font from Fontello project
+ * See vendor/fontello/brandico.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@font-face {
+  font-family: 'brandico';
+  src: url('/bundles/bootstrapp/fonts/brandico/brandico.eot?49362932');
+  src: url('/bundles/bootstrapp/fonts/brandico/brandico.eot?49362932#iefix') format('embedded-opentype'),
+       url('/bundles/bootstrapp/fonts/brandico/brandico.woff?49362932') format('woff'),
+       url('/bundles/bootstrapp/fonts/brandico/brandico.ttf?49362932') format('truetype'),
+       url('/bundles/bootstrapp/fonts/brandico/brandico.svg?49362932#brandico') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.brandico(@content:"") {
+  font-family: "brandico";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - magrins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.brandico-facebook()          { .brandico('\f300'); }
+.brandico-facebook-rect()     { .brandico('\f301'); }
+.brandico-twitter()           { .brandico('\f302'); }
+.brandico-twitter-bird()      { .brandico('\f303'); }
+.brandico-vimeo()             { .brandico('\f30f'); }
+.brandico-vimeo-rect()        { .brandico('\f30e'); }
+.brandico-tumblr()            { .brandico('\f311'); }
+.brandico-tumblr-rect()       { .brandico('\f310'); }
+.brandico-googleplus-rect()   { .brandico('\f309'); }
+.brandico-github-text()       { .brandico('\f307'); }
+.brandico-github()            { .brandico('\f308'); }
+.brandico-skype()             { .brandico('\f30b'); }
+.brandico-icq()               { .brandico('\f304'); }
+.brandico-yandex()            { .brandico('\f305'); }
+.brandico-yandex-rect()       { .brandico('\f306'); }
+.brandico-vkontakte-rect()    { .brandico('\f30a'); }
+.brandico-odnoklassniki()     { .brandico('\f30c'); }
+.brandico-odnoklassniki-rect(){ .brandico('\f30d'); }
+.brandico-friendfeed()        { .brandico('\f312'); }
+.brandico-friendfeed-rect()   { .brandico('\f313'); }
+.brandico-blogger()           { .brandico('\f314'); }
+.brandico-blogger-rect()      { .brandico('\f315'); }
+.brandico-deviantart()        { .brandico('\f316'); }
+.brandico-jabber()            { .brandico('\f317'); }
+.brandico-lastfm()            { .brandico('\f318'); }
+.brandico-lastfm-rect()       { .brandico('\f319'); }
+.brandico-linkedin()          { .brandico('\f31a'); }
+.brandico-linkedin-rect()     { .brandico('\f31b'); }
+.brandico-picasa()            { .brandico('\f31c'); }
+.brandico-wordpress()         { .brandico('\f31d'); }
+.brandico-instagram()         { .brandico('\f31e'); }
+.brandico-instagram-filled()  { .brandico('\f31f'); }
+.brandico-diigo()             { .brandico('\f320'); }
+.brandico-box()               { .brandico('\f321'); }
+.brandico-box-rect()          { .brandico('\f322'); }
+.brandico-tudou()             { .brandico('\f323'); }
+.brandico-youku()             { .brandico('\f324'); }
+.brandico-win8()              { .brandico('\f325'); }

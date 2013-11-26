@@ -16,6 +16,12 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'TwitterCldr',
         'Entypo',
         'FontAwesome',
+        'Brandico',
+        'Fontelico',
+        'Maki',
+        'Meteocons',
+        'Ionicons',
+        'Elusive',
         'Jdewit',
         'Eternicode',
         'Vitalets',
@@ -97,6 +103,60 @@ EOT
                 $output->writeln('<info>Success, FontAwesome assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : FontAwesome assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Brandico', $this->assets)) {
+            $output->writeln('<comment>Installing Brandico assets...</comment>');
+            if(true === $this->getBrandicoAssets($output)) {
+                $output->writeln('<info>Success, Brandico assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Brandico assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Fontelico', $this->assets)) {
+            $output->writeln('<comment>Installing Fontelico assets...</comment>');
+            if(true === $this->getFontelicoAssets($output)) {
+                $output->writeln('<info>Success, Fontelico assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Fontelico assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Maki', $this->assets)) {
+            $output->writeln('<comment>Installing Maki assets...</comment>');
+            if(true === $this->getMakiAssets($output)) {
+                $output->writeln('<info>Success, Maki assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Maki assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Meteocons', $this->assets)) {
+            $output->writeln('<comment>Installing Meteocons assets...</comment>');
+            if(true === $this->getMeteoconsAssets($output)) {
+                $output->writeln('<info>Success, Meteocons assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Meteocons assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Ionicons', $this->assets)) {
+            $output->writeln('<comment>Installing Ionicons assets...</comment>');
+            if(true === $this->getIoniconsAssets($output)) {
+                $output->writeln('<info>Success, Ionicons assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Ionicons assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('Elusive', $this->assets)) {
+            $output->writeln('<comment>Installing Elusive assets...</comment>');
+            if(true === $this->getElusiveAssets($output)) {
+                $output->writeln('<info>Success, Elusive assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Elusive assets installation failed!</error>');
             }
         }
 
@@ -539,6 +599,9 @@ $lessFile
 
 // Alias
 // --------------------------
+.fontawesome-settings() {
+    .fontawesome-cog();
+}
 .fontawesome-show() {
 	.fontawesome-eye();
 }
@@ -566,7 +629,609 @@ $lessFile
 EOF
         );
 
-        $output->writeln('<info>Success, entypo.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+        $output->writeln('<info>Success, fontawesome.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getBrandicoAssets($output)
+    {
+        $brandicoDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/fontello/brandico.font/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/brandico');
+        $files = [
+            'brandico.eot',
+            'brandico.svg',
+            'brandico.ttf',
+            'brandico.woff'
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($brandicoDir.'font/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse demo.html
+        $content = '';
+        $demoFile = file_get_contents($brandicoDir.'font/demo.html');
+
+        // get @font-face
+        preg_match_all('/@font-face\s*\{[^}]*\}/', $demoFile, $matches);
+        if (!empty($matches)) {
+            $content .= "\n" . str_replace('brandico.', '/bundles/bootstrapp/fonts/brandico/brandico.', $matches[0][0]);
+        }
+
+        // get mixin css
+        preg_match_all('/\[class.*=".*icon-"\][^{]*\{\s?([^}]*)\s\}/', $demoFile, $matches, PREG_SET_ORDER);
+        if (!empty($matches)) {
+            $content .= <<<EOF
+
+
+.brandico(@content:"") {
+{$matches[0][1]}
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+EOF;
+        }
+
+        // get .icon-*:before rules
+        preg_match_all('/.icon((?:-\w*)+):before\s*\{\s*content:\s*([^;]*)[^}]*\}/', $demoFile, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $content .= "\n" . str_pad('.brandico'.$match[1].'()', 30) . '{ .brandico(' . trim($match[2]). '); }';
+        }
+
+        // Strip whitespaces
+        $content = trim($content);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/brandico.less', <<<EOF
+/*!
+ * brandico.less v1.0.0
+ *
+ * Mixins implementation of the opensource iconic font from Fontello project
+ * See vendor/fontello/brandico.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$content
+EOF
+        );
+
+        $output->writeln('<info>Success, brandico.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getFontelicoAssets($output)
+    {
+        $fontelicoDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/fontello/fontelico.font/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/fontelico');
+        $files = [
+            'fontelico.eot',
+            'fontelico.svg',
+            'fontelico.ttf',
+            'fontelico.woff'
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($fontelicoDir.'font/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse demo.html
+        $content = '';
+        $demoFile = file_get_contents($fontelicoDir.'font/demo.html');
+
+        // get @font-face
+        preg_match_all('/@font-face\s*\{[^}]*\}/', $demoFile, $matches);
+        if (!empty($matches)) {
+            $content .= "\n" . str_replace('fontelico.', '/bundles/bootstrapp/fonts/fontelico/fontelico.', $matches[0][0]);
+        }
+
+        // get mixin css
+        preg_match_all('/\[class.*=".*icon-"\][^{]*\{\s?([^}]*)\s\}/', $demoFile, $matches, PREG_SET_ORDER);
+        if (!empty($matches)) {
+            $content .= <<<EOF
+
+
+.fontelico(@content:"") {
+{$matches[0][1]}
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+EOF;
+        }
+
+        // get .icon-*:before rules
+        preg_match_all('/.icon((?:-\w*)+):before\s*\{\s*content:\s*([^;]*)[^}]*\}/', $demoFile, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $content .= "\n" . str_pad('.fontelico'.$match[1].'()', 30) . '{ .fontelico(' . trim($match[2]). '); }';
+        }
+
+        // Strip whitespaces
+        $content = trim($content);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/fontelico.less', <<<EOF
+/*!
+ * fontelico.less v1.0.0
+ *
+ * Mixins implementation of the opensource iconic font from Fontello project
+ * See vendor/fontello/fontelico.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$content
+EOF
+        );
+
+        $output->writeln('<info>Success, fontelico.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getMakiAssets($output)
+    {
+        $makiDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/fontello/maki.font/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/maki');
+        $files = [
+            'maki.eot',
+            'maki.svg',
+            'maki.ttf',
+            'maki.woff'
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($makiDir.'font/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse demo.html
+        $content = '';
+        $demoFile = file_get_contents($makiDir.'font/demo.html');
+
+        // get @font-face
+        preg_match_all('/@font-face\s*\{[^}]*\}/', $demoFile, $matches);
+        if (!empty($matches)) {
+            $content .= "\n" . str_replace('maki.', '/bundles/bootstrapp/fonts/maki/maki.', $matches[0][0]);
+        }
+
+        // get mixin css
+        preg_match_all('/\[class.*=".*icon-"\][^{]*\{\s?([^}]*)\s\}/', $demoFile, $matches, PREG_SET_ORDER);
+        if (!empty($matches)) {
+            $content .= <<<EOF
+
+
+.maki(@content:"") {
+{$matches[0][1]}
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+EOF;
+        }
+
+        // get .icon-*:before rules
+        preg_match_all('/.icon((?:-\w*)+):before\s*\{\s*content:\s*([^;]*)[^}]*\}/', $demoFile, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $content .= "\n" . str_pad('.maki'.$match[1].'()', 30) . '{ .maki(' . trim($match[2]). '); }';
+        }
+
+        // Strip whitespaces
+        $content = trim($content);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/maki.less', <<<EOF
+/*!
+ * maki.less v1.0.0
+ *
+ * Mixins implementation of the POI Icon Set by MapBox
+ * See vendor/fontello/maki.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$content
+EOF
+        );
+
+        $output->writeln('<info>Success, maki.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getMeteoconsAssets($output)
+    {
+        $meteoconsDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/fontello/meteocons.font/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/meteocons');
+        $files = [
+            'meteocons.eot',
+            'meteocons.svg',
+            'meteocons.ttf',
+            'meteocons.woff'
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($meteoconsDir.'font/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse demo.html
+        $content = '';
+        $demoFile = file_get_contents($meteoconsDir.'font/demo.html');
+
+        // get @font-face
+        preg_match_all('/@font-face\s*\{[^}]*\}/', $demoFile, $matches);
+        if (!empty($matches)) {
+            $content .= "\n" . str_replace('meteocons.', '/bundles/bootstrapp/fonts/meteocons/meteocons.', $matches[0][0]);
+        }
+
+        // get mixin css
+        preg_match_all('/\[class.*=".*icon-"\][^{]*\{\s?([^}]*)\s\}/', $demoFile, $matches, PREG_SET_ORDER);
+        if (!empty($matches)) {
+            $content .= <<<EOF
+
+
+.meteocons(@content:"") {
+{$matches[0][1]}
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+EOF;
+        }
+
+        // get .icon-*:before rules
+        preg_match_all('/.icon((?:-\w*)+):before\s*\{\s*content:\s*([^;]*)[^}]*\}/', $demoFile, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $content .= "\n" . str_pad('.meteocons'.$match[1].'()', 30) . '{ .meteocons(' . trim($match[2]). '); }';
+        }
+
+        // Strip whitespaces
+        $content = trim($content);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/meteocons.less', <<<EOF
+/*!
+ * meteocons.less v1.0.0
+ *
+ * Mixins implementation of the Meteocons set by Alessio Atzeni
+ * See vendor/fontello/meteocons.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$content
+EOF
+        );
+
+        $output->writeln('<info>Success, meteocons.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getIoniconsAssets($output)
+    {
+        $ioniconsDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/driftyco/ionicons/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/ionicons');
+        $files = [
+            'ionicons.eot',
+            'ionicons.svg',
+            'ionicons.ttf',
+            'ionicons.woff',
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($ioniconsDir.'fonts/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse ionicons.css
+        $ionicons = file_get_contents($ioniconsDir.'css/ionicons.css');
+
+        // replace font path
+        $ionicons = str_replace("../fonts/ionicons.", "/bundles/bootstrapp/fonts/ionicons/ionicons.", $ionicons);
+
+        // replace .ion-*:before {}
+        do {
+            $ionicons = preg_replace_callback('/\.ion([-\w]*):before,?\s*([^\s\{]*)\s*\{\s*content:\s*([^;]*)[^}]*\}\s*/', function($m){
+                $replace = str_pad('.ionicons' . $m[1] . "()", 45) . " { .ionicons(" . trim($m[3]) . "); }";
+                if (!empty($m[2])) {
+                    $replace .= "\n" . str_pad($m[2], 45) . " { content: " . trim($m[3]) . "; }";
+                }
+                $replace .= "\n";
+                return $replace;
+            }, $ionicons, -1, $count);
+        } while ($count > 0);
+
+        // remove @keyframe {}
+        $ionicons = preg_replace('/\s*\d+\%[^}]*\}\s*/', '', $ionicons);
+        $ionicons = preg_replace('/@(.*-)?keyframes[^}]*\}\s*/', '', $ionicons);
+
+        // replace .ion-* {}
+        $ionicons = preg_replace('/(?:\.ion(?:-\w*)*[^}]*)+\{\s?([^}]*)\}\s*/', <<<EOF
+.ionicons(@content:"") {
+$1
+
+  /* bootstrapp fix */
+  background: none !important;
+  line-height: 14px;
+  font-size: 20px;
+  font-weight: bold;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+
+EOF
+            , $ionicons, 1);
+
+        // remove .ion-* {}
+        $ionicons = preg_replace('/(?:.ion(?:-\w*)+,?\s*)+\{(?:[^}]*)\}\s*/', '', $ionicons);
+
+        // Strip whitespaces
+        $ionicons = trim($ionicons);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/ionicons.less', <<<EOF
+/*!
+ * ionicons.less v1.0.0
+ *
+ * Mixins implementation of the ionicons.css
+ * See ionicons.css for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$ionicons
+
+// Alias
+// --------------------------
+.ionicons-user() {
+    .ionicons-ios7-person-outline();
+}
+.ionicons-settings() {
+    .ionicons-ios7-gear-outline();
+}
+.ionicons-list() {
+    .ionicons-ios7-drag();
+}
+.ionicons-show() {
+	.ionicons-ios7-eye-outline();
+}
+.ionicons-create() {
+	.ionicons-ios7-plus-outline();
+}
+.ionicons-update() {
+	.ionicons-ios7-compose-outline();
+}
+.ionicons-delete() {
+    .ionicons-ios7-trash-outline();
+}
+.ionicons-restore() {
+    .ionicons-ios7-undo-outline();
+}
+.ionicons-cancel() {
+    .ionicons-ios7-close-outline();
+}
+.ionicons-save() {
+    .ionicons-ios7-checkmark-outline();
+}
+.ionicons-back() {
+    .ionicons-ios7-arrow-back();
+}
+.ionicons-trash() {
+    .ionicons-ios7-trash-outline();
+}
+.ionicons-help() {
+    .ionicons-ios7-help-outline();
+}
+.ionicons-chevron-up() {
+    .ionicons-ios7-arrow-up();
+}
+.ionicons-chevron-right() {
+    .ionicons-ios7-arrow-right();
+}
+.ionicons-chevron-left() {
+    .ionicons-ios7-arrow-left();
+}
+.ionicons-chevron-down() {
+    .ionicons-ios7-arrow-down();
+}
+EOF
+        );
+
+        $output->writeln('<info>Success, ionicons.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getElusiveAssets($output)
+    {
+        $elusiveDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/aristath/elusive-iconfont/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/elusive');
+        $files = [
+            'Elusive-Icons.eot',
+            'Elusive-Icons.svg',
+            'Elusive-Icons.ttf',
+            'Elusive-Icons.woff',
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($elusiveDir.'fonts/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse elusive-webfont.less
+        $elusive = file_get_contents($elusiveDir.'less/elusive-webfont.less');
+
+        // replace font path
+        $elusive = str_replace("../fonts/", "/bundles/bootstrapp/fonts/elusive/", $elusive);
+
+        // replace .el-icon-*:before {}
+        do {
+            $elusive = preg_replace_callback('/\.el-icon([-\w]*):before,?\s*([^\s\{]*)\s*\{\s*content:\s*([^;]*)[^}]*\}\s*/', function($m){
+                $replace = str_pad('.elusive' . $m[1] . "()", 45) . " { .elusive(" . trim($m[3]) . "); }";
+                if (!empty($m[2])) {
+                    $replace .= "\n" . str_pad($m[2], 45) . " { content: " . trim($m[3]) . "; }";
+                }
+                $replace .= "\n";
+                return $replace;
+            }, $elusive, -1, $count);
+        } while ($count > 0);
+
+        // replace [class*="el-icon-"] {}
+        $elusive = preg_replace('/\[class.*=".*icon-"\][^{]*\{\s?([^}]*)\s\}\s*/', <<<EOF
+.elusive(@content:"") {
+$1
+
+    /* bootstrapp fix */
+    background: none !important;
+
+    &:before {
+        content: @content;
+    }
+
+    &.icon-white {
+        color: @white;
+    }
+}
+
+
+EOF
+            , $elusive, 1);
+
+        // Strip whitespaces
+        $elusive = trim($elusive);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/elusive.less', <<<EOF
+/*!
+ * elusive.less v1.0.0
+ *
+ * Mixins implementation of the Elusive Open-Source Iconfont
+ * See elusive.css for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@import "../bootstrap/mixins.less";
+
+$elusive
+
+// Alias
+// --------------------------
+.elusive-settings() {
+    .elusive-cog();
+}
+.elusive-show() {
+	.elusive-eye-open();
+}
+.elusive-create() {
+	.elusive-plus();
+}
+.elusive-update() {
+	.elusive-pencil();
+}
+.elusive-delete() {
+    .elusive-trash-alt();
+}
+.elusive-restore() {
+    .elusive-share-alt();
+    .skew(0,180deg);
+}
+.elusive-cancel() {
+    .elusive-remove-circle();
+}
+.elusive-save() {
+    .elusive-ok-circle();
+}
+.elusive-back() {
+    .elusive-chevron-left();
+}
+.elusive-help() {
+    .elusive-question();
+}
+EOF
+        );
+
+        $output->writeln('<info>Success, elusive.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
 
         return true;
     }

@@ -70,12 +70,108 @@
         {
             "type": "package",
             "package": {
+                "name": "fontello/brandico.font",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/fontello/brandico.font.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/fontello/brandico.font/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "fontello/fontelico.font",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/fontello/fontelico.font.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/fontello/fontelico.font/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "fontello/maki.font",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/fontello/maki.font.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/fontello/maki.font/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "fontello/meteocons.font",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/fontello/meteocons.font.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/fontello/meteocons.font/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "driftyco/ionicons",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/driftyco/ionicons.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/driftyco/ionicons/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "aristath/elusive-iconfont",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/aristath/elusive-iconfont.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/aristath/elusive-iconfont/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
                 "name": "jdewit/bootstrap-timepicker",
                 "version": "dev-master",
                 "source": {
                     "url": "https://github.com/jdewit/bootstrap-timepicker.git",
                     "type": "git",
-                    "reference": "master"
+                    "reference": "gh-pages"
                 },
                 "dist": {
                     "url": "https://github.com/jdewit/bootstrap-timepicker/zipball/master",
@@ -268,6 +364,12 @@
         "twitter/twitter-cldr-js": "dev-master",
         "danielbruce/entypo": "dev-master",
         "FortAwesome/Font-Awesome": "dev-master",
+        "fontello/brandico.font": "dev-master",
+        "fontello/fontelico.font": "dev-master",
+        "fontello/maki.font": "dev-master",
+        "fontello/meteocons.font": "dev-master",
+        "driftyco/ionicons": "dev-master",
+        "aristath/elusive-iconfont": "dev-master",
         "jdewit/bootstrap-timepicker": "dev-master",
         "eternicode/bootstrap-datepicker": "dev-master",
         "vitalets/bootstrap-datepicker": "dev-master",

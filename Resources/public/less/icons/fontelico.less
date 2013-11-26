@@ -1,0 +1,99 @@
+/*!
+ * fontelico.less v1.0.0
+ *
+ * Mixins implementation of the opensource iconic font from Fontello project
+ * See vendor/fontello/fontelico.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@font-face {
+  font-family: 'fontelico';
+  src: url('/bundles/bootstrapp/fonts/fontelico/fontelico.eot?7803838');
+  src: url('/bundles/bootstrapp/fonts/fontelico/fontelico.eot?7803838#iefix') format('embedded-opentype'),
+       url('/bundles/bootstrapp/fonts/fontelico/fontelico.woff?7803838') format('woff'),
+       url('/bundles/bootstrapp/fonts/fontelico/fontelico.ttf?7803838') format('truetype'),
+       url('/bundles/bootstrapp/fonts/fontelico/fontelico.svg?7803838#fontelico') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.fontelico(@content:"") {
+  font-family: "fontelico";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - magrins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.fontelico-emo-happy()        { .fontelico('\e800'); }
+.fontelico-emo-wink()         { .fontelico('\e801'); }
+.fontelico-emo-wink2()        { .fontelico('\e813'); }
+.fontelico-emo-unhappy()      { .fontelico('\e802'); }
+.fontelico-emo-sleep()        { .fontelico('\e803'); }
+.fontelico-emo-thumbsup()     { .fontelico('\e804'); }
+.fontelico-emo-devil()        { .fontelico('\e805'); }
+.fontelico-emo-surprised()    { .fontelico('\e806'); }
+.fontelico-emo-tongue()       { .fontelico('\e807'); }
+.fontelico-emo-coffee()       { .fontelico('\e808'); }
+.fontelico-emo-sunglasses()   { .fontelico('\e809'); }
+.fontelico-emo-displeased()   { .fontelico('\e80a'); }
+.fontelico-emo-beer()         { .fontelico('\e80b'); }
+.fontelico-emo-grin()         { .fontelico('\e80c'); }
+.fontelico-emo-angry()        { .fontelico('\e80d'); }
+.fontelico-emo-saint()        { .fontelico('\e80e'); }
+.fontelico-emo-cry()          { .fontelico('\e80f'); }
+.fontelico-emo-shoot()        { .fontelico('\e810'); }
+.fontelico-emo-squint()       { .fontelico('\e811'); }
+.fontelico-emo-laugh()        { .fontelico('\e812'); }
+.fontelico-spin1()            { .fontelico('\e830'); }
+.fontelico-spin2()            { .fontelico('\e831'); }
+.fontelico-spin3()            { .fontelico('\e832'); }
+.fontelico-spin4()            { .fontelico('\e834'); }
+.fontelico-spin5()            { .fontelico('\e838'); }
+.fontelico-spin6()            { .fontelico('\e839'); }
+.fontelico-firefox()          { .fontelico('\e840'); }
+.fontelico-chrome()           { .fontelico('\e841'); }
+.fontelico-opera()            { .fontelico('\e842'); }
+.fontelico-ie()               { .fontelico('\e843'); }
+.fontelico-crown()            { .fontelico('\e844'); }
+.fontelico-crown-plus()       { .fontelico('\e845'); }
+.fontelico-crown-minus()      { .fontelico('\e846'); }
+.fontelico-marquee()          { .fontelico('\e847'); }

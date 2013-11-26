@@ -1,0 +1,128 @@
+/*!
+ * maki.less v1.0.0
+ *
+ * Mixins implementation of the POI Icon Set by MapBox
+ * See vendor/fontello/maki.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@font-face {
+  font-family: 'maki';
+  src: url('/bundles/bootstrapp/fonts/maki/maki.eot?56675205');
+  src: url('/bundles/bootstrapp/fonts/maki/maki.eot?56675205#iefix') format('embedded-opentype'),
+       url('/bundles/bootstrapp/fonts/maki/maki.woff?56675205') format('woff'),
+       url('/bundles/bootstrapp/fonts/maki/maki.ttf?56675205') format('truetype'),
+       url('/bundles/bootstrapp/fonts/maki/maki.svg?56675205#maki') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.maki(@content:"") {
+  font-family: "maki";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - magrins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.maki-aboveground-rail()      { .maki('\e800'); }
+.maki-airfield()              { .maki('\e801'); }
+.maki-airport()               { .maki('\e802'); }
+.maki-art-gallery()           { .maki('\e803'); }
+.maki-bar()                   { .maki('\e804'); }
+.maki-baseball()              { .maki('\e806'); }
+.maki-basketball()            { .maki('\e807'); }
+.maki-beer()                  { .maki('\e808'); }
+.maki-belowground-rail()      { .maki('\e809'); }
+.maki-bicycle()               { .maki('\e80a'); }
+.maki-bus()                   { .maki('\e80b'); }
+.maki-cafe()                  { .maki('\e80c'); }
+.maki-campsite()              { .maki('\e80d'); }
+.maki-cemetery()              { .maki('\e80e'); }
+.maki-cinema()                { .maki('\e80f'); }
+.maki-college()               { .maki('\e810'); }
+.maki-commerical-building()   { .maki('\e811'); }
+.maki-credit-card()           { .maki('\e812'); }
+.maki-cricket()               { .maki('\e813'); }
+.maki-embassy()               { .maki('\e814'); }
+.maki-fast-food()             { .maki('\e815'); }
+.maki-ferry()                 { .maki('\e816'); }
+.maki-fire-station()          { .maki('\e817'); }
+.maki-football()              { .maki('\e818'); }
+.maki-fuel()                  { .maki('\e819'); }
+.maki-garden()                { .maki('\e81a'); }
+.maki-giraffe()               { .maki('\e81b'); }
+.maki-golf()                  { .maki('\e81c'); }
+.maki-grocery-store()         { .maki('\e81e'); }
+.maki-harbor()                { .maki('\e81f'); }
+.maki-heliport()              { .maki('\e820'); }
+.maki-hospital()              { .maki('\e821'); }
+.maki-industrial-building()   { .maki('\e822'); }
+.maki-library()               { .maki('\e823'); }
+.maki-lodging()               { .maki('\e824'); }
+.maki-london-underground()    { .maki('\e825'); }
+.maki-minefield()             { .maki('\e826'); }
+.maki-monument()              { .maki('\e827'); }
+.maki-museum()                { .maki('\e828'); }
+.maki-pharmacy()              { .maki('\e829'); }
+.maki-pitch()                 { .maki('\e82a'); }
+.maki-police()                { .maki('\e82b'); }
+.maki-post()                  { .maki('\e82c'); }
+.maki-prison()                { .maki('\e82d'); }
+.maki-rail()                  { .maki('\e82e'); }
+.maki-religious-christian()   { .maki('\e82f'); }
+.maki-religious-islam()       { .maki('\e830'); }
+.maki-religious-jewish()      { .maki('\e831'); }
+.maki-restaurant()            { .maki('\e832'); }
+.maki-roadblock()             { .maki('\e833'); }
+.maki-school()                { .maki('\e834'); }
+.maki-shop()                  { .maki('\e835'); }
+.maki-skiing()                { .maki('\e836'); }
+.maki-soccer()                { .maki('\e837'); }
+.maki-swimming()              { .maki('\e838'); }
+.maki-tennis()                { .maki('\e839'); }
+.maki-theatre()               { .maki('\e83a'); }
+.maki-toilet()                { .maki('\e83b'); }
+.maki-town-hall()             { .maki('\e83c'); }
+.maki-trash()                 { .maki('\e83d'); }
+.maki-tree-1()                { .maki('\e83e'); }
+.maki-tree-2()                { .maki('\e83f'); }
+.maki-warehouse()             { .maki('\e840'); }

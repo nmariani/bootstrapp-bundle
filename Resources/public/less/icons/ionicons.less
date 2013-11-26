@@ -1,0 +1,560 @@
+/*!
+ * ionicons.less v1.0.0
+ *
+ * Mixins implementation of the ionicons.css
+ * See ionicons.css for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*!
+  Ionicons, v1.3.6
+  Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
+  https://twitter.com/helloimben  https://twitter.com/ionicframework
+  MIT License: https://github.com/driftyco/ionicons
+*/
+@font-face {
+  font-family: "Ionicons";
+  src: url("/bundles/bootstrapp/fonts/ionicons/ionicons.eot?v=1.3.6");
+  src: url("/bundles/bootstrapp/fonts/ionicons/ionicons.eot?v=1.3.6#iefix") format("embedded-opentype"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.ttf?v=1.3.6") format("truetype"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.woff?v=1.3.6") format("woff"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.svg?v=1.3.6#Ionicons") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+.ionicons(@content:"") {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; 
+
+  /* bootstrapp fix */
+  background: none !important;
+  line-height: 14px;
+  font-size: 20px;
+  font-weight: bold;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.ionicons-alert()                             { .ionicons("\f101"); }
+.ionicons-alert-circled()                     { .ionicons("\f100"); }
+.ionicons-archive()                           { .ionicons("\f102"); }
+.ionicons-arrow-down-a()                      { .ionicons("\f103"); }
+.ionicons-arrow-down-b()                      { .ionicons("\f104"); }
+.ionicons-arrow-down-c()                      { .ionicons("\f105"); }
+.ionicons-arrow-expand()                      { .ionicons("\f25e"); }
+.ionicons-arrow-graph-down-left()             { .ionicons("\f25f"); }
+.ionicons-arrow-graph-down-right()            { .ionicons("\f260"); }
+.ionicons-arrow-graph-up-left()               { .ionicons("\f261"); }
+.ionicons-arrow-graph-up-right()              { .ionicons("\f262"); }
+.ionicons-arrow-left-a()                      { .ionicons("\f106"); }
+.ionicons-arrow-left-b()                      { .ionicons("\f107"); }
+.ionicons-arrow-left-c()                      { .ionicons("\f108"); }
+.ionicons-arrow-move()                        { .ionicons("\f263"); }
+.ionicons-arrow-resize()                      { .ionicons("\f264"); }
+.ionicons-arrow-return-left()                 { .ionicons("\f265"); }
+.ionicons-arrow-return-right()                { .ionicons("\f266"); }
+.ionicons-arrow-right-a()                     { .ionicons("\f109"); }
+.ionicons-arrow-right-b()                     { .ionicons("\f10a"); }
+.ionicons-arrow-right-c()                     { .ionicons("\f10b"); }
+.ionicons-arrow-shrink()                      { .ionicons("\f267"); }
+.ionicons-arrow-swap()                        { .ionicons("\f268"); }
+.ionicons-arrow-up-a()                        { .ionicons("\f10c"); }
+.ionicons-arrow-up-b()                        { .ionicons("\f10d"); }
+.ionicons-arrow-up-c()                        { .ionicons("\f10e"); }
+.ionicons-at()                                { .ionicons("\f10f"); }
+.ionicons-bag()                               { .ionicons("\f110"); }
+.ionicons-battery-charging()                  { .ionicons("\f111"); }
+.ionicons-battery-empty()                     { .ionicons("\f112"); }
+.ionicons-battery-full()                      { .ionicons("\f113"); }
+.ionicons-battery-half()                      { .ionicons("\f114"); }
+.ionicons-battery-low()                       { .ionicons("\f115"); }
+.ionicons-beaker()                            { .ionicons("\f269"); }
+.ionicons-beer()                              { .ionicons("\f26a"); }
+.ionicons-bluetooth()                         { .ionicons("\f116"); }
+.ionicons-bookmark()                          { .ionicons("\f26b"); }
+.ionicons-briefcase()                         { .ionicons("\f26c"); }
+.ionicons-calculator()                        { .ionicons("\f26d"); }
+.ionicons-calendar()                          { .ionicons("\f117"); }
+.ionicons-camera()                            { .ionicons("\f118"); }
+.ionicons-card()                              { .ionicons("\f119"); }
+.ionicons-chatbox()                           { .ionicons("\f11b"); }
+.ionicons-chatbox-working()                   { .ionicons("\f11a"); }
+.ionicons-chatboxes()                         { .ionicons("\f11c"); }
+.ionicons-chatbubble()                        { .ionicons("\f11e"); }
+.ionicons-chatbubble-working()                { .ionicons("\f11d"); }
+.ionicons-chatbubbles()                       { .ionicons("\f11f"); }
+.ionicons-checkmark()                         { .ionicons("\f122"); }
+.ionicons-checkmark-circled()                 { .ionicons("\f120"); }
+.ionicons-checkmark-round()                   { .ionicons("\f121"); }
+.ionicons-chevron-down()                      { .ionicons("\f123"); }
+.ionicons-chevron-left()                      { .ionicons("\f124"); }
+.ionicons-chevron-right()                     { .ionicons("\f125"); }
+.ionicons-chevron-up()                        { .ionicons("\f126"); }
+.ionicons-clipboard()                         { .ionicons("\f127"); }
+.ionicons-clock()                             { .ionicons("\f26e"); }
+.ionicons-close()                             { .ionicons("\f12a"); }
+.ionicons-close-circled()                     { .ionicons("\f128"); }
+.ionicons-close-round()                       { .ionicons("\f129"); }
+.ionicons-cloud()                             { .ionicons("\f12b"); }
+.ionicons-code()                              { .ionicons("\f271"); }
+.ionicons-code-download()                     { .ionicons("\f26f"); }
+.ionicons-code-working()                      { .ionicons("\f270"); }
+.ionicons-coffee()                            { .ionicons("\f272"); }
+.ionicons-compass()                           { .ionicons("\f273"); }
+.ionicons-compose()                           { .ionicons("\f12c"); }
+.ionicons-connection-bars()                   { .ionicons("\f274"); }
+.ionicons-contrast()                          { .ionicons("\f275"); }
+.ionicons-disc()                              { .ionicons("\f12d"); }
+.ionicons-document()                          { .ionicons("\f12f"); }
+.ionicons-document-text()                     { .ionicons("\f12e"); }
+.ionicons-drag()                              { .ionicons("\f130"); }
+.ionicons-earth()                             { .ionicons("\f276"); }
+.ionicons-egg()                               { .ionicons("\f277"); }
+.ionicons-eject()                             { .ionicons("\f131"); }
+.ionicons-email()                             { .ionicons("\f132"); }
+.ionicons-eye()                               { .ionicons("\f133"); }
+.ionicons-female()                            { .ionicons("\f278"); }
+.ionicons-filing()                            { .ionicons("\f134"); }
+.ionicons-film-marker()                       { .ionicons("\f135"); }
+.ionicons-flag()                              { .ionicons("\f279"); }
+.ionicons-flash()                             { .ionicons("\f137"); }
+.ionicons-flash-off()                         { .ionicons("\f136"); }
+.ionicons-flask()                             { .ionicons("\f138"); }
+.ionicons-folder()                            { .ionicons("\f139"); }
+.ionicons-fork()                              { .ionicons("\f27a"); }
+.ionicons-forward()                           { .ionicons("\f13a"); }
+.ionicons-game-controller-a()                 { .ionicons("\f13b"); }
+.ionicons-game-controller-b()                 { .ionicons("\f13c"); }
+.ionicons-gear-a()                            { .ionicons("\f13d"); }
+.ionicons-gear-b()                            { .ionicons("\f13e"); }
+.ionicons-grid()                              { .ionicons("\f13f"); }
+.ionicons-hammer()                            { .ionicons("\f27b"); }
+.ionicons-headphone()                         { .ionicons("\f140"); }
+.ionicons-heart()                             { .ionicons("\f141"); }
+.ionicons-help()                              { .ionicons("\f143"); }
+.ionicons-help-buoy()                         { .ionicons("\f27c"); }
+.ionicons-help-circled()                      { .ionicons("\f142"); }
+.ionicons-home()                              { .ionicons("\f144"); }
+.ionicons-icecream()                          { .ionicons("\f27d"); }
+.ionicons-icon-social-google-plus()           { .ionicons("\f146"); }
+.ionicons-icon-social-google-plus-outline()   { .ionicons("\f145"); }
+.ionicons-image()                             { .ionicons("\f147"); }
+.ionicons-images()                            { .ionicons("\f148"); }
+.ionicons-information()                       { .ionicons("\f14a"); }
+.ionicons-information-circled()               { .ionicons("\f149"); }
+.ionicons-ionic()                             { .ionicons("\f14b"); }
+.ionicons-ios7-alarm()                        { .ionicons("\f14d"); }
+.ionicons-ios7-alarm-outline()                { .ionicons("\f14c"); }
+.ionicons-ios7-albums()                       { .ionicons("\f14f"); }
+.ionicons-ios7-albums-outline()               { .ionicons("\f14e"); }
+.ionicons-ios7-arrow-back()                   { .ionicons("\f150"); }
+.ionicons-ios7-arrow-down()                   { .ionicons("\f151"); }
+.ionicons-ios7-arrow-forward()                { .ionicons("\f152"); }
+.ionicons-ios7-arrow-left()                   { .ionicons("\f153"); }
+.ionicons-ios7-arrow-right()                  { .ionicons("\f154"); }
+.ionicons-ios7-arrow-thin-down()              { .ionicons("\f27e"); }
+.ionicons-ios7-arrow-thin-left()              { .ionicons("\f27f"); }
+.ionicons-ios7-arrow-thin-right()             { .ionicons("\f280"); }
+.ionicons-ios7-arrow-thin-up()                { .ionicons("\f281"); }
+.ionicons-ios7-arrow-up()                     { .ionicons("\f155"); }
+.ionicons-ios7-at()                           { .ionicons("\f157"); }
+.ionicons-ios7-at-outline()                   { .ionicons("\f156"); }
+.ionicons-ios7-bell()                         { .ionicons("\f159"); }
+.ionicons-ios7-bell-outline()                 { .ionicons("\f158"); }
+.ionicons-ios7-bolt()                         { .ionicons("\f15b"); }
+.ionicons-ios7-bolt-outline()                 { .ionicons("\f15a"); }
+.ionicons-ios7-bookmarks()                    { .ionicons("\f15d"); }
+.ionicons-ios7-bookmarks-outline()            { .ionicons("\f15c"); }
+.ionicons-ios7-box()                          { .ionicons("\f15f"); }
+.ionicons-ios7-box-outline()                  { .ionicons("\f15e"); }
+.ionicons-ios7-briefcase()                    { .ionicons("\f283"); }
+.ionicons-ios7-briefcase-outline()            { .ionicons("\f282"); }
+.ionicons-ios7-browsers()                     { .ionicons("\f161"); }
+.ionicons-ios7-browsers-outline()             { .ionicons("\f160"); }
+.ionicons-ios7-calculator()                   { .ionicons("\f285"); }
+.ionicons-ios7-calculator-outline()           { .ionicons("\f284"); }
+.ionicons-ios7-calendar()                     { .ionicons("\f163"); }
+.ionicons-ios7-calendar-outline()             { .ionicons("\f162"); }
+.ionicons-ios7-camera()                       { .ionicons("\f165"); }
+.ionicons-ios7-camera-outline()               { .ionicons("\f164"); }
+.ionicons-ios7-cart()                         { .ionicons("\f167"); }
+.ionicons-ios7-cart-outline()                 { .ionicons("\f166"); }
+.ionicons-ios7-chatboxes()                    { .ionicons("\f169"); }
+.ionicons-ios7-chatboxes-outline()            { .ionicons("\f168"); }
+.ionicons-ios7-chatbubble()                   { .ionicons("\f16b"); }
+.ionicons-ios7-chatbubble-outline()           { .ionicons("\f16a"); }
+.ionicons-ios7-checkmark()                    { .ionicons("\f16e"); }
+.ionicons-ios7-checkmark-empty()              { .ionicons("\f16c"); }
+.ionicons-ios7-checkmark-outline()            { .ionicons("\f16d"); }
+.ionicons-ios7-circle-filled()                { .ionicons("\f16f"); }
+.ionicons-ios7-circle-outline()               { .ionicons("\f170"); }
+.ionicons-ios7-clock()                        { .ionicons("\f172"); }
+.ionicons-ios7-clock-outline()                { .ionicons("\f171"); }
+.ionicons-ios7-close()                        { .ionicons("\f2bc"); }
+.ionicons-ios7-close-empty()                  { .ionicons("\f2bd"); }
+.ionicons-ios7-close-outline()                { .ionicons("\f2bb"); }
+.ionicons-ios7-cloud()                        { .ionicons("\f178"); }
+.ionicons-ios7-cloud-download()               { .ionicons("\f174"); }
+.ionicons-ios7-cloud-download-outline()       { .ionicons("\f173"); }
+.ionicons-ios7-cloud-outline()                { .ionicons("\f175"); }
+.ionicons-ios7-cloud-upload()                 { .ionicons("\f177"); }
+.ionicons-ios7-cloud-upload-outline()         { .ionicons("\f176"); }
+.ionicons-ios7-cloudy()                       { .ionicons("\f17a"); }
+.ionicons-ios7-cloudy-outline()               { .ionicons("\f179"); }
+.ionicons-ios7-cog()                          { .ionicons("\f17c"); }
+.ionicons-ios7-cog-outline()                  { .ionicons("\f17b"); }
+.ionicons-ios7-compose()                      { .ionicons("\f17e"); }
+.ionicons-ios7-compose-outline()              { .ionicons("\f17d"); }
+.ionicons-ios7-contact()                      { .ionicons("\f180"); }
+.ionicons-ios7-contact-outline()              { .ionicons("\f17f"); }
+.ionicons-ios7-copy()                         { .ionicons("\f182"); }
+.ionicons-ios7-copy-outline()                 { .ionicons("\f181"); }
+.ionicons-ios7-download()                     { .ionicons("\f184"); }
+.ionicons-ios7-download-outline()             { .ionicons("\f183"); }
+.ionicons-ios7-drag()                         { .ionicons("\f185"); }
+.ionicons-ios7-email()                        { .ionicons("\f187"); }
+.ionicons-ios7-email-outline()                { .ionicons("\f186"); }
+.ionicons-ios7-eye()                          { .ionicons("\f189"); }
+.ionicons-ios7-eye-outline()                  { .ionicons("\f188"); }
+.ionicons-ios7-fastforward()                  { .ionicons("\f18b"); }
+.ionicons-ios7-fastforward-outline()          { .ionicons("\f18a"); }
+.ionicons-ios7-filing()                       { .ionicons("\f18d"); }
+.ionicons-ios7-filing-outline()               { .ionicons("\f18c"); }
+.ionicons-ios7-film()                         { .ionicons("\f18f"); }
+.ionicons-ios7-film-outline()                 { .ionicons("\f18e"); }
+.ionicons-ios7-flag()                         { .ionicons("\f191"); }
+.ionicons-ios7-flag-outline()                 { .ionicons("\f190"); }
+.ionicons-ios7-folder()                       { .ionicons("\f193"); }
+.ionicons-ios7-folder-outline()               { .ionicons("\f192"); }
+.ionicons-ios7-gear()                         { .ionicons("\f195"); }
+.ionicons-ios7-gear-outline()                 { .ionicons("\f194"); }
+.ionicons-ios7-glasses()                      { .ionicons("\f197"); }
+.ionicons-ios7-glasses-outline()              { .ionicons("\f196"); }
+.ionicons-ios7-heart()                        { .ionicons("\f199"); }
+.ionicons-ios7-heart-outline()                { .ionicons("\f198"); }
+.ionicons-ios7-help()                         { .ionicons("\f19c"); }
+.ionicons-ios7-help-empty()                   { .ionicons("\f19a"); }
+.ionicons-ios7-help-outline()                 { .ionicons("\f19b"); }
+.ionicons-ios7-infinite()                     { .ionicons("\f19e"); }
+.ionicons-ios7-infinite-outline()             { .ionicons("\f19d"); }
+.ionicons-ios7-information()                  { .ionicons("\f1a1"); }
+.ionicons-ios7-information-empty()            { .ionicons("\f19f"); }
+.ionicons-ios7-information-outline()          { .ionicons("\f1a0"); }
+.ionicons-ios7-ionic-outline()                { .ionicons("\f1a2"); }
+.ionicons-ios7-keypad()                       { .ionicons("\f1a4"); }
+.ionicons-ios7-keypad-outline()               { .ionicons("\f1a3"); }
+.ionicons-ios7-lightbulb()                    { .ionicons("\f287"); }
+.ionicons-ios7-lightbulb-outline()            { .ionicons("\f286"); }
+.ionicons-ios7-location()                     { .ionicons("\f1a6"); }
+.ionicons-ios7-location-outline()             { .ionicons("\f1a5"); }
+.ionicons-ios7-locked()                       { .ionicons("\f1a8"); }
+.ionicons-ios7-locked-outline()               { .ionicons("\f1a7"); }
+.ionicons-ios7-medkit()                       { .ionicons("\f289"); }
+.ionicons-ios7-medkit-outline()               { .ionicons("\f288"); }
+.ionicons-ios7-mic()                          { .ionicons("\f1ab"); }
+.ionicons-ios7-mic-off()                      { .ionicons("\f1a9"); }
+.ionicons-ios7-mic-outline()                  { .ionicons("\f1aa"); }
+.ionicons-ios7-minus()                        { .ionicons("\f1ae"); }
+.ionicons-ios7-minus-empty()                  { .ionicons("\f1ac"); }
+.ionicons-ios7-minus-outline()                { .ionicons("\f1ad"); }
+.ionicons-ios7-monitor()                      { .ionicons("\f1b0"); }
+.ionicons-ios7-monitor-outline()              { .ionicons("\f1af"); }
+.ionicons-ios7-moon()                         { .ionicons("\f1b2"); }
+.ionicons-ios7-moon-outline()                 { .ionicons("\f1b1"); }
+.ionicons-ios7-more()                         { .ionicons("\f1b4"); }
+.ionicons-ios7-more-outline()                 { .ionicons("\f1b3"); }
+.ionicons-ios7-musical-note()                 { .ionicons("\f1b5"); }
+.ionicons-ios7-musical-notes()                { .ionicons("\f1b6"); }
+.ionicons-ios7-navigate()                     { .ionicons("\f1b8"); }
+.ionicons-ios7-navigate-outline()             { .ionicons("\f1b7"); }
+.ionicons-ios7-paperplane()                   { .ionicons("\f1ba"); }
+.ionicons-ios7-paperplane-outline()           { .ionicons("\f1b9"); }
+.ionicons-ios7-partlysunny()                  { .ionicons("\f1bc"); }
+.ionicons-ios7-partlysunny-outline()          { .ionicons("\f1bb"); }
+.ionicons-ios7-pause()                        { .ionicons("\f1be"); }
+.ionicons-ios7-pause-outline()                { .ionicons("\f1bd"); }
+.ionicons-ios7-people()                       { .ionicons("\f1c0"); }
+.ionicons-ios7-people-outline()               { .ionicons("\f1bf"); }
+.ionicons-ios7-person()                       { .ionicons("\f1c2"); }
+.ionicons-ios7-person-outline()               { .ionicons("\f1c1"); }
+.ionicons-ios7-personadd()                    { .ionicons("\f1c4"); }
+.ionicons-ios7-personadd-outline()            { .ionicons("\f1c3"); }
+.ionicons-ios7-photos()                       { .ionicons("\f1c6"); }
+.ionicons-ios7-photos-outline()               { .ionicons("\f1c5"); }
+.ionicons-ios7-pie()                          { .ionicons("\f28b"); }
+.ionicons-ios7-pie-outline()                  { .ionicons("\f28a"); }
+.ionicons-ios7-play()                         { .ionicons("\f1c8"); }
+.ionicons-ios7-play-outline()                 { .ionicons("\f1c7"); }
+.ionicons-ios7-plus()                         { .ionicons("\f1cb"); }
+.ionicons-ios7-plus-empty()                   { .ionicons("\f1c9"); }
+.ionicons-ios7-plus-outline()                 { .ionicons("\f1ca"); }
+.ionicons-ios7-pricetag()                     { .ionicons("\f28d"); }
+.ionicons-ios7-pricetag-outline()             { .ionicons("\f28c"); }
+.ionicons-ios7-printer()                      { .ionicons("\f1cd"); }
+.ionicons-ios7-printer-outline()              { .ionicons("\f1cc"); }
+.ionicons-ios7-rainy()                        { .ionicons("\f1cf"); }
+.ionicons-ios7-rainy-outline()                { .ionicons("\f1ce"); }
+.ionicons-ios7-recording()                    { .ionicons("\f1d1"); }
+.ionicons-ios7-recording-outline()            { .ionicons("\f1d0"); }
+.ionicons-ios7-redo()                         { .ionicons("\f1d3"); }
+.ionicons-ios7-redo-outline()                 { .ionicons("\f1d2"); }
+.ionicons-ios7-refresh()                      { .ionicons("\f1d6"); }
+.ionicons-ios7-refresh-empty()                { .ionicons("\f1d4"); }
+.ionicons-ios7-refresh-outline()              { .ionicons("\f1d5"); }
+.ionicons-ios7-reload()                       { .ionicons("\f28e"); }
+.ionicons-ios7-reloading()                    { .ionicons("\f28e"); }
+.ionicons-ios7-rewind()                       { .ionicons("\f1d8"); }
+.ionicons-ios7-rewind-outline()               { .ionicons("\f1d7"); }
+.ionicons-ios7-search()                       { .ionicons("\f1da"); }
+.ionicons-ios7-search-strong()                { .ionicons("\f1d9"); }
+.ionicons-ios7-skipbackward()                 { .ionicons("\f1dc"); }
+.ionicons-ios7-skipbackward-outline()         { .ionicons("\f1db"); }
+.ionicons-ios7-skipforward()                  { .ionicons("\f1de"); }
+.ionicons-ios7-skipforward-outline()          { .ionicons("\f1dd"); }
+.ionicons-ios7-speedometer()                  { .ionicons("\f290"); }
+.ionicons-ios7-speedometer-outline()          { .ionicons("\f28f"); }
+.ionicons-ios7-star()                         { .ionicons("\f1e0"); }
+.ionicons-ios7-star-outline()                 { .ionicons("\f1df"); }
+.ionicons-ios7-stopwatch()                    { .ionicons("\f1e2"); }
+.ionicons-ios7-stopwatch-outline()            { .ionicons("\f1e1"); }
+.ionicons-ios7-sunny()                        { .ionicons("\f1e4"); }
+.ionicons-ios7-sunny-outline()                { .ionicons("\f1e3"); }
+.ionicons-ios7-telephone()                    { .ionicons("\f1e6"); }
+.ionicons-ios7-telephone-outline()            { .ionicons("\f1e5"); }
+.ionicons-ios7-thunderstorm()                 { .ionicons("\f1e8"); }
+.ionicons-ios7-thunderstorm-outline()         { .ionicons("\f1e7"); }
+.ionicons-ios7-time()                         { .ionicons("\f292"); }
+.ionicons-ios7-time-outline()                 { .ionicons("\f291"); }
+.ionicons-ios7-timer()                        { .ionicons("\f1ea"); }
+.ionicons-ios7-timer-outline()                { .ionicons("\f1e9"); }
+.ionicons-ios7-trash()                        { .ionicons("\f1ec"); }
+.ionicons-ios7-trash-outline()                { .ionicons("\f1eb"); }
+.ionicons-ios7-undo()                         { .ionicons("\f1ee"); }
+.ionicons-ios7-undo-outline()                 { .ionicons("\f1ed"); }
+.ionicons-ios7-unlocked()                     { .ionicons("\f1f0"); }
+.ionicons-ios7-unlocked-outline()             { .ionicons("\f1ef"); }
+.ionicons-ios7-upload()                       { .ionicons("\f1f2"); }
+.ionicons-ios7-upload-outline()               { .ionicons("\f1f1"); }
+.ionicons-ios7-videocam()                     { .ionicons("\f1f4"); }
+.ionicons-ios7-videocam-outline()             { .ionicons("\f1f3"); }
+.ionicons-ios7-volume-high()                  { .ionicons("\f1f5"); }
+.ionicons-ios7-volume-low()                   { .ionicons("\f1f6"); }
+.ionicons-ios7-wineglass()                    { .ionicons("\f294"); }
+.ionicons-ios7-wineglass-outline()            { .ionicons("\f293"); }
+.ionicons-ios7-world()                        { .ionicons("\f1f8"); }
+.ionicons-ios7-world-outline()                { .ionicons("\f1f7"); }
+.ionicons-ipad()                              { .ionicons("\f1f9"); }
+.ionicons-iphone()                            { .ionicons("\f1fa"); }
+.ionicons-ipod()                              { .ionicons("\f1fb"); }
+.ionicons-jet()                               { .ionicons("\f295"); }
+.ionicons-key()                               { .ionicons("\f296"); }
+.ionicons-knife()                             { .ionicons("\f297"); }
+.ionicons-laptop()                            { .ionicons("\f1fc"); }
+.ionicons-leaf()                              { .ionicons("\f1fd"); }
+.ionicons-levels()                            { .ionicons("\f298"); }
+.ionicons-lightbulb()                         { .ionicons("\f299"); }
+.ionicons-link()                              { .ionicons("\f1fe"); }
+.ionicons-load-a()                            { .ionicons("\f29a"); }
+.ionicons-loading-a()                         { .ionicons("\f29a"); }
+.ionicons-load-b()                            { .ionicons("\f29b"); }
+.ionicons-loading-b()                         { .ionicons("\f29b"); }
+.ionicons-load-c()                            { .ionicons("\f29c"); }
+.ionicons-loading-c()                         { .ionicons("\f29c"); }
+.ionicons-load-d()                            { .ionicons("\f29d"); }
+.ionicons-loading-d()                         { .ionicons("\f29d"); }
+.ionicons-location()                          { .ionicons("\f1ff"); }
+.ionicons-locked()                            { .ionicons("\f200"); }
+.ionicons-log-in()                            { .ionicons("\f29e"); }
+.ionicons-log-out()                           { .ionicons("\f29f"); }
+.ionicons-loop()                              { .ionicons("\f201"); }
+.ionicons-looping()                           { .ionicons("\f201"); }
+.ionicons-magnet()                            { .ionicons("\f2a0"); }
+.ionicons-male()                              { .ionicons("\f2a1"); }
+.ionicons-man()                               { .ionicons("\f202"); }
+.ionicons-map()                               { .ionicons("\f203"); }
+.ionicons-medkit()                            { .ionicons("\f2a2"); }
+.ionicons-mic-a()                             { .ionicons("\f204"); }
+.ionicons-mic-b()                             { .ionicons("\f205"); }
+.ionicons-mic-c()                             { .ionicons("\f206"); }
+.ionicons-minus()                             { .ionicons("\f209"); }
+.ionicons-minus-circled()                     { .ionicons("\f207"); }
+.ionicons-minus-round()                       { .ionicons("\f208"); }
+.ionicons-monitor()                           { .ionicons("\f20a"); }
+.ionicons-more()                              { .ionicons("\f20b"); }
+.ionicons-music-note()                        { .ionicons("\f20c"); }
+.ionicons-navicon()                           { .ionicons("\f20e"); }
+.ionicons-navicon-round()                     { .ionicons("\f20d"); }
+.ionicons-navigate()                          { .ionicons("\f2a3"); }
+.ionicons-nuclear()                           { .ionicons("\f2a4"); }
+.ionicons-paperclip()                         { .ionicons("\f20f"); }
+.ionicons-pause()                             { .ionicons("\f210"); }
+.ionicons-person()                            { .ionicons("\f213"); }
+.ionicons-person-add()                        { .ionicons("\f211"); }
+.ionicons-person-stalker()                    { .ionicons("\f212"); }
+.ionicons-pie-graph()                         { .ionicons("\f2a5"); }
+.ionicons-pin()                               { .ionicons("\f2a6"); }
+.ionicons-pinpoint()                          { .ionicons("\f2a7"); }
+.ionicons-pizza()                             { .ionicons("\f2a8"); }
+.ionicons-plane()                             { .ionicons("\f214"); }
+.ionicons-play()                              { .ionicons("\f215"); }
+.ionicons-plus()                              { .ionicons("\f218"); }
+.ionicons-plus-circled()                      { .ionicons("\f216"); }
+.ionicons-plus-round()                        { .ionicons("\f217"); }
+.ionicons-pound()                             { .ionicons("\f219"); }
+.ionicons-power()                             { .ionicons("\f2a9"); }
+.ionicons-pricetag()                          { .ionicons("\f2aa"); }
+.ionicons-pricetags()                         { .ionicons("\f2ab"); }
+.ionicons-printer()                           { .ionicons("\f21a"); }
+.ionicons-radio-waves()                       { .ionicons("\f2ac"); }
+.ionicons-record()                            { .ionicons("\f21b"); }
+.ionicons-refresh()                           { .ionicons("\f21c"); }
+.ionicons-refreshing()                        { .ionicons("\f21c"); }
+.ionicons-reply()                             { .ionicons("\f21e"); }
+.ionicons-reply-all()                         { .ionicons("\f21d"); }
+.ionicons-search()                            { .ionicons("\f21f"); }
+.ionicons-settings()                          { .ionicons("\f2ad"); }
+.ionicons-share()                             { .ionicons("\f220"); }
+.ionicons-shuffle()                           { .ionicons("\f221"); }
+.ionicons-skip-backward()                     { .ionicons("\f222"); }
+.ionicons-skip-forward()                      { .ionicons("\f223"); }
+.ionicons-social-android()                    { .ionicons("\f225"); }
+.ionicons-social-android-outline()            { .ionicons("\f224"); }
+.ionicons-social-apple()                      { .ionicons("\f227"); }
+.ionicons-social-apple-outline()              { .ionicons("\f226"); }
+.ionicons-social-bitcoin()                    { .ionicons("\f2af"); }
+.ionicons-social-bitcoin-outline()            { .ionicons("\f2ae"); }
+.ionicons-social-buffer()                     { .ionicons("\f229"); }
+.ionicons-social-buffer-outline()             { .ionicons("\f228"); }
+.ionicons-social-designernews()               { .ionicons("\f22b"); }
+.ionicons-social-designernews-outline()       { .ionicons("\f22a"); }
+.ionicons-social-dribbble()                   { .ionicons("\f22d"); }
+.ionicons-social-dribbble-outline()           { .ionicons("\f22c"); }
+.ionicons-social-dropbox()                    { .ionicons("\f22f"); }
+.ionicons-social-dropbox-outline()            { .ionicons("\f22e"); }
+.ionicons-social-facebook()                   { .ionicons("\f231"); }
+.ionicons-social-facebook-outline()           { .ionicons("\f230"); }
+.ionicons-social-github()                     { .ionicons("\f233"); }
+.ionicons-social-github-outline()             { .ionicons("\f232"); }
+.ionicons-social-googleplus()                 { .ionicons("\f235"); }
+.ionicons-social-googleplus-outline()         { .ionicons("\f234"); }
+.ionicons-social-hackernews()                 { .ionicons("\f237"); }
+.ionicons-social-hackernews-outline()         { .ionicons("\f236"); }
+.ionicons-social-linkedin()                   { .ionicons("\f239"); }
+.ionicons-social-linkedin-outline()           { .ionicons("\f238"); }
+.ionicons-social-pinterest()                  { .ionicons("\f2b1"); }
+.ionicons-social-pinterest-outline()          { .ionicons("\f2b0"); }
+.ionicons-social-reddit()                     { .ionicons("\f23b"); }
+.ionicons-social-reddit-outline()             { .ionicons("\f23a"); }
+.ionicons-social-rss()                        { .ionicons("\f23d"); }
+.ionicons-social-rss-outline()                { .ionicons("\f23c"); }
+.ionicons-social-skype()                      { .ionicons("\f23f"); }
+.ionicons-social-skype-outline()              { .ionicons("\f23e"); }
+.ionicons-social-tumblr()                     { .ionicons("\f241"); }
+.ionicons-social-tumblr-outline()             { .ionicons("\f240"); }
+.ionicons-social-twitter()                    { .ionicons("\f243"); }
+.ionicons-social-twitter-outline()            { .ionicons("\f242"); }
+.ionicons-social-vimeo()                      { .ionicons("\f245"); }
+.ionicons-social-vimeo-outline()              { .ionicons("\f244"); }
+.ionicons-social-windows()                    { .ionicons("\f247"); }
+.ionicons-social-windows-outline()            { .ionicons("\f246"); }
+.ionicons-social-wordpress()                  { .ionicons("\f249"); }
+.ionicons-social-wordpress-outline()          { .ionicons("\f248"); }
+.ionicons-social-yahoo()                      { .ionicons("\f24b"); }
+.ionicons-social-yahoo-outline()              { .ionicons("\f24a"); }
+.ionicons-social-youtube()                    { .ionicons("\f24d"); }
+.ionicons-social-youtube-outline()            { .ionicons("\f24c"); }
+.ionicons-speakerphone()                      { .ionicons("\f2b2"); }
+.ionicons-speedometer()                       { .ionicons("\f2b3"); }
+.ionicons-spoon()                             { .ionicons("\f2b4"); }
+.ionicons-star()                              { .ionicons("\f24e"); }
+.ionicons-stats-bars()                        { .ionicons("\f2b5"); }
+.ionicons-stop()                              { .ionicons("\f24f"); }
+.ionicons-thermometer()                       { .ionicons("\f2b6"); }
+.ionicons-thumbsdown()                        { .ionicons("\f250"); }
+.ionicons-thumbsup()                          { .ionicons("\f251"); }
+.ionicons-trash-a()                           { .ionicons("\f252"); }
+.ionicons-trash-b()                           { .ionicons("\f253"); }
+.ionicons-umbrella()                          { .ionicons("\f2b7"); }
+.ionicons-unlocked()                          { .ionicons("\f254"); }
+.ionicons-upload()                            { .ionicons("\f255"); }
+.ionicons-usb()                               { .ionicons("\f2b8"); }
+.ionicons-videocamera()                       { .ionicons("\f256"); }
+.ionicons-volume-high()                       { .ionicons("\f257"); }
+.ionicons-volume-low()                        { .ionicons("\f258"); }
+.ionicons-volume-medium()                     { .ionicons("\f259"); }
+.ionicons-volume-mute()                       { .ionicons("\f25a"); }
+.ionicons-waterdrop()                         { .ionicons("\f25b"); }
+.ionicons-wifi()                              { .ionicons("\f25c"); }
+.ionicons-wineglass()                         { .ionicons("\f2b9"); }
+.ionicons-woman()                             { .ionicons("\f25d"); }
+.ionicons-wrench()                            { .ionicons("\f2ba"); }
+
+// Alias
+// --------------------------
+.ionicons-user() {
+    .ionicons-ios7-person-outline();
+}
+.ionicons-settings() {
+    .ionicons-ios7-gear-outline();
+}
+.ionicons-list() {
+    .ionicons-ios7-drag();
+}
+.ionicons-show() {
+	.ionicons-ios7-eye-outline();
+}
+.ionicons-create() {
+	.ionicons-ios7-plus-outline();
+}
+.ionicons-update() {
+	.ionicons-ios7-compose-outline();
+}
+.ionicons-delete() {
+    .ionicons-ios7-trash-outline();
+}
+.ionicons-restore() {
+    .ionicons-ios7-undo-outline();
+}
+.ionicons-cancel() {
+    .ionicons-ios7-close-outline();
+}
+.ionicons-save() {
+    .ionicons-ios7-checkmark-outline();
+}
+.ionicons-back() {
+    .ionicons-ios7-arrow-back();
+}
+.ionicons-trash() {
+    .ionicons-ios7-trash-outline();
+}
+.ionicons-help() {
+    .ionicons-ios7-help-outline();
+}
+.ionicons-chevron-up() {
+    .ionicons-ios7-arrow-up();
+}
+.ionicons-chevron-right() {
+    .ionicons-ios7-arrow-right();
+}
+.ionicons-chevron-left() {
+    .ionicons-ios7-arrow-left();
+}
+.ionicons-chevron-down() {
+    .ionicons-ios7-arrow-down();
+}

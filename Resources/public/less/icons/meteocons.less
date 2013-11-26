@@ -1,0 +1,112 @@
+/*!
+ * meteocons.less v1.0.0
+ *
+ * Mixins implementation of the Meteocons set by Alessio Atzeni
+ * See vendor/fontello/meteocons.font for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@font-face {
+  font-family: 'meteocons';
+  src: url('/bundles/bootstrapp/fonts/meteocons/meteocons.eot?883158');
+  src: url('/bundles/bootstrapp/fonts/meteocons/meteocons.eot?883158#iefix') format('embedded-opentype'),
+       url('/bundles/bootstrapp/fonts/meteocons/meteocons.woff?883158') format('woff'),
+       url('/bundles/bootstrapp/fonts/meteocons/meteocons.ttf?883158') format('truetype'),
+       url('/bundles/bootstrapp/fonts/meteocons/meteocons.svg?883158#meteocons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.meteocons(@content:"") {
+  font-family: "meteocons";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - magrins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.meteocons-windy-rain-inv()   { .meteocons('\21'); }
+.meteocons-snow-inv()         { .meteocons('\22'); }
+.meteocons-snow-heavy-inv()   { .meteocons('\23'); }
+.meteocons-hail-inv()         { .meteocons('\24'); }
+.meteocons-clouds-inv()       { .meteocons('\25'); }
+.meteocons-clouds-flash-inv() { .meteocons('\26'); }
+.meteocons-temperature()      { .meteocons('\27'); }
+.meteocons-compass()          { .meteocons('\28'); }
+.meteocons-na()               { .meteocons('\29'); }
+.meteocons-celcius()          { .meteocons('\2a'); }
+.meteocons-fahrenheit()       { .meteocons('\2b'); }
+.meteocons-clouds-flash-alt() { .meteocons('\30'); }
+.meteocons-sun-inv()          { .meteocons('\31'); }
+.meteocons-moon-inv()         { .meteocons('\32'); }
+.meteocons-cloud-sun-inv()    { .meteocons('\33'); }
+.meteocons-cloud-moon-inv()   { .meteocons('\34'); }
+.meteocons-cloud-inv()        { .meteocons('\35'); }
+.meteocons-cloud-flash-inv()  { .meteocons('\36'); }
+.meteocons-drizzle-inv()      { .meteocons('\37'); }
+.meteocons-rain-inv()         { .meteocons('\38'); }
+.meteocons-windy-inv()        { .meteocons('\39'); }
+.meteocons-sunrise()          { .meteocons('\41'); }
+.meteocons-sun()              { .meteocons('\42'); }
+.meteocons-moon()             { .meteocons('\43'); }
+.meteocons-eclipse()          { .meteocons('\44'); }
+.meteocons-mist()             { .meteocons('\45'); }
+.meteocons-wind()             { .meteocons('\46'); }
+.meteocons-snowflake()        { .meteocons('\47'); }
+.meteocons-cloud-sun()        { .meteocons('\48'); }
+.meteocons-cloud-moon()       { .meteocons('\49'); }
+.meteocons-fog-sun()          { .meteocons('\4a'); }
+.meteocons-fog-moon()         { .meteocons('\4b'); }
+.meteocons-fog-cloud()        { .meteocons('\4c'); }
+.meteocons-fog()              { .meteocons('\4d'); }
+.meteocons-cloud()            { .meteocons('\4e'); }
+.meteocons-cloud-flash()      { .meteocons('\4f'); }
+.meteocons-cloud-flash-alt()  { .meteocons('\50'); }
+.meteocons-drizzle()          { .meteocons('\51'); }
+.meteocons-rain()             { .meteocons('\52'); }
+.meteocons-windy()            { .meteocons('\53'); }
+.meteocons-windy-rain()       { .meteocons('\54'); }
+.meteocons-snow()             { .meteocons('\55'); }
+.meteocons-snow-alt()         { .meteocons('\56'); }
+.meteocons-snow-heavy()       { .meteocons('\57'); }
+.meteocons-hail()             { .meteocons('\58'); }
+.meteocons-clouds()           { .meteocons('\59'); }
+.meteocons-clouds-flash()     { .meteocons('\5a'); }
