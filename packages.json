@@ -182,6 +182,22 @@
         {
             "type": "package",
             "package": {
+                "name": "kudakurage/LigatureSymbols",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/kudakurage/LigatureSymbols.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/kudakurage/LigatureSymbols/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
                 "name": "jdewit/bootstrap-timepicker",
                 "version": "dev-master",
                 "source": {
@@ -387,6 +403,7 @@
         "driftyco/ionicons": "dev-master",
         "aristath/elusive-iconfont": "dev-master",
         "MfgLabs/mfglabs-iconset": "dev-master",
+        "kudakurage/LigatureSymbols": "dev-master",
         "jdewit/bootstrap-timepicker": "dev-master",
         "eternicode/bootstrap-datepicker": "dev-master",
         "vitalets/bootstrap-datepicker": "dev-master",

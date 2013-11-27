@@ -1,0 +1,408 @@
+/*!
+ * ligaturesymbols.less v1.0.0
+ *
+ * Mixins implementation of the LigatureSymbols web font by Kazuyuki Motoyama
+ * See https://github.com/kudakurage/LigatureSymbols for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+@font-face {
+    font-family: 'LigatureSymbols';
+    src: url('/bundles/bootstrapp/fonts/ligaturesymbols/LigatureSymbols-2.11.eot');
+    src: url('/bundles/bootstrapp/fonts/ligaturesymbols/LigatureSymbols-2.11.eot?#iefix') format('embedded-opentype'),
+         url('/bundles/bootstrapp/fonts/ligaturesymbols/LigatureSymbols-2.11.woff') format('woff'),
+         url('/bundles/bootstrapp/fonts/ligaturesymbols/LigatureSymbols-2.11.ttf') format('truetype'),
+         url('/bundles/bootstrapp/fonts/ligaturesymbols/LigatureSymbols-2.11.svg#LigatureSymbols') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ligaturesymbols(@content:"") {
+  font-family: 'LigatureSymbols';
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  -webkit-font-feature-settings: "liga" 1, "dlig" 1;
+  -moz-font-feature-settings: "liga=1, dlig=1";
+  -ms-font-feature-settings: "liga" 1, "dlig" 1;
+  font-feature-settings: "liga" 1, "dlig" 1;
+
+  /* bootstrapp fix */
+  background: none !important;
+  font-style: normal;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.ligaturesymbols-table()                { .ligaturesymbols("table"); }
+.ligaturesymbols-cell()                 { .ligaturesymbols("table"); }
+.ligaturesymbols-copy()                 { .ligaturesymbols("copy"); }
+.ligaturesymbols-files()                { .ligaturesymbols("copy"); }
+.ligaturesymbols-cut()                  { .ligaturesymbols("cut"); }
+.ligaturesymbols-scissors()             { .ligaturesymbols("cut"); }
+.ligaturesymbols-backspace()            { .ligaturesymbols("backspace"); }
+.ligaturesymbols-alignleft()            { .ligaturesymbols("alignleft"); }
+.ligaturesymbols-aligncenter()          { .ligaturesymbols("aligncenter"); }
+.ligaturesymbols-alignright()           { .ligaturesymbols("alignright"); }
+.ligaturesymbols-alignadjust()          { .ligaturesymbols("alignadjust"); }
+.ligaturesymbols-italic()               { .ligaturesymbols("italic"); }
+.ligaturesymbols-bold()                 { .ligaturesymbols("bold"); }
+.ligaturesymbols-underline()            { .ligaturesymbols("underline"); }
+.ligaturesymbols-strike()               { .ligaturesymbols("strike"); }
+.ligaturesymbols-emphasis()             { .ligaturesymbols("emphasis"); }
+.ligaturesymbols-code()                 { .ligaturesymbols("code"); }
+.ligaturesymbols-link()                 { .ligaturesymbols("link"); }
+.ligaturesymbols-chain()                { .ligaturesymbols("link"); }
+.ligaturesymbols-quote()                { .ligaturesymbols("quote"); }
+.ligaturesymbols-graph()                { .ligaturesymbols("graph"); }
+.ligaturesymbols-magic()                { .ligaturesymbols("magic"); }
+.ligaturesymbols-effect()               { .ligaturesymbols("magic"); }
+.ligaturesymbols-brush()                { .ligaturesymbols("brush"); }
+.ligaturesymbols-color()                { .ligaturesymbols("color"); }
+.ligaturesymbols-palette()              { .ligaturesymbols("color"); }
+.ligaturesymbols-contrast()             { .ligaturesymbols("contrast"); }
+.ligaturesymbols-adjust()               { .ligaturesymbols("contrast"); }
+.ligaturesymbols-ink()                  { .ligaturesymbols("ink"); }
+.ligaturesymbols-water()                { .ligaturesymbols("ink"); }
+.ligaturesymbols-gradation()            { .ligaturesymbols("gradation"); }
+.ligaturesymbols-grayscale()            { .ligaturesymbols("gradation"); }
+.ligaturesymbols-sepia()                { .ligaturesymbols("sepia"); }
+.ligaturesymbols-grunge()               { .ligaturesymbols("sepia"); }
+.ligaturesymbols-invert()               { .ligaturesymbols("invert"); }
+.ligaturesymbols-paint()                { .ligaturesymbols("paint"); }
+.ligaturesymbols-paramater()            { .ligaturesymbols("paramater"); }
+.ligaturesymbols-param()                { .ligaturesymbols("paramater"); }
+.ligaturesymbols-slider()               { .ligaturesymbols("paramater"); }
+.ligaturesymbols-crop()                 { .ligaturesymbols("crop"); }
+.ligaturesymbols-check()                { .ligaturesymbols("check"); }
+.ligaturesymbols-ok()                   { .ligaturesymbols("check"); }
+.ligaturesymbols-checkbox()             { .ligaturesymbols("checkbox"); }
+.ligaturesymbols-checkboxempty()        { .ligaturesymbols("checkboxempty"); }
+.ligaturesymbols-pc()                   { .ligaturesymbols("pc"); }
+.ligaturesymbols-display()              { .ligaturesymbols("pc"); }
+.ligaturesymbols-compiter()             { .ligaturesymbols("pc"); }
+.ligaturesymbols-keyboard()             { .ligaturesymbols("keyboard"); }
+.ligaturesymbols-mobile()               { .ligaturesymbols("mobile"); }
+.ligaturesymbols-iphone()               { .ligaturesymbols("mobile"); }
+.ligaturesymbols-smartphone()           { .ligaturesymbols("mobile"); }
+.ligaturesymbols-horizontal()           { .ligaturesymbols("horizontal"); }
+.ligaturesymbols-vertical()             { .ligaturesymbols("vertical"); }
+.ligaturesymbols-web()                  { .ligaturesymbols("web"); }
+.ligaturesymbols-mail()                 { .ligaturesymbols("mail"); }
+.ligaturesymbols-shopping()             { .ligaturesymbols("shopping"); }
+.ligaturesymbols-cart()                 { .ligaturesymbols("shopping"); }
+.ligaturesymbols-dashboard()            { .ligaturesymbols("dashboard"); }
+.ligaturesymbols-key()                  { .ligaturesymbols("key"); }
+.ligaturesymbols-sns()                  { .ligaturesymbols("sns"); }
+.ligaturesymbols-network()              { .ligaturesymbols("sns"); }
+.ligaturesymbols-calendar()             { .ligaturesymbols("calendar"); }
+.ligaturesymbols-dailycalendar()        { .ligaturesymbols("dailycalendar"); }
+.ligaturesymbols-ban()                  { .ligaturesymbols("ban"); }
+.ligaturesymbols-remove()               { .ligaturesymbols("remove"); }
+.ligaturesymbols-close()                { .ligaturesymbols("remove"); }
+.ligaturesymbols-pen()                  { .ligaturesymbols("pen"); }
+.ligaturesymbols-pencil()               { .ligaturesymbols("pen"); }
+.ligaturesymbols-write()                { .ligaturesymbols("pen"); }
+.ligaturesymbols-eraser()               { .ligaturesymbols("eraser"); }
+.ligaturesymbols-edit()                 { .ligaturesymbols("edit"); }
+.ligaturesymbols-addnew()               { .ligaturesymbols("edit"); }
+.ligaturesymbols-tabs()                 { .ligaturesymbols("tabs"); }
+.ligaturesymbols-tag()                  { .ligaturesymbols("tag"); }
+.ligaturesymbols-setup()                { .ligaturesymbols("setup"); }
+.ligaturesymbols-wrench()               { .ligaturesymbols("setup"); }
+.ligaturesymbols-spanner()              { .ligaturesymbols("setup"); }
+.ligaturesymbols-setting()              { .ligaturesymbols("setting"); }
+.ligaturesymbols-gear()                 { .ligaturesymbols("setting"); }
+.ligaturesymbols-etc()                  { .ligaturesymbols("etc"); }
+.ligaturesymbols-ellipsis()             { .ligaturesymbols("etc"); }
+.ligaturesymbols-clip()                 { .ligaturesymbols("clip"); }
+.ligaturesymbols-attach()               { .ligaturesymbols("clip"); }
+.ligaturesymbols-bookmark()             { .ligaturesymbols("bookmark"); }
+.ligaturesymbols-book()                 { .ligaturesymbols("book"); }
+.ligaturesymbols-album()                { .ligaturesymbols("album"); }
+.ligaturesymbols-user()                 { .ligaturesymbols("user"); }
+.ligaturesymbols-you()                  { .ligaturesymbols("user"); }
+.ligaturesymbols-human()                { .ligaturesymbols("user"); }
+.ligaturesymbols-man()                  { .ligaturesymbols("user"); }
+.ligaturesymbols-friend()               { .ligaturesymbols("friend"); }
+.ligaturesymbols-users()                { .ligaturesymbols("friend"); }
+.ligaturesymbols-group()                { .ligaturesymbols("group"); }
+.ligaturesymbols-frustrate()            { .ligaturesymbols("frustrate"); }
+.ligaturesymbols-laugh()                { .ligaturesymbols("laugh"); }
+.ligaturesymbols-wink()                 { .ligaturesymbols("wink"); }
+.ligaturesymbols-smile()                { .ligaturesymbols("smile"); }
+.ligaturesymbols-surprise()             { .ligaturesymbols("surprise"); }
+.ligaturesymbols-trouble()              { .ligaturesymbols("trouble"); }
+.ligaturesymbols-male()                 { .ligaturesymbols("male"); }
+.ligaturesymbols-man()                  { .ligaturesymbols("male"); }
+.ligaturesymbols-female()               { .ligaturesymbols("female"); }
+.ligaturesymbols-woman()                { .ligaturesymbols("female"); }
+.ligaturesymbols-lady()                 { .ligaturesymbols("female"); }
+.ligaturesymbols-game()                 { .ligaturesymbols("game"); }
+.ligaturesymbols-globe()                { .ligaturesymbols("globe"); }
+.ligaturesymbols-global()               { .ligaturesymbols("globe"); }
+.ligaturesymbols-earth()                { .ligaturesymbols("globe"); }
+.ligaturesymbols-home()                 { .ligaturesymbols("home"); }
+.ligaturesymbols-house()                { .ligaturesymbols("home"); }
+.ligaturesymbols-building()             { .ligaturesymbols("building"); }
+.ligaturesymbols-rss()                  { .ligaturesymbols("rss"); }
+.ligaturesymbols-feed()                 { .ligaturesymbols("rss"); }
+.ligaturesymbols-server()               { .ligaturesymbols("server"); }
+.ligaturesymbols-sitemap()              { .ligaturesymbols("sitemap"); }
+.ligaturesymbols-app()                  { .ligaturesymbols("app"); }
+.ligaturesymbols-application()          { .ligaturesymbols("app"); }
+.ligaturesymbols-memo()                 { .ligaturesymbols("memo"); }
+.ligaturesymbols-meal()                 { .ligaturesymbols("meal"); }
+.ligaturesymbols-dish()                 { .ligaturesymbols("meal"); }
+.ligaturesymbols-lunch()                { .ligaturesymbols("meal"); }
+.ligaturesymbols-coffee()               { .ligaturesymbols("coffee"); }
+.ligaturesymbols-cup()                  { .ligaturesymbols("coffee"); }
+.ligaturesymbols-spa()                  { .ligaturesymbols("spa"); }
+.ligaturesymbols-onsen()                { .ligaturesymbols("spa"); }
+.ligaturesymbols-college()              { .ligaturesymbols("college"); }
+.ligaturesymbols-bag()                  { .ligaturesymbols("bag"); }
+.ligaturesymbols-present()              { .ligaturesymbols("present"); }
+.ligaturesymbols-gift()                 { .ligaturesymbols("present"); }
+.ligaturesymbols-umbrella()             { .ligaturesymbols("umbrella"); }
+.ligaturesymbols-twinkle()              { .ligaturesymbols("twinkle"); }
+.ligaturesymbols-spark()                { .ligaturesymbols("twinkle"); }
+.ligaturesymbols-hot()                  { .ligaturesymbols("twinkle"); }
+.ligaturesymbols-crown()                { .ligaturesymbols("crown"); }
+.ligaturesymbols-category()             { .ligaturesymbols("category"); }
+.ligaturesymbols-drawer()               { .ligaturesymbols("category"); }
+.ligaturesymbols-circle()               { .ligaturesymbols("circle"); }
+.ligaturesymbols-info()                 { .ligaturesymbols("info"); }
+.ligaturesymbols-information()          { .ligaturesymbols("info"); }
+.ligaturesymbols-help()                 { .ligaturesymbols("help"); }
+.ligaturesymbols-refreshbutton()        { .ligaturesymbols("refreshbutton"); }
+.ligaturesymbols-terminal()             { .ligaturesymbols("terminal"); }
+.ligaturesymbols-()                     { .ligaturesymbols(""); }
+.ligaturesymbols-file()                 { .ligaturesymbols("file"); }
+.ligaturesymbols-print()                { .ligaturesymbols("print"); }
+.ligaturesymbols-delete()               { .ligaturesymbols("delete"); }
+.ligaturesymbols-trash()                { .ligaturesymbols("delete"); }
+.ligaturesymbols-clear()                { .ligaturesymbols("clear"); }
+.ligaturesymbols-save()                 { .ligaturesymbols("save"); }
+.ligaturesymbols-stock()                { .ligaturesymbols("save"); }
+.ligaturesymbols-upload()               { .ligaturesymbols("upload"); }
+.ligaturesymbols-cloud()                { .ligaturesymbols("cloud"); }
+.ligaturesymbols-folder()               { .ligaturesymbols("folder"); }
+.ligaturesymbols-camera()               { .ligaturesymbols("camera"); }
+.ligaturesymbols-photo()                { .ligaturesymbols("photo"); }
+.ligaturesymbols-images()               { .ligaturesymbols("photo"); }
+.ligaturesymbols-image()                { .ligaturesymbols("image"); }
+.ligaturesymbols-img()                  { .ligaturesymbols("image"); }
+.ligaturesymbols-barcode()              { .ligaturesymbols("barcode"); }
+.ligaturesymbols-phone()                { .ligaturesymbols("phone"); }
+.ligaturesymbols-call()                 { .ligaturesymbols("phone"); }
+.ligaturesymbols-music()                { .ligaturesymbols("music"); }
+.ligaturesymbols-video()                { .ligaturesymbols("video"); }
+.ligaturesymbols-playmedia()            { .ligaturesymbols("playmedia"); }
+.ligaturesymbols-record()               { .ligaturesymbols("record"); }
+.ligaturesymbols-mic()                  { .ligaturesymbols("record"); }
+.ligaturesymbols-microphone()           { .ligaturesymbols("record"); }
+.ligaturesymbols-play()                 { .ligaturesymbols("play"); }
+.ligaturesymbols-pause()                { .ligaturesymbols("pause"); }
+.ligaturesymbols-stop()                 { .ligaturesymbols("stop"); }
+.ligaturesymbols-eject()                { .ligaturesymbols("eject"); }
+.ligaturesymbols-bell()                 { .ligaturesymbols("bell"); }
+.ligaturesymbols-volumeup()             { .ligaturesymbols("volumeup"); }
+.ligaturesymbols-volumedown()           { .ligaturesymbols("volumedown"); }
+.ligaturesymbols-volume()               { .ligaturesymbols("volume"); }
+.ligaturesymbols-volumeoff()            { .ligaturesymbols("volume"); }
+.ligaturesymbols-off()                  { .ligaturesymbols("off"); }
+.ligaturesymbols-power()                { .ligaturesymbols("off"); }
+.ligaturesymbols-light()                { .ligaturesymbols("light"); }
+.ligaturesymbols-brightness()           { .ligaturesymbols("light"); }
+.ligaturesymbols-dark()                 { .ligaturesymbols("dark"); }
+.ligaturesymbols-darkness()             { .ligaturesymbols("dark"); }
+.ligaturesymbols-lock()                 { .ligaturesymbols("lock"); }
+.ligaturesymbols-unlock()               { .ligaturesymbols("unlock"); }
+.ligaturesymbols-flag()                 { .ligaturesymbols("flag"); }
+.ligaturesymbols-wifi()                 { .ligaturesymbols("wifi"); }
+.ligaturesymbols-time()                 { .ligaturesymbols("time"); }
+.ligaturesymbols-map()                  { .ligaturesymbols("map"); }
+.ligaturesymbols-geo()                  { .ligaturesymbols("geo"); }
+.ligaturesymbols-aim()                  { .ligaturesymbols("geo"); }
+.ligaturesymbols-location()             { .ligaturesymbols("location"); }
+.ligaturesymbols-direction()            { .ligaturesymbols("location"); }
+.ligaturesymbols-pin()                  { .ligaturesymbols("pin"); }
+.ligaturesymbols-walking()              { .ligaturesymbols("walking"); }
+.ligaturesymbols-bicycle()              { .ligaturesymbols("bicycle"); }
+.ligaturesymbols-car()                  { .ligaturesymbols("car"); }
+.ligaturesymbols-bus()                  { .ligaturesymbols("bus"); }
+.ligaturesymbols-plane()                { .ligaturesymbols("plane"); }
+.ligaturesymbols-airport()              { .ligaturesymbols("plane"); }
+.ligaturesymbols-compass()              { .ligaturesymbols("compass"); }
+.ligaturesymbols-cursor()               { .ligaturesymbols("cursor"); }
+.ligaturesymbols-pointer()              { .ligaturesymbols("pointer"); }
+.ligaturesymbols-grab()                 { .ligaturesymbols("grab"); }
+.ligaturesymbols-arrowup()              { .ligaturesymbols("arrowup"); }
+.ligaturesymbols-arrowright()           { .ligaturesymbols("arrowright"); }
+.ligaturesymbols-arrowdown()            { .ligaturesymbols("arrowdown"); }
+.ligaturesymbols-arrowleft()            { .ligaturesymbols("arrowleft"); }
+.ligaturesymbols-up()                   { .ligaturesymbols("up"); }
+.ligaturesymbols-right()                { .ligaturesymbols("right"); }
+.ligaturesymbols-down()                 { .ligaturesymbols("down"); }
+.ligaturesymbols-left()                 { .ligaturesymbols("left"); }
+.ligaturesymbols-back()                 { .ligaturesymbols("back"); }
+.ligaturesymbols-next()                 { .ligaturesymbols("next"); }
+.ligaturesymbols-dropdown()             { .ligaturesymbols("dropdown"); }
+.ligaturesymbols-sort()                 { .ligaturesymbols("sort"); }
+.ligaturesymbols-good()                 { .ligaturesymbols("good"); }
+.ligaturesymbols-like()                 { .ligaturesymbols("good"); }
+.ligaturesymbols-bad()                  { .ligaturesymbols("bad"); }
+.ligaturesymbols-nogood()               { .ligaturesymbols("bad"); }
+.ligaturesymbols-full()                 { .ligaturesymbols("full"); }
+.ligaturesymbols-small()                { .ligaturesymbols("small"); }
+.ligaturesymbols-move()                 { .ligaturesymbols("move"); }
+.ligaturesymbols-undo()                 { .ligaturesymbols("undo"); }
+.ligaturesymbols-forward()              { .ligaturesymbols("forward"); }
+.ligaturesymbols-reply()                { .ligaturesymbols("reply"); }
+.ligaturesymbols-share()                { .ligaturesymbols("share"); }
+.ligaturesymbols-login()                { .ligaturesymbols("login"); }
+.ligaturesymbols-in()                   { .ligaturesymbols("login"); }
+.ligaturesymbols-logout()               { .ligaturesymbols("logout"); }
+.ligaturesymbols-out()                  { .ligaturesymbols("logout"); }
+.ligaturesymbols-exchange()             { .ligaturesymbols("exchange"); }
+.ligaturesymbols-shuffle()              { .ligaturesymbols("shuffle"); }
+.ligaturesymbols-random()               { .ligaturesymbols("shuffle"); }
+.ligaturesymbols-repeat()               { .ligaturesymbols("repeat"); }
+.ligaturesymbols-retweet()              { .ligaturesymbols("repeat"); }
+.ligaturesymbols-refresh()              { .ligaturesymbols("refresh"); }
+.ligaturesymbols-reload()               { .ligaturesymbols("refresh"); }
+.ligaturesymbols-sync()                 { .ligaturesymbols("sync"); }
+.ligaturesymbols-external()             { .ligaturesymbols("external"); }
+.ligaturesymbols-newtab()               { .ligaturesymbols("external"); }
+.ligaturesymbols-addstar()              { .ligaturesymbols("addstar"); }
+.ligaturesymbols-star()                 { .ligaturesymbols("star"); }
+.ligaturesymbols-starempty()            { .ligaturesymbols("starempty"); }
+.ligaturesymbols-heart()                { .ligaturesymbols("heart"); }
+.ligaturesymbols-love()                 { .ligaturesymbols("heart"); }
+.ligaturesymbols-heartempty()           { .ligaturesymbols("heartempty"); }
+.ligaturesymbols-view()                 { .ligaturesymbols("view"); }
+.ligaturesymbols-eye()                  { .ligaturesymbols("view"); }
+.ligaturesymbols-comment()              { .ligaturesymbols("comment"); }
+.ligaturesymbols-balloon()              { .ligaturesymbols("comment"); }
+.ligaturesymbols-comments()             { .ligaturesymbols("comments"); }
+.ligaturesymbols-balloons()             { .ligaturesymbols("comments"); }
+.ligaturesymbols-plus()                 { .ligaturesymbols("plus"); }
+.ligaturesymbols-add()                  { .ligaturesymbols("plus"); }
+.ligaturesymbols-minus()                { .ligaturesymbols("minus"); }
+.ligaturesymbols-zoomin()               { .ligaturesymbols("zoomin"); }
+.ligaturesymbols-zoom()                 { .ligaturesymbols("zoomin"); }
+.ligaturesymbols-zoomout()              { .ligaturesymbols("zoomout"); }
+.ligaturesymbols-search()               { .ligaturesymbols("search"); }
+.ligaturesymbols-menu()                 { .ligaturesymbols("menu"); }
+.ligaturesymbols-tilemenu()             { .ligaturesymbols("tilemenu"); }
+.ligaturesymbols-list()                 { .ligaturesymbols("list"); }
+.ligaturesymbols-tile()                 { .ligaturesymbols("tile"); }
+.ligaturesymbols-notify()               { .ligaturesymbols("notify"); }
+.ligaturesymbols-apple()                { .ligaturesymbols("apple"); }
+.ligaturesymbols-android()              { .ligaturesymbols("android"); }
+.ligaturesymbols-windows()              { .ligaturesymbols("windows"); }
+.ligaturesymbols-ubuntu()               { .ligaturesymbols("ubuntu"); }
+.ligaturesymbols-amazon()               { .ligaturesymbols("amazon"); }
+.ligaturesymbols-facebook()             { .ligaturesymbols("facebook"); }
+.ligaturesymbols-twitter()              { .ligaturesymbols("twitter"); }
+.ligaturesymbols-vk()                   { .ligaturesymbols("vk"); }
+.ligaturesymbols-google()               { .ligaturesymbols("google"); }
+.ligaturesymbols-yahoo()                { .ligaturesymbols("yahoo"); }
+.ligaturesymbols-bing()                 { .ligaturesymbols("bing"); }
+.ligaturesymbols-hatena()               { .ligaturesymbols("hatena"); }
+.ligaturesymbols-hatenabookmark()       { .ligaturesymbols("hatenabookmark"); }
+.ligaturesymbols-digg()                 { .ligaturesymbols("digg"); }
+.ligaturesymbols-linkedin()             { .ligaturesymbols("linkedin"); }
+.ligaturesymbols-myspace()              { .ligaturesymbols("myspace"); }
+.ligaturesymbols-paperboy()             { .ligaturesymbols("paperboy"); }
+.ligaturesymbols-mixi()                 { .ligaturesymbols("mixi"); }
+.ligaturesymbols-line()                 { .ligaturesymbols("line"); }
+.ligaturesymbols-mobage()               { .ligaturesymbols("mobage"); }
+.ligaturesymbols-gree()                 { .ligaturesymbols("gree"); }
+.ligaturesymbols-skype()                { .ligaturesymbols("skype"); }
+.ligaturesymbols-aim()                  { .ligaturesymbols("aim"); }
+.ligaturesymbols-yelp()                 { .ligaturesymbols("yelp"); }
+.ligaturesymbols-foursquare()           { .ligaturesymbols("foursquare"); }
+.ligaturesymbols-pinterest()            { .ligaturesymbols("pinterest"); }
+.ligaturesymbols-flickr()               { .ligaturesymbols("flickr"); }
+.ligaturesymbols-tumblr()               { .ligaturesymbols("tumblr"); }
+.ligaturesymbols-wordpress()            { .ligaturesymbols("wordpress"); }
+.ligaturesymbols-blogger()              { .ligaturesymbols("blogger"); }
+.ligaturesymbols-evernote()             { .ligaturesymbols("evernote"); }
+.ligaturesymbols-dropbox()              { .ligaturesymbols("dropbox"); }
+.ligaturesymbols-slideshare()           { .ligaturesymbols("slideshare"); }
+.ligaturesymbols-github()               { .ligaturesymbols("github"); }
+.ligaturesymbols-yapcasialogomark()     { .ligaturesymbols("yapcasialogomark"); }
+.ligaturesymbols-dribbble()             { .ligaturesymbols("dribbble"); }
+.ligaturesymbols-cookpad()              { .ligaturesymbols("cookpad"); }
+.ligaturesymbols-instapaper()           { .ligaturesymbols("instapaper"); }
+.ligaturesymbols-readability()          { .ligaturesymbols("readability"); }
+.ligaturesymbols-gumroad()              { .ligaturesymbols("gumroad"); }
+.ligaturesymbols-picasa()               { .ligaturesymbols("picasa"); }
+.ligaturesymbols-instagram()            { .ligaturesymbols("instagram"); }
+.ligaturesymbols-delicious()            { .ligaturesymbols("delicious"); }
+.ligaturesymbols-youtube()              { .ligaturesymbols("youtube"); }
+.ligaturesymbols-vimeo()                { .ligaturesymbols("vimeo"); }
+.ligaturesymbols-ustream()              { .ligaturesymbols("ustream"); }
+.ligaturesymbols-soundcloud()           { .ligaturesymbols("soundcloud"); }
+.ligaturesymbols-chrome()               { .ligaturesymbols("chrome"); }
+.ligaturesymbols-safari()               { .ligaturesymbols("safari"); }
+.ligaturesymbols-sleipnir()             { .ligaturesymbols("sleipnir"); }
+.ligaturesymbols-chess()                { .ligaturesymbols("sleipnir"); }
+.ligaturesymbols-knight()               { .ligaturesymbols("sleipnir"); }
+.ligaturesymbols-firefox()              { .ligaturesymbols("firefox"); }
+.ligaturesymbols-opera()                { .ligaturesymbols("opera"); }
+.ligaturesymbols-internetexplorer()     { .ligaturesymbols("internetexplorer"); }
+.ligaturesymbols-ie()                   { .ligaturesymbols("internetexplorer"); }
+
+// Alias
+// --------------------------
+.ligaturesymbols-settings() {
+    .ligaturesymbols-setting();
+}
+.ligaturesymbols-show() {
+	.ligaturesymbols-eye();
+}
+.ligaturesymbols-create() {
+	.ligaturesymbols-plus();
+}
+.ligaturesymbols-update() {
+	.ligaturesymbols-edit();
+}
+.ligaturesymbols-restore() {
+    .ligaturesymbols-undo();
+}
+.ligaturesymbols-cancel() {
+    .ligaturesymbols-remove();
+}
+.ligaturesymbols-save() {
+    .ligaturesymbols-check();
+}
+.ligaturesymbols-back() {
+    .ligaturesymbols-left();
+}
+.ligaturesymbols-chevron-up() {
+    .ligaturesymbols-up();
+}
+.ligaturesymbols-chevron-right() {
+    .ligaturesymbols-right();
+}
+.ligaturesymbols-chevron-left() {
+    .ligaturesymbols-left();
+}
+.ligaturesymbols-chevron-down() {
+    .ligaturesymbols-down();
+}

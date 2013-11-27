@@ -23,6 +23,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'Ionicons',
         'Elusive',
         'MfgLabs',
+        'LigatureSymbols',
         'Jdewit',
         'Eternicode',
         'Vitalets',
@@ -167,6 +168,15 @@ EOT
                 $output->writeln('<info>Success, MfgLabs assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : MfgLabs assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('LigatureSymbols', $this->assets)) {
+            $output->writeln('<comment>Installing LigatureSymbols assets...</comment>');
+            if(true === $this->getLigatureSymbolsAssets($output)) {
+                $output->writeln('<info>Success, LigatureSymbols assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : LigatureSymbols assets installation failed!</error>');
             }
         }
 
@@ -1366,6 +1376,138 @@ EOF
         );
 
         $output->writeln('<info>Success, mfglabs.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getLigatureSymbolsAssets($output)
+    {
+        $ligatureDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/kudakurage/LigatureSymbols/site/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/ligaturesymbols');
+        $files = [
+            'LigatureSymbols-2.11.eot',
+            'LigatureSymbols-2.11.svg',
+            'LigatureSymbols-2.11.ttf',
+            'LigatureSymbols-2.11.woff'
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($ligatureDir.'font/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse ligature.css
+        $content = '';
+        $cssFile = file_get_contents($ligatureDir.'style/ligature.css');
+
+        // get @font-face
+        preg_match_all('/@font-face\s*\{[^}]*\}/', $cssFile, $matches);
+        if (!empty($matches)) {
+            $content .= "\n" . str_replace('../font/', '/bundles/bootstrapp/fonts/ligaturesymbols/', $matches[0][0]);
+        }
+
+        // get mixin css
+        preg_match_all('/\.lsf-icon:before\s*\{\s?([^}]*)\s\}/', $cssFile, $matches, PREG_SET_ORDER);
+        if (!empty($matches)) {
+            $content .= <<<EOF
+
+
+.ligaturesymbols(@content:"") {
+{$matches[0][1]}
+
+  /* bootstrapp fix */
+  background: none !important;
+  font-style: normal;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+EOF;
+        }
+
+        # parse index.html
+        $indexFile = file_get_contents($ligatureDir.'index.html');
+
+        // get ligatures
+        preg_match_all('/<td\s*class="lsf symbol">([^<]*)<\/td>\s*<td\s*class="ligature">([^<]*)<\/td>\s*<td\s*class="unicode">([^<]*)<\/td>/', $indexFile, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $symbol = $match[1];
+            $tags = explode(', ', $match[2]);
+            $unicode = $match[3];
+            foreach($tags as $tag) {
+                $content .= "\n" . str_pad('.ligaturesymbols-'.$tag.'()', 40) . '{ .ligaturesymbols("' . trim($symbol). '"); }';
+            }
+        }
+
+        // Strip whitespaces
+        $content = trim($content);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/ligaturesymbols.less', <<<EOF
+/*!
+ * ligaturesymbols.less v1.0.0
+ *
+ * Mixins implementation of the LigatureSymbols web font by Kazuyuki Motoyama
+ * See https://github.com/kudakurage/LigatureSymbols for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$content
+
+// Alias
+// --------------------------
+.ligaturesymbols-settings() {
+    .ligaturesymbols-setting();
+}
+.ligaturesymbols-show() {
+	.ligaturesymbols-eye();
+}
+.ligaturesymbols-create() {
+	.ligaturesymbols-plus();
+}
+.ligaturesymbols-update() {
+	.ligaturesymbols-edit();
+}
+.ligaturesymbols-restore() {
+    .ligaturesymbols-undo();
+}
+.ligaturesymbols-cancel() {
+    .ligaturesymbols-remove();
+}
+.ligaturesymbols-save() {
+    .ligaturesymbols-check();
+}
+.ligaturesymbols-back() {
+    .ligaturesymbols-left();
+}
+.ligaturesymbols-chevron-up() {
+    .ligaturesymbols-up();
+}
+.ligaturesymbols-chevron-right() {
+    .ligaturesymbols-right();
+}
+.ligaturesymbols-chevron-left() {
+    .ligaturesymbols-left();
+}
+.ligaturesymbols-chevron-down() {
+    .ligaturesymbols-down();
+}
+EOF
+        );
+
+        $output->writeln('<info>Success, ligaturesymbols.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
 
         return true;
     }
