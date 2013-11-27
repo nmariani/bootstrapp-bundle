@@ -22,6 +22,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'Meteocons',
         'Ionicons',
         'Elusive',
+        'MfgLabs',
         'Jdewit',
         'Eternicode',
         'Vitalets',
@@ -157,6 +158,15 @@ EOT
                 $output->writeln('<info>Success, Elusive assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : Elusive assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('MfgLabs', $this->assets)) {
+            $output->writeln('<comment>Installing MfgLabs assets...</comment>');
+            if(true === $this->getMfgLabsAssets($output)) {
+                $output->writeln('<info>Success, MfgLabs assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : MfgLabs assets installation failed!</error>');
             }
         }
 
@@ -1232,6 +1242,130 @@ EOF
         );
 
         $output->writeln('<info>Success, elusive.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getMfgLabsAssets($output)
+    {
+        $mfglabsDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/MfgLabs/mfglabs-iconset/css/';
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/mfglabs');
+        $files = [
+            'mfglabsiconset-webfont.eot',
+            'mfglabsiconset-webfont.svg',
+            'mfglabsiconset-webfont.ttf',
+            'mfglabsiconset-webfont.woff'
+        ];
+        foreach($files as $file) {
+            $filesystem->copy($mfglabsDir.'font/'.$file, $fontsPath . '/' . basename($file));
+        }
+        $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
+
+        # parse mfglabs_iconset.css
+        $content = '';
+        $cssFile = file_get_contents($mfglabsDir.'mfglabs_iconset.css');
+
+        // get file header comment and licence
+        preg_match_all('#/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/#', $cssFile, $matches);
+        if (!empty($matches)) {
+            $content .= $matches[0][0];
+        }
+
+        // get @font-face
+        preg_match_all('/@font-face\s*\{[^}]*\}/', $cssFile, $matches);
+        if (!empty($matches)) {
+            $content .= "\n" . str_replace('font/', '/bundles/bootstrapp/fonts/mfglabs/', $matches[0][0]);
+        }
+
+        // get mixin css
+        preg_match_all('/\.icon\s*\{\s?([^}]*)\s\}/', $cssFile, $matches, PREG_SET_ORDER);
+        if (!empty($matches)) {
+            $content .= <<<EOF
+
+
+.mfglabs(@content:"") {
+{$matches[0][1]}
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+EOF;
+        }
+
+        // get .icon-*:before rules
+        preg_match_all('/.icon((?:-\w*)+):before\s*\{\s*content:\s*([^;]*)[^}]*\}/', $cssFile, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $match[1] = str_replace('_', '-', $match[1]);
+            $content .= "\n" . str_pad('.mfglabs'.$match[1].'()', 30) . '{ .mfglabs(' . trim($match[2]). '); }';
+        }
+
+        // Strip whitespaces
+        $content = trim($content);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/mfglabs.less', <<<EOF
+/*!
+ * mfglabs.less v1.0.0
+ *
+ * Mixins implementation of the MFG Labs iconset
+ * See https://github.com/MfgLabs/mfglabs-iconset for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$content
+
+// Alias
+// --------------------------
+.mfglabs-show() {
+	.mfglabs-eye();
+}
+.mfglabs-create() {
+	.mfglabs-plus();
+}
+.mfglabs-update() {
+	.mfglabs-pen();
+}
+.mfglabs-delete() {
+    .mfglabs-trash-can();
+}
+.mfglabs-restore() {
+    .mfglabs-reply();
+}
+.mfglabs-cancel() {
+    .mfglabs-cross-mark();
+}
+.mfglabs-save() {
+    .mfglabs-check();
+}
+.mfglabs-back() {
+    .mfglabs-chevron-left();
+}
+.mfglabs-trash() {
+    .mfglabs-trash-can();
+}
+.mfglabs-help() {
+    .mfglabs-white-question();
+}
+EOF
+        );
+
+        $output->writeln('<info>Success, mfglabs.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
 
         return true;
     }

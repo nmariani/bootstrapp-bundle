@@ -1,0 +1,253 @@
+/*!
+ * mfglabs.less v1.0.0
+ *
+ * Mixins implementation of the MFG Labs iconset
+ * See https://github.com/MfgLabs/mfglabs-iconset for more informations
+ *
+ * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*  MFG Labs iconset 1.0
+    
+    -------------------------------------------------------
+    
+    License
+    -------------------------------------------------------
+    • The MFG Labs iconset font is licensed under the SIL Open Font License - http://scripts.sil.org/OFL
+    • MFG Labs inconset CSS files are licensed under the MIT License -
+      http://opensource.org/licenses/mit-license.html
+    • The MFG Labs iconset pictograms are licensed under the CC BY 3.0 License - http://creativecommons.org/licenses/by/3.0/
+    • Attribution is no longer required in Font Awesome 3.0, but much appreciated:
+      MFG Labs inconset by MFG Labs
+
+    Contact
+    -------------------------------------------------------
+    Email: martin.charpentier@mfglabs.com
+    Twitter: http://twitter.com/mfg_labs
+    
+
+    */
+@font-face {
+    font-family: 'mfg_labs_iconsetregular';
+    src: url('/bundles/bootstrapp/fonts/mfglabs/mfglabsiconset-webfont.eot');
+    src: url('/bundles/bootstrapp/fonts/mfglabs/mfglabsiconset-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/bundles/bootstrapp/fonts/mfglabs/mfglabsiconset-webfont.woff') format('woff'),
+         url('/bundles/bootstrapp/fonts/mfglabs/mfglabsiconset-webfont.ttf') format('truetype'),
+         url('/bundles/bootstrapp/fonts/mfglabs/mfglabsiconset-webfont.svg#mfg_labs_iconsetregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.mfglabs(@content:"") {
+  font-family: 'mfg_labs_iconsetregular';
+  font-style: normal;
+  speak: none;
+  font-weight: normal;
+  font-size: 1em;
+  -webkit-font-smoothing: antialiased;
+
+  /* bootstrapp fix */
+  background: none !important;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+.mfglabs-cloud()              { .mfglabs("\2601"); }
+.mfglabs-at()                 { .mfglabs("\0040"); }
+.mfglabs-plus()               { .mfglabs("\002B"); }
+.mfglabs-minus()              { .mfglabs("\2212"); }
+.mfglabs-arrow-up()           { .mfglabs("\2191"); }
+.mfglabs-arrow-down()         { .mfglabs("\2193"); }
+.mfglabs-arrow-right()        { .mfglabs("\2192"); }
+.mfglabs-arrow-left()         { .mfglabs("\2190"); }
+.mfglabs-chevron-down()       { .mfglabs("\f004"); }
+.mfglabs-chevron-up()         { .mfglabs("\f005"); }
+.mfglabs-chevron-right()      { .mfglabs("\f006"); }
+.mfglabs-chevron-left()       { .mfglabs("\f007"); }
+.mfglabs-reorder()            { .mfglabs("\f008"); }
+.mfglabs-list()               { .mfglabs("\f009"); }
+.mfglabs-reorder-square()     { .mfglabs("\f00a"); }
+.mfglabs-reorder-square-line(){ .mfglabs("\f00b"); }
+.mfglabs-coverflow()          { .mfglabs("\f00c"); }
+.mfglabs-coverflow-line()     { .mfglabs("\f00d"); }
+.mfglabs-pause()              { .mfglabs("\f00e"); }
+.mfglabs-play()               { .mfglabs("\f00f"); }
+.mfglabs-step-forward()       { .mfglabs("\f010"); }
+.mfglabs-step-backward()      { .mfglabs("\f011"); }
+.mfglabs-fast-forward()       { .mfglabs("\f012"); }
+.mfglabs-fast-backward()      { .mfglabs("\f013"); }
+.mfglabs-cloud-upload()       { .mfglabs("\f014"); }
+.mfglabs-cloud-download()     { .mfglabs("\f015"); }
+.mfglabs-data-science()       { .mfglabs("\f016"); }
+.mfglabs-data-science-black() { .mfglabs("\f017"); }
+.mfglabs-globe()              { .mfglabs("\f018"); }
+.mfglabs-globe-black()        { .mfglabs("\f019"); }
+.mfglabs-math-ico()           { .mfglabs("\f01a"); }
+.mfglabs-math()               { .mfglabs("\f01b"); }
+.mfglabs-math-black()         { .mfglabs("\f01c"); }
+.mfglabs-paperplane-ico()     { .mfglabs("\f01d"); }
+.mfglabs-paperplane()         { .mfglabs("\f01e"); }
+.mfglabs-paperplane-black()   { .mfglabs("\f01f"); }
+.mfglabs-color-balance()      { .mfglabs("\f020"); }
+.mfglabs-star()               { .mfglabs("\2605"); }
+.mfglabs-star-half()          { .mfglabs("\f022"); }
+.mfglabs-star-empty()         { .mfglabs("\2606"); }
+.mfglabs-star-half-empty()    { .mfglabs("\f024"); }
+.mfglabs-reload()             { .mfglabs("\f025"); }
+.mfglabs-heart()              { .mfglabs("\2665"); }
+.mfglabs-heart-broken()       { .mfglabs("\f028"); }
+.mfglabs-hashtag()            { .mfglabs("\f029"); }
+.mfglabs-reply()              { .mfglabs("\f02a"); }
+.mfglabs-retweet()            { .mfglabs("\f02b"); }
+.mfglabs-signin()             { .mfglabs("\f02c"); }
+.mfglabs-signout()            { .mfglabs("\f02d"); }
+.mfglabs-download()           { .mfglabs("\f02e"); }
+.mfglabs-upload()             { .mfglabs("\f02f"); }
+.mfglabs-placepin()           { .mfglabs("\f031"); }
+.mfglabs-display-screen()     { .mfglabs("\f032"); }
+.mfglabs-tablet()             { .mfglabs("\f033"); }
+.mfglabs-smartphone()         { .mfglabs("\f034"); }
+.mfglabs-connected-object()   { .mfglabs("\f035"); }
+.mfglabs-lock()               { .mfglabs("\F512"); }
+.mfglabs-unlock()             { .mfglabs("\F513"); }
+.mfglabs-camera()             { .mfglabs("\F4F7"); }
+.mfglabs-isight()             { .mfglabs("\f039"); }
+.mfglabs-video-camera()       { .mfglabs("\f03a"); }
+.mfglabs-random()             { .mfglabs("\f03b"); }
+.mfglabs-message()            { .mfglabs("\F4AC"); }
+.mfglabs-discussion()         { .mfglabs("\f03d"); }
+.mfglabs-calendar()           { .mfglabs("\F4C5"); }
+.mfglabs-ringbell()           { .mfglabs("\f03f"); }
+.mfglabs-movie()              { .mfglabs("\f040"); }
+.mfglabs-mail()               { .mfglabs("\2709"); }
+.mfglabs-pen()                { .mfglabs("\270F"); }
+.mfglabs-settings()           { .mfglabs("\9881"); }
+.mfglabs-measure()            { .mfglabs("\f044"); }
+.mfglabs-vector()             { .mfglabs("\f045"); }
+.mfglabs-vector-pen()         { .mfglabs("\2712"); }
+.mfglabs-mute-on()            { .mfglabs("\f047"); }
+.mfglabs-mute-off()           { .mfglabs("\f048"); }
+.mfglabs-home()               { .mfglabs("\2302"); }
+.mfglabs-sheet()              { .mfglabs("\f04a"); }
+.mfglabs-arrow-big-right()    { .mfglabs("\21C9"); }
+.mfglabs-arrow-big-left()     { .mfglabs("\21C7"); }
+.mfglabs-arrow-big-down()     { .mfglabs("\21CA"); }
+.mfglabs-arrow-big-up()       { .mfglabs("\21C8"); }
+.mfglabs-dribbble-circle()    { .mfglabs("\f04f"); }
+.mfglabs-dribbble()           { .mfglabs("\f050"); }
+.mfglabs-facebook-circle()    { .mfglabs("\f051"); }
+.mfglabs-facebook()           { .mfglabs("\f052"); }
+.mfglabs-git-circle-alt()     { .mfglabs("\f053"); }
+.mfglabs-git-circle()         { .mfglabs("\f054"); }
+.mfglabs-git()                { .mfglabs("\f055"); }
+.mfglabs-octopus()            { .mfglabs("\f056"); }
+.mfglabs-twitter-circle()     { .mfglabs("\f057"); }
+.mfglabs-twitter()            { .mfglabs("\f058"); }
+.mfglabs-google-plus-circle() { .mfglabs("\f059"); }
+.mfglabs-google-plus()        { .mfglabs("\f05a"); }
+.mfglabs-linked-in-circle()   { .mfglabs("\f05b"); }
+.mfglabs-linked-in()          { .mfglabs("\f05c"); }
+.mfglabs-instagram()          { .mfglabs("\f05d"); }
+.mfglabs-instagram-circle()   { .mfglabs("\f05e"); }
+.mfglabs-mfg-icon()           { .mfglabs("\f05f"); }
+.mfglabs-xing()               { .mfglabs("\F532"); }
+.mfglabs-xing-circle()        { .mfglabs("\F533"); }
+.mfglabs-mfg-icon-circle()    { .mfglabs("\f060"); }
+.mfglabs-user()               { .mfglabs("\f061"); }
+.mfglabs-user-male()          { .mfglabs("\f062"); }
+.mfglabs-user-female()        { .mfglabs("\f063"); }
+.mfglabs-users()              { .mfglabs("\f064"); }
+.mfglabs-file-open()          { .mfglabs("\F4C2"); }
+.mfglabs-file-close()         { .mfglabs("\f067"); }
+.mfglabs-file-alt()           { .mfglabs("\f068"); }
+.mfglabs-file-close-alt()     { .mfglabs("\f069"); }
+.mfglabs-attachment()         { .mfglabs("\f06a"); }
+.mfglabs-check()              { .mfglabs("\2713"); }
+.mfglabs-cross-mark()         { .mfglabs("\274C"); }
+.mfglabs-cancel-circle()      { .mfglabs("\F06E"); }
+.mfglabs-check-circle()       { .mfglabs("\f06d"); }
+.mfglabs-magnifying()         { .mfglabs("\F50D"); }
+.mfglabs-inbox()              { .mfglabs("\f070"); }
+.mfglabs-clock()              { .mfglabs("\23F2"); }
+.mfglabs-stopwatch()          { .mfglabs("\23F1"); }
+.mfglabs-hourglass()          { .mfglabs("\231B"); }
+.mfglabs-trophy()             { .mfglabs("\f074"); }
+.mfglabs-unlock-alt()         { .mfglabs("\F075"); }
+.mfglabs-lock-alt()           { .mfglabs("\F510"); }
+.mfglabs-arrow-doubled-right(){ .mfglabs("\21D2"); }
+.mfglabs-arrow-doubled-left() { .mfglabs("\21D0"); }
+.mfglabs-arrow-doubled-down() { .mfglabs("\21D3"); }
+.mfglabs-arrow-doubled-up()   { .mfglabs("\21D1"); }
+.mfglabs-link()               { .mfglabs("\f07B"); }
+.mfglabs-warning()            { .mfglabs("\2757"); }
+.mfglabs-warning-alt()        { .mfglabs("\2755"); }
+.mfglabs-magnifying-plus()    { .mfglabs("\f07E"); }
+.mfglabs-magnifying-minus()   { .mfglabs("\f07F"); }
+.mfglabs-white-question()     { .mfglabs("\2754"); }
+.mfglabs-black-question()     { .mfglabs("\2753"); }
+.mfglabs-stop()               { .mfglabs("\f080"); }
+.mfglabs-share()              { .mfglabs("\f081"); }
+.mfglabs-eye()                { .mfglabs("\f082"); }
+.mfglabs-trash-can()          { .mfglabs("\f083"); }
+.mfglabs-hard-drive()         { .mfglabs("\f084"); }
+.mfglabs-information-black()  { .mfglabs("\f085"); }
+.mfglabs-information-white()  { .mfglabs("\f086"); }
+.mfglabs-printer()            { .mfglabs("\f087"); }
+.mfglabs-letter()             { .mfglabs("\f088"); }
+.mfglabs-soundcloud()         { .mfglabs("\f089"); }
+.mfglabs-soundcloud-circle()  { .mfglabs("\f08A"); }
+.mfglabs-anchor()             { .mfglabs("\2693"); }
+.mfglabs-female-sign()        { .mfglabs("\2640"); }
+.mfglabs-male-sign()          { .mfglabs("\2642"); }
+.mfglabs-joystick()           { .mfglabs("\F514"); }
+.mfglabs-high-voltage()       { .mfglabs("\26A1"); }
+.mfglabs-fire()               { .mfglabs("\F525"); }
+.mfglabs-newspaper()          { .mfglabs("\F4F0"); }
+.mfglabs-chart()              { .mfglabs("\F526"); }
+.mfglabs-spread()             { .mfglabs("\F527"); }
+.mfglabs-spinner-1()          { .mfglabs("\F528"); }
+.mfglabs-spinner-2()          { .mfglabs("\F529"); }
+.mfglabs-chart-alt()          { .mfglabs("\F530"); }
+.mfglabs-label()              { .mfglabs("\F531"); }
+
+// Alias
+// --------------------------
+.mfglabs-show() {
+	.mfglabs-eye();
+}
+.mfglabs-create() {
+	.mfglabs-plus();
+}
+.mfglabs-update() {
+	.mfglabs-pen();
+}
+.mfglabs-delete() {
+    .mfglabs-trash-can();
+}
+.mfglabs-restore() {
+    .mfglabs-reply();
+}
+.mfglabs-cancel() {
+    .mfglabs-cross-mark();
+}
+.mfglabs-save() {
+    .mfglabs-check();
+}
+.mfglabs-back() {
+    .mfglabs-chevron-left();
+}
+.mfglabs-trash() {
+    .mfglabs-trash-can();
+}
+.mfglabs-help() {
+    .mfglabs-white-question();
+}
