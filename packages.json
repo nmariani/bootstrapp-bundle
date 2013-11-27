@@ -166,6 +166,22 @@
         {
             "type": "package",
             "package": {
+                "name": "MfgLabs/mfglabs-iconset",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/MfgLabs/mfglabs-iconset.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/MfgLabs/mfglabs-iconset/zipball/latest/full",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
                 "name": "jdewit/bootstrap-timepicker",
                 "version": "dev-master",
                 "source": {
@@ -370,6 +386,7 @@
         "fontello/meteocons.font": "dev-master",
         "driftyco/ionicons": "dev-master",
         "aristath/elusive-iconfont": "dev-master",
+        "MfgLabs/mfglabs-iconset": "dev-master",
         "jdewit/bootstrap-timepicker": "dev-master",
         "eternicode/bootstrap-datepicker": "dev-master",
         "vitalets/bootstrap-datepicker": "dev-master",
