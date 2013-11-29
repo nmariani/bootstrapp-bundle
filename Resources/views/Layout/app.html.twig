@@ -59,7 +59,7 @@
 
 {% block container %}
     {% if sidebar is defined and sidebar.visible == true %}
-    <div id="sidebar" class="span2">
+    <div id="sidebar">
         {% block sidebar %}
         <div id="sidebar-header">
             {% block sidebar_header %}
@@ -75,10 +75,8 @@
         </div>
         {% endblock sidebar %}
     </div>
-    <div id="content" class="span10">
-    {% else %}
-    <div id="content" class="span12">
     {% endif %}
+    <div id="content">
         <div id="content-inner">
             {{ parent() }}
         </div>

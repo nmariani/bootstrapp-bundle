@@ -21,6 +21,45 @@ tr.deleted {
     color: #B94A48;
 }
 
+body {
+  padding: 0;
+
+  .navbar-fixed-top {
+    position: fixed !important;
+    margin: 0;
+
+    .navbar-inner {
+      padding: 5px;
+    }
+
+    .container-fluid {
+      padding: 0;
+    }
+    .brand,
+    .brand:hover {
+      margin-left: 0;
+      margin-right: 20px;
+      padding: 10px;
+    }
+  }
+
+  > .container-fluid {
+    padding: 0;
+
+    > .row-fluid {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      position: absolute;
+      top: 41px;
+      bottom: 39px;
+      overflow: hidden;
+    }
+  }
+}
+
 .navbar .nav > li > a:hover,
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover {
@@ -28,9 +67,10 @@ tr.deleted {
 }
 
 #content {
-    background-color: #fff;
-    .border-radius(0 0 6px 6px);
-    .box-shadow(0 1px 3px rgba(0,0,0,.15));
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    background: @white;
 }
 #content-inner {
     padding: 20px;
@@ -87,4 +127,89 @@ header {
         margin-left: 20px;
         margin-bottom: 0;
     }
+}
+
+@media screen and (orientation:portrait) {
+  body {
+    > .container-fluid {
+      > .row-fluid {
+        -webkit-box-direction: normal;
+        -moz-box-direction: normal;
+        -webkit-box-orient: vertical;
+        -moz-box-orient: vertical;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+      }
+    }
+  }
+
+  #sidebar {
+    .nav-list {
+      overflow: hidden;
+
+      > li {
+        float: left;
+        width: 33%;
+
+        > a {
+          margin: 0;
+        }
+
+        &.divider {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    > .container-fluid {
+      > .row-fluid {
+        display: block;
+        height: auto;
+        overflow: auto;
+      }
+    }
+  }
+
+  .navbar-fixed-top {
+    .container-fluid {
+      > form {
+        width: 50%;
+
+        .input-append,
+        input {
+          width: 100%;
+        }
+      }
+
+      .nav-collapse ul.nav {
+        li {
+          float: left;
+        }
+      }
+    }
+  }
+
+  #sidebar {
+    .nav-list {
+      overflow: hidden;
+
+      > li {
+        float: left;
+        width: 50%;
+
+        > a {
+          margin: 0;
+        }
+
+        &.divider {
+          display: none;
+        }
+      }
+    }
+  }
 }
