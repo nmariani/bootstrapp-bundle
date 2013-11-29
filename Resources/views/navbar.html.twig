@@ -26,7 +26,9 @@
                                         {% if item.icon is defined %}
                                             <i class="{{ item.icon }}"></i>
                                         {% endif %}
-                                        {{ item.caption }} <b class="caret"></b>
+                                        {% if item.caption is defined %}
+                                            {{ item.caption }} <b class="caret"></b>
+                                        {% endif %}
                                     </a>
                                     <ul class="dropdown-menu pull-right">
                                         {% for subitem in item.items %}
@@ -43,7 +45,9 @@
                                     {% if item.icon is defined %}
                                         <i class="{{ item.icon }}"></i>
                                     {% endif %}
-                                    {{ item.caption }}
+                                    {% if item.caption is defined %}
+                                        {{ item.caption }}
+                                    {% endif %}
                                     </a>
                                 </li>
                             {% endif %}
@@ -75,6 +79,17 @@
                                         {% endfor %}
                                         {% endblock navbar_menu %}
                                     </ul>
+                                </li>
+                            {% elseif menu.href is defined %}
+                                <li>
+                                    <a href="{{ menu.href }}">
+                                    {% if menu.icon is defined %}
+                                        <i class="{{ menu.icon }}"></i>
+                                    {% endif %}
+                                    {% if menu.caption is defined %}
+                                        {{ menu.caption }}
+                                    {% endif %}
+                                    </a>
                                 </li>
                             {% endif %}
                         {% endfor %}

@@ -84,7 +84,7 @@
 
 {% block bootstrapp_bundle_location_widget %}
     {% trans_default_domain "location" %}
-    <div class="row-fluid" id ="{{ form.vars.id }}">
+    <div class="row-fluid" id ="{{ form.vars.id }}" style="position: relative;">
         <div class="span8">
             {% if form.address is defined %}
             <div class="row-fluid">
@@ -137,7 +137,9 @@
             {{ form_row(form.latitude) }}
             {{ form_row(form.longitude) }}
         </div>
-        <div id="{{ form.vars.id }}_map" class="map google-maps span4"></div>
+        <div class="span4" style="position: absolute; top: 0; right: 0; bottom: 0;">
+            <div id="{{ form.vars.id }}_map" class="map google-maps" style="height: 100%"></div>
+        </div>
     </div>
     <script type="text/javascript">
         {% if not app.request.isXmlHttpRequest %}
