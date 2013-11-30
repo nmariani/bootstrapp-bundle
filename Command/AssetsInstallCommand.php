@@ -1443,7 +1443,7 @@ EOF;
             $tags = explode(', ', $match[2]);
             $unicode = $match[3];
             foreach($tags as $tag) {
-                $content .= "\n" . str_pad('.ligaturesymbols-'.$tag.'()', 40) . '{ .ligaturesymbols("' . trim($symbol). '"); }';
+                $content .= "\n" . str_pad('.ligaturesymbols-'.$tag.'()', 40) . '{ .ligaturesymbols("' . trim($unicode). '"); }';
             }
         }
 
