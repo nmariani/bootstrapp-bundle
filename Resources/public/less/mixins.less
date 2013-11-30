@@ -16,3 +16,20 @@
 /*------------------------------*
  *      BootstrappBundle        *
  *------------------------------*/
+
+// Flexbox layout
+// -------------------------
+.flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.flex(@grow: 0, @shrink: 1, @basis: auto) {
+  -webkit-box-flex: @grow;
+  -moz-box-flex: @grow;
+  -webkit-flex: @grow @shrink @basis;
+  -ms-flex: @grow @shrink @basis;
+  flex: @grow @shrink @basis;
+}
