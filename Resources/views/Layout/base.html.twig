@@ -13,7 +13,11 @@
 
 {% spaceless %}
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}">
+<!--[if lt IE 7]><html lang="{{ app.request.locale }}" class="lt-ie10 lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html lang="{{ app.request.locale }}" class="lt-ie10 lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html lang="{{ app.request.locale }}" class="lt-ie10 lt-ie9"> <![endif]-->
+<!--[if IE 9]><html lang="{{ app.request.locale }}" class="lt-ie10"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="{{ app.request.locale }}"> <!--<![endif]-->
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +25,10 @@
     <meta name="author" content="{% block meta_author %}{% endblock meta_author %}">
 
     <title>{% block title %}Your Twitter Bootstrap based application{% endblock title %}</title>
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
     {% block stylesheets %}
         {% stylesheets filter='less' output='bundles/bootstrapp/css/base.css'

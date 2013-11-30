@@ -47,11 +47,7 @@ body {
     padding: 0;
 
     > .row-fluid {
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
+      .flexbox();
       position: absolute;
       top: 41px;
       bottom: 39px;
@@ -67,7 +63,7 @@ body {
 }
 
 #content {
-    flex: 1 1 auto;
+    .flex(1, 1, auto);
     min-height: 0;
     overflow: auto;
     background: @white;
@@ -76,6 +72,7 @@ body {
     padding: 20px;
 }
 #sidebar {
+    .flex(0, 1, auto);
     background-color: @wellBackground;
     padding: 15px;
 
@@ -87,6 +84,24 @@ body {
   .nav-list {
       padding-left: 0;
       padding-right: 0;
+  }
+}
+/* Older MSIE workarounds */
+.lt-ie9 {
+  #content, #sidebar {
+    display: block;
+  }
+}
+.lt-ie10 {
+  #sidebar {
+    float: left;
+    width: 20%;
+    height: 100%;
+  }
+  #content {
+    float: left;
+    width: 80%;
+    height: 100%;
   }
 }
 ul.nav-list,
