@@ -42,6 +42,22 @@ $.fn.bootstrappSelect2 = function(options) {
         } else if (element.is('input')) {
             values = element.val().split(",");
         }
+        if (opts.data && opts.data.text) {
+            if (!opts.formatSelection) {
+                if ($.isFunction(opts.data.text)) {
+                    opts.formatSelection = opts.data.text;
+                } else if ($.type(opts.data.text) == 'string') {
+                    opts.formatSelection = function (item) { return item[opts.data.text]; };
+                }
+            }
+            if (!opts.formatResult) {
+                if ($.isFunction(opts.data.text)) {
+                    opts.formatResult = opts.data.text;
+                } else if ($.type(opts.data.text) == 'string') {
+                    opts.formatResult = function (item) { return item[opts.data.text]; };
+                }
+            }
+        }
         select2 = element.select2(opts);
         if (!element.val() && opts.selectSingleValue && values.length == 1) {
             element.select2('val', values[0], true);
