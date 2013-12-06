@@ -37,6 +37,18 @@ div.inline {
 iframe {
     border: none;
 }
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+[draggable] * {
+  -moz-user-drag: none;
+  -khtml-user-drag: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+}
 
 // Icons
 // --------------------
@@ -333,6 +345,9 @@ legend {
             top: 1px;
             left: 1px;
             z-index: 3;
+            border-top: none;
+            border-bottom: none;
+            border-left: none;
         }
 
         input.input-block-level {
@@ -350,6 +365,9 @@ legend {
             top: 1px;
             right: 1px;
             z-index: 3;
+            border-top: none;
+            border-right: none;
+            border-bottom: none;
         }
 
         input.input-block-level {
@@ -370,6 +388,20 @@ legend {
 }
 .select2-container {
     width: 100%;
+}
+.input-append,
+.input-prepend {
+    .select2-container {
+      .select2-results .select2-result-label {
+          padding-left: 28px;
+      }
+      .select2-choice {
+          font-size: @baseFontSize;
+          height: @inputHeight;
+          .box-sizing(border-box);
+          padding-left: 32px;
+      }
+    }
 }
 /* bootstrap-fileupload */
 .btn-file {
