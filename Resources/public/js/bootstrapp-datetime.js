@@ -178,7 +178,7 @@ Bootstrapp.DateTime = (function() {
 
     DateTime.prototype.onPluginChange = function() {
         if(this.plugin) {
-            this.setDate(this.plugin.getDate(), false);
+            this.setDate(this.plugin.getDate());
         }
     }
 
