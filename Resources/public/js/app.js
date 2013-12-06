@@ -17,7 +17,9 @@
 
             $this.click(function (e) {
                 var $this = $(this),
-                    modalButton = modal.find(".modal-footer a.btn-primary")
+                    header = $this.data('modal-header'),
+                    body = $this.data('modal-body'),
+                    modalButton = modal.find(".modal-footer a:not([data-dismiss])")
                 ;
                 if (!$this.data('modal-confirm')) {
                     e.stopImmediatePropagation();
@@ -26,8 +28,15 @@
                     // show modal
                     modal.modal('show');
 
+                    // update modal header content
+                    if (header) {
+                        $($this.data('modal')+" .modal-header > h4").first().html(header);
+                    }
+
                     // update modal body content
-                    $($this.data('modal')+" .modal-body p").html($this.data('modal-body'));
+                    if (body) {
+                        $($this.data('modal')+" .modal-body > p").first().html(body);
+                    }
 
                     // update modal button href and target attributes
                     modalButton.attr('href', $this.attr('href')||'#');
@@ -43,9 +52,12 @@
                     // fire element click on modal button click
                     modalButton.click(function (e) {
                         $this.data('modal-confirm', true);
-                        modal.modal('hide');
-                        $this.click();
-                        $this.data('modal-confirm', false);
+                        var e = $.Event('click');
+                        $this.trigger(e);
+                        if (!e.isDefaultPrevented() && !e.isPropagationStopped() && !e.isImmediatePropagationStopped()) {
+                            modal.modal('hide');
+                            $this.data('modal-confirm', false);
+                        }
                     });
                 }
             });
