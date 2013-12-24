@@ -7,10 +7,14 @@
  */
 (function ( $ ) {
     $(document).ready(function() {
-        $('[data-modal^="#"]').each(function () {
+        $('[data-modal]').each(function () {
             var $this = $(this),
-                modal = $($this.data('modal'))
+                modal = $this.data('modal') ? $($this.data('modal')) : $('#modal-ask')
             ;
+
+            if (modal.length == 0) {
+                return;
+            }
 
             // prevent onclick from being dispatched
             $this.attr('onclick', "if($(this).data('modal-confirm')!=true) return false; "+$this.attr('onclick'));
