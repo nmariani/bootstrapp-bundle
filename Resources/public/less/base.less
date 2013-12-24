@@ -354,6 +354,10 @@ legend {
             padding-left: 32px;
             border-radius: 4px;
         }
+
+        > button.btn:first-child + input.input-block-level {
+            padding-left: 46px;
+        }
     }
     &.input-append {
         position: relative;
@@ -391,6 +395,12 @@ legend {
 }
 .input-append,
 .input-prepend {
+    .add-on,
+    .btn,
+    .btn-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
     .select2-container {
       .select2-results .select2-result-label {
           padding-left: 28px;
