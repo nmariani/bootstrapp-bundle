@@ -24,6 +24,13 @@
 
 // Common
 // --------------------
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child {
+  margin-top: 0;
+}
 h3 + hr {
   margin-top: 0;
 }
@@ -52,6 +59,11 @@ iframe {
 
 // Icons
 // --------------------
+[class^="icon-"],
+[class*=" icon-"] {
+  text-align: center;
+  cursor: default;
+}
 /* Animated rotating icon */
 .icon-spin {
   display: inline-block;
