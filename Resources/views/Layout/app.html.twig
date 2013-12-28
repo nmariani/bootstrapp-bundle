@@ -1,7 +1,7 @@
 {% extends 'BootstrappBundle:Layout:base.html.twig' %}
 
 {% if sidebar is not defined %}
-    {% set sidebar = { visible: true, subnav: true } %}
+    {% set sidebar = { visible: true, nav: false, subnav: true } %}
 {% endif %}
 {% if header is not defined %}
     {% set header = { subnav: not sidebar.subnav } %}
@@ -66,11 +66,72 @@
             {% endblock %}
         </div>
         <div id="sidebar-content">
-            {% if sidebar is defined and sidebar.subnav == true %}
-            {% block sidebar_nav %}
-            {% set subnavType = 'list' %}
-            {{ block('subnavbar') }}
-            {% endblock %}
+            {% if sidebar is defined and sidebar.nav is iterable %}
+                {% set active = '' %}
+                {% for item in sidebar.nav %}
+                    {% if item.href is defined %}
+                        {% set sliced = app.request.pathInfo|slice(0, item.href|length) %}
+                        {% if sliced == item.href and item.href|length > active|length %}
+                            {% set active = item.href %}
+                        {% endif %}
+                    {% endif %}
+                    {% if item.items is defined and item.items is iterable %}
+                        {% for subitem in item.items %}
+                            {% if subitem.href is defined %}
+                                {% set sliced = app.request.pathInfo|slice(0, subitem.href|length) %}
+                                {% if sliced == subitem.href and subitem.href|length > active|length %}
+                                    {% set active = subitem.href %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <ul class="nav nav-list">
+                    {% for item in sidebar.nav %}
+                        {% if item.divider is defined %}
+                            <li class="divider"></li>
+                        {% endif %}
+                        {% set classes = [] %}
+                        {% if item.href is defined and active == item.href %}
+                            {% set classes = classes|merge(['active']) %}
+                        {% endif %}
+                        {% if item.items is defined and item.items|length > 0 %}
+                            {% set classes = classes|merge(['nav-header']) %}
+                        {% endif %}
+                        <li{% if classes|length > 0 %} class="{{ classes|join(' ') }}"{% endif %}>
+                            {% if item.href is defined %}
+                            <a href="{{ item.href }}" target="{{ item.target|default('_self') }}">
+                            {% endif %}
+                            {% if item.icon is defined %}<i class="{{ item.icon }}"></i>{% endif %}
+                            {% if item.caption is defined %}{{ item.caption }}{% endif %}
+                            {% if item.href is defined %}
+                            </a>
+                            {% endif %}
+                        </li>
+                        {% if item.items is defined and item.items is iterable %}
+                            <ul class="nav nav-list">
+                            {% for subitem in item.items %}
+                                {% if subitem.divider is defined %}
+                                    <li class="divider"></li>
+                                {% endif %}
+                                <li{% if active == subitem.href %} class="active"{% endif %}>
+                                    <a href="{{ subitem.href }}" target="{{ subitem.target|default('_self') }}">
+                                        {% if subitem.icon is defined %}<i class="{{ subitem.icon }}"></i>{% endif %}
+                                        {% if subitem.caption is defined %}{{ subitem.caption }}{% endif %}
+                                    </a>
+                                    {% if active == subitem.href and sidebar.subnav == true %}
+                                        {% set subnavType = 'list' %}
+                                        {{ block('subnavbar') }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% elseif sidebar is defined and sidebar.subnav == true %}
+                {% set subnavType = 'list' %}
+                {{ block('subnavbar') }}
             {% endif %}
         </div>
         {% endblock sidebar %}
@@ -93,27 +154,29 @@
 {% endblock header %}
 
 {% block subnavbar %}
-{% if subnavType is not defined %}
-    {% set subnavType = 'pills' %}
-{% endif %}
-<ul class="nav nav-{{ subnavType }}">
-    {% block subnavbar_items %}
-    {% if subnavType == 'pills' %}
-    <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
-    <li class="divider"></li>
-    <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
-    {% elseif subnavType == 'list' %}
-    <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
-    <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
-    <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
-    <li class="nav-header">{% trans %}My account{% endtrans %}</li>
-    <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
-    <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
-    <li class="divider"></li>
-    <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
-    {% endif %}
-    {% endblock subnavbar_items %}
-</ul>
+    {% block sidebar_nav %}
+        {% if subnavType is not defined %}
+            {% set subnavType = 'pills' %}
+        {% endif %}
+        <ul class="nav nav-{{ subnavType }}">
+            {% block subnavbar_items %}
+            {% if subnavType == 'pills' %}
+            <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+            {% elseif subnavType == 'list' %}
+            <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
+            <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
+            <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
+            <li class="nav-header">{% trans %}My account{% endtrans %}</li>
+            <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
+            <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+            {% endif %}
+            {% endblock subnavbar_items %}
+        </ul>
+    {% endblock %}
 {% endblock subnavbar %}
 
 {% block javascripts %}

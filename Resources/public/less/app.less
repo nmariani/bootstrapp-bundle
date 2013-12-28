@@ -77,15 +77,15 @@ body {
     .flex(0, 1, auto);
     background-color: @wellBackground;
     padding: 15px;
+    overflow: auto;
 
     div.well {
         padding: 6px;
     }
 }
 #sidebar-content {
-  .nav-list {
-      padding-left: 0;
-      padding-right: 0;
+  > .nav-list {
+      padding: 0;
   }
 }
 /* Older MSIE workarounds */
