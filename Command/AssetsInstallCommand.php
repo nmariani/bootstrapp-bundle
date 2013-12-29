@@ -1420,6 +1420,8 @@ EOF
   /* bootstrapp fix */
   background: none !important;
   font-style: normal;
+  font-size: 18px;
+  vertical-align: baseline;
 
   &:before {
     content: @content;
