@@ -33,3 +33,10 @@
   -ms-flex: @grow @shrink @basis;
   flex: @grow @shrink @basis;
 }
+.order(@val) {
+  -webkit-box-ordinal-group: @val;
+  -moz-box-ordinal-group: @val;
+  -ms-flex-order: @val;
+  -webkit-order: @val;
+  order: @val;
+}
