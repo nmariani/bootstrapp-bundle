@@ -418,14 +418,21 @@ legend {
         margin-right: 0;
     }
     .select2-container {
-      .select2-results .select2-result-label {
+      .select2-results .select2-result-label,
+      .select2-choices {
           padding-left: 28px;
+      }
+      .select2-choices {
+          border-radius: 4px;
       }
       .select2-choice {
           font-size: @baseFontSize;
           height: @inputHeight;
           .box-sizing(border-box);
           padding-left: 32px;
+      }
+      .select2-input {
+          height: 16px;
       }
     }
 }
