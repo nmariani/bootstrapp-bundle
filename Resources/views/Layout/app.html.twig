@@ -1,10 +1,10 @@
 {% extends 'BootstrappBundle:Layout:base.html.twig' %}
 
 {% if sidebar is not defined %}
-    {% set sidebar = { visible: true, nav: false, subnav: true } %}
+    {% set sidebar = { visible: true, nav: false } %}
 {% endif %}
 {% if header is not defined %}
-    {% set header = { subnav: not sidebar.subnav } %}
+    {% set header = { nav: not sidebar.nav } %}
 {% endif %}
 
 
@@ -66,7 +66,7 @@
             {% endblock %}
         </div>
         <div id="sidebar-content">
-            {% if sidebar is defined and sidebar.nav is iterable %}
+            {% if sidebar.nav is defined and sidebar.nav is iterable %}
                 {% set active = '' %}
                 {% for item in sidebar.nav %}
                     {% if item.href is defined %}
@@ -119,8 +119,8 @@
                                         {% if subitem.icon is defined %}<i class="{{ subitem.icon }}"></i>{% endif %}
                                         {% if subitem.caption is defined %}{{ subitem.caption }}{% endif %}
                                     </a>
-                                    {% if active == subitem.href and sidebar.subnav == true %}
-                                        {% set subnavType = 'list' %}
+                                    {% if active == subitem.href and sidebar.nav is defined and sidebar.nav %}
+                                        {% set subnavtype = 'list' %}
                                         {{ block('subnavbar') }}
                                     {% endif %}
                                 </li>
@@ -129,8 +129,8 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
-            {% elseif sidebar is defined and sidebar.subnav == true %}
-                {% set subnavType = 'list' %}
+            {% elseif sidebar.nav is defined and sidebar.nav %}
+                {% set subnavtype = 'list' %}
                 {{ block('subnavbar') }}
             {% endif %}
         </div>
@@ -147,36 +147,34 @@
 
 {% block header %}
     {{ parent() }}
-    {% if header is defined and header.subnav == true %}
-        {% set subnavType = 'pills' %}
+    {% if header.nav is defined and header.nav %}
+        {% set subnavtype = 'pills' %}
         {{ block('subnavbar') }}
     {% endif %}
 {% endblock header %}
 
 {% block subnavbar %}
-    {% block sidebar_nav %}
-        {% if subnavType is not defined %}
-            {% set subnavType = 'pills' %}
+    {% if subnavtype is not defined %}
+        {% set subnavtype = 'pills' %}
+    {% endif %}
+    <ul class="nav nav-{{ subnavtype }}">
+        {% block subnav %}
+        {% if subnavtype == 'pills' %}
+        <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
+        <li class="divider"></li>
+        <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+        {% elseif subnavtype == 'list' %}
+        <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
+        <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
+        <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
+        <li class="nav-header">{% trans %}My account{% endtrans %}</li>
+        <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
+        <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
+        <li class="divider"></li>
+        <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
         {% endif %}
-        <ul class="nav nav-{{ subnavType }}">
-            {% block subnavbar_items %}
-            {% if subnavType == 'pills' %}
-            <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
-            <li class="divider"></li>
-            <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
-            {% elseif subnavType == 'list' %}
-            <li class="nav-header">{% trans %}Menu{% endtrans %}</li>
-            <li class="active"><a href="#"><i class="icon-white icon-home"></i> {% trans %}Home{% endtrans %}</a></li>
-            <li><a href="#"><i class="icon-info-sign"></i> {% trans %}About{% endtrans %}</a></li>
-            <li class="nav-header">{% trans %}My account{% endtrans %}</li>
-            <li><a href="#"><i class="icon-user"></i> {% trans %}Profile{% endtrans %}</a></li>
-            <li><a href="#"><i class="icon-cog"></i> {% trans %}Settings{% endtrans %}</a></li>
-            <li class="divider"></li>
-            <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
-            {% endif %}
-            {% endblock subnavbar_items %}
-        </ul>
-    {% endblock %}
+        {% endblock subnav %}
+    </ul>
 {% endblock subnavbar %}
 
 {% block javascripts %}
