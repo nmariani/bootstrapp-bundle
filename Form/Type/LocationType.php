@@ -141,6 +141,7 @@ class LocationType  extends AbstractType
                         array_unshift($countries, $country);
                     }
                     $opts = [
+                        'empty_data' => $country,
                         'preferred_choices' => $countries,
                         'required' => false,
                         'label' => 'Country',
