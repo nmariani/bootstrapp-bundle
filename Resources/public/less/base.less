@@ -297,6 +297,14 @@ input.error {
     }
 }
 
+label.required:after {
+    position: absolute;
+    content: '*';
+    color: @errorText;
+    font-size: 1.4em;
+    margin-left: 2px;
+}
+
 [data-type="datetime"] {
     .input-append:not(:first-of-type),
     .input-prepend:not(:first-of-type) {
