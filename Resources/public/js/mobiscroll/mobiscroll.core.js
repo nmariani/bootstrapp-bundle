@@ -1,9 +1,9 @@
 /*jslint eqeq: true, plusplus: true, undef: true, sloppy: true, vars: true, forin: true, nomen: true */
 /*!
- * Mobiscroll v2.8.3
+ * Mobiscroll v2.9.2
  * http://mobiscroll.com
  *
- * Copyright 2010-2013, Acid Media
+ * Copyright 2010-2014, Acid Media
  * Licensed under the MIT license.
  *
  */
@@ -72,7 +72,18 @@
         return ret;
     }
 
+    function testTouch(e) {
+        if (e.type == 'touchstart') {
+            touches[e.target] = true;
+        } else if (touches[e.target]) {
+            delete touches[e.target];
+            return false;
+        }
+        return true;
+    }
+
     var id = +new Date,
+        touches = {},
         instances = {},
         extend = $.extend,
         mod = document.createElement('modernizr').style,
@@ -90,7 +101,8 @@
             prefix: prefix,
             jsPrefix: pr,
             has3d: has3d,
-            getCoord: getCoord
+            getCoord: getCoord,
+            testTouch: testTouch
         },
         presets: {},
         themes: {},
@@ -98,6 +110,11 @@
         instances: instances,
         classes: {},
         components: {},
+        defaults: {},
+        userdef: {},
+        setDefaults: function (o) {
+            extend(this.userdef, o);
+        },
         presetShort: function (name, c) {
             this.components[name] = function (s) {
                 return init(this, extend(s, { component: c, preset: name }), arguments);

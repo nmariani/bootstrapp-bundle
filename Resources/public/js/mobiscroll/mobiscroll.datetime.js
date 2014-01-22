@@ -4,30 +4,15 @@
     var ms = $.mobiscroll,
         date = new Date(),
         defaults = {
-            dateFormat: 'mm/dd/yy',
-            dateOrder: 'mmddy',
-            timeWheels: 'hhiiA',
-            timeFormat: 'hh:ii A',
             startYear: date.getFullYear() - 100,
             endYear: date.getFullYear() + 1,
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             shortYearCutoff: '+10',
-            monthText: 'Month',
-            dayText: 'Day',
-            yearText: 'Year',
-            hourText: 'Hours',
-            minuteText: 'Minutes',
-            secText: 'Seconds',
-            ampmText: '&nbsp;',
-            nowText: 'Now',
             showNow: false,
             stepHour: 1,
             stepMinute: 1,
             stepSecond: 1,
-            separator: ' '
+            separator: ' ',
+            ampmText: '&nbsp;'
         },
         /**
          * @class Mobiscroll.datetime
@@ -203,7 +188,7 @@
                     } else if (k == o.a) {
                         offset++;
                         var upper = tord.match(/A/);
-                        addWheel(wg, [0, 1], upper ? ['AM', 'PM'] : ['am', 'pm'], s.ampmText);
+                        addWheel(wg, [0, 1], upper ? [s.amText.toUpperCase(), s.pmText.toUpperCase()] : [s.amText, s.pmText], s.ampmText);
                     }
                 }
 
@@ -252,7 +237,7 @@
 
             function getDate(d) {
                 var hour = get(d, 'h', 0);
-                return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'a') ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
+                return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'a', 0) ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
             }
 
             function getIndex(t, v) {
@@ -279,16 +264,16 @@
              * @param {Boolean} [fill=false] Also set the value of the associated input element. Default is true.
              * @param {Number} [time=0] Animation time to scroll to the selected date.
              * @param {Boolean} [temp=false] Set temporary value only.
-             * @param {Boolean} [manual=false] Indicates that the action was triggered by the user or from code.
+             * @param {Boolean} [change=fill] Trigger change on input element.
              */
-            inst.setDate = function (d, fill, time, temp) {
+            inst.setDate = function (d, fill, time, temp, change) {
                 var i;
 
                 // Set wheels
                 for (i in o) {
                     inst.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
                 }
-                inst.setValue(inst.temp, fill, time, temp);
+                inst.setValue(inst.temp, fill, time, temp, change);
             };
 
             /**
@@ -565,6 +550,26 @@
             };
         };
 
+    ms.i18n.en = $.extend(ms.i18n.en, {
+        dateFormat: 'mm/dd/yy',
+        dateOrder: 'mmddy',
+        timeWheels: 'hhiiA',
+        timeFormat: 'hh:ii A',
+        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        monthText: 'Month',
+        dayText: 'Day',
+        yearText: 'Year',
+        hourText: 'Hours',
+        minuteText: 'Minutes',
+        secText: 'Seconds',
+        amText: 'am',
+        pmText: 'pm',
+        nowText: 'Now'
+    });
+
     $.each(['date', 'time', 'datetime'], function (i, v) {
         ms.presets[v] = preset;
         ms.presetShort(v);
@@ -647,10 +652,10 @@
                     output += f1('s', date.getSeconds(), 2);
                     break;
                 case 'a':
-                    output += date.getHours() > 11 ? 'pm' : 'am';
+                    output += date.getHours() > 11 ? s.pmText : s.amText;
                     break;
                 case 'A':
-                    output += date.getHours() > 11 ? 'PM' : 'AM';
+                    output += date.getHours() > 11 ? s.pmText.toUpperCase() : s.amText.toUpperCase();
                     break;
                 case "'":
                     if (look("'")) {
@@ -771,10 +776,10 @@
                     seconds = getNumber('s');
                     break;
                 case 'a':
-                    ampm = getName('a', ['am', 'pm'], ['am', 'pm']) - 1;
+                    ampm = getName('a', [s.amText, s.pmText], [s.amText, s.pmText]) - 1;
                     break;
                 case 'A':
-                    ampm = getName('A', ['am', 'pm'], ['am', 'pm']) - 1;
+                    ampm = getName('A', [s.amText, s.pmText], [s.amText, s.pmText]) - 1;
                     break;
                 case "'":
                     if (lookAhead("'")) {
