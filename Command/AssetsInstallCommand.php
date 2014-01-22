@@ -508,12 +508,12 @@ EOF
         $lessPath = $this->initializeDirectory('less/icons', false);
         file_put_contents($lessPath . '/glyphicons-sprite.less', <<<EOF
 /*!
- * glyphicons.less v2.0.0
+ * glyphicons.less v2.3.2
  *
  * Mixins implementation of the bootstrap sprites.less
  * See bootstrap/sprites.less for more informations
  *
- * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2014, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -632,7 +632,7 @@ EOF
  * Mixins implementation of the entypo.css
  * See entypo.css for more informations
  *
- * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2014, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -1235,7 +1235,7 @@ EOF
  * Mixins implementation of the ionicons.css
  * See ionicons.css for more informations
  *
- * Copyright (c) 2013, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2014, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
