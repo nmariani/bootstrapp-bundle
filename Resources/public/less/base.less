@@ -17,9 +17,38 @@
 /*------------------------------*
  *      BootstrappBundle        *
  *------------------------------*/
-// Define new variables or override bootstrap
-@import "variables.less";
-@import "mixins.less";
+// Variables (define new variables or override bootstrap)
+// -------------------------
+// Colors
+@baseColor:             #4b78bb;
+@linkColor:             @baseColor;
+// Glyphicons path
+@iconSpritePath:          "../../bootstrapp/images/bootstrap2/glyphicons-halflings.png";
+@iconWhiteSpritePath:     "../../bootstrapp/images/bootstrap2/glyphicons-halflings-white.png";
+
+// Mixins
+// -------------------------
+.flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.flex(@grow: 0, @shrink: 1, @basis: auto) {
+  -webkit-box-flex: @grow;
+  -moz-box-flex: @grow;
+  -webkit-flex: @grow @shrink @basis;
+  -ms-flex: @grow @shrink @basis;
+  flex: @grow @shrink @basis;
+}
+.order(@val) {
+  -webkit-box-ordinal-group: @val;
+  -moz-box-ordinal-group: @val;
+  -ms-flex-order: @val;
+  -webkit-order: @val;
+  order: @val;
+}
 
 
 // Common
