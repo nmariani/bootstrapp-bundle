@@ -548,7 +548,7 @@ EOF
 
     protected function getEntypoAssets($output)
     {
-        $entypoDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/danielbruce/entypo/font/';
+        $entypoDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/danielbruce/entypo';
         $filesystem = $this->getContainer()->get('filesystem');
 
         # fonts
@@ -560,25 +560,52 @@ EOF
             'entypo.woff',
         ];
         foreach($files as $file) {
-            $filesystem->copy($entypoDir.$file, $fontsPath . '/' . basename($file));
+            $filesystem->copy($entypoDir.'/font/'.$file, $fontsPath . '/' . basename($file));
         }
         $output->writeln('<info>Success, fonts files written in @BootstrappBundle/Resources/public/fonts</info>');
 
         # parse entypo.css
-        $entypo = file_get_contents($entypoDir.'entypo.css');
+        $entypo = file_get_contents($entypoDir.'/font/entypo.css');
 
         // replace font path
         $entypo = str_replace("'entypo.", "'/bundles/bootstrapp/fonts/entypo/entypo.", $entypo);
 
-        // replace .icon-*:before {}
-        $entypo = preg_replace('/.icon((-\w*)+)(:before)/', '.entypo$1()', $entypo);
-        $entypo = preg_replace('/content\s*:\s*(.*)\s*;/', '.entypo($1);', $entypo);
+        // remove .icon-*:before {}
+        $entypo = preg_replace('/.icon(-\w*)+:before.*/', '', $entypo);
+        $entypo = trim($entypo);
+        $entypo .= "\n";
+
+        // get .icon-*:before rules
+        $glyphs = [];
+        $finder = new Finder();
+        $finder->files()->in($entypoDir.'/src/original')->name('*.svg');
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getPathname());
+            preg_match_all('/glyph-name="([^"]+)" unicode="&#x([^"]+);"/', $content, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                $name = trim($match[1]);
+                $code = trim($match[2]);
+                // replace special chars
+                $name = str_replace(['+'], ['-plus'], $name);
+                // name misspelling
+                switch ($name) {
+                    case 'c-radio':
+                        $name = 'c-rdio';
+                        break;
+                }
+                $glyphs[$name] = trim($code);
+            }
+        }
+        ksort($glyphs);
+        foreach ($glyphs as $name => $code) {
+            $entypo .= "\n" . str_pad('.entypo-'.$name.'()', 30) . '{ ' . str_pad('.entypo("\\' . $code . '");', 18).' }';
+        }
 
         // replace [class^="icon-"], [class*=" icon-"] {}
         $entypo = preg_replace('/\[class.*=".*icon-"\][^{]*\{\s?((([^}"])*(".*")*)*)\}/', <<<EOF
 .entypo(@content:"") {
 $1
-  background-image: none;
+  background-image: none !important;
 
   &:before {
     content: @content;
@@ -612,6 +639,53 @@ EOF
 
 
 $entypo
+
+// Alias
+// --------------------------
+.entypo-flash() {
+    .entypo-bolt();
+}
+.entypo-beamed-note() {
+    .entypo-beamed-notes();
+}
+.entypo-show() {
+	.entypo-text-doc();
+}
+.entypo-create() {
+	.entypo-plus();
+}
+.entypo-update() {
+	.entypo-pencil();
+}
+.entypo-delete() {
+    .entypo-trash();
+}
+.entypo-restore() {
+    .entypo-reply();
+}
+.entypo-cancel() {
+    .entypo-cross();
+}
+.entypo-save() {
+    .entypo-check();
+}
+.entypo-back() {
+    .entypo-chevron-left();
+}
+/*
+.entypo-chevron-up() {
+    .entypo-chevron-small-up();
+}
+.entypo-chevron-right() {
+    .entypo-chevron-small-right();
+}
+.entypo-chevron-left() {
+    .entypo-chevron-small-left();
+}
+.entypo-chevron-down() {
+    .entypo-chevron-small-down();
+}
+*/
 EOF
         );
 
@@ -1304,7 +1378,7 @@ EOF
  */
 
 
-@import "../bootstrap/mixins.less";
+@import "../bootstrap2/mixins.less";
 
 $elusive
 
@@ -1702,8 +1776,8 @@ $0
 /*------------------------------*
  * Twitter Bootstrap less files *
  *------------------------------*/
-@import "bootstrap/variables.less";
-@import "bootstrap/mixins.less";
+@import "bootstrap2/variables.less";
+@import "bootstrap2/mixins.less";
 
 
 EOF
