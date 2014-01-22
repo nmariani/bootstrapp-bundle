@@ -4,7 +4,7 @@
     "description": "Bootstrap your Symfony2 application with ease.",
     "keywords": ["bootstrapp", "bundle", "symfony2", "rad", "kick start", "kickstart", "kick off", "kickoff", "template", "twitter bootstrap"],
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "authors": [
         {
             "name": "Nathanaël Mariani",
@@ -22,7 +22,7 @@
     "target-dir": "nmariani/Bundle/BootstrappBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.3.x-dev"
+            "dev-master": "3.0.x-dev"
         }
     }
 }

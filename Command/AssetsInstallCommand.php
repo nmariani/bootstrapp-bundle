@@ -13,6 +13,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
 {
     static private $availableAssets = [
         'TwitterBootstrap',
+        'TwitterBootstrap2',
         'TwitterCldr',
         'Entypo',
         'FontAwesome',
@@ -78,6 +79,15 @@ EOT
                 $output->writeln('<info>Success, Twitter Bootstrap assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : Twitter Bootstrap assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('TwitterBootstrap2', $this->assets)) {
+            $output->writeln('<comment>Installing Twitter Bootstrap v2.3.2 assets...</comment>');
+            if(true === $this->getTwitterBootstrap2Assets($output)) {
+                $output->writeln('<info>Success, Twitter Bootstrap v2.3.2 assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : Twitter Bootstrap v2.3.2 assets installation failed!</error>');
             }
         }
 
@@ -342,12 +352,95 @@ EOT
 
     protected function getTwitterBootstrapAssets($output)
     {
+        $filesystem = $this->getContainer()->get('filesystem');
+        $rootDir = $this->getContainer()->get('kernel')->getRootDir();
+        $bootstrapDir = $rootDir.'/../vendor/twitter/bootstrap';
+
+        # fonts
+        $fontsPath = $this->initializeDirectory('fonts/glyphicons');
+        $finder = new Finder();
+        $finder->files()->in($bootstrapDir.'/fonts');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $fontsPath . '/' . $file->getBaseName());
+        }
+        $output->writeln('<info>Success, fonts files copied to @BootstrappBundle/Resources/public/fonts</info>');
+
+        # js
+        $jsPath = $this->initializeDirectory('js/bootstrap');
+        $finder = new Finder();
+        $finder->files()->name('*.js')->in([$bootstrapDir.'/js', $bootstrapDir.'/dist/js'])->depth('== 0');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $jsPath . '/' . $file->getBaseName());
+        }
+        $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
+
+        # less
+        $lessPath = $this->initializeDirectory('less/bootstrap');
+        $finder = new Finder();
+        $finder->files()->name('*.less')->in($bootstrapDir.'/less')->depth('== 0');
+        foreach ($finder as $file) {
+            $filesystem->copy($file, $lessPath . '/' . $file->getBaseName());
+        }
+        $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/less</info>');
+
+        # parse glyphicons.less
+        $glyphicons = file_get_contents($this->path . '/Resources/public/less/bootstrap/glyphicons.less');
+
+        // replace .glyphicon {}
+        $glyphicons = preg_replace('/\.glyphicon\s*\{\s?((([^}"])*(".*")*)*)\s\}/', <<<EOF
+.glyphicon(@content:"") {
+$1
+  background-image: none;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+EOF
+            , $glyphicons, 1);
+
+        // replace .icon-* {}
+        $glyphicons = preg_replace('/\.glyphicon((-\w*)+)(\s*\{)/', '.glyphicons$1()$3', $glyphicons);
+        $glyphicons = preg_replace('/&:before\s*\{\s*content:\s*"([^"]*)";\s*\}/', '.glyphicon($1);', $glyphicons);
+
+        // Strip whitespaces
+        $glyphicons = trim($glyphicons);
+
+        $lessPath = $this->initializeDirectory('less/icons', false);
+        file_put_contents($lessPath . '/glyphicons.less', <<<EOF
+/*!
+ * glyphicons.less v3.0.0
+ *
+ * Mixins implementation of the bootstrap glyphicons.less
+ * See bootstrap/glyphicons.less for more informations
+ *
+ * Copyright (c) 2014, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+$glyphicons
+EOF
+        );
+
+        $output->writeln('<info>Success, glyphicons.less file written in @BootstrappBundle/Resources/public/less/icons</info>');
+
+        return true;
+    }
+
+    protected function getTwitterBootstrap2Assets($output)
+    {
         # images
-        $imagesPath = $this->initializeDirectory('images/bootstrap');
+        $imagesPath = $this->initializeDirectory('images/bootstrap2');
         $rootDir = $this->getContainer()->get('kernel')->getRootDir();
         $finder = new Finder();
         $finder->depth('== 0');
-        $finder->files()->in($rootDir.'/../vendor/twitter/bootstrap/img');
+        $finder->files()->in($rootDir.'/../vendor/twitter/bootstrap2/img');
         $filesystem = $this->getContainer()->get('filesystem');
         foreach ($finder as $file) {
             $filesystem->copy($file, $imagesPath . '/' . $file->getBaseName());
@@ -355,12 +448,12 @@ EOT
         $output->writeln('<info>Success, images files copied to @BootstrappBundle/Resources/public/img</info>');
 
         # js
-        $jsPath = $this->initializeDirectory('js/bootstrap');
+        $jsPath = $this->initializeDirectory('js/bootstrap2');
         $rootDir = $this->getContainer()->get('kernel')->getRootDir();
         $finder = new Finder();
         $finder->depth('== 0');
         $finder->files()
-            ->in($rootDir.'/../vendor/twitter/bootstrap/js')
+            ->in($rootDir.'/../vendor/twitter/bootstrap2/js')
             ->name('*.js');
         $filesystem = $this->getContainer()->get('filesystem');
         foreach ($finder as $file) {
@@ -369,12 +462,12 @@ EOT
         $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
 
         # less
-        $lessPath = $this->initializeDirectory('less/bootstrap');
+        $lessPath = $this->initializeDirectory('less/bootstrap2');
         $rootDir = $this->getContainer()->get('kernel')->getRootDir();
         $finder = new Finder();
         $finder->depth('== 0');
         $finder->files()
-            ->in($rootDir.'/../vendor/twitter/bootstrap/less')
+            ->in($rootDir.'/../vendor/twitter/bootstrap2/less')
             ->name('*.less');
         $filesystem = $this->getContainer()->get('filesystem');
         foreach ($finder as $file) {
@@ -383,7 +476,7 @@ EOT
         $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/less</info>');
 
         # parse sprites.less
-        $glyphicons = file_get_contents($this->path . '/Resources/public/less/bootstrap/sprites.less');
+        $glyphicons = file_get_contents($this->path . '/Resources/public/less/bootstrap2/sprites.less');
 
         // replace comments //
         $glyphicons = preg_replace('/\s*\/\/.*/', '', $glyphicons);
@@ -413,9 +506,9 @@ EOF
         $glyphicons = trim($glyphicons);
 
         $lessPath = $this->initializeDirectory('less/icons', false);
-        file_put_contents($lessPath . '/glyphicons.less', <<<EOF
+        file_put_contents($lessPath . '/glyphicons-sprite.less', <<<EOF
 /*!
- * glyphicons.less v1.0.0
+ * glyphicons.less v2.0.0
  *
  * Mixins implementation of the bootstrap sprites.less
  * See bootstrap/sprites.less for more informations

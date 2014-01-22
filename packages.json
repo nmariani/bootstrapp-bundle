@@ -11,10 +11,26 @@
                 "source": {
                     "url": "https://github.com/twbs/bootstrap.git",
                     "type": "git",
-                    "reference": "v2.3.2"
+                    "reference": "master"
                 },
                 "dist": {
                     "url": "https://github.com/twbs/bootstrap/zipball/master",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/bootstrap2",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/twbs/bootstrap.git",
+                    "type": "git",
+                    "reference": "v2.3.2"
+                },
+                "dist": {
+                    "url": "https://github.com/twbs/bootstrap/zipball/v2.3.2",
                     "type": "zip"
                 }
             }
@@ -392,6 +408,7 @@
     "require-all": true,
 
     "require": {
+        "twitter/bootstrap2": "dev-master",
         "twitter/bootstrap": "dev-master",
         "twitter/twitter-cldr-js": "dev-master",
         "danielbruce/entypo": "dev-master",
