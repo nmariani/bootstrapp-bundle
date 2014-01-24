@@ -1,37 +1,37 @@
 {% if app.session.hasFlash('alert-success') %}
     {% set title = 'Success' %}
     {% set message = app.session.getFlash('alert-success') %}
-    {% set type = 'success' %}
+    {% set type = 'alerte-success' %}
 {% endif %}
 
 {% if app.session.hasFlash('alert-error') %}
     {% set title = 'Error' %}
     {% set message = app.session.getFlash('alert-error') %}
-    {% set type = 'error' %}
+    {% set type = 'alerte-error alerte-danger' %}
 {% endif %}
 
 {% if app.session.hasFlash('alert-warning') %}
     {% set title = 'Warning' %}
     {% set message = app.session.getFlash('alert-warning') %}
-    {% set type = 'warning' %}
+    {% set type = 'alerte-warning' %}
 {% endif %}
 
 {% if app.session.hasFlash('alert-info') %}
     {% set title = 'Info' %}
     {% set message = app.session.getFlash('alert-info') %}
-    {% set type = 'info' %}
+    {% set type = 'alerte-info' %}
 {% endif %}
 
 {% if type is not defined and error.message is defined %}
     {% set title = 'Error' %}
     {% set message = error.message %}
-    {% set type = 'error' %}
+    {% set type = 'alerte-error alerte-danger' %}
 {% endif %}
 
 {% if type is defined %}
     {# --> Start bootstrap_alert block #}
     {% block bootstrap_alert %}
-    <div class="alert alert-{{ type }}">
+    <div class="alert {{ type }}">
         {% if dismiss is not defined or dismiss == true %}
             <a class="close" data-dismiss="alert">×</a>
         {% endif %}

@@ -25,7 +25,7 @@ class TwigRenderer extends BaseRenderer
         );
 
         if ('root' === $item->getName()) {
-            $item->setChildrenAttribute('class', trim('nav '.$item->getAttribute('class')));
+            $item->setChildrenAttribute('class', trim('nav navbar-nav '.$item->getAttribute('class')));
         }
 
         return parent::render($item, $options);

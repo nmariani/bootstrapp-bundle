@@ -1,6 +1,9 @@
 {% block breadcrumb %}
 {% if breadcrumb is defined and breadcrumb|length %}
 <ul class="breadcrumb">
+    {% if divider is not defined %}
+        {% set divider = true %}
+    {% endif %}
     {% block breadcrumb_items %}
         {% for item in breadcrumb %}
             {% set islink = item.url|default('')|length and item.url != app.request.requestUri %}
@@ -15,7 +18,9 @@
                 {% if islink %}
                     </a>
                 {% endif %}
-                {% if not loop.last %}<span class='divider'>{{ separator|default('/') }}</span>{% endif %}
+                {% if not loop.last and divider %}
+                    <span class='divider'>{{ separator|default('/') }}</span>
+                {% endif %}
             </li>
         {% endfor %}
     {% endblock breadcrumb_items %}
