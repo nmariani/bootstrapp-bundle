@@ -405,7 +405,7 @@ EOF
 
         // replace .icon-* {}
         $glyphicons = preg_replace('/\.glyphicon((-\w*)+)(\s*\{)/', '.glyphicons$1()$3', $glyphicons);
-        $glyphicons = preg_replace('/&:before\s*\{\s*content:\s*"([^"]*)";\s*\}/', '.glyphicon($1);', $glyphicons);
+        $glyphicons = preg_replace('/&:before\s*\{\s*content:\s*"([^"]*)";\s*\}/', '.glyphicon("$1");', $glyphicons);
 
         // Strip whitespaces
         $glyphicons = trim($glyphicons);
