@@ -339,7 +339,7 @@
                 {% endif %}
             </div>
         {% elseif errors|length > 0 %}
-            <span class="help-inline">
+            <span class="help-block">
                 {% for error in errors %}
                 <p>{{
                     error.messagePluralization is null
