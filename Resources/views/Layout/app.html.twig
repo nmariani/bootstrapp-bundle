@@ -179,10 +179,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-
-    {% javascripts output='bundles/bootstrapp/js/app.js'
-        'bundles/bootstrapp/js/app.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp.js') }}"></script>
 {% endblock javascripts %}
