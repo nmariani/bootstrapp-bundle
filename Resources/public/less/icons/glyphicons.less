@@ -1,0 +1,254 @@
+/*!
+ * glyphicons.less v3.0.0
+ *
+ * Mixins implementation of the bootstrap glyphicons.less
+ * See bootstrap/glyphicons.less for more informations
+ *
+ * Copyright (c) 2014, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+//
+// Glyphicons for Bootstrap
+//
+// Since icons are fonts, they can be placed anywhere text is placed and are
+// thus automatically sized to match the surrounding child. To use, create an
+// inline element with the appropriate classes, like so:
+//
+// <a href="#"><span class="glyphicon glyphicon-star"></span> Star</a>
+
+// Import the fonts
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: ~"url('@{icon-font-path}@{icon-font-name}.eot')";
+  src: ~"url('@{icon-font-path}@{icon-font-name}.eot?#iefix') format('embedded-opentype')",
+       ~"url('@{icon-font-path}@{icon-font-name}.woff') format('woff')",
+       ~"url('@{icon-font-path}@{icon-font-name}.ttf') format('truetype')",
+       ~"url('@{icon-font-path}@{icon-font-name}.svg#@{icon-font-svg-id}') format('svg')";
+}
+
+// Catchall baseclass
+.glyphicon(@content:"") {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: none;
+
+  &:before {
+    content: @content;
+  }
+
+  &.icon-white {
+    color: @white;
+  }
+}
+
+// Individual icons
+.glyphicons-asterisk()               { .glyphicon("\2a"); }
+.glyphicons-plus()                   { .glyphicon("\2b"); }
+.glyphicons-euro()                   { .glyphicon("\20ac"); }
+.glyphicons-minus()                  { .glyphicon("\2212"); }
+.glyphicons-cloud()                  { .glyphicon("\2601"); }
+.glyphicons-envelope()               { .glyphicon("\2709"); }
+.glyphicons-pencil()                 { .glyphicon("\270f"); }
+.glyphicons-glass()                  { .glyphicon("\e001"); }
+.glyphicons-music()                  { .glyphicon("\e002"); }
+.glyphicons-search()                 { .glyphicon("\e003"); }
+.glyphicons-heart()                  { .glyphicon("\e005"); }
+.glyphicons-star()                   { .glyphicon("\e006"); }
+.glyphicons-star-empty()             { .glyphicon("\e007"); }
+.glyphicons-user()                   { .glyphicon("\e008"); }
+.glyphicons-film()                   { .glyphicon("\e009"); }
+.glyphicons-th-large()               { .glyphicon("\e010"); }
+.glyphicons-th()                     { .glyphicon("\e011"); }
+.glyphicons-th-list()                { .glyphicon("\e012"); }
+.glyphicons-ok()                     { .glyphicon("\e013"); }
+.glyphicons-remove()                 { .glyphicon("\e014"); }
+.glyphicons-zoom-in()                { .glyphicon("\e015"); }
+.glyphicons-zoom-out()               { .glyphicon("\e016"); }
+.glyphicons-off()                    { .glyphicon("\e017"); }
+.glyphicons-signal()                 { .glyphicon("\e018"); }
+.glyphicons-cog()                    { .glyphicon("\e019"); }
+.glyphicons-trash()                  { .glyphicon("\e020"); }
+.glyphicons-home()                   { .glyphicon("\e021"); }
+.glyphicons-file()                   { .glyphicon("\e022"); }
+.glyphicons-time()                   { .glyphicon("\e023"); }
+.glyphicons-road()                   { .glyphicon("\e024"); }
+.glyphicons-download-alt()           { .glyphicon("\e025"); }
+.glyphicons-download()               { .glyphicon("\e026"); }
+.glyphicons-upload()                 { .glyphicon("\e027"); }
+.glyphicons-inbox()                  { .glyphicon("\e028"); }
+.glyphicons-play-circle()            { .glyphicon("\e029"); }
+.glyphicons-repeat()                 { .glyphicon("\e030"); }
+.glyphicons-refresh()                { .glyphicon("\e031"); }
+.glyphicons-list-alt()               { .glyphicon("\e032"); }
+.glyphicons-lock()                   { .glyphicon("\e033"); }
+.glyphicons-flag()                   { .glyphicon("\e034"); }
+.glyphicons-headphones()             { .glyphicon("\e035"); }
+.glyphicons-volume-off()             { .glyphicon("\e036"); }
+.glyphicons-volume-down()            { .glyphicon("\e037"); }
+.glyphicons-volume-up()              { .glyphicon("\e038"); }
+.glyphicons-qrcode()                 { .glyphicon("\e039"); }
+.glyphicons-barcode()                { .glyphicon("\e040"); }
+.glyphicons-tag()                    { .glyphicon("\e041"); }
+.glyphicons-tags()                   { .glyphicon("\e042"); }
+.glyphicons-book()                   { .glyphicon("\e043"); }
+.glyphicons-bookmark()               { .glyphicon("\e044"); }
+.glyphicons-print()                  { .glyphicon("\e045"); }
+.glyphicons-camera()                 { .glyphicon("\e046"); }
+.glyphicons-font()                   { .glyphicon("\e047"); }
+.glyphicons-bold()                   { .glyphicon("\e048"); }
+.glyphicons-italic()                 { .glyphicon("\e049"); }
+.glyphicons-text-height()            { .glyphicon("\e050"); }
+.glyphicons-text-width()             { .glyphicon("\e051"); }
+.glyphicons-align-left()             { .glyphicon("\e052"); }
+.glyphicons-align-center()           { .glyphicon("\e053"); }
+.glyphicons-align-right()            { .glyphicon("\e054"); }
+.glyphicons-align-justify()          { .glyphicon("\e055"); }
+.glyphicons-list()                   { .glyphicon("\e056"); }
+.glyphicons-indent-left()            { .glyphicon("\e057"); }
+.glyphicons-indent-right()           { .glyphicon("\e058"); }
+.glyphicons-facetime-video()         { .glyphicon("\e059"); }
+.glyphicons-picture()                { .glyphicon("\e060"); }
+.glyphicons-map-marker()             { .glyphicon("\e062"); }
+.glyphicons-adjust()                 { .glyphicon("\e063"); }
+.glyphicons-tint()                   { .glyphicon("\e064"); }
+.glyphicons-edit()                   { .glyphicon("\e065"); }
+.glyphicons-share()                  { .glyphicon("\e066"); }
+.glyphicons-check()                  { .glyphicon("\e067"); }
+.glyphicons-move()                   { .glyphicon("\e068"); }
+.glyphicons-step-backward()          { .glyphicon("\e069"); }
+.glyphicons-fast-backward()          { .glyphicon("\e070"); }
+.glyphicons-backward()               { .glyphicon("\e071"); }
+.glyphicons-play()                   { .glyphicon("\e072"); }
+.glyphicons-pause()                  { .glyphicon("\e073"); }
+.glyphicons-stop()                   { .glyphicon("\e074"); }
+.glyphicons-forward()                { .glyphicon("\e075"); }
+.glyphicons-fast-forward()           { .glyphicon("\e076"); }
+.glyphicons-step-forward()           { .glyphicon("\e077"); }
+.glyphicons-eject()                  { .glyphicon("\e078"); }
+.glyphicons-chevron-left()           { .glyphicon("\e079"); }
+.glyphicons-chevron-right()          { .glyphicon("\e080"); }
+.glyphicons-plus-sign()              { .glyphicon("\e081"); }
+.glyphicons-minus-sign()             { .glyphicon("\e082"); }
+.glyphicons-remove-sign()            { .glyphicon("\e083"); }
+.glyphicons-ok-sign()                { .glyphicon("\e084"); }
+.glyphicons-question-sign()          { .glyphicon("\e085"); }
+.glyphicons-info-sign()              { .glyphicon("\e086"); }
+.glyphicons-screenshot()             { .glyphicon("\e087"); }
+.glyphicons-remove-circle()          { .glyphicon("\e088"); }
+.glyphicons-ok-circle()              { .glyphicon("\e089"); }
+.glyphicons-ban-circle()             { .glyphicon("\e090"); }
+.glyphicons-arrow-left()             { .glyphicon("\e091"); }
+.glyphicons-arrow-right()            { .glyphicon("\e092"); }
+.glyphicons-arrow-up()               { .glyphicon("\e093"); }
+.glyphicons-arrow-down()             { .glyphicon("\e094"); }
+.glyphicons-share-alt()              { .glyphicon("\e095"); }
+.glyphicons-resize-full()            { .glyphicon("\e096"); }
+.glyphicons-resize-small()           { .glyphicon("\e097"); }
+.glyphicons-exclamation-sign()       { .glyphicon("\e101"); }
+.glyphicons-gift()                   { .glyphicon("\e102"); }
+.glyphicons-leaf()                   { .glyphicon("\e103"); }
+.glyphicons-fire()                   { .glyphicon("\e104"); }
+.glyphicons-eye-open()               { .glyphicon("\e105"); }
+.glyphicons-eye-close()              { .glyphicon("\e106"); }
+.glyphicons-warning-sign()           { .glyphicon("\e107"); }
+.glyphicons-plane()                  { .glyphicon("\e108"); }
+.glyphicons-calendar()               { .glyphicon("\e109"); }
+.glyphicons-random()                 { .glyphicon("\e110"); }
+.glyphicons-comment()                { .glyphicon("\e111"); }
+.glyphicons-magnet()                 { .glyphicon("\e112"); }
+.glyphicons-chevron-up()             { .glyphicon("\e113"); }
+.glyphicons-chevron-down()           { .glyphicon("\e114"); }
+.glyphicons-retweet()                { .glyphicon("\e115"); }
+.glyphicons-shopping-cart()          { .glyphicon("\e116"); }
+.glyphicons-folder-close()           { .glyphicon("\e117"); }
+.glyphicons-folder-open()            { .glyphicon("\e118"); }
+.glyphicons-resize-vertical()        { .glyphicon("\e119"); }
+.glyphicons-resize-horizontal()      { .glyphicon("\e120"); }
+.glyphicons-hdd()                    { .glyphicon("\e121"); }
+.glyphicons-bullhorn()               { .glyphicon("\e122"); }
+.glyphicons-bell()                   { .glyphicon("\e123"); }
+.glyphicons-certificate()            { .glyphicon("\e124"); }
+.glyphicons-thumbs-up()              { .glyphicon("\e125"); }
+.glyphicons-thumbs-down()            { .glyphicon("\e126"); }
+.glyphicons-hand-right()             { .glyphicon("\e127"); }
+.glyphicons-hand-left()              { .glyphicon("\e128"); }
+.glyphicons-hand-up()                { .glyphicon("\e129"); }
+.glyphicons-hand-down()              { .glyphicon("\e130"); }
+.glyphicons-circle-arrow-right()     { .glyphicon("\e131"); }
+.glyphicons-circle-arrow-left()      { .glyphicon("\e132"); }
+.glyphicons-circle-arrow-up()        { .glyphicon("\e133"); }
+.glyphicons-circle-arrow-down()      { .glyphicon("\e134"); }
+.glyphicons-globe()                  { .glyphicon("\e135"); }
+.glyphicons-wrench()                 { .glyphicon("\e136"); }
+.glyphicons-tasks()                  { .glyphicon("\e137"); }
+.glyphicons-filter()                 { .glyphicon("\e138"); }
+.glyphicons-briefcase()              { .glyphicon("\e139"); }
+.glyphicons-fullscreen()             { .glyphicon("\e140"); }
+.glyphicons-dashboard()              { .glyphicon("\e141"); }
+.glyphicons-paperclip()              { .glyphicon("\e142"); }
+.glyphicons-heart-empty()            { .glyphicon("\e143"); }
+.glyphicons-link()                   { .glyphicon("\e144"); }
+.glyphicons-phone()                  { .glyphicon("\e145"); }
+.glyphicons-pushpin()                { .glyphicon("\e146"); }
+.glyphicons-usd()                    { .glyphicon("\e148"); }
+.glyphicons-gbp()                    { .glyphicon("\e149"); }
+.glyphicons-sort()                   { .glyphicon("\e150"); }
+.glyphicons-sort-by-alphabet()       { .glyphicon("\e151"); }
+.glyphicons-sort-by-alphabet-alt()   { .glyphicon("\e152"); }
+.glyphicons-sort-by-order()          { .glyphicon("\e153"); }
+.glyphicons-sort-by-order-alt()      { .glyphicon("\e154"); }
+.glyphicons-sort-by-attributes()     { .glyphicon("\e155"); }
+.glyphicons-sort-by-attributes-alt() { .glyphicon("\e156"); }
+.glyphicons-unchecked()              { .glyphicon("\e157"); }
+.glyphicons-expand()                 { .glyphicon("\e158"); }
+.glyphicons-collapse-down()          { .glyphicon("\e159"); }
+.glyphicons-collapse-up()            { .glyphicon("\e160"); }
+.glyphicons-log-in()                 { .glyphicon("\e161"); }
+.glyphicons-flash()                  { .glyphicon("\e162"); }
+.glyphicons-log-out()                { .glyphicon("\e163"); }
+.glyphicons-new-window()             { .glyphicon("\e164"); }
+.glyphicons-record()                 { .glyphicon("\e165"); }
+.glyphicons-save()                   { .glyphicon("\e166"); }
+.glyphicons-open()                   { .glyphicon("\e167"); }
+.glyphicons-saved()                  { .glyphicon("\e168"); }
+.glyphicons-import()                 { .glyphicon("\e169"); }
+.glyphicons-export()                 { .glyphicon("\e170"); }
+.glyphicons-send()                   { .glyphicon("\e171"); }
+.glyphicons-floppy-disk()            { .glyphicon("\e172"); }
+.glyphicons-floppy-saved()           { .glyphicon("\e173"); }
+.glyphicons-floppy-remove()          { .glyphicon("\e174"); }
+.glyphicons-floppy-save()            { .glyphicon("\e175"); }
+.glyphicons-floppy-open()            { .glyphicon("\e176"); }
+.glyphicons-credit-card()            { .glyphicon("\e177"); }
+.glyphicons-transfer()               { .glyphicon("\e178"); }
+.glyphicons-cutlery()                { .glyphicon("\e179"); }
+.glyphicons-header()                 { .glyphicon("\e180"); }
+.glyphicons-compressed()             { .glyphicon("\e181"); }
+.glyphicons-earphone()               { .glyphicon("\e182"); }
+.glyphicons-phone-alt()              { .glyphicon("\e183"); }
+.glyphicons-tower()                  { .glyphicon("\e184"); }
+.glyphicons-stats()                  { .glyphicon("\e185"); }
+.glyphicons-sd-video()               { .glyphicon("\e186"); }
+.glyphicons-hd-video()               { .glyphicon("\e187"); }
+.glyphicons-subtitles()              { .glyphicon("\e188"); }
+.glyphicons-sound-stereo()           { .glyphicon("\e189"); }
+.glyphicons-sound-dolby()            { .glyphicon("\e190"); }
+.glyphicons-sound-5-1()              { .glyphicon("\e191"); }
+.glyphicons-sound-6-1()              { .glyphicon("\e192"); }
+.glyphicons-sound-7-1()              { .glyphicon("\e193"); }
+.glyphicons-copyright-mark()         { .glyphicon("\e194"); }
+.glyphicons-registration-mark()      { .glyphicon("\e195"); }
+.glyphicons-cloud-download()         { .glyphicon("\e197"); }
+.glyphicons-cloud-upload()           { .glyphicon("\e198"); }
+.glyphicons-tree-conifer()           { .glyphicon("\e199"); }
+.glyphicons-tree-deciduous()         { .glyphicon("\e200"); }
