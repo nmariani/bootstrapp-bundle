@@ -32,7 +32,7 @@ class BootstrappExtension extends Extension
             : array();
         $container->setParameter(
             'twig.form.resources',
-            array_merge($twigFormResources, array('BootstrappBundle:Form:fields.html.twig'))
+            array_merge($twigFormResources, array('BootstrappBundle:Bootstrap3:fields.html.twig'))
         );
 
         if (isset($config['ckeditor'])) {

@@ -1,0 +1,36 @@
+{% macro navlist(items, active, activeBlock) %}
+    <ul class="list-group">
+    {% for i, item in items %}
+        {% set classes = ['list-group-item'] %}
+        {% set href = item.href|default(null) %}
+        {% if active == href %}
+            {% set classes = classes|merge(['active']) %}
+        {% endif %}
+        {% if item.divider is defined %}
+            {% set classes = classes|merge(['divider']) %}
+        {% endif %}
+        <li{% if classes|length > 0 %} class="{{ classes|join(' ') }}"{% endif %}>
+            {% set content = '' %}
+            {% if item.icon is defined %}
+                {% set content = content ~ '<i class="' ~ item.icon ~'"></i>' %}
+            {% endif %}
+            {% if item.caption is defined %}
+                {% set content = content ~ item.caption %}
+            {% endif %}
+            {% if href %}
+                {% set content = '<a href="' ~ item.href ~ '" target="' ~ item.target|default('_self') ~ '">' ~ content ~ '</a>' %}
+            {% endif %}
+            {% if item.items is defined and item.items|length > 0 %}
+                {% set content = '<div class="list-group-item-heading">' ~ content ~ '</div>' %}
+            {% endif %}
+            {{ content|raw }}
+            {% if active == href %}
+                {{ activeBlock|raw }}
+            {% endif %}
+            {% if item.items is defined and item.items is iterable %}
+                {{ _self.navlist(item.items, active, activeBlock) }}
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endmacro %}

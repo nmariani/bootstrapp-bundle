@@ -1,0 +1,222 @@
+{% import 'BootstrappBundle:Bootstrap3:macro.html.twig' as bootstrap %}
+{% import 'BootstrappBundle:Macro:assets.html.twig' as assets %}
+
+{% if breadcrumb is not defined or breadcrumb is not iterable %}
+    {% set breadcrumb = [] %}
+{% endif %}
+{% if sidebar is not defined %}
+    {% set sidebar = { visible: true, nav: false, subnav: true } %}
+{% endif %}
+{% if header is not defined %}
+    {% set header = { nav: not sidebar.nav } %}
+{% endif %}
+{% if template is not defined %}
+    {% set template = 'base' %}
+{% endif %}
+
+{% spaceless %}
+<!DOCTYPE html>
+<!--[if lt IE 7]><html lang="{{ app.request.locale }}" class="lt-ie10 lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html lang="{{ app.request.locale }}" class="lt-ie10 lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html lang="{{ app.request.locale }}" class="lt-ie10 lt-ie9"> <![endif]-->
+<!--[if IE 9]><html lang="{{ app.request.locale }}" class="lt-ie10"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="{{ app.request.locale }}"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{% endblock meta_description %}">
+    <meta name="author" content="{% block meta_author %}{% endblock meta_author %}">
+
+    <title>{% block title %}Your Twitter Bootstrap based application{% endblock title %}</title>
+
+    {% block stylesheets %}
+        {% if 'app' == template %}
+            {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-app.css'
+                "@BootstrappBundle/Resources/public/less/bootstrapp-app.less"
+            %}
+            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+            {% endstylesheets %}
+        {% else %}
+            {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-base.css'
+                "@BootstrappBundle/Resources/public/less/bootstrapp-base.less"
+            %}
+            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+            {% endstylesheets %}
+        {% endif %}
+    {% endblock stylesheets %}
+
+    {% block assets_stylesheets %}
+        {% for vendor, components in app.vendors %}
+            {{ assets.stylesheets(vendor, components) }}
+        {% endfor %}
+    {% endblock assets_stylesheets %}
+
+    {% block javascripts_head %}
+        {# Append JavaScript at the bottom for fast page loading except in special cases. #}
+        {# HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries #}
+        {# WARNING: Respond.js doesn't work if you view the page via file:// #}
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+        {# jQuery (necessary for Bootstrap's JavaScript plugins) #}
+        {# http://code.jquery.com/jquery-1.10.2.min.js #}
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-1.10.2.min.js') }}"></script>
+    {% endblock javascripts_head %}
+
+    <!-- Le fav and touch icons -->
+    {% block icon %}
+    <link rel="shortcut icon" href="{{ asset('bundles/bootstrapp/ico/favicon.ico') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-144.png') }}" sizes="144x144">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-114.png') }}" sizes="114x114">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-72.png') }}" sizes="72x72">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-57.png') }}">
+    {% endblock icon %}
+</head>
+<body class="{{ body.class|default(null) }}">
+{% block body %}
+    {% block navbar %}{% include 'BootstrappBundle:Bootstrap3:header.html.twig' %}{% endblock navbar %}
+    <div class="container">
+        <div class="row">
+            {% block container %}
+                {% if sidebar is defined and sidebar.visible == true %}
+                <div id="sidebar">
+                    {% block sidebar %}
+                    <div id="sidebar-header">
+                        {% block sidebar_header %}
+                        {% endblock %}
+                    </div>
+                    <div id="sidebar-content">
+                        {% set stacked = true %}
+                        {% if sidebar.nav is defined and sidebar.nav is iterable %}
+                            {% set href = '' %}
+                            {% for item in sidebar.nav %}
+                                {% if item.href is defined %}
+                                    {% set sliced = app.request.pathInfo|slice(0, item.href|length) %}
+                                    {% if sliced == item.href and item.href|length > href|length %}
+                                        {% set href = item.href %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if item.items is defined and item.items is iterable %}
+                                    {% for subitem in item.items %}
+                                        {% if subitem.href is defined %}
+                                            {% set sliced = app.request.pathInfo|slice(0, subitem.href|length) %}
+                                            {% if sliced == subitem.href and subitem.href|length > href|length %}
+                                                {% set href = subitem.href %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                            {{ bootstrap.navlist(sidebar.nav, href, sidebar.subnav|default(false) ? block('subnavbar') : null) }}
+                        {% elseif sidebar.nav is defined and sidebar.nav %}
+                            {{ block('subnavbar') }}
+                        {% endif %}
+                    </div>
+                    {% endblock sidebar %}
+                </div>
+                {% endif %}
+                <div id="content">
+                    <div id="content-inner">
+                        <header class="clearfix">
+                            {% block header %}
+                            <div class="page-header">
+                                <h4>{% block headline %}Twitter Bootstrap base layout{% endblock headline %}</h4>
+                            </div>
+                            {% if breadcrumb|length %}
+                                {% include 'BootstrappBundle::breadcrumb.html.twig' with {'breadcrumb' : breadcrumb, 'divider': false} %}
+                            {% endif %}
+                            {% if header.nav is defined and header.nav %}
+                                {% block subnavbar %}
+                                    <ul class="nav nav-pills{% if stacked|default(false) %} nav-stacked{% endif %}">
+                                        {% block subnav %}
+                                        <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
+                                        {% endblock subnav %}
+                                    </ul>
+                                {% endblock subnavbar %}
+                            {% endif %}
+                            {% endblock header %}
+                        </header>
+
+                        <div class="flashes">
+                            {% block flashes %}
+                            {% import 'BootstrappBundle:Macro:alert.html.twig' as alert %}
+                            {{ alert.session_flashbag(false, true, true, 'fade in') }}
+
+                            {% for name, value in app.session.flashbag if name in ['success', 'error', 'notice'] %}
+                            <div class="alert alert-{{ name }}">
+                                <a class="close" data-dismiss="alert" href="#">×</a>
+                                {{ value|trans }}
+                            </div>
+                            {% endfor %}
+                            {% endblock flashes %}
+                        </div>
+
+                        <div class="content">
+                            {% block content %}
+                                <p>
+                                    Cupcake ipsum dolor sit. Amet topping sesame snaps fruitcake sesame snaps. Bonbon danish pudding liquorice bear claw croissant jelly-o lemon drops cupcake. Chupa chups jelly bear claw. Sweet roll cake candy macaroon applicake. Tiramisu chocolate cake sugar plum candy canes wypas pudding chocolate bar cheesecake. Wafer lemon drops ice cream sesame snaps chocolate toffee. Cupcake chupa chups gummi bears chocolate. Donut caramels dragée carrot cake donut candy. Sugar plum fruitcake sweet sugar plum cake.
+                                    Cupcake toffee chocolate chocolate cake. Wafer chupa chups ice cream danish topping. Applicake chupa chups candy canes gingerbread donut. Jelly croissant tiramisu chocolate cake faworki ice cream chupa chups candy bear claw. Ice cream danish halvah bear claw pie halvah bonbon sweet roll. Jelly jelly marzipan brownie. Oat cake caramels sweet marzipan pudding sweet roll sugar plum biscuit. Pie pastry dessert ice cream.
+                                    Cake jelly beans liquorice sesame snaps sesame snaps marshmallow. Cookie macaroon cupcake oat cake halvah gummies cheesecake. Danish sweet roll chupa chups cheesecake. Halvah faworki lemon drops sugar plum chocolate bear claw carrot cake. Cake caramels ice cream cupcake tootsie roll. Sugar plum pastry gummi bears tootsie roll pastry caramels.
+                                    Candy canes fruitcake macaroon tiramisu tiramisu. Croissant candy canes croissant croissant danish carrot cake biscuit apple pie pudding. Marshmallow sesame snaps sesame snaps candy canes. Bonbon chocolate bar carrot cake brownie. Pudding candy canes danish apple pie jelly cake. Cookie dessert jelly beans dragée sweet donut candy canes gingerbread.
+                                    Icing lemon drops halvah dragée icing sesame snaps wafer. Tootsie roll apple pie oat cake lemon drops soufflé. Bonbon jelly-o caramels bear claw applicake bonbon wypas halvah biscuit. Dessert jelly icing pudding powder cotton candy. Apple pie dragée carrot cake. Sesame snaps tiramisu cupcake cupcake applicake. Faworki chocolate sugar plum. Pie candy gummi bears topping. Cake oat cake fruitcake.
+                                </p>
+                            {% endblock content %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock container %}
+        </div>
+    </div>
+
+    <footer>
+        {% block footer %}
+        <span id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</span>
+        <span class="dropdown dropup locale-dropdown">
+        {% render url('bootstrapp_locales', {
+            'route':app.request.attributes.get('_route'),
+            'routeParams':app.request.attributes.get('_route_params')|json_encode(),
+            'locale':app.request.locale
+        }) %}
+        </span>
+        {% endblock footer %}
+    </footer>
+
+    <div id="modal-ask" class="modal hide fade">
+        <div class="modal-header">
+            {# <a class="close" data-dismiss="modal">×</a> #}
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4>{{ 'modal.header'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+            <p>{{ 'modal.body'|trans }}</p>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-primary">{{ 'modal.button.ok'|trans }}</a>
+            <a class="btn btn-default" data-dismiss="modal">{{ 'modal.button.cancel'|trans }}</a>
+        </div>
+    </div>
+
+	{% block javascripts %}
+        {% javascripts
+            'bundles/bootstrapp/js/bootstrap/bootstrap.min.js'
+            'bundles/bootstrapp/js/bootstrap2/bootstrap-typeahead.js'
+        %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {# Dynamically load assets #}
+        {% block assets_javascripts %}
+            {% for vendor, components in app.vendors %}
+                {{ assets.javascripts(vendor, components) }}
+            {% endfor %}
+        {% endblock assets_javascripts %}
+
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp.js') }}"></script>
+    {% endblock javascripts %}
+{% endblock body %}
+</body>
+</html>
+{% endspaceless %}

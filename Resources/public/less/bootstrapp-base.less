@@ -1,0 +1,583 @@
+/*!
+ * bootstrapp-base.less v1.0.0
+ *
+ * Copyright (c) 2012-2014, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*------------------------------*
+ * Twitter Bootstrap less files *
+ *------------------------------*/
+@import "bootstrap/bootstrap.less";
+
+/*------------------------------*
+ *      BootstrappBundle        *
+ *------------------------------*/
+// Define new variables or override bootstrap
+@import "variables.less";
+@import "mixins.less";
+
+
+// Common
+// --------------------
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child {
+  margin-top: 0;
+}
+h3 + hr {
+  margin-top: 0;
+}
+div.inline-children > *,
+form.inline-children > *,
+div.inline {
+    display: inline-block;
+    margin-bottom: 0;
+}
+iframe {
+    border: none;
+}
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+[draggable] * {
+  -moz-user-drag: none;
+  -khtml-user-drag: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+// Icons
+// --------------------
+[class^="icon-"],
+[class*=" icon-"] {
+  text-align: center;
+  cursor: default;
+  line-height: 1;
+}
+a [class^="icon-"],
+a [class*=" icon-"] {
+  cursor: pointer;
+}
+/* Animated rotating icon */
+.icon-spin {
+  display: inline-block;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  -webkit-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+@-moz-keyframes spin {
+  0% { -moz-transform: rotate(0deg); }
+  100% { -moz-transform: rotate(359deg); }
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(359deg); }
+}
+@-o-keyframes spin {
+  0% { -o-transform: rotate(0deg); }
+  100% { -o-transform: rotate(359deg); }
+}
+@-ms-keyframes spin {
+  0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(359deg); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(359deg); }
+}
+
+// Dropdown
+// --------------------
+.nav.dropdown-hover .dropdown:hover > .dropdown-menu {
+    display: block;
+}
+.dropdown-menu {
+    min-width: 100px;
+    margin:0;
+}
+// Hover/Focus/Active state
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li.active a,
+.dropdown-menu > li.active a:hover {
+    text-decoration: none;
+    color: @dropdown-link-hover-color;
+    background-color: @dropdown-link-hover-bg;
+    #gradient > .vertical(@dropdown-link-hover-bg, darken(@dropdown-link-hover-bg, 5%));
+}
+.dropdown-menu li a:hover > [class^="icon-"],
+.dropdown-menu li a:hover > [class*=" icon-"],
+.dropdown-menu .active a > [class^="icon-"],
+.dropdown-menu .active a > [class*=" icon-"],
+.dropdown-menu .active a:hover > [class^="icon-"],
+.dropdown-menu .active a:hover > [class*=" icon-"] {
+    color: @white;
+    background-image: url("@{iconWhiteSpritePath}");
+}
+// form
+.dropdown-menu li form {
+    margin:0;
+    a {
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: @line-height-computed;
+        color: @dropdown-link-color;
+        white-space: nowrap;
+    }
+}
+
+.nav.locale-dropdown {
+    font-size: 13px;
+}
+.nav.locale-dropdown img {
+  margin-top:-2px;
+}
+
+.navbar .nav {
+  a, p, h1, h2, h3, h4 {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+  }
+
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: transparent;
+}
+
+.navbar-inverse li a > [class^="icon-"],
+.navbar-inverse li a > [class*=" icon-"] {
+  color: @white;
+  background-image: url("@{iconWhiteSpritePath}");
+}
+
+.nav img {
+  max-height: 18px;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    #gradient > .directional(#e5e5e5, #f2f2f2);
+    background-image: url("../../bootstrapp/images/patterns/whitey/whitey.png");
+    background-repeat: repeat;
+}
+
+body > .container,
+body > .container-fluid {
+    min-height: 100%;
+}
+
+@media (min-width: (@container-desktop)) {
+    body > .container,
+    body > .container-fluid {
+        > .row {
+            padding-top: 40px;
+        }
+    }
+}
+
+body > footer {
+    clear:both;
+    margin-top: -38px;
+    text-align: center;
+    font-size: 13px;
+    background: @white;
+    padding: 10px 12px;
+
+    .locale-dropdown {
+        display: inline-block;
+        text-align: left;
+        font-size: 13px;
+        margin-left: 10px;
+        img {
+          margin-top: -4px;
+          max-height: 20px;
+        }
+        .dropdown-menu {
+            z-index: 0;
+            width:190px;
+            left: 0;
+            right: auto;
+            margin-bottom: 5px;
+            margin-left: -20px;
+            border-radius: 6px 6px 0 0;
+            border: none;
+            .box-shadow(none);
+        }
+    }
+}
+
+p:last-child {
+    margin: 0;
+}
+
+// Forms
+// --------------------
+// read-only inputs not like disabled
+div.well input[readonly],
+div.well select[readonly],
+div.well textarea[readonly] {
+  cursor: default;
+  background-color: @input-bg;
+}
+
+input.error {
+  border-color: @state-danger-border;
+  color: @state-danger-text;
+}
+
+.form-horizontal {
+    input[type="radio"] {
+        margin: 0;
+        vertical-align: 1px;
+
+        &:not(:first-of-type) {
+            margin-left: 10px;
+        }
+
+        + .control-label {
+            display: inline-block;
+            margin-left: 5px;
+        }
+    }
+    .form-group {
+        > label {
+            .make-sm-column(3);
+        }
+        > label + div {
+            .make-sm-column(9);
+        }
+    }
+    .form-group {
+        > .control-label {
+            float: left;
+            padding-top: 5px;
+            text-align: right;
+            width: 160px;
+        }
+        > .control-label + div,
+        > .form-controls {
+            margin-left: 160px;
+            float: none;
+            width: auto;
+        }
+
+        // date and time widget
+        .date div[data-type="date"],
+        .time div[data-type="time"] {
+            input.form-control:first-of-type {
+                position: absolute;
+                bottom: 0;
+                visibility: hidden;
+                width: 100px;
+            }
+        }
+        .date div[data-type="date"] {
+            input.bootstrapp-datetime {
+                width: 200px;
+            }
+        }
+        .time div[data-type="time"] {
+            input.bootstrapp-datetime {
+                width: 100px;
+            }
+        }
+        .datetime {
+            .date {
+                float: left;
+                div[data-type="date"] {
+                    input.bootstrapp-datetime {
+                        .border-right-radius(0);
+                    }
+                }
+            }
+            .time {
+                float: left;
+                margin-left: -1px;
+                div[data-type="time"] {
+                    .input-group-addon:first-child {
+                        .border-left-radius(0);
+                    }
+                }
+            }
+        }
+    }
+    .form-group .form-group {
+        > .control-label,
+        > .control-label + div,
+        > .form-controls {
+            float: none;
+            width: auto;
+            text-align: left;
+            margin-left: 0;
+        }
+    }
+}
+
+.control-group > label.required:after {
+    position: absolute;
+    content: '*';
+    color: @state-danger-text;
+    font-size: 1.4em;
+    margin-left: 2px;
+}
+
+[data-type="datetime"] {
+    .input-append:not(:first-of-type),
+    .input-prepend:not(:first-of-type) {
+        margin-left: -1px;
+    }
+
+    .input-prepend:not(:first-of-type),
+    .input-append:not(:last-of-type) {
+        .add-on {
+            border-radius: 0;
+        }
+    }
+
+    .input-prepend:not(:last-of-type),
+    .input-append:not(:first-of-type) {
+        input {
+            border-radius: 0;
+        }
+    }
+}
+
+legend {
+    font-size: @font-size-base * 1.25;
+    margin-bottom: 0;
+    line-height: @legend-line-height;
+    & + *:before {
+        content: ".";
+        display: block;
+        height: 0;
+        visibility: hidden;
+        margin-bottom: @line-height-computed
+    }
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+      vertical-align: baseline;
+    }
+}
+
+// Thumbnails
+// --------------------
+.thumbnail {
+    background-color: @white;
+}
+
+// Maps
+// --------------------
+.map, .google-maps {
+    width: 100%;
+    height: 400px;
+}
+
+// Forms
+// --------------------
+.input-group {
+    > .input-group-btn > .btn > i {
+        font-size: @font-size-base;
+    }
+}
+.select2-container {
+    width: 100%;
+    &.form-control {
+        border: none !important;
+        box-shadow: none;
+        padding: 0;
+    }
+    .select2-choice {
+        font-size: @font-size-base !important;
+        height: @input-height-base !important;
+        line-height: @line-height-base !important;
+        padding: @padding-base-vertical @padding-base-horizontal !important;
+    }
+}
+.input-group {
+    .input-group-addon,
+    .btn,
+    .btn-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .select2-container {
+      .select2-results .select2-result-label,
+      .select2-choices {
+          padding-left: 28px;
+      }
+      .select2-choices {
+          border-radius: 4px;
+      }
+      .select2-choice {
+          .box-sizing(border-box);
+          padding-left: 32px;
+      }
+      .select2-input {
+          height: 16px;
+      }
+    }
+}
+/* bootstrap-fileupload */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    vertical-align: middle;
+}
+.btn-file > input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    font-size: 23px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    direction: ltr;
+}
+.fileupload {
+    margin-bottom: 9px;
+    position: relative;
+}
+.fileupload .uneditable-input {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+    cursor: text;
+}
+.fileupload .thumbnail {
+    display: inline-block;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    padding-bottom: 25px;
+    width: 100%;
+    background: #e6e6e6;
+}
+.fileupload .thumbnail > img {
+    display: inline-block;
+    max-height: 100%;
+    max-width: 100%;
+    vertical-align: middle;
+}
+.fileupload .btn {
+    vertical-align: middle;
+}
+.fileupload .input-append .btn {
+    line-height: 20px;
+}
+.fileupload-exists .fileupload-new,
+.fileupload-new .fileupload-exists {
+    display: none;
+}
+.fileupload-inline .fileupload-controls {
+    display: inline;
+}
+.fileupload-new .input-append .btn-file {
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+}
+.thumbnail-borderless .thumbnail {
+    padding: 0;
+    border: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.fileupload-new.thumbnail-borderless .thumbnail {
+    border: 1px solid #ddd;
+}
+.control-group.warning .fileupload .uneditable-input {
+    color: #a47e3c;
+    border-color: #a47e3c;
+}
+.control-group.warning .fileupload .fileupload-preview {
+    color: #a47e3c;
+}
+.control-group.warning .fileupload .thumbnail {
+    border-color: #a47e3c;
+}
+.control-group.error .fileupload .uneditable-input {
+    color: #b94a48;
+    border-color: #b94a48;
+}
+.control-group.error .fileupload .fileupload-preview {
+    color: #b94a48;
+}
+.control-group.error .fileupload .thumbnail {
+    border-color: #b94a48;
+}
+.control-group.success .fileupload .uneditable-input {
+    color: #468847;
+    border-color: #468847;
+}
+.control-group.success .fileupload .fileupload-preview {
+    color: #468847;
+}
+.control-group.success .fileupload .thumbnail {
+    border-color: #468847;
+}
+.fileupload .btn-group {
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    bottom: 6px;
+    left: 0;
+    width: 100%;
+    background-color: whitesmoke;
+    background-image: -moz-linear-gradient(top, white, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(white), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, white, #e6e6e6);
+    background-image: -o-linear-gradient(top, white, #e6e6e6);
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFE6E6E6', GradientType=0);
+    *background-color: #e6e6e6;
+    /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    border-right: 1px solid #DDDDDD;
+    -webkit-border-bottom-left-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -moz-border-radius-bottomright: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    margin: 0;
+}
+.fileupload .btn-group > .btn {
+    position:relative;
+    width: 50%;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #DDDDDD;
+    border-top: none;
+}
+.fileupload .btn-group > .btn + .btn {
+    margin-left: 0; }

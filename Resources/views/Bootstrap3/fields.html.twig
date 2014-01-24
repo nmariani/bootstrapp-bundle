@@ -1,0 +1,390 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{# Labels #}
+
+{% block form_label %}
+{% set label_attr = label_attr|merge({'class': 'control-label'}) %}
+{{ parent() }}
+{% endblock form_label %}
+
+{# Fields #}
+
+{% block form_widget_simple %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+    {{ parent() }}
+{% endblock form_widget_simple %}
+
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+    {{ parent() }}
+{% endblock choice_widget_collapsed %}
+
+{% block date_widget %}
+    {% spaceless %}
+        {% if widget == 'choice' or widget == 'single_text' or widget == 'text' %}
+            {{ parent() }}
+        {% else %}
+            {% set attr = attr|merge({'class': (attr.class|default('') ~ ' bootstrapp-datetime')|trim}) %}
+            <div class="date">
+                <div class="input-group" data-widget="{{ widget }}" data-type='date'>
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type="text" class="{{ widget }} form-control"/>
+                    {{ block('form_widget_simple') }}
+                </div>
+            </div>
+            {% if javascript %}
+            <script type="text/javascript">
+                {% if not app.request.isXmlHttpRequest %}
+                window.addEventListener('load', function(){
+                {% endif %}
+                    $(function() {
+                        $('#{{ id }}').datetime({lang: '{{ app.request.locale|slice(0,2)|lower }}'});
+                    });
+                {% if not app.request.isXmlHttpRequest %}
+                });
+                {% endif %}
+            </script>
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock date_widget %}
+
+{% block time_widget %}
+    {% spaceless %}
+        {% if widget == 'choice' or widget == 'single_text' or widget == 'text' %}
+            {{ parent() }}
+        {% else %}
+            {% set attr = attr|merge({'class': (attr.class|default('') ~ ' bootstrapp-datetime')|trim}) %}
+            <div class="time">
+                <div class="input-group" data-widget="{{ widget }}" data-type='time'>
+                    <span class="input-group-addon"><i class="icon-time"></i></span>
+                    <input type="text" class="{{ widget }} form-control"/>
+                    {{ block('form_widget_simple') }}
+                </div>
+            </div>
+            {% if javascript %}
+            <script type="text/javascript">
+                {% if not app.request.isXmlHttpRequest %}
+                window.addEventListener('load', function(){
+                {% endif %}
+                    $(function() {
+                        $('#{{ id }}').datetime({lang: '{{ app.request.locale|slice(0,2)|lower }}'});
+                    });
+                {% if not app.request.isXmlHttpRequest %}
+                });
+                {% endif %}
+            </script>
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock time_widget %}
+
+{% block datetime_widget %}
+    {% spaceless %}
+        {% if widget == 'mobiscroll' %}
+            {% set attr = attr|merge({'data-widget': widget, 'data-type':'datetime', 'style': 'position:relative;'}) %}
+            <div {{ block('widget_container_attributes') }}>
+                {{ form_errors(form.date) }}
+                {{ form_errors(form.time) }}
+                <div style="display: inline;">
+                {{ form_widget(form.date) }}
+                </div>
+                <div style="display: inline;">
+                {{ form_widget(form.time) }}
+                </div>
+                <input type="text" class="{{ widget }} form-control" style="position:absolute; bottom:0; visibility: hidden;"/>
+            </div>
+        {% elseif widget == 'single_text' %}
+            {{ block('form_widget_simple') }}
+        {% else %}
+            {% set attr = attr|merge({'data-type':'datetime', 'class': 'datetime'}) %}
+            <div {{ block('widget_container_attributes') }}>
+                {{ form_errors(form.date) }}
+                {{ form_errors(form.time) }}
+                {{ form_widget(form.date) }}
+                {{ form_widget(form.time) }}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock datetime_widget %}
+
+{% block bootstrapp_bundle_location_widget %}
+    {% trans_default_domain "location" %}
+    <div class="row" id ="{{ form.vars.id }}" style="position: relative;">
+        <div class="col-md-8">
+            {% if form.address is defined %}
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="{{ form.vars.id }}_clear" class="btn btn-default" type="button">
+                                <i class="icon-remove"></i>
+                            </button>
+                        </span>
+                        {{ form_widget(form.address) }}
+                        <span class="input-group-btn">
+                            <button id="{{ form.vars.id }}_locate" class="btn btn-default" type="button">
+                                <i class="icon-location"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <div class="col-sm-12">
+                    {% if form.streetNumber is defined or form.route is defined %}
+                    <div class="row">
+                        {% if form.streetNumber is defined and form.route is defined %}
+                        <div class="col-md-4">{{ form_row(form.streetNumber) }}</div>
+                        <div class="col-md-8">{{ form_row(form.route) }}</div>
+                        {% elseif form.streetNumber is defined %}
+                        <div class="col-md-12">{{ form_row(form.streetNumber) }}</div>
+                        {% elseif form.route is defined %}
+                        <div class="col-md-12">{{ form_row(form.route) }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-4">{{ form_row(form.postalCode) }}</div>
+                        <div class="col-md-8">{{ form_row(form.locality) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form_row(form.shortCountry) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_row(form.country) }}
+            {% if form.administrativeAreaLevel1 is defined %}
+            {{ form_row(form.administrativeAreaLevel1) }}
+            {% endif %}
+            {% if form.administrativeAreaLevel2 is defined %}
+            {{ form_row(form.administrativeAreaLevel2) }}
+            {% endif %}
+            {{ form_row(form.latitude) }}
+            {{ form_row(form.longitude) }}
+        </div>
+        <div class="col-md-4" style="position: absolute; top: 0; right: 0; bottom: 0;">
+            <div id="{{ form.vars.id }}_map" class="map google-maps" style="height: 100%"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        {% if not app.request.isXmlHttpRequest %}
+        window.addEventListener('load', function(){
+        {% endif %}
+            var latitude = {{ form.latitude.vars.data|default(0) }},
+                longitude = {{ form.longitude.vars.data|default(0) }},
+                mapOptions = {
+                    scrollwheel: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    marker: { visible: true }
+                };
+            mapOptions.center = [latitude, longitude];
+            $('#{{ form.vars.id }}').locationTypeahead({
+                country: '{{ defaultCountry }}',
+                map: '#{{ form.vars.id }}_map',
+                draggableMarker: true,
+                mapOptions: mapOptions,
+                callback: function(data, status) {
+                    if (status == google.maps.GeocoderStatus.OK && null != data) {
+                        $('#{{ form.latitude.vars.id }}').val(data.geometry.location.lat());
+                        $('#{{ form.longitude.vars.id }}').val(data.geometry.location.lng());
+                    } else {
+                        // handle error
+                    }
+                },
+                geocoderOptions: {
+                    region: '{{ app.request.locale|slice(3,2)|upper }}',
+                    reverse: true
+                }
+            });
+            {% if form.address is defined %}
+            $('#{{ form.vars.id }}_locate').click(function(e){
+                var typeahead = $('#{{ form.vars.id }}').data('locationTypeahead');
+                if (typeahead) {
+                    typeahead.geocode();
+                }
+            });
+            $('#{{ form.vars.id }}_clear').click(function(e){
+                $('#{{ form.vars.id }}').find('input, select').each(function(index, element) {
+                    if ($(element).data('select2')) {
+                        $(element).select2('val', '');
+                    } else {
+                        $(element).val('');
+                    }
+                });
+            });
+            {% endif %}
+            {% if form.shortCountry is defined %}
+            $('#{{ form.shortCountry.vars.id }}').bootstrappSelect2({
+                placeholder: '{{ 'Select the country'|trans }}'
+            });
+            {% endif %}
+        {% if not app.request.isXmlHttpRequest %}
+        });
+        {% endif %}
+    </script>
+{% endblock bootstrapp_bundle_location_widget %}
+
+{% block bootstrapp_bundle_ckeditor_widget %}
+    <textarea {{ block('widget_attributes') }}>{{ value | raw }}</textarea>
+    {% if enable %}
+        <script type="text/javascript">
+            {% if not app.request.isXmlHttpRequest %}
+            window.addEventListener('load', function(){
+            {% endif %}
+                if (CKEDITOR.instances['{{ id }}']) {
+                    delete CKEDITOR.instances['{{ id }}'];
+                }
+
+                {% for plugin_name, plugin in plugins %}
+                    CKEDITOR.plugins.addExternal('{{ plugin_name }}', '{{ plugin.path }}', '{{ plugin.filename }}');
+                {% endfor %}
+
+                CKEDITOR.replace('{{ id }}', {{ config | raw }});
+            {% if not app.request.isXmlHttpRequest %}
+            });
+            {% endif %}
+        </script>
+    {% endif %}
+{% endblock bootstrapp_bundle_ckeditor_widget %}
+
+{% block file_widget %}
+    {% set uploadtype = uploadtype|default('file') %}
+    {% if uploadtype == 'image' %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail"><img src="{{ url|default(placehold(placeholdWidth, placeholdHeight, placeholdText|trans)) }}" /></div>
+            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+            <div class="btn-group">
+                <span class="btn btn-default btn-sm btn-file" type="button"><i class="icon-picture"></i> Select{{ parent() }}</span>
+                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+            </div>
+        </div>
+    {% elseif uploadtype|default('file') == 'video' %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail">
+                <video id="video" controls width="{{ placeholdWidth }}" height="{{ placeholdHeight }}" preload="auto" data-setup="{}">
+                    <source type="video/{{ filetype }}" src="{{ url }}">
+                </video>
+            </div>
+            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+            <div class="btn-group">
+                <span class="btn btn-default btn-sm btn-file" type="button"><i class="icon-film"></i> Select{{ parent() }}</span>
+                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+            </div>
+        </div>
+    {% elseif uploadtype|default('file') == 'disabled-audio' %}
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail">
+                <audio>
+                    <source type="audio/{{ filetype }}" src="{{ url }}"></source>
+                </audio>
+            </div>
+            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+            <div class="btn-group">
+                <span class="btn btn-default btn-sm btn-file" type="button"><i class="icon-music"></i> Select{{ parent() }}</span>
+                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+            </div>
+        </div>
+    {% else %}
+        <div class="fileupload {{ filename|default(null) is empty ? 'fileupload-new' : 'fileupload-exists' }}" data-provides="fileupload">
+            <div class="input-group">
+                <div class="uneditable-input span3"><i class="icon-file"></i>
+                    <span class="fileupload-preview">
+                        {% if url is defined and url is not empty %}
+                            <a href="{{ url }}" target="_blank">{{ filename|default(null) }}</a>
+                        {% else %}
+                            {{ filename|default(null) }}
+                        {% endif %}
+                    </span>
+                </div>
+                <span class="button btn btn-default btn-file">Select file
+                    {{ block('form_widget') }}
+                </span>
+                <span class="button btn fileupload-exists" data-dismiss="fileupload" type="button">Remove</span>
+            </div>
+        </div>
+    {% endif %}
+    <script type="text/javascript">
+        {% if not app.request.isXmlHttpRequest %}
+        window.addEventListener('load', function(){
+        {% endif %}
+            $(function() {
+                $('#{{ id }}').fileupload();
+            });
+        {% if not app.request.isXmlHttpRequest %}
+        });
+        {% endif %}
+    </script>
+{% endblock file_widget %}
+
+{# Errors #}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if not form.vars.valid %}
+        {% if not form.parent %}
+            <div class="alert alert-danger">
+                {{ 'alert.form.errors'|trans|raw }}
+                {% if form.vars.errors|length %}
+                    {% for error in form.vars.errors %}
+                        <p>{{
+                            error.messagePluralization is null
+                            ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                            }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% elseif errors|length > 0 %}
+            <span class="help-inline">
+                {% for error in errors %}
+                <p>{{
+                    error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                }}</p>
+                {% endfor %}
+            </span>
+        {% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+{# Rows #}
+
+{% block form_row %}
+{% spaceless %}
+    <div class="form-group{% if errors %} has-error{% endif %}">
+        {{ form_label(form) }}
+        <div>
+            {{ form_widget(form) }}
+            {% if parent is defined %}
+                {{ form_errors(parent) }}
+            {% else %}
+                {{ form_errors(form) }}
+            {% endif %}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block form_rows %}
+{% spaceless %}
+    {% import 'BootstrappBundle:Macro:alert.html.twig' as alert %}
+    {% if errors %}
+        {% for error in errors %}
+            {{ alert.message('error',
+                error.messagePluralization is null
+                ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+            ) }}
+        {% endfor %}
+    {% endif %}
+    {% for child in form %}
+        {{ form_row(child) }}
+    {% endfor %}
+{% endspaceless %}
+{% endblock form_rows %}

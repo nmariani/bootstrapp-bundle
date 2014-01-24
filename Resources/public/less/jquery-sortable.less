@@ -10,7 +10,7 @@ body.dragging, body.dragging * {
   top: 0:
   opacity: 0.5;
   z-index: 2000;
-  background-color: @grayLight;
+  background-color: @gray-light;
 }
 
 ul.vertical,
@@ -21,8 +21,8 @@ ol.vertical {
     margin: 5px;
     padding: 5px;
     border: 1px solid #CCC;
-    color: @linkColor;
-    background: @grayLighter;
+    color: @link-color;
+    background: @gray-lighter;
 
     &.placeholder {
       position: relative;
@@ -38,7 +38,7 @@ ol.vertical {
         left: -5px;
         top: -4px;
         border: 5px solid transparent;
-        border-left-color: @errorText;
+        border-left-color: @state-danger-text;
         border-right: none;
       }
     }
@@ -51,8 +51,8 @@ ol, ul {
     cursor: pointer;
   }
   li.highlight {
-    background: @grayDark;
-    color: @grayLight;
+    background: @gray-dark;
+    color: @gray-light;
     i.icon-move {
       background-image: url(@iconWhiteSpritePath)
     }
@@ -78,7 +78,7 @@ ol.nav, ul.nav {
       width: 0;
       height: 0;
       border: 5px solid transparent;
-      border-top-color: @errorText;
+      border-top-color: @state-danger-text;
       top: 0;
       margin-left: -5px;
       border-bottom: none;
@@ -87,7 +87,7 @@ ol.nav, ul.nav {
   ol.dropdown-menu, ul.dropdown-menu {
     li.placeholder:before {
       border: 5px solid transparent;
-      border-left-color: @errorText;
+      border-left-color: @state-danger-text;
       margin-top: 0;
       margin-left: none;
       top: 0;
@@ -114,7 +114,7 @@ ol.nav, ul.nav {
       width: 0;
       height: 0;
       border: 5px solid transparent;
-      border-left-color: @errorText;
+      border-left-color: @state-danger-text;
       margin-top: -5px;
       left: -5px;
       border-right: none;
@@ -139,7 +139,7 @@ ol.nav, ul.nav {
       width: 0;
       height: 0;
       border: 5px solid transparent;
-      border-top-color: @errorText;
+      border-top-color: @state-danger-text;
       top: -6px;
       margin-left: -5px;
       border-bottom: none;

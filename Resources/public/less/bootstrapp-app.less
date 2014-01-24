@@ -1,0 +1,296 @@
+/*!
+ * bootstrapp-app.less v1.0.0
+ *
+ * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*------------------------------*
+ *    BootstrappBundle base     *
+ *------------------------------*/
+@import "bootstrapp-base.less";
+
+
+th {
+    background-color: #f5f5f5;
+}
+tr.inactive {
+    background-color: #f5f5f5;
+    color: #969696;
+}
+tr.deleted {
+    background-color: #F2DEDE;
+    border-bottom: 1px solid #EED3D7;
+    color: #B94A48;
+}
+
+body {
+  padding: 0;
+
+  .navbar-fixed-top {
+    position: fixed !important;
+    margin: 0;
+
+    .container,
+    .container-fluid {
+      padding: 0;
+    }
+    .navbar-brand,
+    .navbar-brand:hover {
+      margin-left: 0;
+      margin-right: 20px;
+      padding: 15px;
+      font-size: 20px;
+    }
+    .navbar-nav.navbar-right:last-child {
+      margin-right: 0;
+    }
+  }
+
+  > .container,
+  > .container-fluid {
+    padding: 0;
+
+    > .row {
+      .flexbox();
+      position: absolute;
+      top: 41px;
+      right: 0;
+      bottom: 39px;
+      left: 0;
+      overflow: hidden;
+      margin: 0;
+    }
+  }
+}
+
+.navbar .nav > li > a:hover,
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
+    color: @baseColor;
+}
+
+#content {
+    .flex(1, 1, auto);
+    min-height: 0;
+    max-height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    background: @white;
+}
+#content-inner .content {
+    padding: 20px;
+}
+#sidebar {
+    .flex(0, 1, auto);
+    background-color: @well-bg;
+    padding: 15px;
+    overflow: auto;
+
+    div.well {
+        padding: 6px;
+    }
+}
+#sidebar-content {
+    .list-group {
+        margin-bottom: 10px;
+    }
+    > .list-group {
+        .list-group-item {
+            padding: 0 0 0 25px;
+            background: none;
+            border: none;
+            > a {
+                display: block;
+                padding: 5px 15px;
+                margin-left: -15px;
+            }
+            > a:hover,
+            > a:focus {
+                text-decoration: none;
+                border-radius: 4px;
+                background-color: @gray-lighter;
+            }
+            .nav-pills > li > a {
+                padding: 5px 15px;
+            }
+        }
+        > .list-group-item {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .list-group-item,
+        .list-group-item-heading {
+            > a > [class^="icon-"],
+            > a > [class*=" icon-"],
+            > [class^="icon-"],
+            > [class*=" icon-"] {
+                display: inline-block;
+                min-width: 25px;
+            }
+        }
+
+        .list-group-item-heading {
+            font-weight: bold;
+            color: @gray;
+        }
+    }
+}
+/* Older MSIE workarounds */
+.lt-ie9 {
+  #content, #sidebar {
+    display: block;
+  }
+}
+.lt-ie10 {
+  #sidebar {
+    float: left;
+    height: 100%;
+    width: 20%;
+  }
+  #content {
+    float: left;
+    height: 100%;
+    &:first-child {
+      width: 100%;
+    }
+    &:not(:first-child) {
+      width: 80%;
+    }
+  }
+}
+ul.nav-list,
+ul.nav-pills {
+    li.nav-header {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}
+
+// Header
+// --------------------
+header {
+    position: relative;
+    background-color: #f5f5f5;
+
+    .page-header {
+        background-color: @baseColor;
+        padding: 15px;
+        margin: 0;
+        color:@gray-lighter;
+
+        *:first-child {
+            margin-top: 0;
+        }
+
+        *:last-child {
+            margin-bottom: 0;
+        }
+    }
+    .breadcrumb {
+        float: left;
+        margin-bottom: 0;
+        padding: 10px 15px;
+    }
+    ul.nav-pills {
+        float: right;
+        margin: 0 15px;
+
+        > li > a {
+            margin: 2px 0;
+            padding: 8px 15px 7px;
+            line-height: 20px;
+
+            &.dropdown-toggle .caret {
+                margin-top: 8px;
+            }
+        }
+    }
+}
+
+@media screen and (orientation:portrait) {
+  body {
+    > .container > .row,
+    > .container-fluid > .row {
+      -webkit-box-direction: normal;
+      -moz-box-direction: normal;
+      -webkit-box-orient: vertical;
+      -moz-box-orient: vertical;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+    }
+  }
+
+  #sidebar {
+    .nav-list {
+      overflow: hidden;
+
+      > li {
+        float: left;
+        width: 33%;
+
+        > a {
+          margin: 0;
+        }
+
+        &.divider {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    > .container > .row,
+    > .container-fluid > .row {
+      display: block;
+      height: auto;
+      overflow: auto;
+    }
+  }
+
+  .navbar-fixed-top {
+    .container,
+    .container-fluid {
+      > form {
+        width: 50%;
+
+        .input-append,
+        input {
+          width: 100%;
+        }
+      }
+
+      .nav-collapse ul.nav {
+        li {
+          float: left;
+        }
+      }
+    }
+  }
+
+  #sidebar {
+    .nav-list {
+      overflow: hidden;
+
+      > li {
+        float: left;
+        width: 50%;
+
+        > a {
+          margin: 0;
+        }
+
+        &.divider {
+          display: none;
+        }
+      }
+    }
+  }
+}
