@@ -402,6 +402,22 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "vitalets/x-editable",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/vitalets/x-editable.git",
+                    "type": "git",
+                    "reference": "1.5.1"
+                },
+                "dist": {
+                    "url": "https://github.com/vitalets/x-editable/zipball/master",
+                    "type": "zip"
+                }
+            }
         }
     ],
 
@@ -432,6 +448,7 @@
         "studio-42/elfinder": "dev-master",
         "johnny/jquery-sortable": "dev-master",
         "ivaynberg/select2": "dev-master",
-        "ckeditor/ckeditor-releases": "dev-master"
+        "ckeditor/ckeditor-releases": "dev-master",
+        "vitalets/x-editable": "dev-master"
     }
 }

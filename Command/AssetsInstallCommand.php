@@ -27,7 +27,7 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'LigatureSymbols',
         'Jdewit',
         'Eternicode',
-        'Vitalets',
+        'VitaletsDatepicker',
         'Mobiscroll',
         'JQueryUI',
         'Addyosmani',
@@ -36,7 +36,8 @@ class AssetsInstallCommand extends ContainerAwareCommand
         'ElFinder',
         'JQuerySortable',
         'Select2',
-        'CKEditor'
+        'CKEditor',
+        'VitaletsXEditable'
     ];
     private $path;
     private $assets;
@@ -208,12 +209,12 @@ EOT
             }
         }
 
-        if(in_array('Vitalets', $this->assets)) {
-            $output->writeln('<comment>Installing vitalets assets...</comment>');
-            if(true === $this->getVitaletsAssets($output)) {
-                $output->writeln('<info>Success, vitalets assets installed!</info>');
+        if(in_array('VitaletsDatepicker', $this->assets)) {
+            $output->writeln('<comment>Installing vitalets datepicker assets...</comment>');
+            if(true === $this->getVitaletsDatepickerAssets($output)) {
+                $output->writeln('<info>Success, vitalets datepicker assets installed!</info>');
             } else {
-                $output->writeln('<error>Error : vitalets assets installation failed!</error>');
+                $output->writeln('<error>Error : vitalets datepicker assets installation failed!</error>');
             }
         }
 
@@ -295,6 +296,15 @@ EOT
                 $output->writeln('<info>Success, CKEditor assets installed!</info>');
             } else {
                 $output->writeln('<error>Error : CKEditor assets installation failed!</error>');
+            }
+        }
+
+        if(in_array('VitaletsXEditable', $this->assets)) {
+            $output->writeln('<comment>Installing X-editable assets...</comment>');
+            if(true === $this->getVitaletsXEditableAssets($output)) {
+                $output->writeln('<info>Success, X-editable assets installed!</info>');
+            } else {
+                $output->writeln('<error>Error : X-editable assets installation failed!</error>');
             }
         }
     }
@@ -1745,7 +1755,7 @@ EOF
         return $success;
     }
 
-    protected function getVitaletsAssets($output)
+    protected function getVitaletsDatepickerAssets($output)
     {
         $success = true;
 
@@ -2101,6 +2111,51 @@ EOF
         $finder->files()->in($vendorDir.'/plugins');
         foreach ($finder as $file) {
             $filesystem->copy($file, $jsPath . '/plugins/' . $file->getRelativePathname());
+        }
+
+        return $success;
+    }
+
+    protected function getVitaletsXEditableAssets($output)
+    {
+        $success = true;
+
+        $filesystem = $this->getContainer()->get('filesystem');
+
+        $vendorDir = $this->getContainer()->get('kernel')->getRootDir().'/../vendor/vitalets/x-editable';
+        foreach(['bootstrap-editable', 'bootstrap3-editable'] as $version) {
+            $versionDir = $vendorDir . '/dist/' . $version;
+
+            if ('bootstrap-editable' == $version) {
+                $version = 'bootstrap2-editable';
+            }
+
+            # css
+            $cssPath = $this->initializeDirectory('css/'.$version);
+            $finder = new Finder();
+            $finder->files()->in($versionDir.'/css')->name('*.css');
+            foreach ($finder as $file) {
+                $content = file_get_contents($file->getPathname());
+                // replace images url
+                $content = str_replace('../img', '/bundles/bootstrapp/images/'.$version, $content);
+                file_put_contents($cssPath . '/' . $file->getRelativePathname(), $content);
+            }
+
+            # images
+            $imagesPath = $this->initializeDirectory('images/'.$version);
+            $finder = new Finder();
+            $finder->files()->in($versionDir.'/img')->name('*.gif')->name('*.jpg')->name('*.png');
+            foreach ($finder as $file) {
+                $filesystem->copy($file, $imagesPath . '/' . $file->getRelativePathname());
+            }
+
+            # js
+            $jsPath = $this->initializeDirectory('js/'.$version);
+            $finder = new Finder();
+            $finder->files()->in($versionDir.'/js')->name('*.js');
+            foreach ($finder as $file) {
+                $filesystem->copy($file, $jsPath . '/' . $file->getRelativePathname());
+            }
         }
 
         return $success;
