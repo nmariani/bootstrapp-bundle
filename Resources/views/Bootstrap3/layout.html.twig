@@ -215,6 +215,37 @@
         {% endblock assets_javascripts %}
 
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp.js') }}"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                /**
+                 * Adjust container padding-top with navbar height
+                 */
+                function adjustContainerPadding() {
+                    var navbar = $('.navbar.navbar-fixed-top'),
+                        container = $('body > .container > .row'),
+                        property = container.length && container.css('position') == 'absolute' ? 'top' : 'padding-top';
+                    if (navbar.length > 0 && navbar.css('position').search('fixed') > -1) {
+                        if (!$.isNumeric(container.data('spacer'))) {
+                            container.data('spacer', parseInt(container.css(property)) - navbar.height());
+                        }
+                        container.css(property, navbar.height() + container.data('spacer'));
+                    } else {
+                        container.css(property, '');
+                    }
+                }
+                /**
+                 * Adjust container padding-top with navbar height on window resize
+                 */
+                $(window).resize(function() {
+                    adjustContainerPadding();
+                });
+                /**
+                 * Initialize container padding-top with navbar height
+                 */
+                adjustContainerPadding();
+            });
+        </script>
     {% endblock javascripts %}
 {% endblock body %}
 </body>
