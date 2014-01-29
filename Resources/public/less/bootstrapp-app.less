@@ -66,6 +66,11 @@ body {
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover {
     color: @baseColor;
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+        color: @baseColor;
+    }
 }
 
 #content {
