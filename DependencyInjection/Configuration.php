@@ -22,6 +22,15 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('twig')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('form')
+                            ->defaultValue('Bootstrap')
+                            ->treatNullLike('')
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('ckeditor')
                     ->addDefaultsIfNotSet()
                     ->children()

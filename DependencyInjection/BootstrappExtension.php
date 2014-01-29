@@ -2,6 +2,7 @@
 
 namespace nmariani\Bundle\BootstrappBundle\DependencyInjection;
 
+use nmariani\Bundle\BootstrappBundle\Resource;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader;
@@ -26,14 +27,20 @@ class BootstrappExtension extends Extension
         $loader->load('services.yml');
         $loader->load('twig.yml');
 
-        // register twig form fields
-        $twigFormResources = $container->hasParameter('twig.form.resources')
-            ? $container->getParameter('twig.form.resources')
-            : array();
-        $container->setParameter(
-            'twig.form.resources',
-            array_merge($twigFormResources, array('BootstrappBundle:Bootstrap3:fields.html.twig'))
-        );
+        $resource = $config['twig']['form'];
+        if ($resource) {
+            $resource = Resource::fromString($resource);
+            if ($twig = $resource->getTwigForm()) {
+                // register twig form fields
+                $twigFormResources = $container->hasParameter('twig.form.resources')
+                    ? $container->getParameter('twig.form.resources')
+                    : array();
+                $container->setParameter(
+                    'twig.form.resources',
+                    array_merge($twigFormResources, ['BootstrappBundle:'.$resource->getPath().':'.$twig])
+                );
+            }
+        }
 
         if (isset($config['ckeditor'])) {
             $this->registerCKEditor($config['ckeditor'], $container);
