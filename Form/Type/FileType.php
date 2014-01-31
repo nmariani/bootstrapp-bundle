@@ -87,7 +87,7 @@ class FileType extends BaseFileType
             }
         }
         // autodetect type of upload
-        $uploadtype = $form->getConfig()->getAttribute('uploadtype');
+        $uploadtype = $options['uploadtype'];
         if (isset($view->vars['filename'])) {
             $file = new File($view->vars['filename'], false);
             $view->vars['filetype'] = $file->getExtension();
@@ -110,9 +110,10 @@ class FileType extends BaseFileType
             }
         }
         $view->vars['uploadtype'] = $uploadtype;
-        $view->vars['placeholdWidth'] = $form->getConfig()->getAttribute('placeholdWidth');
-        $view->vars['placeholdHeight'] = $form->getConfig()->getAttribute('placeholdHeight');
-        $view->vars['placeholdText'] = $form->getConfig()->getAttribute('placeholdText');
+        $view->vars['placeholdWidth'] = $options['placeholdWidth'];
+        $view->vars['placeholdHeight'] = $options['placeholdHeight'];
+        $view->vars['placeholdText'] = $options['placeholdText'];
+        $view->vars['remove'] = $options['remove'];
 
         $pattern = $options['pattern'];
         if($pattern != null) {
@@ -145,6 +146,7 @@ class FileType extends BaseFileType
         $defaults['placeholdWidth'] = 300;
         $defaults['placeholdHeight'] = 300;
         $defaults['placeholdText'] = 'Upload a file';
+        $defaults['remove'] = false;
 
         $resolver->setDefaults($defaults);
     }
