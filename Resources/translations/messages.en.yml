@@ -5,6 +5,17 @@ alert:
         warn: Warning
         error: Error
 
+# form
+form:
+  button:
+    cancel: cancel
+    create: create
+    delete: delete
+    file: select file
+    next: next
+    remove: remove
+    update: apply
+
 # modal
 modal:
     header: Confirm your action.

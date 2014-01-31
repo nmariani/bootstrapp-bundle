@@ -12,6 +12,17 @@ alert:
         warn: Attention
         error: Erreur
 
+# form
+form:
+  button:
+    cancel: annuler
+    create: créer
+    delete: supprimer
+    file: sélectionner le fichier
+    next: suivant
+    remove: supprimer
+    update: appliquer
+
 # modal
 modal:
     header: Confirmer votre action.
