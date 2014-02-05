@@ -158,10 +158,12 @@ body > footer {
   &.ratio1_2,
   &.ratio4_3,
   &.ratio16_9 {
-    top: 4px;
-    right: 4px;
-    bottom: 4px;
-    left: 4px;
+    > *:first-child {
+      top: 4px;
+      right: 4px;
+      bottom: 4px;
+      left: 4px;
+    }
   }
 }
 .thumbnail > i:first-child:last-child {
@@ -180,4 +182,11 @@ body > footer {
 table > tbody > tr > td > .thumbnail {
   width: 50px;
   .ratio(1, 1);
+
+  > *:first-child {
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+  }
 }
