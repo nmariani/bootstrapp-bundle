@@ -1597,7 +1597,7 @@ EOF
   /* bootstrapp fix */
   background: none !important;
   font-style: normal;
-  font-size: 18px;
+  font-size: 16px;
   vertical-align: baseline;
 
   &:before {
