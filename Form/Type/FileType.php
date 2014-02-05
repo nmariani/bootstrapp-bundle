@@ -61,6 +61,7 @@ class FileType extends BaseFileType
         $builder->setAttribute('placeholdWidth', $options['placeholdWidth']);
         $builder->setAttribute('placeholdHeight', $options['placeholdHeight']);
         $builder->setAttribute('placeholdText', $options['placeholdText']);
+        $builder->setAttribute('ratio', $options['ratio']);
         $builder->setAttribute('pattern', $options['pattern']);
     }
 
@@ -113,6 +114,7 @@ class FileType extends BaseFileType
         $view->vars['placeholdWidth'] = $options['placeholdWidth'];
         $view->vars['placeholdHeight'] = $options['placeholdHeight'];
         $view->vars['placeholdText'] = $options['placeholdText'];
+        $view->vars['ratio'] = $options['ratio'];
         $view->vars['remove'] = $options['remove'];
 
         $pattern = $options['pattern'];
@@ -143,9 +145,10 @@ class FileType extends BaseFileType
 
         $defaults = [];
         $defaults['uploadtype'] = 'file';
-        $defaults['placeholdWidth'] = 300;
-        $defaults['placeholdHeight'] = 300;
-        $defaults['placeholdText'] = 'Upload a file';
+        $defaults['placeholdWidth'] = null;
+        $defaults['placeholdHeight'] = null;
+        $defaults['placeholdText'] = null;
+        $defaults['ratio'] = null;
         $defaults['remove'] = false;
 
         $resolver->setDefaults($defaults);
