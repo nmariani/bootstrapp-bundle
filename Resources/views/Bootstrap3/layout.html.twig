@@ -32,13 +32,13 @@
     {% block stylesheets %}
         {% if 'app' == template %}
             {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-app.css'
-                "@BootstrappBundle/Resources/public/less/bootstrapp-app.less"
+                "@BootstrappBundle/Resources/public/less/bootstrapp/bootstrap3-app.less"
             %}
             <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
             {% endstylesheets %}
         {% else %}
             {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-base.css'
-                "@BootstrappBundle/Resources/public/less/bootstrapp-base.less"
+                "@BootstrappBundle/Resources/public/less/bootstrapp/bootstrap3-base.less"
             %}
             <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
             {% endstylesheets %}
@@ -201,7 +201,7 @@
 
 	{% block javascripts %}
         {% javascripts
-            'bundles/bootstrapp/js/bootstrap/bootstrap.min.js'
+            'bundles/bootstrapp/js/bootstrap3/bootstrap.min.js'
             'bundles/bootstrapp/js/bootstrap2/bootstrap-typeahead.js'
         %}
             <script type="text/javascript" src="{{ asset_url }}"></script>

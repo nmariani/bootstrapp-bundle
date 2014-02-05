@@ -1,12 +1,17 @@
 /*!
- * app.less v1.0.0
+ * bootstrap3-app.less v1.0.0
  *
  * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-@import "base.less";
+
+/*------------------------------*
+ *    BootstrappBundle base     *
+ *------------------------------*/
+@import "bootstrap3-base";
+
 
 th {
     background-color: #f5f5f5;
@@ -28,30 +33,31 @@ body {
     position: fixed !important;
     margin: 0;
 
-    .navbar-inner {
-      padding: 5px;
-    }
-
-    .container-fluid {
-      padding: 0;
-    }
-    .brand,
-    .brand:hover {
+    .navbar-brand,
+    .navbar-brand:hover {
       margin-left: 0;
       margin-right: 20px;
-      padding: 10px;
+      padding: 15px;
+      font-size: 20px;
+    }
+    .navbar-nav.navbar-right:last-child {
+      margin-right: 0;
     }
   }
 
-  > .container-fluid {
+  > .container {
     padding: 0;
+    width: auto;
 
-    > .row-fluid {
+    > .row {
       .flexbox();
       position: absolute;
       top: 41px;
+      right: 0;
       bottom: 39px;
+      left: 0;
       overflow: hidden;
+      margin: 0;
     }
   }
 }
@@ -75,12 +81,12 @@ body {
     -webkit-overflow-scrolling: touch;
     background: @white;
 }
-#content-inner {
+#content-inner .content {
     padding: 20px;
 }
 #sidebar {
     .flex(0, 1, auto);
-    background-color: @wellBackground;
+    background-color: @well-bg;
     padding: 15px;
     overflow: auto;
 
@@ -89,9 +95,50 @@ body {
     }
 }
 #sidebar-content {
-  > .nav-list {
-      padding: 0;
-  }
+    .list-group {
+        margin-bottom: 10px;
+    }
+    > .list-group {
+        .list-group-item {
+            padding: 0 0 0 25px;
+            background: none;
+            border: none;
+            > a {
+                display: block;
+                padding: 5px 15px;
+                margin-left: -15px;
+            }
+            > a:hover,
+            > a:focus {
+                text-decoration: none;
+                border-radius: 4px;
+                background-color: @gray-lighter;
+            }
+            .nav-pills > li > a {
+                padding: 5px 15px;
+            }
+        }
+        > .list-group-item {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .list-group-item,
+        .list-group-item-heading {
+            > a > [class^="icon-"],
+            > a > [class*=" icon-"],
+            > [class^="icon-"],
+            > [class*=" icon-"] {
+                display: inline-block;
+                min-width: 25px;
+            }
+        }
+
+        .list-group-item-heading {
+            font-weight: bold;
+            color: @gray;
+        }
+    }
 }
 /* Older MSIE workarounds */
 .lt-ie9 {
@@ -128,14 +175,13 @@ ul.nav-pills {
 // --------------------
 header {
     position: relative;
-    margin: -20px -20px 20px -20px;
     background-color: #f5f5f5;
 
     .page-header {
         background-color: @baseColor;
         padding: 15px;
         margin: 0;
-        color:@grayLighter;
+        color:@gray-lighter;
 
         *:first-child {
             margin-top: 0;
@@ -168,16 +214,14 @@ header {
 
 @media screen and (orientation:portrait) {
   body {
-    > .container-fluid {
-      > .row-fluid {
-        -webkit-box-direction: normal;
-        -moz-box-direction: normal;
-        -webkit-box-orient: vertical;
-        -moz-box-orient: vertical;
-        -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-        flex-direction: column;
-      }
+    > .container > .row {
+      -webkit-box-direction: normal;
+      -moz-box-direction: normal;
+      -webkit-box-orient: vertical;
+      -moz-box-orient: vertical;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
     }
   }
 
@@ -203,30 +247,26 @@ header {
 
 @media (max-width: 767px) {
   body {
-    > .container-fluid {
-      > .row-fluid {
-        display: block;
-        height: auto;
-        overflow: auto;
-      }
+    > .container > .row {
+      display: block;
+      height: auto;
+      overflow: auto;
     }
   }
 
   .navbar-fixed-top {
-    .container-fluid {
-      > form {
-        width: 50%;
+    > form.navbar-form {
+      width: 50%;
 
-        .input-append,
-        input {
-          width: 100%;
-        }
+      .input-group,
+      input {
+        width: 100%;
       }
+    }
 
-      .nav-collapse ul.nav {
-        li {
-          float: left;
-        }
+    .navbar-collapse ul.nav {
+      li {
+        float: left;
       }
     }
   }

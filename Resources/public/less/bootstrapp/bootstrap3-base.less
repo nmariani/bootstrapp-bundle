@@ -1,0 +1,238 @@
+/*!
+ * bootstrap3-base.less v1.0.0
+ *
+ * Copyright (c) 2012-2014, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*------------------------------*
+ * Twitter Bootstrap less files *
+ *------------------------------*/
+@import "../bootstrap3/bootstrap";
+
+/*------------------------------*
+ * Twitter Bootstrap variables  *
+ *------------------------------*/
+@import "bootstrap3-variables";
+
+/*------------------------------*
+ *  Twitter Bootstrap commons   *
+ *------------------------------*/
+@import "bootstrap-commons";
+
+
+// Base
+// --------------------
+body > .container {
+    min-height: 100%;
+}
+@media (min-width: (@container-desktop)) {
+    body > .container {
+        > .row {
+            padding-top: 40px;
+        }
+    }
+}
+
+// Dropdown
+// --------------------
+// Hover/Focus/Active state
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li.active a,
+.dropdown-menu > li.active a:hover {
+    text-decoration: none;
+    color: @dropdown-link-hover-color;
+    background-color: @dropdown-link-hover-bg;
+    #gradient > .vertical(@dropdown-link-hover-bg, darken(@dropdown-link-hover-bg, 5%));
+}
+// form
+.dropdown-menu li form {
+    margin:0;
+    a {
+        line-height: @line-height-computed;
+        color: @dropdown-link-color;
+    }
+}
+
+// Forms
+// --------------------
+// read-only inputs not like disabled
+div.well input[readonly],
+div.well select[readonly],
+div.well textarea[readonly] {
+  cursor: default;
+  background-color: @input-bg;
+}
+input.error {
+  border-color: @state-danger-border;
+  color: @state-danger-text;
+}
+
+.form-horizontal {
+  .form-group {
+    > label {
+      .make-sm-column(3);
+    }
+    > label + div {
+      .make-sm-column(9);
+    }
+  }
+  .form-group {
+    > .control-label {
+      float: left;
+      padding-top: 5px;
+      text-align: right;
+      width: 160px;
+    }
+    > .control-label + div,
+    > .form-controls {
+      margin-left: 160px;
+      float: none;
+      width: auto;
+    }
+
+    // date and time widget
+    .date div[data-type="date"],
+    .time div[data-type="time"] {
+      input.form-control:first-of-type {
+        position: absolute;
+        bottom: 0;
+        visibility: hidden;
+        width: 100px;
+      }
+    }
+    .date div[data-type="date"] {
+      input.bootstrapp-datetime {
+        width: 200px;
+      }
+    }
+    .time div[data-type="time"] {
+      input.bootstrapp-datetime {
+        width: 100px;
+      }
+    }
+    .datetime {
+      .date {
+        float: left;
+        div[data-type="date"] {
+          input.bootstrapp-datetime {
+            .border-right-radius(0);
+          }
+        }
+      }
+      .time {
+        float: left;
+        margin-left: -1px;
+        div[data-type="time"] {
+          .input-group-addon:first-child {
+            .border-left-radius(0);
+          }
+        }
+      }
+    }
+  }
+  .form-group .form-group {
+    > .control-label,
+    > .control-label + div,
+    > .form-controls {
+      float: none;
+      width: auto;
+      text-align: left;
+      margin-left: 0;
+    }
+  }
+}
+.form-group > label.required:after {
+  position: absolute;
+  content: '*';
+  color: @state-danger-text;
+  margin-left: 2px;
+}
+legend {
+  font-size: @font-size-base * 1.25;
+  line-height: @legend-line-height;
+  & + *:before {
+    margin-bottom: @line-height-computed
+  }
+}
+
+// Forms
+// --------------------
+.input-group {
+    > .input-group-btn > .btn > i {
+        font-size: @font-size-base;
+    }
+}
+.select2-container {
+    &.form-control {
+        border: none !important;
+        box-shadow: none;
+        padding: 0;
+    }
+    .select2-choice {
+        font-size: @font-size-base !important;
+        height: @input-height-base !important;
+        line-height: @line-height-base !important;
+        padding: @padding-base-vertical @padding-base-horizontal !important;
+    }
+}
+.input-group {
+  .input-group-addon,
+  .btn,
+  .btn-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .select2-container {
+    .select2-results .select2-result-label,
+    .select2-choices {
+      padding-left: 28px;
+    }
+    .select2-choices {
+      border-radius: 4px;
+    }
+    .select2-choice {
+      .box-sizing(border-box);
+      padding-left: 32px;
+    }
+    .select2-input {
+      height: 16px;
+    }
+  }
+}
+
+// Fileupload
+// --------------------
+.form-group.has-warning .fileupload .uneditable-input {
+  color: #a47e3c;
+  border-color: #a47e3c;
+}
+.form-group.has-warning .fileupload .fileupload-preview {
+  color: #a47e3c;
+}
+.form-group.has-warning .fileupload .thumbnail {
+  border-color: #a47e3c;
+}
+.form-group.has-error .fileupload .uneditable-input {
+  color: #b94a48;
+  border-color: #b94a48;
+}
+.form-group.has-error .fileupload .fileupload-preview {
+  color: #b94a48;
+}
+.form-group.has-error .fileupload .thumbnail {
+  border-color: #b94a48;
+}
+.form-group.has-success .fileupload .uneditable-input {
+  color: #468847;
+  border-color: #468847;
+}
+.form-group.has-success .fileupload .fileupload-preview {
+  color: #468847;
+}
+.form-group.has-success .fileupload .thumbnail {
+  border-color: #468847;
+}

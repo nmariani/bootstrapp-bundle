@@ -1,21 +1,11 @@
 /*!
  * mixins.less v1.0.0
  *
- * Copyright (c) 2012, Nathanaël Mariani <github@nmariani.fr>
+ * Copyright (c) 2012-2014, Nathanaël Mariani <github@nmariani.fr>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-
-/*------------------------------*
- * Twitter Bootstrap mixins     *
- *------------------------------*/
-@import "bootstrap/mixins.less";
-
-
-/*------------------------------*
- *      BootstrappBundle        *
- *------------------------------*/
 
 // Flexbox layout
 // -------------------------
@@ -39,4 +29,39 @@
   -ms-flex-order: @val;
   -webkit-order: @val;
   order: @val;
+}
+.ratio(@width, @height) {
+  position: relative;
+  background-size: contain;
+
+  &:before {
+    display: block;
+    content: "";
+    padding-top: (@height / @width) * 100%;
+  }
+
+  &.contain {
+    background-size: contain;
+    > *:first-child {
+      background-size: contain;
+    }
+  }
+
+  &.cover {
+    background-size: cover;
+    > *:first-child {
+      background-size: cover;
+    }
+  }
+
+  > *:first-child {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+    left: 4px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 }

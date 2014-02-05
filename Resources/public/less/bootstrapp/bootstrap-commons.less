@@ -1,0 +1,168 @@
+/*!
+ * bootstrap-commons.less v1.0.0
+ *
+ * Copyright (c) 2012-2014, Nathanaël Mariani <github@nmariani.fr>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+/*------------------------------*
+ * Bootstrapp commons           *
+ *------------------------------*/
+@import "commons";
+
+
+/*------------------------------*
+ * Twitter Bootstrap commons    *
+ *------------------------------*/
+
+// Dropdown
+// --------------------
+.nav.dropdown-hover .dropdown:hover > .dropdown-menu {
+  display: block;
+}
+.dropdown-menu {
+  min-width: 100px;
+  margin:0;
+}
+// Hover state
+.dropdown-menu a:hover,
+.dropdown-menu .active a,
+.dropdown-menu .active a:hover {
+  color: @white;
+  text-decoration: none;
+  background-color: @baseColor;
+}
+.dropdown-menu li a:hover > [class^="icon-"],
+.dropdown-menu li a:hover > [class*=" icon-"],
+.dropdown-menu .active a > [class^="icon-"],
+.dropdown-menu .active a > [class*=" icon-"],
+.dropdown-menu .active a:hover > [class^="icon-"],
+.dropdown-menu .active a:hover > [class*=" icon-"] {
+  color: @white;
+  background-image: url("@{iconWhiteSpritePath}");
+}
+// form
+.dropdown-menu li form {
+  margin:0;
+  a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    white-space: nowrap;
+  }
+}
+
+// Navbar / Nav
+// --------------------
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background-color: transparent;
+}
+.navbar-inverse li a > [class^="icon-"],
+.navbar-inverse li a > [class*=" icon-"] {
+  color: @white;
+  background-image: url("@{iconWhiteSpritePath}");
+}
+.nav img {
+  max-height: 18px;
+}
+.navbar .nav {
+  a, p, h1, h2, h3, h4 {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+// Footer
+// --------------------
+body > footer {
+  .locale-dropdown {
+    display: inline-block;
+    text-align: left;
+    font-size: 13px;
+    margin-left: 10px;
+    img {
+      margin-top: -4px;
+      max-height: 20px;
+    }
+    .dropdown-menu {
+      z-index: 0;
+      width:190px;
+      left: 0;
+      right: auto;
+      margin-bottom: 5px;
+      margin-left: -20px;
+      border-radius: 6px 6px 0 0;
+      border: none;
+      .box-shadow(none);
+    }
+  }
+}
+
+// Forms
+// --------------------
+.form-horizontal {
+  input[type="radio"] {
+    margin: 0;
+    vertical-align: 1px;
+
+    &:not(:first-of-type) {
+        margin-left: 10px;
+    }
+
+    + .control-label {
+        display: inline-block;
+        margin-left: 5px;
+    }
+  }
+}
+[data-type="datetime"] {
+  .input-append:not(:first-of-type),
+  .input-prepend:not(:first-of-type) {
+    margin-left: -1px;
+  }
+
+  .input-prepend:not(:first-of-type),
+  .input-append:not(:last-of-type) {
+    .add-on {
+      border-radius: 0;
+    }
+  }
+
+  .input-prepend:not(:last-of-type),
+  .input-append:not(:first-of-type) {
+    input {
+      border-radius: 0;
+    }
+  }
+}
+
+// Thumbnails
+// --------------------
+.thumbnail {
+  background-color: @white;
+  overflow: hidden;
+}
+.thumbnail > i:first-child:last-child {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  height: 50px;
+  width: 50px;
+  font-size: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+table > tbody > tr > td > .thumbnail {
+  width: 50px;
+  .ratio(1, 1);
+}
