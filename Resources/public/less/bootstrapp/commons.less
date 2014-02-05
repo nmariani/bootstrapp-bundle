@@ -38,15 +38,19 @@ form.inline-children > *,
 div.inline {
   display: inline-block;
   margin-bottom: 0;
+  vertical-align: middle;
 }
 iframe {
   border: none;
 }
 
-// Aspect ration
+// Aspect ratio
 // --------------------
-.square, .ratio1_1 {
+.circle, .square, .ratio1_1 {
   .ratio(1, 1);
+}
+.circle {
+  border-radius: 50%;
 }
 .ratio2_1 {
   .ratio(2, 1);
@@ -193,6 +197,7 @@ legend {
     .box-sizing(border-box);
     line-height: 175px;
 }
+.fileupload.circle,
 .fileupload.square,
 .fileupload.ratio1_1,
 .fileupload.ratio2_1,

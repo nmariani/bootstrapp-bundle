@@ -148,6 +148,21 @@ body > footer {
 .thumbnail {
   background-color: @white;
   overflow: hidden;
+  min-width: 30px;
+  min-height: 30px;
+
+  &.circle,
+  &.square,
+  &.ratio1_1,
+  &.ratio2_1,
+  &.ratio1_2,
+  &.ratio4_3,
+  &.ratio16_9 {
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+    left: 4px;
+  }
 }
 .thumbnail > i:first-child:last-child {
   position: absolute;
