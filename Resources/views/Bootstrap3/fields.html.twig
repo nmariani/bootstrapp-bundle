@@ -253,17 +253,39 @@
 
 {% block file_widget %}
     {% set uploadtype = uploadtype|default('file') %}
+    {% set class = filename|default(null) is not empty and remove ? 'fileupload-exists' : 'fileupload-new' %}
     {% if uploadtype == 'image' %}
-        <div class="fileupload fileupload-new" data-provides="fileupload">
-            <div class="fileupload-new thumbnail"><img src="{{ url|default(placehold(placeholdWidth, placeholdHeight, placeholdText|trans)) }}" /></div>
-            <div class="fileupload-preview fileupload-exists thumbnail"></div>
+        {% set style = '' %}
+        {% if placeholdWidth %}
+            {% set style = style ~ ' width: ' ~ placeholdWidth|default('100%') ~ ';' %}
+        {% endif %}
+        {% if placeholdHeight %}
+            {% set style = style ~ ' height: ' ~ placeholdHeight ~ ';' %}
+        {% else %}
+            {% set class = class ~ (ratio ? ' ratio' ~ ratio|replace('/', '_') : ' square') %}
+        {% endif %}
+        <div class="fileupload {{ class }}" data-provides="fileupload" style="{{ style }}">
+            <div class="fileupload-new thumbnail" style="{{ style }}">
+                {% if placeholdText is not empty %}
+                {{ placeholdText|trans|raw }}
+                {% else %}
+                    <i class="icon-picture"></i>
+                {% endif %}
+            </div>
+            <div class="fileupload-preview fileupload-exists thumbnail" style="{{ style }}">
+                {% if url is defined and url is not empty %}
+                    <img src="{{ url }}">
+                {% endif %}
+            </div>
             <div class="btn-group">
-                <span class="btn btn-default btn-sm btn-file" type="button"><i class="icon-picture"></i> Select{{ parent() }}</span>
-                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+                <span class="btn btn-default btn-sm btn-file"><i class="icon-picture"></i>
+                    {{ block('form_widget') }}
+                </span>
+                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload"><i class="icon-remove"></i></span>
             </div>
         </div>
     {% elseif uploadtype|default('file') == 'video' %}
-        <div class="fileupload fileupload-new" data-provides="fileupload">
+        <div class="fileupload {{ class }}" data-provides="fileupload">
             <div class="fileupload-new thumbnail">
                 <video id="video" controls width="{{ placeholdWidth }}" height="{{ placeholdHeight }}" preload="auto" data-setup="{}">
                     <source type="video/{{ filetype }}" src="{{ url }}">
@@ -271,12 +293,14 @@
             </div>
             <div class="fileupload-preview fileupload-exists thumbnail"></div>
             <div class="btn-group">
-                <span class="btn btn-default btn-sm btn-file" type="button"><i class="icon-film"></i> Select{{ parent() }}</span>
-                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+                <span class="btn btn-default btn-sm btn-file"><i class="icon-film"></i> {{ 'form.button.file'|trans }}
+                    {{ block('form_widget') }}
+                </span>
+                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload"><i class="icon-remove"></i> {{ 'form.button.cancel'|trans }}</span>
             </div>
         </div>
     {% elseif uploadtype|default('file') == 'disabled-audio' %}
-        <div class="fileupload fileupload-new" data-provides="fileupload">
+        <div class="fileupload {{ class }}" data-provides="fileupload">
             <div class="fileupload-new thumbnail">
                 <audio>
                     <source type="audio/{{ filetype }}" src="{{ url }}"></source>
@@ -284,12 +308,14 @@
             </div>
             <div class="fileupload-preview fileupload-exists thumbnail"></div>
             <div class="btn-group">
-                <span class="btn btn-default btn-sm btn-file" type="button"><i class="icon-music"></i> Select{{ parent() }}</span>
-                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload" type="button"><i class="icon-remove"></i> Undo</span>
+                <span class="btn btn-default btn-sm btn-file"><i class="icon-music"></i> {{ 'form.button.file'|trans }}
+                    {{ block('form_widget') }}
+                </span>
+                <span class="btn btn-default btn-sm fileupload-exists" data-dismiss="fileupload"><i class="icon-remove"></i> {{ 'form.button.cancel'|trans }}</span>
             </div>
         </div>
     {% else %}
-        <div class="fileupload {{ filename|default(null) is empty ? 'fileupload-new' : 'fileupload-exists' }}" data-provides="fileupload">
+        <div class="fileupload {{ class }}" data-provides="fileupload">
             <div class="input-group">
                 <div class="uneditable-input span3"><i class="icon-file"></i>
                     <span class="fileupload-preview">
@@ -300,10 +326,16 @@
                         {% endif %}
                     </span>
                 </div>
-                <span class="button btn btn-default btn-file">Select file
+                <span class="btn btn-default btn-file">{{ 'form.button.file'|trans }}
                     {{ block('form_widget') }}
                 </span>
-                <span class="button btn fileupload-exists" data-dismiss="fileupload" type="button">Remove</span>
+                <span class="btn btn-default fileupload-exists" data-dismiss="fileupload">
+                    {% if filename|default(null) is not empty and remove %}
+                    {{ 'form.button.remove'|trans }}
+                    {% else %}
+                    {{ 'form.button.cancel'|trans }}
+                    {% endif %}
+                </span>
             </div>
         </div>
     {% endif %}
@@ -312,7 +344,25 @@
         window.addEventListener('load', function(){
         {% endif %}
             $(function() {
-                $('#{{ id }}').fileupload();
+                var fileupload = $('#{{ id }}').closest('.fileupload').fileupload().data('fileupload'),
+                    preview = fileupload.$preview.html();
+                $('#{{ id }}').change(function(){
+                    if (fileupload.$preview.html().length ==0 && preview != fileupload.original.preview) {
+                        fileupload.$preview.html(fileupload.original.preview);
+                    }
+                    {% if filename|default(null) is not empty and remove %}
+                    if (fileupload.$preview.html() == fileupload.original.preview) {
+                        fileupload.$remove.html('{{ 'form.button.remove'|trans }}');
+                    } else {
+                        fileupload.$remove.html('{{ 'form.button.cancel'|trans }}');
+                    }
+                    // toggle button action remove|cancel
+                    fileupload.$element.removeClass('fileupload-new');
+                    fileupload.$element.addClass('fileupload-exist');
+                    fileupload.$remove.show();
+                    {% endif %}
+                    preview = fileupload.$preview.html()
+                });
             });
         {% if not app.request.isXmlHttpRequest %}
         });
