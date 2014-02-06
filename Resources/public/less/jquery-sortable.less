@@ -1,4 +1,3 @@
-@import "bootstrap3/variables.less";
 @import "bootstrapp/bootstrap3-variables.less";
 
 body.dragging, body.dragging * {
@@ -54,9 +53,6 @@ ol, ul {
   li.highlight {
     background: @gray-dark;
     color: @gray-light;
-    i.icon-move {
-      background-image: url(@iconWhiteSpritePath)
-    }
   }
 }
 
@@ -69,7 +65,8 @@ ol.nav, ul.nav {
   }
 
   li.dragged {
-    background-color: #2C2C2C;
+    background-color: @gray-light;
+    color: @gray;
   }
   li.placeholder {
     position: relative;
