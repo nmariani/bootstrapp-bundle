@@ -35,6 +35,7 @@
   background-size: contain;
   min-width: @minWidth;
   min-height: @minHeight;
+  overflow: auto;
 
   &:before {
     display: block;
@@ -56,8 +57,10 @@
     }
   }
 
-  > *:first-child {
+  > * {
     position: absolute;
+  }
+  > *:first-child {
     top: 0;
     right: 0;
     bottom: 0;

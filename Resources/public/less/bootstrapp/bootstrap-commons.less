@@ -145,7 +145,6 @@ body > footer {
 // --------------------
 .thumbnail {
   background-color: @white;
-  overflow: hidden;
   min-width: 30px;
   min-height: 30px;
 
@@ -156,11 +155,16 @@ body > footer {
   &.ratio1_2,
   &.ratio4_3,
   &.ratio16_9 {
-    > *:first-child {
+    > div:first-child,
+    > span:first-child,
+    > i:first-child {
       top: 4px;
       right: 4px;
       bottom: 4px;
       left: 4px;
+    }
+    > img {
+      padding: 4px;
     }
   }
 }

@@ -261,18 +261,19 @@
         {% endif %}
         {% if placeholdHeight %}
             {% set style = style ~ ' height: ' ~ placeholdHeight ~ ';' %}
+            {% set ratio = '' %}
         {% else %}
-            {% set class = class ~ (ratio ? ' ratio' ~ ratio|replace('/', '_') : ' square') %}
+            {% set ratio = ratio ? ' ratio' ~ ratio|replace('/', '_') : ' square' %}
         {% endif %}
         <div class="fileupload {{ class }}" data-provides="fileupload" style="{{ style }}">
-            <div class="fileupload-new thumbnail" style="{{ style }}">
+            <div class="fileupload-new thumbnail{{ ratio }}" style="{{ style }}">
                 {% if placeholdText is not empty %}
                 {{ placeholdText|trans|raw }}
                 {% else %}
                     <i class="icon-picture"></i>
                 {% endif %}
             </div>
-            <div class="fileupload-preview fileupload-exists thumbnail" style="{{ style }}">
+            <div class="fileupload-preview fileupload-exists thumbnail{{ ratio }}" style="{{ style }}">
                 {% if url is defined and url is not empty %}
                     <img src="{{ url }}">
                 {% endif %}
@@ -345,24 +346,29 @@
         {% endif %}
             $(function() {
                 var fileupload = $('#{{ id }}').closest('.fileupload').fileupload().data('fileupload'),
+                    filename = fileupload.$input.val(),
                     preview = fileupload.$preview.html();
+                {% if filename|default(null) is not empty and remove %}
                 $('#{{ id }}').change(function(){
-                    if (fileupload.$preview.html().length ==0 && preview != fileupload.original.preview) {
-                        fileupload.$preview.html(fileupload.original.preview);
+                    switch(true) {
+                        case filename.length > 0:
+                        case fileupload.$input.val().length == 0 && fileupload.$preview.html().length ==0 && preview.length == 0:
+                            fileupload.reset();
+                            fileupload.$element.removeClass('fileupload-new')
+                            fileupload.$element.addClass('fileupload-exists')
+                            break;
                     }
-                    {% if filename|default(null) is not empty and remove %}
-                    if (fileupload.$preview.html() == fileupload.original.preview) {
-                        fileupload.$remove.html('{{ 'form.button.remove'|trans }}');
-                    } else {
-                        fileupload.$remove.html('{{ 'form.button.cancel'|trans }}');
-                    }
-                    // toggle button action remove|cancel
-                    fileupload.$element.removeClass('fileupload-new');
-                    fileupload.$element.addClass('fileupload-exist');
-                    fileupload.$remove.show();
-                    {% endif %}
+                    filename = fileupload.$input.val();
                     preview = fileupload.$preview.html()
+                    if (fileupload.$element.is('.fileupload-exists') && filename.length == 0) {
+                        fileupload.$remove.html('<i class="icon-remove"></i>');
+                    } else {
+                        fileupload.$remove.html('<i class="icon-undo"></i>');
+                    }
+                    // show button action remove|cancel
+                    fileupload.$remove.show();
                 });
+                {% endif %}
             });
         {% if not app.request.isXmlHttpRequest %}
         });
