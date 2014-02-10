@@ -170,7 +170,9 @@ legend {
       border-left: none;
     }
 
-    input.input-block-level {
+    input.input-block-level,
+    input:not([class*=input-]) {
+      .input-block-level();
       padding-left: 32px;
       border-radius: 4px;
     }
@@ -194,7 +196,9 @@ legend {
       border-bottom: none;
     }
 
-    input.input-block-level {
+    input.input-block-level,
+    input:not([class*=input-]) {
+      .input-block-level();
       padding-right: 46px;
       border-radius: 4px;
     }

@@ -93,7 +93,7 @@
                         <label class="control-label" for="{{ form.address.vars.id }}">{{ 'Address'|trans }}</label>
                         <div class="controls">
                             <div class="input-append input-block-level">
-                                {{ form_widget(form.address, {'attr':{'class':'input-block-level'}}) }}
+                                {{ form_widget(form.address) }}
                                 <div class="btn-group">
                                     <button id="{{ form.vars.id }}_clear" class="btn" type="button"><i class="icon-remove"></i></button>
                                     <button id="{{ form.vars.id }}_locate" class="btn" type="button"><i class="icon-location"></i></button>
