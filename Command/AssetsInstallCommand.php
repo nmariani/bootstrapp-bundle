@@ -1595,6 +1595,7 @@ EOF
 {$matches[0][1]}
 
   /* bootstrapp fix */
+  display: inline-block;
   background: none !important;
   font-style: normal;
   font-size: 16px;
