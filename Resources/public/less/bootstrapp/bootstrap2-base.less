@@ -111,22 +111,27 @@ input.error {
   border-color: @errorBorder;
   color: @errorText;
 }
-.form-horizontal {
-  .controls .control-label {
-    float: none;
-    width: auto;
-    text-align: left;
-  }
-  .controls .controls {
-    margin-left: 0;
-  }
-}
 .control-group > label.required:after {
   position: absolute;
   content: '*';
   color: @errorText;
   font-size: 1.4em;
   margin-left: 2px;
+}
+.form-horizontal {
+  .controls {
+    .control-group {
+      margin-bottom: @baseLineHeight / 2;
+    }
+    .control-label {
+      float: none;
+      width: auto;
+      text-align: left;
+    }
+    .controls {
+      margin-left: 0;
+    }
+  }
 }
 [data-type="datetime"] {
   .input-append:not(:first-of-type),
