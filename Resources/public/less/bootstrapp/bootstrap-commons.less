@@ -140,6 +140,16 @@ body > footer {
     }
   }
 }
+.clear-form-horizontal {
+  .control-label,
+  .control-label + div,
+  .form-controls {
+    float: none;
+    width: auto;
+    text-align: left;
+    margin-left: 0;
+  }
+}
 
 // Thumbnails
 // --------------------
@@ -167,6 +177,26 @@ body > footer {
       padding: 4px;
       .box-sizing(border-box);
     }
+  }
+
+  &.thumbnail-xs {
+    max-width: 30px;
+    max-height: 30px;
+  }
+
+  &.thumbnail-sm {
+    max-width: 50px;
+    max-height: 50px;
+  }
+
+  &.thumbnail-md {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  &.thumbnail-lg {
+    max-width: 120px;
+    max-height: 120px;
   }
 }
 .thumbnail > i:first-child:last-child {
