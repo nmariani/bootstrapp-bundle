@@ -81,11 +81,18 @@ div.well textarea[readonly] {
   cursor: default;
   background-color: @inputBackground;
 }
-// fix form-horizontal inputs sizing
+// fix form inputs sizing
 form,
+div.control-group,
 div.controls {
   // override default bootstrap input, texterea & select width to fill the space available
-  > textarea,
+  > textarea {
+    display: block;
+    width: 100%;
+    min-height: @inputHeight * 5;
+    .box-sizing(border-box);
+  }
+
   > select,
   > input[type="text"],
   > input[type="password"],
