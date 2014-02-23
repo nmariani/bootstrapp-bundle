@@ -173,9 +173,15 @@ body > footer {
       bottom: 4px;
       left: 4px;
     }
-    > img {
+    > img:first-child {
       padding: 4px;
       .box-sizing(border-box);
+    }
+  }
+
+  &.circle {
+    > *:first-child {
+      border-radius: 50%;
     }
   }
 
