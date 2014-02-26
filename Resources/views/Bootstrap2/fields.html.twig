@@ -200,7 +200,7 @@
 {% endblock bootstrapp_bundle_location_widget %}
 
 {% block bootstrapp_bundle_ckeditor_widget %}
-    <textarea {{ block('widget_attributes') }}>{{ value | raw }}</textarea>
+    <textarea {{ block('widget_attributes') }}>{{ value|raw }}</textarea>
     {% if enable %}
         <script type="text/javascript">
             {% if not app.request.isXmlHttpRequest %}
@@ -214,7 +214,7 @@
                     CKEDITOR.plugins.addExternal('{{ plugin_name }}', '{{ plugin.path }}', '{{ plugin.filename }}');
                 {% endfor %}
 
-                CKEDITOR.replace('{{ id }}', {{ config | raw }});
+                CKEDITOR.replace('{{ id }}', {{ config|raw }});
             {% if not app.request.isXmlHttpRequest %}
             });
             {% endif %}
@@ -275,7 +275,7 @@
         <div class="fileupload {{ class }}" data-provides="fileupload">
             <div class="fileupload-new thumbnail">
                 <audio>
-                    <source type="audio/{{ filetype }}" src="{{ url }}"></source>
+                    <source type="audio/{{ filetype }}" src="{{ url }}">
                 </audio>
             </div>
             <div class="fileupload-preview fileupload-exists thumbnail"></div>
@@ -359,8 +359,8 @@
                     {% for error in form.vars.errors %}
                         <p>{{
                             error.messagePluralization is null
-                            ? error.messageTemplate|trans(error.messageParameters, 'validators')
-                            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                            ? error.messageTemplate|trans(error.messageParameters, 'validators')|raw
+                            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')|raw
                             }}</p>
                     {% endfor %}
                 {% endif %}
@@ -370,8 +370,8 @@
                 {% for error in errors %}
                 <p>{{
                     error.messagePluralization is null
-                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
-                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')|raw
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')|raw
                 }}</p>
                 {% endfor %}
             </span>
