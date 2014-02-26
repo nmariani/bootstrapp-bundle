@@ -29,6 +29,12 @@
 
     <title>{% block title %}Your Twitter Bootstrap based application{% endblock title %}</title>
 
+    {% block assets_stylesheets %}
+        {% for vendor, components in app.vendors %}
+            {{ assets.stylesheets(vendor, components) }}
+        {% endfor %}
+    {% endblock assets_stylesheets %}
+
     {% block stylesheets %}
         {% if 'app' == template %}
             {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-app.css'
@@ -44,12 +50,6 @@
             {% endstylesheets %}
         {% endif %}
     {% endblock stylesheets %}
-
-    {% block assets_stylesheets %}
-        {% for vendor, components in app.vendors %}
-            {{ assets.stylesheets(vendor, components) }}
-        {% endfor %}
-    {% endblock assets_stylesheets %}
 
     {% block javascripts_head %}
         {# Append JavaScript at the bottom for fast page loading except in special cases. #}
