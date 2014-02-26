@@ -72,21 +72,26 @@ div.well textarea[readonly] {
   cursor: default;
   background-color: @input-bg;
 }
+// fix form inputs sizing
+form {
+  // override default bootstrap textarea to fill the space available
+  textarea {
+    min-height: @input-height-base * 4;
+  }
+}
 input.error {
   border-color: @state-danger-border;
   color: @state-danger-text;
 }
-
 .form-horizontal {
   .form-group {
-    > label {
+    > label,
+    > .control-label {
       .make-sm-column(3);
+      + div {
+        .make-sm-column(9);
+      }
     }
-    > label + div {
-      .make-sm-column(9);
-    }
-  }
-  .form-group {
     > .control-label {
       float: left;
       padding-top: 5px;
@@ -151,11 +156,21 @@ input.error {
     }
   }
 }
+.clear-form-horizontal .form-controls {
+  float: none;
+  width: auto;
+  text-align: left;
+  margin-left: 0;
+}
 .form-group > label.required:after {
   position: absolute;
   content: '*';
   color: @state-danger-text;
   margin-left: 2px;
+}
+.form-controls {
+  display: block;
+  overflow: hidden;
 }
 legend {
   font-size: @font-size-base * 1.25;
@@ -164,9 +179,6 @@ legend {
     margin-bottom: @line-height-computed
   }
 }
-
-// Forms
-// --------------------
 .input-group {
     > .input-group-btn > .btn > i {
         font-size: @font-size-base;
@@ -183,6 +195,18 @@ legend {
         height: @input-height-base !important;
         line-height: @line-height-base !important;
         padding: @padding-base-vertical @padding-base-horizontal !important;
+    }
+}
+.select2-container-multi {
+    .select2-choices {
+        border-radius: 4px;
+    }
+    .select2-search-choice {
+        div {
+          font-size: @font-size-base !important;
+          height: @line-height-computed * 0.9 !important;
+          line-height: @line-height-base !important;
+        }
     }
 }
 .input-group {

@@ -184,18 +184,21 @@
         {% endblock footer %}
     </footer>
 
-    <div id="modal-ask" class="modal hide fade">
-        <div class="modal-header">
-            {# <a class="close" data-dismiss="modal">×</a> #}
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h4>{{ 'modal.header'|trans }}</h4>
-        </div>
-        <div class="modal-body">
-            <p>{{ 'modal.body'|trans }}</p>
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-primary">{{ 'modal.button.ok'|trans }}</a>
-            <a class="btn btn-default" data-dismiss="modal">{{ 'modal.button.cancel'|trans }}</a>
+    <div id="modal-ask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-ask-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="modal-ask-label">{{ 'modal.header'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'modal.body'|trans }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">{{ 'modal.button.ok'|trans }}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.button.cancel'|trans }}</button>
+                </div>
+            </div>
         </div>
     </div>
 
