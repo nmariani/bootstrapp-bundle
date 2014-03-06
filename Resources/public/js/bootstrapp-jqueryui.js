@@ -61,7 +61,7 @@ Bootstrapp.jQueryUIDatePicker = (function() {
     jQueryUIDatePicker.prototype.setDate = function(date) {
         if(date.getTime) {
             date.setHours(0, 0, 0, 0);
-            if(!this.getDate() || date.getTime() != this.date.getTime()) {
+            if(!this.getDate() || !this.date.getTime || date.getTime() != this.date.getTime()) {
                 this.date = null;
                 this.input.datepicker("setDate", date);
                 this.getDate();
