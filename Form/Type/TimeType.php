@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType as BaseTimeType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
@@ -86,6 +87,7 @@ class TimeType extends BaseTimeType
 
         $defaults = [
             'format'  => $this->format,
+            'compound' => function(Options $options){return $this->isCompound($options);},
             'javascript' => true
         ];
         if(null!==$this->widget) {
@@ -156,5 +158,14 @@ class TimeType extends BaseTimeType
             $format = $formatter->getPattern();
         }
         return $format;
+    }
+
+    /**
+     * Return true is given options match a compound widget, else return false
+     * @param \Symfony\Component\OptionsResolver\Options $options
+     * @return bool
+     */
+    protected function isCompound(Options $options) {
+        return in_array($options['widget'], ['text', 'choice']);
     }
 }
