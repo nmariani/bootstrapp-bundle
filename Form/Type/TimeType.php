@@ -11,6 +11,7 @@
 
 namespace nmariani\Bundle\BootstrappBundle\Form\Type;
 
+use nmariani\Bundle\BootstrappBundle\Form\Extension\Core\DataTransformer\Hour2400ToHour1200Transformer;
 use Symfony\Component\Form\Extension\Core\Type\TimeType as BaseTimeType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\Form\FormInterface,
@@ -49,7 +50,19 @@ class TimeType extends BaseTimeType
                 $options['widget'] = 'single_text';
                 break;
         }
+
         parent::buildForm($builder, $options);
+
+        if ('single_text' === $options['widget']) {
+            switch(true) {
+                // add support to AM/PM format (transform 24h/12h time)
+                case false !== strpos($this->getPattern($options['format']), 'a'):
+                    $builder->addViewTransformer(new Hour2400ToHour1200Transformer());
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -138,7 +151,7 @@ class TimeType extends BaseTimeType
     }
 
     /**
-     * Return date pattern for given date format
+     * Return time pattern for given time format
      * @param string|int $format
      * @return string
      */
