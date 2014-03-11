@@ -25,6 +25,10 @@ class DateTimeType extends BaseDateTimeType
      */
     private $widget;
     /**
+     * @var string|int
+     */
+    private $format;
+    /**
      * @var \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
      */
     private $assetsLoader;
@@ -39,6 +43,9 @@ class DateTimeType extends BaseDateTimeType
         $defaults = [];
         if(null!==$this->widget) {
             $defaults['widget'] = $this->widget;
+        }
+        if(null!==$this->format) {
+            $defaults['format'] = $this->format;
         }
         $resolver->setDefaults($defaults);
 
@@ -96,6 +103,18 @@ class DateTimeType extends BaseDateTimeType
     public function setDefaultWidget($widget) {
         if(is_string($widget)) {
             $this->widget = $widget;
+        }
+        return $this;
+    }
+
+    /**
+     * Set the default format
+     * @param string|int $format
+     * @return DateTimeType
+     */
+    public function setDefaultFormat($format = null) {
+        if(is_string($format) || is_int($format)) {
+            $this->format = $format;
         }
         return $this;
     }

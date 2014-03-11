@@ -13,7 +13,9 @@ parameters:
     form.type.date.widget: eyecon
     form.type.date.format: 1 # 16 juillet 1983
     form.type.time.widget: jdewit
+    form.type.time.format: ~
     form.type.datetime.widget: mobiscroll
+    form.type.datetime.format: ~
     # location
     form.type.location.widget: location-typeahead
     form.type.location.preferred_countries: ['FR']
@@ -39,6 +41,7 @@ services:
         tags: [{ name: form.type, alias: time }]
         calls:
             - [ setDefaultWidget, [ %form.type.time.widget% ] ]
+            - [ setDefaultFormat, [ %form.type.time.format% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
     form.type.datetime:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\DateTimeType
@@ -46,6 +49,7 @@ services:
         tags: [{ name: form.type, alias: datetime }]
         calls:
             - [ setDefaultWidget, [ %form.type.datetime.widget% ] ]
+            - [ setDefaultFormat, [ %form.type.datetime.format% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
     form.type.choice:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\ChoiceType
