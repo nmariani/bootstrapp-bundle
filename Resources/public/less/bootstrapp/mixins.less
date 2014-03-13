@@ -30,6 +30,9 @@
   -webkit-order: @val;
   order: @val;
 }
+
+// ratio 1/1, 4/3, 16/9, etc
+// -------------------------
 .ratio(@width, @height, @minWidth: 30px, @minHeight: 30px) {
   position: relative;
   background-size: contain;
@@ -69,4 +72,19 @@
     background-repeat: no-repeat;
     background-size: contain;
   }
+}
+
+// Scroll (smoothly webkit)
+// -------------------------
+.scroll-x() {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-y() {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll() {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }

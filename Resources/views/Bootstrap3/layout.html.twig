@@ -8,10 +8,7 @@
     {% set sidebar = { visible: true, nav: false, subnav: true } %}
 {% endif %}
 {% if header is not defined %}
-    {% set header = { nav: not sidebar.nav } %}
-{% endif %}
-{% if template is not defined %}
-    {% set template = 'base' %}
+    {% set header = { nav: not sidebar.nav|default(false) } %}
 {% endif %}
 
 {% spaceless %}
@@ -36,19 +33,11 @@
     {% endblock assets_stylesheets %}
 
     {% block stylesheets %}
-        {% if 'app' == template %}
-            {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-app.css'
-                "@BootstrappBundle/Resources/public/less/bootstrapp/bootstrap3-app.less"
-            %}
-            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
-            {% endstylesheets %}
-        {% else %}
-            {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-base.css'
-                "@BootstrappBundle/Resources/public/less/bootstrapp/bootstrap3-base.less"
-            %}
-            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
-            {% endstylesheets %}
-        {% endif %}
+        {% stylesheets filter='less' output='bundles/bootstrapp/css/bootstrapp-base.css'
+            "@BootstrappBundle/Resources/public/less/bootstrapp/bootstrap3-base.less"
+        %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
     {% endblock stylesheets %}
 
     {% block javascripts_head %}
@@ -73,20 +62,26 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/bootstrapp/ico/icon-57.png') }}">
     {% endblock icon %}
 </head>
+{% block body_outer %}
 <body class="{{ body.class|default(null) }}">
 {% block body %}
     {% block navbar %}{% include 'BootstrappBundle:Bootstrap3:header.html.twig' %}{% endblock navbar %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             {% block container %}
+                {% block sidebar_outer %}
                 {% if sidebar is defined and sidebar.visible == true %}
                 <div id="sidebar">
                     {% block sidebar %}
+                    {% block sidebar_header_outer %}
                     <div id="sidebar-header">
                         {% block sidebar_header %}
                         {% endblock %}
                     </div>
+                    {% endblock sidebar_header_outer %}
+                    {% block sidebar_content_outer %}
                     <div id="sidebar-content">
+                        {% block sidebar_content %}
                         {% set stacked = true %}
                         {% if sidebar.nav is defined and sidebar.nav is iterable %}
                             {% set href = '' %}
@@ -112,22 +107,28 @@
                         {% elseif sidebar.nav is defined and sidebar.nav %}
                             {{ block('subnavbar') }}
                         {% endif %}
+                        {% endblock sidebar_content %}
                     </div>
+                    {% endblock sidebar_content_outer %}
                     {% endblock sidebar %}
                 </div>
                 {% endif %}
-                <div id="content">
-                    <div id="content-inner">
+                {% endblock sidebar_outer %}
+                {% block content_outer %}
+                <div id="content" class="content">
+                        {% block header_outer %}
                         <header class="clearfix">
                             {% block header %}
                             <div class="page-header">
                                 <h4>{% block headline %}Twitter Bootstrap base layout{% endblock headline %}</h4>
                             </div>
+                            {% block breadcrumb %}
                             {% if breadcrumb|length %}
                                 {% include 'BootstrappBundle::breadcrumb.html.twig' with {'breadcrumb' : breadcrumb, 'divider': false} %}
                             {% endif %}
+                            {% endblock breadcrumb %}
+                            {% block subnavbar %}
                             {% if header.nav is defined and header.nav %}
-                                {% block subnavbar %}
                                     <ul class="nav nav-pills{% if stacked|default(false) %} nav-stacked{% endif %}">
                                         {% block subnav %}
                                         <li><a href="#"><i class="icon-info-sign"></i> {% trans %}Informations{% endtrans %}</a></li>
@@ -135,11 +136,13 @@
                                         <li><a href="#"><i class="icon-flag"></i> {% trans %}Help{% endtrans %}</a></li>
                                         {% endblock subnav %}
                                     </ul>
-                                {% endblock subnavbar %}
                             {% endif %}
+                            {% endblock subnavbar %}
                             {% endblock header %}
                         </header>
+                        {% endblock header_outer %}
 
+                        {% block flashes_outer %}
                         <div class="flashes">
                             {% block flashes %}
                             {% import 'BootstrappBundle:Macro:alert.html.twig' as alert %}
@@ -153,8 +156,8 @@
                             {% endfor %}
                             {% endblock flashes %}
                         </div>
+                        {% endblock flashes_outer %}
 
-                        <div class="content">
                             {% block content %}
                                 <p>
                                     Cupcake ipsum dolor sit. Amet topping sesame snaps fruitcake sesame snaps. Bonbon danish pudding liquorice bear claw croissant jelly-o lemon drops cupcake. Chupa chups jelly bear claw. Sweet roll cake candy macaroon applicake. Tiramisu chocolate cake sugar plum candy canes wypas pudding chocolate bar cheesecake. Wafer lemon drops ice cream sesame snaps chocolate toffee. Cupcake chupa chups gummi bears chocolate. Donut caramels dragée carrot cake donut candy. Sugar plum fruitcake sweet sugar plum cake.
@@ -164,13 +167,13 @@
                                     Icing lemon drops halvah dragée icing sesame snaps wafer. Tootsie roll apple pie oat cake lemon drops soufflé. Bonbon jelly-o caramels bear claw applicake bonbon wypas halvah biscuit. Dessert jelly icing pudding powder cotton candy. Apple pie dragée carrot cake. Sesame snaps tiramisu cupcake cupcake applicake. Faworki chocolate sugar plum. Pie candy gummi bears topping. Cake oat cake fruitcake.
                                 </p>
                             {% endblock content %}
-                        </div>
-                    </div>
                 </div>
+                {% endblock content_outer %}
             {% endblock container %}
         </div>
     </div>
 
+    {% block footer_outer %}
     <footer>
         {% block footer %}
         <span id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</span>
@@ -183,6 +186,7 @@
         </span>
         {% endblock footer %}
     </footer>
+    {% endblock footer_outer %}
 
     <div id="modal-ask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-ask-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -226,7 +230,7 @@
                  */
                 function adjustContainerPadding() {
                     var navbar = $('.navbar.navbar-fixed-top'),
-                        container = $('body > .container > .row'),
+                        container = $('body > .container-fluid > .row'),
                         property = container.length && container.css('position') == 'absolute' ? 'top' : 'padding-top';
                     if (navbar.length > 0 && navbar.css('position').search('fixed') > -1) {
                         if (!$.isNumeric(container.data('spacer'))) {
@@ -252,5 +256,6 @@
     {% endblock javascripts %}
 {% endblock body %}
 </body>
+{% endblock body_outer %}
 </html>
 {% endspaceless %}
