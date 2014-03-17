@@ -434,6 +434,8 @@ EOF
  */
 
 
+@import "../bootstrapp/bootstrap3-variables.less";
+
 $glyphicons
 EOF
         );
@@ -528,6 +530,8 @@ EOF
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/bootstrap2-variables.less";
 
 $glyphicons
 EOF
@@ -647,6 +651,8 @@ EOF
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/variables.less";
 
 $entypo
 
@@ -792,6 +798,8 @@ EOF
  */
 
 
+@import "../bootstrapp/variables.less";
+
 $lessFile
 
 // Alias
@@ -906,6 +914,8 @@ EOF;
  */
 
 
+@import "../bootstrapp/variables.less";
+
 $content
 EOF
         );
@@ -989,6 +999,8 @@ EOF;
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/variables.less";
 
 $content
 EOF
@@ -1074,6 +1086,8 @@ EOF;
  */
 
 
+@import "../bootstrapp/variables.less";
+
 $content
 EOF
         );
@@ -1157,6 +1171,8 @@ EOF;
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/variables.less";
 
 $content
 EOF
@@ -1250,6 +1266,8 @@ EOF
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/variables.less";
 
 $ionicons
 
@@ -1388,7 +1406,7 @@ EOF
  */
 
 
-@import "../bootstrap2/mixins.less";
+@import "../bootstrapp/variables.less";
 
 $elusive
 
@@ -1514,6 +1532,8 @@ EOF;
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/variables.less";
 
 $content
 
@@ -1643,6 +1663,8 @@ EOF;
  * file that was distributed with this source code.
  */
 
+
+@import "../bootstrapp/variables.less";
 
 $content
 
@@ -1787,7 +1809,7 @@ $0
 /*------------------------------*
  * Twitter Bootstrap less files *
  *------------------------------*/
-@import "bootstrap2/variables.less";
+@import "bootstrapp/bootstrap2-variables.less";
 @import "bootstrap2/mixins.less";
 
 
