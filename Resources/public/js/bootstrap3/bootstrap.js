@@ -1,13 +1,13 @@
 /*!
- * Bootstrap v3.0.3 (http://getbootstrap.com)
+ * Bootstrap v3.1.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery') }
+if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript requires jQuery') }
 
 /* ========================================================================
- * Bootstrap: transition.js v3.0.3
+ * Bootstrap: transition.js v3.1.1
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -25,10 +25,10 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     var el = document.createElement('bootstrap')
 
     var transEndEventNames = {
-      'WebkitTransition' : 'webkitTransitionEnd',
-      'MozTransition'    : 'transitionend',
-      'OTransition'      : 'oTransitionEnd otransitionend',
-      'transition'       : 'transitionend'
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
     }
 
     for (var name in transEndEventNames) {
@@ -56,7 +56,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.0.3
+ * Bootstrap: alert.js v3.1.1
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -145,7 +145,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.0.3
+ * Bootstrap: button.js v3.1.1
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -253,7 +253,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.0.3
+ * Bootstrap: carousel.js v3.1.1
  * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -459,7 +459,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.0.3
+ * Bootstrap: collapse.js v3.1.1
  * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -516,7 +516,8 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
     this.transitioning = 1
 
-    var complete = function () {
+    var complete = function (e) {
+      if (e && e.target != this.$element[0]) return
       this.$element
         .removeClass('collapsing')
         .addClass('collapse in')
@@ -555,7 +556,8 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
     this.transitioning = 1
 
-    var complete = function () {
+    var complete = function (e) {
+      if (e && e.target != this.$element[0]) return
       this.transitioning = 0
       this.$element
         .trigger('hidden.bs.collapse')
@@ -608,7 +610,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
   // COLLAPSE DATA-API
   // =================
 
-  $(document).on('click.bs.collapse.data-api', '[data-toggle=collapse]', function (e) {
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
     var $this   = $(this), href
     var target  = $this.attr('data-target')
         || e.preventDefault()
@@ -620,7 +622,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     var $parent = parent && $(parent)
 
     if (!data || !data.transitioning) {
-      if ($parent) $parent.find('[data-toggle=collapse][data-parent="' + parent + '"]').not($this).addClass('collapsed')
+      if ($parent) $parent.find('[data-toggle="collapse"][data-parent="' + parent + '"]').not($this).addClass('collapsed')
       $this[$target.hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
     }
 
@@ -630,7 +632,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.0.3
+ * Bootstrap: dropdown.js v3.1.1
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -645,7 +647,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
   // =========================
 
   var backdrop = '.dropdown-backdrop'
-  var toggle   = '[data-toggle=dropdown]'
+  var toggle   = '[data-toggle="dropdown"]'
   var Dropdown = function (element) {
     $(element).on('click.bs.dropdown', this.toggle)
   }
@@ -675,7 +677,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
         .toggleClass('open')
         .trigger('shown.bs.dropdown', relatedTarget)
 
-      $this.focus()
+      $this.trigger('focus')
     }
 
     return false
@@ -695,12 +697,12 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     var isActive = $parent.hasClass('open')
 
     if (!isActive || (isActive && e.keyCode == 27)) {
-      if (e.which == 27) $parent.find(toggle).focus()
-      return $this.click()
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
     }
 
     var desc = ' li:not(.divider):visible a'
-    var $items = $parent.find('[role=menu]' + desc + ', [role=listbox]' + desc)
+    var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
 
     if (!$items.length) return
 
@@ -710,7 +712,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     if (e.keyCode == 40 && index < $items.length - 1) index++                        // down
     if (!~index)                                      index = 0
 
-    $items.eq(index).focus()
+    $items.eq(index).trigger('focus')
   }
 
   function clearMenus(e) {
@@ -773,12 +775,12 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     .on('click.bs.dropdown.data-api', clearMenus)
     .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
     .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
-    .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu], [role=listbox]', Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', toggle + ', [role="menu"], [role="listbox"]', Dropdown.prototype.keydown)
 
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.0.3
+ * Bootstrap: modal.js v3.1.1
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -794,6 +796,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
   var Modal = function (element, options) {
     this.options   = options
+    this.$body     = $(document.body)
     this.$element  = $(element)
     this.$backdrop =
     this.isShown   = null
@@ -814,7 +817,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
   }
 
   Modal.prototype.toggle = function (_relatedTarget) {
-    return this[!this.isShown ? 'show' : 'hide'](_relatedTarget)
+    return this.isShown ? this.hide() : this.show(_relatedTarget)
   }
 
   Modal.prototype.show = function (_relatedTarget) {
@@ -827,6 +830,9 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
     this.isShown = true
 
+    this.$body.addClass('modal-open')
+
+    this.setScrollbar()
     this.escape()
 
     this.$element.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
@@ -835,7 +841,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
       var transition = $.support.transition && that.$element.hasClass('fade')
 
       if (!that.$element.parent().length) {
-        that.$element.appendTo(document.body) // don't move modals dom position
+        that.$element.appendTo(that.$body) // don't move modals dom position
       }
 
       that.$element
@@ -857,10 +863,10 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
       transition ?
         that.$element.find('.modal-dialog') // wait for modal to slide in
           .one($.support.transition.end, function () {
-            that.$element.focus().trigger(e)
+            that.$element.trigger('focus').trigger(e)
           })
           .emulateTransitionEnd(300) :
-        that.$element.focus().trigger(e)
+        that.$element.trigger('focus').trigger(e)
     })
   }
 
@@ -875,6 +881,9 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
     this.isShown = false
 
+    this.$body.removeClass('modal-open')
+
+    this.resetScrollbar()
     this.escape()
 
     $(document).off('focusin.bs.modal')
@@ -896,7 +905,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
       .off('focusin.bs.modal') // guard against infinite focus loop
       .on('focusin.bs.modal', $.proxy(function (e) {
         if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
-          this.$element.focus()
+          this.$element.trigger('focus')
         }
       }, this))
   }
@@ -932,7 +941,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
       var doAnimate = $.support.transition && animate
 
       this.$backdrop = $('<div class="modal-backdrop ' + animate + '" />')
-        .appendTo(document.body)
+        .appendTo(this.$body)
 
       this.$element.on('click.dismiss.bs.modal', $.proxy(function (e) {
         if (e.target !== e.currentTarget) return
@@ -965,6 +974,26 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     } else if (callback) {
       callback()
     }
+  }
+
+  Modal.prototype.setScrollbar =  function () {
+    if (document.body.clientHeight <= window.innerHeight) return
+    var scrollbarWidth = this.measureScrollbar()
+    var bodyPad        = parseInt(this.$body.css('padding-right') || 0)
+    if (scrollbarWidth) this.$body.css('padding-right', bodyPad + scrollbarWidth)
+  }
+
+  Modal.prototype.resetScrollbar = function () {
+    this.$body.css('padding-right', '')
+  }
+
+  Modal.prototype.measureScrollbar = function () { // thx walsh
+    var scrollDiv = document.createElement('div')
+    scrollDiv.className = 'modal-scrollbar-measure'
+    this.$body.append(scrollDiv)
+    var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth
+    this.$body[0].removeChild(scrollDiv)
+    return scrollbarWidth
   }
 
 
@@ -1011,18 +1040,14 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     $target
       .modal(option, this)
       .one('hide', function () {
-        $this.is(':visible') && $this.focus()
+        $this.is(':visible') && $this.trigger('focus')
       })
   })
-
-  $(document)
-    .on('show.bs.modal', '.modal', function () { $(document.body).addClass('modal-open') })
-    .on('hidden.bs.modal', '.modal', function () { $(document.body).removeClass('modal-open') })
 
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.0.3
+ * Bootstrap: tooltip.js v3.1.1
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
@@ -1052,7 +1077,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     animation: true,
     placement: 'top',
     selector: false,
-    template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
     trigger: 'hover focus',
     title: '',
     delay: 0,
@@ -1183,7 +1208,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
         var $parent = this.$element.parent()
 
         var orgPlacement = placement
-        var docScroll    = document.documentElement.scrollTop || document.body.scrollTop
+        var docScroll    = document.documentElement.scrollTop
         var parentWidth  = this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
         var parentHeight = this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
         var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
@@ -1422,7 +1447,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.0.3
+ * Bootstrap: popover.js v3.1.1
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -1533,7 +1558,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.0.3
+ * Bootstrap: scrollspy.js v3.1.1
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -1553,7 +1578,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
     this.$element       = $(element).is('body') ? $(window) : $(element)
     this.$body          = $('body')
-    this.$scrollElement = this.$element.on('scroll.bs.scroll-spy.data-api', process)
+    this.$scrollElement = this.$element.on('scroll.bs.scrollspy', process)
     this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
     this.selector       = (this.options.target
       || ((href = $(element).attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
@@ -1598,7 +1623,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 
   ScrollSpy.prototype.process = function () {
     var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
-    var scrollHeight = this.$scrollElement[0].scrollHeight || this.$body[0].scrollHeight
+    var scrollHeight = this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
     var maxScroll    = scrollHeight - this.$scrollElement.height()
     var offsets      = this.offsets
     var targets      = this.targets
@@ -1677,7 +1702,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
   // SCROLLSPY DATA-API
   // ==================
 
-  $(window).on('load', function () {
+  $(window).on('load.bs.scrollspy.data-api', function () {
     $('[data-spy="scroll"]').each(function () {
       var $spy = $(this)
       $spy.scrollspy($spy.data())
@@ -1687,7 +1712,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.0.3
+ * Bootstrap: tab.js v3.1.1
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -1813,7 +1838,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.0.3
+ * Bootstrap: affix.js v3.1.1
  * http://getbootstrap.com/javascript/#affix
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -1869,8 +1894,6 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
     var offsetTop    = offset.top
     var offsetBottom = offset.bottom
 
-    if (this.affixed == 'top') position.top += scrollTop
-
     if (typeof offset != 'object')         offsetBottom = offsetTop = offset
     if (typeof offsetTop == 'function')    offsetTop    = offset.top(this.$element)
     if (typeof offsetBottom == 'function') offsetBottom = offset.bottom(this.$element)
@@ -1880,7 +1903,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
                 offsetTop    != null && (scrollTop <= offsetTop) ? 'top' : false
 
     if (this.affixed === affix) return
-    if (this.unpin) this.$element.css('top', '')
+    if (this.unpin != null) this.$element.css('top', '')
 
     var affixType = 'affix' + (affix ? '-' + affix : '')
     var e         = $.Event(affixType + '.bs.affix')
@@ -1898,7 +1921,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap requires jQuery'
       .trigger($.Event(affixType.replace('affix', 'affixed')))
 
     if (affix == 'bottom') {
-      this.$element.offset({ top: scrollHeight - offsetBottom - this.$element.height() })
+      this.$element.offset({ top: position.top })
     }
   }
 

@@ -376,7 +376,7 @@ EOT
         $output->writeln('<info>Success, fonts files copied to @BootstrappBundle/Resources/public/fonts</info>');
 
         # js
-        $jsPath = $this->initializeDirectory('js/bootstrap');
+        $jsPath = $this->initializeDirectory('js/bootstrap3');
         $finder = new Finder();
         $finder->files()->name('*.js')->in([$bootstrapDir.'/js', $bootstrapDir.'/dist/js'])->depth('== 0');
         foreach ($finder as $file) {
@@ -385,7 +385,7 @@ EOT
         $output->writeln('<info>Success, js files written in @BootstrappBundle/Resources/public/js</info>');
 
         # less
-        $lessPath = $this->initializeDirectory('less/bootstrap');
+        $lessPath = $this->initializeDirectory('less/bootstrap3');
         $finder = new Finder();
         $finder->files()->name('*.less')->in($bootstrapDir.'/less')->depth('== 0');
         foreach ($finder as $file) {
