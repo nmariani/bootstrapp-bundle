@@ -395,10 +395,10 @@
                 "source": {
                     "url": "https://github.com/ckeditor/ckeditor-releases.git",
                     "type": "git",
-                    "reference": "latest/full"
+                    "reference": "full/latest"
                 },
                 "dist": {
-                    "url": "https://github.com/ckeditor/ckeditor-releases/zipball/latest/full",
+                    "url": "https://github.com/ckeditor/ckeditor-releases/zipball/full/latest",
                     "type": "zip"
                 }
             }
