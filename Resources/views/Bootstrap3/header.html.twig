@@ -20,41 +20,7 @@
     <nav class="collapse navbar-collapse" role="navigation">
         {% block navbar_navigation %}
             {% if navbar.nav is defined and navbar.nav is iterable %}
-            <ul class="nav navbar-nav">
-                {% for item in navbar.nav %}
-                    {% if item.items is defined and item.items|length > 0 %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {% if item.icon is defined %}
-                                    <i class="{{ item.icon }}"></i>
-                                {% endif %}
-                                {% if item.caption is defined %}
-                                    {{ item.caption }} <b class="caret"></b>
-                                {% endif %}
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                {% for subitem in item.items %}
-                                    {% if subitem.divider is defined %}
-                                        <li class="divider"></li>
-                                    {% endif %}
-                                    <li><a href="{{ subitem.href }}" target="{{ subitem.target|default('_self') }}">{{ subitem.caption }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% elseif item.href is defined %}
-                        <li>
-                            <a href="{{ item.href }}">
-                            {% if item.icon is defined %}
-                                <i class="{{ item.icon }}"></i>
-                            {% endif %}
-                            {% if item.caption is defined %}
-                                {{ item.caption }}
-                            {% endif %}
-                            </a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+                {% include 'BootstrappBundle::navigation.html.twig' with {items: navbar.nav} %}
             {% endif %}
         {% endblock navbar_navigation %}
         {% block navbar_collapse %}
