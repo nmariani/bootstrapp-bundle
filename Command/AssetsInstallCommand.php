@@ -387,9 +387,9 @@ EOT
         # less
         $lessPath = $this->initializeDirectory('less/bootstrap3');
         $finder = new Finder();
-        $finder->files()->name('*.less')->in($bootstrapDir.'/less')->depth('== 0');
+        $finder->files()->name('*.less')->in($bootstrapDir.'/less');
         foreach ($finder as $file) {
-            $filesystem->copy($file, $lessPath . '/' . $file->getBaseName());
+            $filesystem->copy($file, $lessPath . '/' . $file->getRelativePathname());
         }
         $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/less</info>');
 
