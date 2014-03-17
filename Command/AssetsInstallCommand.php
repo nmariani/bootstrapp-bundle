@@ -394,7 +394,7 @@ EOT
         $output->writeln('<info>Success, less files written in @BootstrappBundle/Resources/public/less</info>');
 
         # parse glyphicons.less
-        $glyphicons = file_get_contents($this->path . '/Resources/public/less/bootstrap/glyphicons.less');
+        $glyphicons = file_get_contents($this->path . '/Resources/public/less/bootstrap3/glyphicons.less');
 
         // replace .glyphicon {}
         $glyphicons = preg_replace('/\.glyphicon\s*\{\s?((([^}"])*(".*")*)*)\s\}/', <<<EOF
