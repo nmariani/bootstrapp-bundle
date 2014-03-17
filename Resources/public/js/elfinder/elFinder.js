@@ -172,6 +172,13 @@ window.elFinder = function(node, opts) {
 		queue = [],
 		
 		/**
+		 * Net drivers names
+		 *
+		 * @type Array
+		 **/
+		netDrivers = [],
+		
+		/**
 		 * Commands prototype
 		 *
 		 * @type Object
@@ -375,7 +382,23 @@ window.elFinder = function(node, opts) {
 	 * @default {}
 	 **/
 	this.customData = $.isPlainObject(this.options.customData) ? this.options.customData : {};
-	
+
+	/**
+	 * Any custom headers to send across every ajax request
+	 *
+	 * @type Object
+	 * @default {}
+	*/
+	this.customHeaders = $.isPlainObject(this.options.customHeaders) ? this.options.customHeaders : {};
+
+	/**
+	 * Any custom xhrFields to send across every ajax request
+	 *
+	 * @type Object
+	 * @default {}
+	 */
+	this.xhrFields = $.isPlainObject(this.options.xhrFields) ? this.options.xhrFields : {};
+
 	/**
 	 * ID. Required to create unique cookie name
 	 *
@@ -748,6 +771,20 @@ window.elFinder = function(node, opts) {
 			return '';
 		}
 		
+		if (file.url == '1') {
+			this.request({
+				data : {cmd : 'url', target : hash},
+				preventFail : true,
+				options: {async: false}
+			})
+			.done(function(data) {
+				file.url = data.url || '';
+			})
+			.fail(function() {
+				file.url = '';
+			});
+		}
+		
 		if (file.url) {
 			return file.url;
 		}
@@ -889,7 +926,9 @@ window.elFinder = function(node, opts) {
 				dataType : 'json',
 				cache    : false,
 				// timeout  : 100,
-				data     : data
+				data     : data,
+				headers  : this.customHeaders,
+				xhrFields: this.xhrFields
 			}, options.options || {}),
 			/**
 			 * Default success handler. 
@@ -2403,6 +2442,23 @@ elFinder.prototype = {
 				}
 				
 				xhr.open('POST', self.uploadURL, true);
+				
+				// set request headers
+				if (fm.customHeaders) {
+					$.each(fm.customHeaders, function(key) {
+						xhr.setRequestHeader(key, this);
+					});
+				}
+				
+				// set xhrFields
+				if (fm.xhrFields) {
+					$.each(fm.xhrFields, function(key) {
+						if (key in xhr) {
+							xhr[key] = this;
+						}
+					});
+				}
+
 				formData.append('cmd', 'upload');
 				formData.append(self.newAPI ? 'target' : 'current', self.cwd().hash);
 				$.each(self.options.customData, function(key, val) {

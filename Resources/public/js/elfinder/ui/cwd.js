@@ -133,6 +133,8 @@ $.fn.elfindercwd = function(fm, options) {
 			
 			permsTpl = fm.res('tpl', 'perms'),
 			
+			lockTpl = fm.res('tpl', 'lock'),
+			
 			symlinkTpl = fm.res('tpl', 'symlink'),
 			
 			/**
@@ -163,7 +165,7 @@ $.fn.elfindercwd = function(fm, options) {
 					return fm.mime2kind(f);
 				},
 				marker : function(f) {
-					return (f.alias || f.mime == 'symlink-broken' ? symlinkTpl : '')+(!f.read || !f.write ? permsTpl : '');
+					return (f.alias || f.mime == 'symlink-broken' ? symlinkTpl : '')+(!f.read || !f.write ? permsTpl : '')+(f.locked ? lockTpl : '');
 				},
 				tooltip : function(f) {
 					var title = fm.formatDate(f) + (f.size > 0 ? ' ('+fm.formatSize(f.size)+')' : '');
@@ -724,12 +726,19 @@ $.fn.elfindercwd = function(fm, options) {
 					        p.nextAll('.'+clSelected+':first').length;
 					$(this).data('longtap', setTimeout(function(){
 						// long tap
-						p.trigger(p.is('.'+clSelected) ? evtUnselect : evtSelect);
-						trigger();
-						if (sel == 0 && p.is('.'+clSelected)) {
-							p.trigger('click');
+						if (p.is('.'+clSelected) && sel > 0) {
+							p.trigger(evtUnselect);
 							trigger();
-						} 
+						} else {
+							p.trigger(evtSelect);
+							trigger();
+							p.trigger(fm.trigger('contextmenu', {
+								'type'    : 'files',
+								'targets' : fm.selected(),
+								'x'       : e.originalEvent.touches[0].clientX,
+								'y'       : e.originalEvent.touches[0].clientY
+							}));
+						}
 					}, 500));
 				})
 				.delegate(fileSelector, 'touchmove.'+fm.namespace+' touchend.'+fm.namespace, function(e) {
@@ -801,7 +810,7 @@ $.fn.elfindercwd = function(fm, options) {
 					if (file.length) {
 						e.stopPropagation();
 						e.preventDefault();
-						if (!file.is('.'+clDisabled)) {
+						if (!file.is('.'+clDisabled) && !file.data('touching')) {
 							if (!file.is('.'+clSelected)) {
 								// cwd.trigger('unselectall');
 								unselectAll();
@@ -821,6 +830,10 @@ $.fn.elfindercwd = function(fm, options) {
 					// e.preventDefault();
 					
 					
+				})
+				// unselect all on cwd click
+				.bind('click.'+fm.namespace, function(e) {
+					!e.shiftKey && !e.ctrlKey && !e.metaKey && unselectAll();
 				})
 				
 				// make files selectable

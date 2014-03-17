@@ -44,6 +44,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		$this->options['fileMode'] = 0644;            // new files mode
 		$this->options['quarantine'] = '.quarantine';  // quarantine folder name - required to check archive (must be hidden)
 		$this->options['maxArcFilesSize'] = 0;        // max allowed archive files size (0 - no limit)
+		$this->options['icon']     = (defined('ELFINDER_IMG_PARENT_URL')? (rtrim(ELFINDER_IMG_PARENT_URL, '/').'/') : '').'img/volume_icon_local.png';
 	}
 	
 	/*********************************************************************/
@@ -237,7 +238,12 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _inpath($path, $parent) {
-		return $path == $parent || strpos($path, $parent.DIRECTORY_SEPARATOR) === 0;
+		$real_path = realpath($path);
+		$real_parent = realpath($parent);
+		if ($real_path && $real_parent) {
+			return $real_path === $real_parent || strpos($real_path, $real_parent.DIRECTORY_SEPARATOR) === 0;
+		}
+		return false;
 	}
 	
 	
@@ -275,7 +281,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 			// for Inheritance class ( not calling parent::configure() )
 			$this->aroot = realpath($this->root);
 		}
-		if (!$this->_inpath(realpath($path), $this->aroot)) {
+		if (!$this->_inpath($path, $this->aroot)) {
 			return $stat;
 		}
 
@@ -367,16 +373,8 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 			$target = dirname($path).DIRECTORY_SEPARATOR.$target;
 		}
 		
-		$atarget = realpath($target);
-		
-		if (!$atarget) {
-			return false;
-		}
-		
-		$root  = $this->root;
-		$aroot = $this->aroot;
-
-		if ($this->_inpath($atarget, $this->aroot)) {
+		if ($this->_inpath($target, $this->aroot)) {
+			$atarget = realpath($target);
 			return $this->_normpath($this->root.DIRECTORY_SEPARATOR.substr($atarget, strlen($this->aroot)+1));
 		}
 
