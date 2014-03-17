@@ -22,7 +22,7 @@
     {% elseif vendor == 'jqueryui' %}
         <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" media="screen" />
         {#
-        "@BootstrappBundle/Resources/public/css/jquery-ui/base/jquery.ui.core.css"
+        "@BootstrappBundle/Resources/public/css/jquery-ui/base/core.css"
         #}
         {% stylesheets output='bundles/bootstrapp/css/jquery-ui/base/jquery-ui.css'
         "@BootstrappBundle/Resources/public/css/jquery-ui/addyosmani/jquery-ui-1.9.2.custom.css"
@@ -99,15 +99,15 @@
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/pickadate/translations/' ~ app.request.locale ~ '.js') }}"></script>
 
     {% elseif vendor == 'jqueryui' %}
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/jquery.ui.core.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/jquery.ui.widget.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/jquery.ui.mouse.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/core.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/widget.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/mouse.js') }}"></script>
         {% if components is defined and components is iterable %}
             {% for component in components %}
-                <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/jquery.ui.'~component~'.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/'~component~'.js') }}"></script>
                 {% if component == 'datepicker' %}
                     {% if app.request.locale|slice(0,2)|lower != 'en' %}
-                    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/i18n/jquery.ui.datepicker-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
+                    <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/i18n/datepicker-' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
                     {% endif %}
                     <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-jqueryui.js') }}"></script>
                 {% endif %}
