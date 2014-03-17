@@ -56,6 +56,9 @@
     containerSelector: "ol, ul",
     // Distance the mouse has to travel to start dragging
     distance: 0,
+    // Time in milliseconds after mousedown until dragging should start.
+    // This option can be used to prevent unwanted drags when clicking on an element.
+    delay: 0,
     // The css selector of the drag handle
     handle: "",
     // The exact css path between the item and its subcontainers
@@ -98,7 +101,7 @@
     // Called on mousedown. If falsy value is returned, the dragging will not start.
     // If clicked on input element, ignore
     onMousedown: function ($item, _super, event) {
-      if (event.target.nodeName != 'INPUT') {
+      if (event.target.nodeName != 'INPUT' && event.target.nodeName != 'SELECT') {
         event.preventDefault()
         return true
       }
@@ -237,8 +240,10 @@
         this.item = $(e.target).closest(this.options.itemSelector)
         this.itemContainer = itemContainer
 
-        if(!this.options.onMousedown(this.item, groupDefaults.onMousedown, e))
+        if(this.item.is(this.options.exclude) ||
+           !this.options.onMousedown(this.item, groupDefaults.onMousedown, e)){
           return
+        }
 
         this.setPointer(e)
         this.toggleListeners('on')
@@ -246,11 +251,12 @@
         this.toggleListeners('on', ['drop'])
       }
 
+      this.setupDelayTimer()
       this.dragInitDone = true
     },
     drag: function  (e) {
       if(!this.dragging){
-        if(!this.distanceMet(e))
+        if(!this.distanceMet(e) || !this.delayMet)
           return
 
         this.options.onDragStart(this.item, this.itemContainer, groupDefaults.onDragStart, e)
@@ -387,6 +393,18 @@
 				Math.abs(this.pointer.top - e.pageY)
 			) >= this.options.distance)
     },
+    setupDelayTimer: function () {
+      var that = this
+      this.delayMet = !this.options.delay
+
+      // init delay timer if needed
+      if (!this.delayMet) {
+        clearTimeout(this._mouseDelayTimer);
+        this._mouseDelayTimer = setTimeout(function() {
+          that.delayMet = true
+        }, this.options.delay)
+      }
+    },
     scroll: function  (e) {
       this.clearDimensions()
       this.clearOffsetParent()
@@ -441,9 +459,9 @@
 
       if( !rootGroup.dragInitDone &&
           e.which === 1 &&
-          this.options.drag &&
-          !$(e.target).is(this.options.exclude))
+          this.options.drag) {
         rootGroup.dragInit(e, this)
+      }
     },
     searchValidTarget: function  (pointer, lastPointer) {
       var distances = sortByDistanceDesc(this.getItemDimensions(),
