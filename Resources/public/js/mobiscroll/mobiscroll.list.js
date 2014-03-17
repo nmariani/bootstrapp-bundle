@@ -9,6 +9,9 @@
         preset = function (inst) {
             var orig = $.extend({}, inst.settings),
                 s = $.extend(inst.settings, defaults, orig),
+                layout = s.layout || (/top|bottom/.test(s.display) ? 'liquid' : ''),
+                isLiquid = layout == 'liquid',
+                origReadOnly = s.readonly,
                 elm = $(this),
                 input,
                 prevent,
@@ -18,6 +21,7 @@
                 timer = {},
                 wa = s.wheelArray || createWheelArray(elm),
                 labels = generateLabels(lvl),
+                currLevel = 0,
                 currWheelVector = [],
                 fwv = firstWheelVector(wa),
                 w = generateWheelsFromVector(fwv, lvl);
@@ -109,16 +113,24 @@
              */
             function generateWheelsFromVector(wv, l, index) {
                 var i = 0, j, obj, chInd,
-                    w = [],
+                    w = [[]],
                     wtObjA = wa;
 
                 if (l) { // if length is defined we need to generate that many wheels (even if they are empty)
                     for (j = 0; j < l; j++) {
-                        w[j] = [{}];
+                        if (isLiquid) {
+                            w[0][j] = {};
+                        } else {
+                            w[j] = [{}];
+                        }
                     }
                 }
                 while (i < wv.length) { // we generate the wheels until the length of the wheel vector
-                    w[i] = [getWheelFromObjA(wtObjA, labels[i])];
+                    if (isLiquid) {
+                        w[0][i] = getWheelFromObjA(wtObjA, labels[i]);
+                    } else {
+                        w[i] = [getWheelFromObjA(wtObjA, labels[i])];
+                    }
 
                     j = 0;
                     chInd = undefined;
@@ -184,7 +196,7 @@
              * i - the last number of wheels that has to be hidden
              */
             function hideWheels(dw, i) {
-                $('.dwc', dw).css('display', '').slice(i).hide();
+                $('.dwfl', dw).css('display', '').slice(i).hide();
             }
 
             /**
@@ -324,7 +336,11 @@
             return {
                 width: 50,
                 wheels: w,
+                layout: layout,
                 headerText: false,
+                formatResult: function (d) {
+                    return d.slice(0, currLevel).join(' ');
+                },
                 parseValue: function (value, inst) {
                     return value ? value.split(" ") : (s.defaultValue || fwv);
                 },
@@ -358,14 +374,16 @@
                     var args = [],
                         t = inst.temp,
                         i = (index || 0) + 1,
+                        j,
                         o;
 
                     if ((index !== undefined && currWheelVector[index] != t[index]) || (index === undefined && !prevent)) {
                         s.wheels = generateWheelsFromVector(t, null, index);
-                        o = calcLevelOfVector2(t, index);
+                        o = calcLevelOfVector2(t, index === undefined ? t.length : index);
+                        currLevel = o.lvl;
 
-                        if (index !== undefined) {
-                            inst.temp = o.nVector.slice(0);
+                        for (j = 0; j < t.length; j++) {
+                            inst.temp[j] = o.nVector[j] || 0;
                         }
 
                         while (i < o.lvl) {
@@ -380,20 +398,21 @@
                                 hideWheels(dw, o.lvl);
                                 currWheelVector = inst.temp.slice(0);
                                 inst.changeWheel(args, index === undefined ? time : 0, index !== undefined);
-                                s.readonly = false;
+                                s.readonly = origReadOnly;
                             }, index === undefined ? 0 : time * 1000);
                             return false;
                         }
-
-                        setDisabled(dw, o.lvl, wa, inst.temp);
                     } else {
                         o = calcLevelOfVector2(t, t.length);
-                        setDisabled(dw, o.lvl, wa, t);
-                        hideWheels(dw, o.lvl);
+                        currLevel = o.lvl;
                     }
 
+                    currWheelVector = t.slice(0);
+                    setDisabled(dw, o.lvl, wa, t);
+                    hideWheels(dw, o.lvl);
+
                     prevent = false;
-                }
+               }
             };
         };
 

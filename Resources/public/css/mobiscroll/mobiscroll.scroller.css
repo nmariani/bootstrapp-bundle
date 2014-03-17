@@ -1,8 +1,8 @@
-/* Datewheel overlay */
 .dw, .dwo {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .dw {
+    max-width: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -10,19 +10,24 @@
     font-size: 12px;
     text-shadow: none;
     -webkit-backface-visibility: hidden;
-    -webkit-box-sizing: border-box;
     -webkit-user-select: none;
-    -moz-box-sizing: border-box;
     -moz-user-select: none;
     -ms-user-select: none;
     -ms-touch-action: none;
-    box-sizing: border-box;
+    backface-visibility: hidden;
     user-select: none;
     touch-action: none;
 }
-.dwi {
-    position: static;
-    display: inline-block;
+.dw-w:focus {
+    outline: none;
+}
+/* Box sizing */
+.dw,
+.dwc,
+.dwbc {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .dwwr {
     padding: 0 2px;
@@ -41,7 +46,7 @@
     -webkit-border-radius: 0;
     border-radius: 0;
 }
-/* Datewheel overlay */
+/* Modal overlay */
 .dw-persp, .dwo {
     width: 100%;
     height: 100%;
@@ -58,10 +63,31 @@
     background: rgba(0,0,0,.7);
     filter: Alpha(Opacity=70);
 }
+/* Liquid mode */
+.dw-liq .dw .dwc {
+    display: block;
+}
+.dw-liq .dw-tbl {
+    width: 100%;
+    table-layout: fixed;
+}
+/* Inline mode */
+.dw-inline .dw {
+    position: static;
+    display: inline-block;
+}
+.dw-inline.dw-liq .dw-persp .dw {
+    display: block;
+}
 .dw-inline .dw-persp {
     position: static;
 }
-/* Bubble positionings */
+.dw-inline .dwv {
+    margin: 0 2px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+/* Bubble mode */
 .dw-bubble .dw {
     margin: 20px 0;
 }
@@ -102,13 +128,15 @@
     bottom: 0;
     border-color: #fff transparent transparent transparent;
 }
-/* Datewheel wheel container wrapper */
+/* Wheel container wrapper */
 .dwc {
+    max-width: 100%;
     vertical-align: middle;
     padding: 26px 2px 4px 2px;
     display: inline-block;
+    overflow: hidden;
 }
-/* Datewheel label */
+/* Wheel label */
 .dwl {
     left: 0;
     text-align: center;
@@ -119,18 +147,14 @@
     top: -30px;
     width: 100%;
 }
-/* Datewheel value */
+/* Wheel value */
 .dwv {
     padding: 7px 0;
     margin: 0 -2px;
     font-size: 14px;
 }
-.dwi .dwv {
-    margin: 0 2px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-}
-.dw-hidden, .dw .dwwr .dw-hidden {
+.dw-hidden, 
+.dw .dwwr .dw-hidden {
     width: 0;
     height: 0;
     margin: 0;
@@ -138,21 +162,43 @@
     border: 0;
     overflow: hidden;
 }
-/* Datewheel wheel container */
-.dwrc {
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-}
+/* Wheel container */
 .dwwc {
-    margin: 0;
-    padding: 0 2px;
+    margin: 0 auto;
     position: relative;
-    background: #000;
     zoom: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+	display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
 }
-/* Datewheel wheels */
+.dwfl {
+    padding: 4px 3px;
+    margin: 0 -1px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 auto;
+    -ms-flex: 1 auto;
+	flex: 1 auto;
+    background: #000;
+}
+.dwfl:first-child {
+    margin-left: 0;
+    padding-left: 4px;
+    -webkit-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px;
+}
+.dwfl:last-child {
+    margin-right: 0;
+    padding-right: 4px;
+    -webkit-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+}
+/* Wheels */
 .dwwl {
-    margin: 4px 2px;
+    margin: 0;
     padding: 0 2px;
     position: relative;
     z-index: 5;
@@ -160,14 +206,11 @@
 .dwww {
     position: relative;
     padding: 1px;
+    overflow: hidden;
 }
 .dww {
     overflow: hidden;
     position: relative;
-    z-index: 2;
-}
-.dw-moz .dww {
-    opacity: .99; /* Fixes Firefox translate overflow bug */
 }
 .dwsc .dwwl {
     background: #888;
@@ -185,12 +228,14 @@
     background: linear-gradient(#000 0%,#444 45%, #444 55%, #000 100%);
 }
 .dw-bf {
-    -webkit-perspective: 1000;
+    -webkit-perspective: 1000px;
     -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    backface-visibility: hidden;
 }
 .dw-ul {
     position: relative;
-    z-index: 2;
+    z-index: 3;
 }
 .dw-li {
     padding: 0 5px;
@@ -262,7 +307,7 @@
 .dwpm .dwwol {
     display: none;
 }
-/* Datewheel wheel overlay */
+/* Wheel overlay */
 .dwwo {
     position: absolute;
     z-index: 3;
@@ -289,7 +334,7 @@
     border-bottom: 1px solid #555;
     pointer-events: none;
 }
-/* Datewheel button */
+/* Buttons */
 .dwbg .dwb {
     cursor: pointer;
     overflow: hidden;
@@ -315,18 +360,16 @@
     -webkit-backface-visibility: hidden;
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    backface-visibility: hidden;
 }
-/* Datewheel button container */
+/* Button container */
 .dwbc {
     display: table;
     width: 100%;
     padding-bottom: 4px;
     text-align: center;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
 }
-/* Datewheel button wrapper */
+/* Button wrapper */
 .dwbw  {
     display: table-cell;
     position: relative;
@@ -339,21 +382,31 @@
 .dwhl .dwl {
     display: none;
 }
-
+/* Hidden select element */
+.dw-hsel {
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    left: 0;
+    overflow: hidden;
+    clip: rect(1px,1px,1px,1px);
+}
+/* Multiple lines */
+.dw-ml .dw-li {
+    overflow: hidden;
+}
+.dw-ml .dw-ul .dw-li .dw-i {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
 /* Multiple selection */
 .dwms .dwwms .dw-li {
     padding: 0 40px;
     position: relative;
 }
-
-.dw-hsel {
-    position: absolute;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
-    clip: rect(1px,1px,1px,1px);
-}
-
 .dwms .dw-msel:after {
     width: 40px;
     text-align: center;

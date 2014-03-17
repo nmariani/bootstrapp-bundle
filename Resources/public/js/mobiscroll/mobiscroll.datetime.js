@@ -3,7 +3,27 @@
 
     var ms = $.mobiscroll,
         date = new Date(),
-        defaults = {
+        locales = {
+            dateFormat: 'mm/dd/yy',
+            dateOrder: 'mmddy',
+            timeWheels: 'hhiiA',
+            timeFormat: 'hh:ii A',
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            monthText: 'Month',
+            dayText: 'Day',
+            yearText: 'Year',
+            hourText: 'Hours',
+            minuteText: 'Minutes',
+            ampmText: '&nbsp;',
+            secText: 'Seconds',
+            amText: 'am',
+            pmText: 'pm',
+            nowText: 'Now'
+        },
+        defaults = $.extend({
             startYear: date.getFullYear() - 100,
             endYear: date.getFullYear() + 1,
             shortYearCutoff: '+10',
@@ -11,9 +31,8 @@
             stepHour: 1,
             stepMinute: 1,
             stepSecond: 1,
-            separator: ' ',
-            ampmText: '&nbsp;'
-        },
+            separator: ' '
+        }, locales),
         /**
          * @class Mobiscroll.datetime
          * @extends Mobiscroll
@@ -240,6 +259,105 @@
                 return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'a', 0) ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
             }
 
+            function getClosestValidDate(d, dir) {
+                var valid,
+                    next,
+                    prev,
+                    nextValid = false,
+                    prevValid = false,
+                    up = 0,
+                    down = 0;
+
+                if (isValid(d)) {
+                    return d;
+                }
+
+                if (d < mind) {
+                    d = mind;
+                }
+
+                if (d > maxd) {
+                    d = maxd;
+                }
+
+                next = d;
+                prev = d;
+
+                if (dir !== 2) {
+                    nextValid = isValid(next);
+
+                    while (!nextValid && next < maxd) {
+                        next = new Date(next.getTime() + 1000 * 60 * 60 * 24);
+                        nextValid = isValid(next);
+                        up++;
+                    }
+                }
+
+                if (dir !== 1) {
+                    prevValid = isValid(prev);
+
+                    while (!prevValid && prev > mind) {
+                        prev = new Date(prev.getTime() - 1000 * 60 * 60 * 24);
+                        prevValid = isValid(prev);
+                        down++;
+                    }
+                }
+
+                if (dir === 1 && nextValid) {
+                    return next;
+                }
+
+                if (dir === 2 && prevValid) {
+                    return prev;
+                }
+
+                return down < up && prevValid ? prev : next;
+            }
+
+            function isValid(d) {
+                var curr,
+                    j,
+                    v;
+
+                if (d < mind) {
+                    return false;
+                }
+
+                if (d > maxd) {
+                    return false;
+                }
+
+                if (invalid) {
+                    for (j = 0; j < invalid.length; j++) {
+                        curr = invalid[j];
+                        v = curr + '';
+                        if (!curr.start) {
+                            if (curr.getTime) { // Exact date
+                                if (d.getFullYear() == curr.getFullYear() && d.getMonth() == curr.getMonth() && d.getDate() == curr.getDate()) {
+                                    return false;
+                                }
+                            } else if (!v.match(/w/i)) { // Day of month
+                                v = v.split('/');
+                                if (v[1]) {
+                                    if ((v[0] - 1) == d.getMonth() && v[1] == d.getDate()) {
+                                        return false;
+                                    }
+                                } else if (v[0] == d.getDate()) {
+                                    return false;
+                                }
+                            } else { // Day of week
+                                v = +v.replace('w', '');
+                                if (v == d.getDay()) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+
             function getIndex(t, v) {
                 return $('.dw-li', t).index($('.dw-li[data-val="' + v + '"]', t));
             }
@@ -252,6 +370,17 @@
                     return $('.dw-li', t).length;
                 }
                 return getIndex(t, v) + add;
+            }
+
+            function getArray(d) {
+                var i,
+                    ret = [];
+
+                for (i in o) {
+                    ret[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
+                }
+
+                return ret;
             }
 
             // Extended methods
@@ -267,12 +396,7 @@
              * @param {Boolean} [change=fill] Trigger change on input element.
              */
             inst.setDate = function (d, fill, time, temp, change) {
-                var i;
-
-                // Set wheels
-                for (i in o) {
-                    inst.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
-                }
+                inst.temp = getArray(d);
                 inst.setValue(inst.temp, fill, time, temp, change);
             };
 
@@ -328,18 +452,11 @@
                     return ms.formatDate(format, getDate(d), s);
                 },
                 parseValue: function (val) {
-                    var d = ms.parseDate(format, val, s),
-                        i,
-                        result = [];
-
-                    // Set wheels
-                    for (i in o) {
-                        result[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
-                    }
-                    return result;
+                    return getArray(ms.parseDate(format, val, s));
                 },
                 validate: function (dw, i, time, dir) {
-                    var temp = inst.temp, //.slice(0),
+                    var valid = getClosestValidDate(getDate(inst.temp), dir),
+                        temp = getArray(valid),//inst.temp, //.slice(0),
                         mins = { y: mind.getFullYear(), m: 0, d: 1, h: 0, i: 0, s: 0, a: 0 },
                         maxs = { y: maxd.getFullYear(), m: 11, d: 31, h: step(hampm ? 11 : 23, stepH), i: step(59, stepM), s: step(59, stepS), a: 1 },
                         steps = { h: stepH, i: stepM, s: stepS, a: 1 },
@@ -432,11 +549,11 @@
                                     $('.dw-li', t).eq(v).removeClass('dw-v');
                                 });
 
-                                val = inst.getValidCell(val, t, dir).val;
+                                //val = inst.getValidCell(val, t, dir).val;
                             }
 
                             // Set modified value
-                            temp[o[i]] = val;
+                            //temp[o[i]] = val;
                         }
                     });
 
@@ -546,34 +663,21 @@
                             }
                         });
                     }
+
+                    inst.temp = temp;
                 }
             };
         };
 
-    ms.i18n.en = $.extend(ms.i18n.en, {
-        dateFormat: 'mm/dd/yy',
-        dateOrder: 'mmddy',
-        timeWheels: 'hhiiA',
-        timeFormat: 'hh:ii A',
-        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        monthText: 'Month',
-        dayText: 'Day',
-        yearText: 'Year',
-        hourText: 'Hours',
-        minuteText: 'Minutes',
-        secText: 'Seconds',
-        amText: 'am',
-        pmText: 'pm',
-        nowText: 'Now'
-    });
+    ms.i18n.en = $.extend(ms.i18n.en, locales);
 
     $.each(['date', 'time', 'datetime'], function (i, v) {
         ms.presets[v] = preset;
         ms.presetShort(v);
     });
+
+    // Utility functions
+    ms.datetime = {};
 
     /**
     * Format a date into a string value with a specified format.
@@ -582,7 +686,7 @@
     * @param {Object} [settings={}] Settings.
     * @return {String} Returns the formatted date string.
     */
-    ms.formatDate = function (format, date, settings) {
+    ms.formatDate = ms.datetime.formatDate = function (format, date, settings) {
         if (!date) {
             return null;
         }
@@ -679,7 +783,7 @@
     * @param {Object} [settings={}] Settings.
     * @return {Date} Returns the extracted date.
     */
-    ms.parseDate = function (format, value, settings) {
+    ms.parseDate = ms.datetime.parseDate = function (format, value, settings) {
         var s = $.extend({}, defaults, settings),
             def = s.defaultValue || new Date();
 

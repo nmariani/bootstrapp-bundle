@@ -3,7 +3,6 @@
 
     $.mobiscroll.classes.Scroller = function (elem, settings) {
         var m,
-            hi,
             v,
             dw,
             persp,
@@ -26,9 +25,12 @@
             p,
             min,
             max,
-            modal,
             target,
             index,
+            isLiquid,
+            isModal,
+            itemHeight,
+            lines,
             timer,
             readOnly,
             preventChange,
@@ -40,7 +42,7 @@
             that = this,
             e = elem,
             elm = $(e),
-            s = extend({}, defaults),
+            s = extend({}, defaults, userdef),
             pres = {},
             iv = {},
             pos = {},
@@ -48,142 +50,161 @@
             wheels = [],
             elmList = [],
             input = elm.is('input'),
-            visible = false,
-            onStart = function (e) {
-                // Scroll start
-                if (testTouch(e) && !move && !click && !btn && !isReadOnly(this)) {
-                    // Prevent touch highlight
-                    e.preventDefault();
+            visible = false;
 
-                    move = true;
-                    scrollable = s.mode != 'clickpick';
-                    target = $('.dw-ul', this);
-                    setGlobals(target);
-                    moved = iv[index] !== undefined; // Don't allow tap, if still moving
-                    p = moved ? getCurrentPosition(target) : pos[index];
-                    start = getCoord(e, 'Y');
-                    startTime = new Date();
-                    stop = start;
-                    scroll(target, index, p, 0.001);
+        // Event handlers
 
-                    if (scrollable) {
-                        target.closest('.dwwl').addClass('dwa');
-                    }
+        function onStart(e) {
+            // Scroll start
+            if (testTouch(e) && !move && !click && !btn && !isReadOnly(this)) {
+                // Prevent touch highlight
+                e.preventDefault();
 
-                    $(document).on(MOVE_EVENT, onMove).on(END_EVENT, onEnd);
-                }
-            },
-            onMove = function (e) {
+                move = true;
+                scrollable = s.mode != 'clickpick';
+                target = $('.dw-ul', this);
+                setGlobals(target);
+                moved = iv[index] !== undefined; // Don't allow tap, if still moving
+                p = moved ? getCurrentPosition(target) : pos[index];
+                start = getCoord(e, 'Y');
+                startTime = new Date();
+                stop = start;
+                scroll(target, index, p, 0.001);
+
                 if (scrollable) {
-                    // Prevent scroll
-                    e.preventDefault();
-                    e.stopPropagation();
-                    stop = getCoord(e, 'Y');
-                    scroll(target, index, constrain(p + (start - stop) / hi, min - 1, max + 1));
+                    target.closest('.dwwl').addClass('dwa');
                 }
-                if (start !== stop) {
-                    moved = true;
-                }
-            },
-            onEnd = function (e) {
-                var time = new Date() - startTime,
-                    val = constrain(p + (start - stop) / hi, min - 1, max + 1),
-                    speed,
-                    dist,
-                    tindex,
-                    ttop = target.offset().top;
 
-                if (time < 300) {
-                    speed = (stop - start) / time;
-                    dist = (speed * speed) / s.speedUnit;
-                    if (stop - start < 0) {
-                        dist = -dist;
-                    }
+                if (e.type === 'mousedown') {
+                    $(document).on('mousemove', onMove).on('mouseup', onEnd);
+                }
+            }
+        }
+
+        function onMove(e) {
+            if (scrollable) {
+                // Prevent scroll
+                e.preventDefault();
+                e.stopPropagation();
+                stop = getCoord(e, 'Y');
+                scroll(target, index, constrain(p + (start - stop) / itemHeight, min - 1, max + 1));
+            }
+            if (start !== stop) {
+                moved = true;
+            }
+        }
+
+        function onEnd(e) {
+            var time = new Date() - startTime,
+                val = constrain(p + (start - stop) / itemHeight, min - 1, max + 1),
+                speed,
+                dist,
+                tindex,
+                ttop = target.offset().top;
+
+            if (has3d && time < 300) {
+                speed = (stop - start) / time;
+                dist = (speed * speed) / s.speedUnit;
+                if (stop - start < 0) {
+                    dist = -dist;
+                }
+            } else {
+                dist = stop - start;
+            }
+
+            tindex = Math.round(p - dist / itemHeight);
+
+            if (!dist && !moved) { // this is a "tap"
+                var idx = Math.floor((stop - ttop) / itemHeight),
+                    li = $($('.dw-li', target)[idx]),
+                    hl = scrollable;
+                if (event('onValueTap', [li]) !== false) {
+                    tindex = idx;
                 } else {
-                    dist = stop - start;
+                    hl = true;
                 }
 
-                tindex = Math.round(p - dist / hi);
+                if (hl) {
+                    li.addClass('dw-hl'); // Highlight
+                    setTimeout(function () {
+                        li.removeClass('dw-hl');
+                    }, 200);
+                }
+            }
 
-                if (!dist && !moved) { // this is a "tap"
-                    var idx = Math.floor((stop - ttop) / hi),
-                        li = $($('.dw-li', target)[idx]),
-                        hl = scrollable;
-                    if (event('onValueTap', [li]) !== false) {
-                        tindex = idx;
-                    } else {
-                        hl = true;
-                    }
+            if (scrollable) {
+                calc(target, tindex, 0, true, Math.round(val));
+            }
 
-                    if (hl) {
-                        li.addClass('dw-hl'); // Highlight
-                        setTimeout(function () {
-                            li.removeClass('dw-hl');
-                        }, 200);
-                    }
-                }
+            if (e.type === 'mouseup') {
+                $(document).off('mousemove', onMove).off('mouseup', onEnd);
+            }
 
-                if (scrollable) {
-                    calc(target, tindex, 0, true, Math.round(val));
-                }
+            move = false;
+            target = null;
+        }
 
-                move = false;
-                target = null;
+        function onBtnStart(e) {
+            // Can't call preventDefault here, it kills page scroll
+            if (btn) {
+                btn.removeClass('dwb-a');
+            }
+            btn = $(this);
+            // Active button
+            if (!btn.hasClass('dwb-d') && !btn.hasClass('dwb-nhl')) {
+                btn.addClass('dwb-a');
+            }
+            // +/- buttons
+            if (btn.hasClass('dwwb')) {
+                if (testTouch(e)) {
+                    step(e, btn.closest('.dwwl'), btn.hasClass('dwwbp') ? plus : minus);
+                }
+            }
+            if (e.type === 'mousedown') {
+                $(document).on('mouseup', onBtnEnd);
+            }
+        }
 
-                $(document).off(MOVE_EVENT, onMove).off(END_EVENT, onEnd);
-            },
-            onBtnStart = function (e) {
-                if (btn) {
-                    btn.removeClass('dwb-a');
-                }
-                btn = $(this);
-                $(document).on(END_EVENT, onBtnEnd);
-                // Active button
-                if (!btn.hasClass('dwb-d') && !btn.hasClass('dwb-nhl')) {
-                    btn.addClass('dwb-a');
-                }
-                // +/- buttons
-                if (btn.hasClass('dwwb')) {
-                    if (testTouch(e)) {
-                        step(e, btn.closest('.dwwl'), btn.hasClass('dwwbp') ? plus : minus);
-                    }
-                }
-            },
-            onBtnEnd = function (e) {
-                if (click) {
-                    clearInterval(timer);
-                    click = false;
-                }
-                if (btn) {
-                    btn.removeClass('dwb-a');
-                    btn = null;
-                }
-                $(document).off(END_EVENT, onBtnEnd);
-            },
-            onKeyDown = function (e) {
-                if (e.keyCode == 38) { // up
-                    step(e, $(this), minus);
-                } else if (e.keyCode == 40) { // down
-                    step(e, $(this), plus);
-                }
-            },
-            onKeyUp = function (e) {
-                if (click) {
-                    clearInterval(timer);
-                    click = false;
-                }
-            },
-            onScroll = function (e) {
-                if (!isReadOnly(this)) {
-                    e.preventDefault();
-                    e = e.originalEvent || e;
-                    var delta = e.wheelDelta ? (e.wheelDelta / 120) : (e.detail ? (-e.detail / 3) : 0),
-                        t = $('.dw-ul', this);
+        function onBtnEnd(e) {
+            if (click) {
+                clearInterval(timer);
+                click = false;
+            }
+            if (btn) {
+                btn.removeClass('dwb-a');
+                btn = null;
+            }
+            if (e.type === 'mouseup') {
+                $(document).off('mousedown', onBtnEnd);
+            }
+        }
 
-                    setGlobals(t);
-                    calc(t, Math.round(pos[index] - delta), delta < 0 ? 1 : 2);
-                }
-            };
+        function onKeyDown(e) {
+            if (e.keyCode == 38) { // up
+                step(e, $(this), minus);
+            } else if (e.keyCode == 40) { // down
+                step(e, $(this), plus);
+            }
+        }
+
+        function onKeyUp(e) {
+            if (click) {
+                clearInterval(timer);
+                click = false;
+            }
+        }
+
+        function onScroll(e) {
+            if (!isReadOnly(this)) {
+                e.preventDefault();
+                e = e.originalEvent || e;
+                var delta = e.wheelDelta ? (e.wheelDelta / 120) : (e.detail ? (-e.detail / 3) : 0),
+                    t = $('.dw-ul', this);
+
+                setGlobals(t);
+                calc(t, Math.round(pos[index] - delta), delta < 0 ? 1 : 2);
+            }
+        }
 
         // Private functions
 
@@ -223,7 +244,8 @@
                 if (l % 20 == 0) {
                     html += '</div><div class="dw-bf">';
                 }
-                html += '<div role="option" aria-selected="false" class="dw-li dw-v" data-val="' + keys[j] + '"' + (labels[j] ? ' aria-label="' + labels[j] + '"' : '') + ' style="height:' + hi + 'px;line-height:' + hi + 'px;"><div class="dw-i">' + v + '</div></div>';
+                html += '<div role="option" aria-selected="false" class="dw-li dw-v" data-val="' + keys[j] + '"' + (labels[j] ? ' aria-label="' + labels[j] + '"' : '') + ' style="height:' + itemHeight + 'px;line-height:' + itemHeight + 'px;">' +
+                    '<div class="dw-i"' + (lines > 1 ? ' style="line-height:' + Math.round(itemHeight / lines) + 'px;font-size:' + Math.round(itemHeight / lines * 0.8) + 'px;"' : '') + '>' + v + '</div></div>';
                 l++;
             });
 
@@ -265,7 +287,7 @@
                 px = style.top.replace('px', '');
             }
 
-            return Math.round(m - (px / hi));
+            return Math.round(m - (px / itemHeight));
         }
 
         function ready(t, i) {
@@ -275,7 +297,7 @@
         }
 
         function scroll(t, index, val, time, active) {
-            var px = (m - val) * hi,
+            var px = (m - val) * itemHeight,
                 style = t[0].style,
                 i;
 
@@ -449,6 +471,9 @@
             }
 
             if (fill) {
+
+                event('onValueFill', [v, change]);
+
                 if (input) {
                     elm.val(v);
                     if (change) {
@@ -456,9 +481,18 @@
                         elm.change();
                     }
                 }
-
-                event('onValueFill', [v, change]);
             }
+        }
+
+        function hide(prevAnim) {
+            dw.remove();
+            if (activeElm && !prevAnim) {
+                setTimeout(function () {
+                    preventShow = true;
+                    activeElm.focus();
+                }, 200);
+            }
+            visible = false;
         }
 
         function attachPosition(ev, checkLock) {
@@ -483,7 +517,7 @@
             var nw = persp.width(), // To get the width without scrollbar
                 nh = wndw[0].innerHeight || wndw.innerHeight();
 
-            if (!(ww === nw && wh === nh && check) && !preventPos && (event('onPosition', [dw, nw, nh]) !== false) && modal) {
+            if (!(ww === nw && wh === nh && check) && !preventPos && (event('onPosition', [dw, nw, nh]) !== false) && isModal) {
                 var w,
                     l,
                     t,
@@ -507,6 +541,7 @@
                     anchor = s.anchor === undefined ? elm : s.anchor;
 
                 if (/modal|bubble/.test(s.display)) {
+                    wr.width('');
                     $('.dwc', dw).each(function () {
                         w = $(this).outerWidth(true);
                         totalw += w;
@@ -523,7 +558,7 @@
                 that.scrollLock = lock;
 
                 if (s.display == 'modal') {
-                    l = (nw - mw) / 2;
+                    l = Math.max(0, (nw - mw) / 2);
                     t = st + (nh - mh) / 2;
                 } else if (s.display == 'bubble') {
                     scroll = true;
@@ -676,19 +711,26 @@
         /**
         * Attach tap event to the given element.
         */
-        that.tap = function (el, handler) {
+        that.tap = function (el, handler, prevent) {
             var startX,
                 startY;
 
             if (s.tap) {
-                el.on('touchstart.dw mousedown.dw', function (e) {
-                    e.preventDefault();
+                el.on('touchstart.dw', function (e) {
+                    // Can't always call preventDefault here, it kills page scroll
+                    if (prevent) {
+                        e.preventDefault();
+                    }
                     startX = getCoord(e, 'X');
                     startY = getCoord(e, 'Y');
                 }).on('touchend.dw', function (e) {
                     // If movement is less than 20px, fire the click event handler
                     if (Math.abs(getCoord(e, 'X') - startX) < 20 && Math.abs(getCoord(e, 'Y') - startY) < 20) {
-                        handler.call(this, e);
+                        // preventDefault and setTimeout are needed by iOS
+                        e.preventDefault();
+                        setTimeout(function () {
+                            handler.call(this, e);
+                        }, isOldAndroid ? 400 : 10);
                     }
                     setTap();
                 });
@@ -711,6 +753,7 @@
         that.show = function (prevAnim) {
             // Create wheels
             var lbl,
+                html,
                 l = 0,
                 mAnim = '';
 
@@ -718,12 +761,13 @@
                 return;
             }
 
-            if (s.display == 'top') {
-                anim = 'slidedown';
-            }
-
-            if (s.display == 'bottom') {
-                anim = 'slideup';
+            if (anim !== false) {
+                if (s.display == 'top') {
+                    anim = 'slidedown';
+                }
+                if (s.display == 'bottom') {
+                    anim = 'slideup';
+                }
             }
 
             // Parse value from input
@@ -731,35 +775,59 @@
 
             event('onBeforeShow', []);
 
-            if (anim && !prevAnim) {
+            if (isModal && anim && !prevAnim) {
                 mAnim = 'dw-' + anim + ' dw-in';
             }
 
             // Create wheels containers
-            var html = '<div role="dialog" class="' + s.theme + ' dw-' + s.display + (prefix ? ' dw' + prefix.replace(/\-$/, '') : '') + (hasButtons ? '' : ' dw-nobtn') + '"><div class="dw-persp">' + (!modal ? '<div class="dw dwbg dwi">' : '<div class="dwo"></div><div class="dw dwbg ' + mAnim + '"><div class="dw-arrw"><div class="dw-arrw-i"><div class="dw-arr"></div></div></div>') + '<div class="dwwr"><div aria-live="assertive" class="dwv' + (s.headerText ? '' : ' dw-hidden') + '"></div><div class="dwcc">',
-                isMinw = $.isArray(s.minWidth),
-                isMaxw = $.isArray(s.maxWidth),
-                isFixw = $.isArray(s.fixedWidth);
+            html = '<div' + (isModal ? ' tabindex="0"' : '') + ' role="dialog" class="dw-w ' + s.theme + ' dw-' + s.display +
+                (isLiquid ? ' dw-liq' : '') +
+                (lines > 1 ? ' dw-ml' : '') +
+                (hasButtons ? '' : ' dw-nobtn') + '">' +
+                    '<div class="dw-persp">' +
+                        (isModal ? '<div class="dwo"></div>' : '') + // Overlay
+                        '<div class="dw dwbg ' + mAnim + '">' + // Popup
+                            (s.display === 'bubble' ? '<div class="dw-arrw"><div class="dw-arrw-i"><div class="dw-arr"></div></div></div>' : '') + // Bubble arrow
+                            '<div class="dwwr">' + // Popup content
+                                '<div aria-live="assertive" class="dwv' + (s.headerText ? '' : ' dw-hidden') + '"></div>' + // Header
+                                '<div class="dwcc">'; // Wheel group container
 
             $.each(s.wheels, function (i, wg) { // Wheel groups
-                html += '<div class="dwc' + (s.mode != 'scroller' ? ' dwpm' : ' dwsc') + (s.showLabel ? '' : ' dwhl') + '"><div class="dwwc dwrc"><table cellpadding="0" cellspacing="0"><tr>';
+                html += '<div class="dwc' + (s.mode != 'scroller' ? ' dwpm' : ' dwsc') + (s.showLabel ? '' : ' dwhl') + '">' +
+                            '<div class="dwwc"' + (s.maxWidth ? '' : ' style="max-width:600px;"') + '>' +
+                                (hasFlex ? '' : '<table class="dw-tbl" cellpadding="0" cellspacing="0"><tr>');
+
                 $.each(wg, function (j, w) { // Wheels
                     wheels[l] = w;
                     lbl = w.label !== undefined ? w.label : j;
-                    html += '<td><div class="dwwl dwrc dwwl' + l + '">' + (s.mode != 'scroller' ? '<a href="#" tabindex="-1" class="dwb-e dwwb dwwbp" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>+</span></a><a href="#" tabindex="-1" class="dwb-e dwwb dwwbm" style="height:' + hi + 'px;line-height:' + hi + 'px;"><span>&ndash;</span></a>' : '') + '<div class="dwl">' + lbl + '</div><div tabindex="0" aria-live="off" aria-label="' + lbl + '" role="listbox" class="dwww"><div class="dww" style="height:' + (s.rows * hi) + 'px;' + (s.fixedWidth ? ('width:' + (isFixw ? s.fixedWidth[l] : s.fixedWidth) + 'px;') : (s.minWidth ? ('min-width:' + (isMinw ? s.minWidth[l] : s.minWidth) + 'px;') : 'min-width:' + s.width + 'px;') + (s.maxWidth ? ('max-width:' + (isMaxw ? s.maxWidth[l] : s.maxWidth) + 'px;') : '')) + '"><div class="dw-ul">';
+                    html += '<' + (hasFlex ? 'div' : 'td') + ' class="dwfl"' + ' style="' + 
+                                    (s.fixedWidth ? ('width:' + (s.fixedWidth[l] || s.fixedWidth) + 'px;') :
+                                    (s.minWidth ? ('min-width:' + (s.minWidth[l] || s.minWidth) + 'px;') : 'min-width:' + s.width + 'px;') +
+                                    (s.maxWidth ? ('max-width:' + (s.maxWidth[l] || s.maxWidth) + 'px;') : '')) + '">' +
+                                '<div class="dwwl dwwl' + l + '">' +
+                                (s.mode != 'scroller' ?
+                                    '<a href="#" tabindex="-1" class="dwb-e dwwb dwwbp" style="height:' + itemHeight + 'px;line-height:' + itemHeight + 'px;"><span>+</span></a>' + // + button
+                                    '<a href="#" tabindex="-1" class="dwb-e dwwb dwwbm" style="height:' + itemHeight + 'px;line-height:' + itemHeight + 'px;"><span>&ndash;</span></a>' : '') + // - button
+                                '<div class="dwl">' + lbl + '</div>' + // Wheel label
+                                '<div tabindex="0" aria-live="off" aria-label="' + lbl + '" role="listbox" class="dwww">' +
+                                    '<div class="dww" style="height:' + (s.rows * itemHeight) + 'px;">' +
+                                        '<div class="dw-ul">';
+
                     // Create wheel values
-                    html += generateWheelItems(l);
-                    html += '</div><div class="dwwol"></div></div><div class="dwwo"></div></div><div class="dwwol"></div></div></td>';
+                    html += generateWheelItems(l) +
+                        '</div></div><div class="dwwo"></div></div><div class="dwwol"' + 
+                        (s.selectedLineHeight ? ' style="height:' + itemHeight + 'px;margin-top:-' + (itemHeight / 2 + (s.selectedLineBorder || 0)) + 'px;"' : '') + '></div></div>' +
+                        (hasFlex ? '</div>' : '</td>');
+
                     l++;
                 });
 
-
-                html += '</tr></table></div></div>';
+                html += (hasFlex ? '' : '</tr></table>') + '</div></div>';
             });
 
             html += '</div>';
 
-            if (modal && hasButtons) {
+            if (isModal && hasButtons) {
                 html += '<div class="dwbc">';
                 $.each(buttons, function (i, b) {
                     b = (typeof b === 'string') ? that.buttons[b] : b;
@@ -780,15 +848,13 @@
             event('onMarkupReady', [dw]);
 
             // Show
-            if (modal) {
-
+            if (isModal) {
+                ms.activeInstance = that;
                 dw.appendTo(s.context);
-                if (anim && !prevAnim) {
-                    dw.addClass('dw-trans');
-                    // Remove animation class
-                    setTimeout(function () {
+                if (has3d && anim && !prevAnim) {
+                    dw.addClass('dw-trans').on(animEnd, function () {
                         dw.removeClass('dw-trans').find('.dw').removeClass(mAnim);
-                    }, 350);
+                    });
                 }
             } else if (elm.is('div')) {
                 elm.html(dw);
@@ -798,7 +864,7 @@
 
             event('onMarkupInserted', [dw]);
 
-            if (modal) {
+            if (isModal) {
                 // Enter / ESC
                 $(window).on('keydown.dw', function (e) {
                     if (e.keyCode == 13) {
@@ -817,15 +883,14 @@
                     });
                 }
 
-                // Disable inputs to prevent bleed through (Android bug) and set autocomplete to off (for Firefox)
-                $('input,select,button', doc).each(function () {
-                    if (!this.disabled) {
-                        if ($(this).attr('autocomplete')) {
-                            $(this).data('autocomplete', $(this).attr('autocomplete'));
+                // Disable inputs to prevent bleed through (Android bug)
+                if (isOldAndroid) {
+                    $('input,select,button', doc).each(function () {
+                        if (!this.disabled) {
+                            $(this).addClass('dwtd').prop('disabled', true);
                         }
-                        $(this).addClass('dwtd').prop('disabled', true).attr('autocomplete', 'off');
-                    }
-                });
+                    });
+                }
 
                 attachPosition('scroll.dw', true);
             }
@@ -840,7 +905,6 @@
                 .on('keyup', '.dwwl', onKeyUp)
                 .on('selectstart mousedown', prevdef) // Prevents blue highlight on Android and text selection in IE
                 .on('click', '.dwb-e', prevdef)
-                .on('touchend', function () { if (s.tap) { setTap(); } })
                 .on('keydown', '.dwb-e', function (e) {
                     if (e.keyCode == 32) { // Space
                         e.preventDefault();
@@ -855,7 +919,7 @@
                     that.tap($('.dwb' + i, dw), function (e) {
                         b = (typeof b === 'string') ? that.buttons[b] : b;
                         b.handler.call(this, e, that);
-                    });
+                    }, true);
                 });
 
                 if (s.closeOnOverlay) {
@@ -864,7 +928,12 @@
                     });
                 }
 
-                dw.on(START_EVENT, '.dwwl', onStart).on(START_EVENT, '.dwb-e', onBtnStart);
+                dw.focus()
+                    .on('touchstart mousedown', '.dwwl', onStart)
+                    .on('touchmove', '.dwwl', onMove)
+                    .on('touchend', '.dwwl', onEnd)
+                    .on('touchstart mousedown', '.dwb-e', onBtnStart)
+                    .on('touchend', '.dwb-e', onBtnEnd);
 
             }, 300);
 
@@ -875,45 +944,35 @@
         * Hides the scroller instance.
         */
         that.hide = function (prevAnim, btn, force) {
+
             // If onClose handler returns false, prevent hide
             if (!visible || (!force && event('onClose', [v, btn]) === false)) {
                 return false;
             }
 
             // Re-enable temporary disabled fields
-            $('.dwtd', doc).each(function () {
-                $(this).prop('disabled', false).removeClass('dwtd');
-                if ($(this).data('autocomplete')) {
-                    $(this).attr('autocomplete', $(this).data('autocomplete'));
-                } else {
-                    $(this).removeAttr('autocomplete');
-                }
-            });
+            if (isOldAndroid) {
+                $('.dwtd', doc).each(function () {
+                    $(this).prop('disabled', false).removeClass('dwtd');
+                });
+            }
 
             // Hide wheels and overlay
             if (dw) {
-                var doAnim = modal && anim && !prevAnim;
-                if (doAnim) {
-                    dw.addClass('dw-trans').find('.dw').addClass('dw-' + anim + ' dw-out');
-                }
-                if (prevAnim) {
-                    dw.remove();
+                if (has3d && isModal && anim && !prevAnim && !dw.hasClass('dw-trans')) { // If dw-trans class was not removed, means that there was no animation
+                    dw.addClass('dw-trans').find('.dw').addClass('dw-' + anim + ' dw-out').on(animEnd, function () {
+                        hide(prevAnim);
+                    });
                 } else {
-                    setTimeout(function () {
-                        dw.remove();
-                        if (activeElm) {
-                            preventShow = true;
-                            activeElm.focus();
-                        }
-                    }, doAnim ? 350 : 1);
+                    hide(prevAnim);
                 }
 
                 // Stop positioning on window resize
                 wndw.off('.dw');
             }
 
+            delete ms.activeInstance;
             pixels = {};
-            visible = false;
         };
 
         /**
@@ -935,6 +994,7 @@
             elmList.push(elm);
             if (s.display !== 'inline') {
                 elm.on((s.showOnFocus ? 'focus.dw' : '') + (s.showOnTap ? ' click.dw' : ''), function (ev) {
+                    ev.preventDefault();
                     if ((ev.type !== 'focus' || (ev.type === 'focus' && !preventShow)) && !tap) {
                         if (beforeShow) {
                             beforeShow();
@@ -966,7 +1026,7 @@
             theme = ms.themes[ss.theme || s.theme];
 
             // Get language defaults
-            lang = ms.i18n[ss.lang || s.lang];
+            lang = ms.i18n[ss.lang || s.lang] || ms.i18n.en;
 
             extend(settings, ss); // Update original user settings
 
@@ -994,9 +1054,11 @@
 
             // Set private members
             m = Math.floor(s.rows / 2);
-            hi = s.height;
-            anim = s.animate;
-            modal = s.display !== 'inline';
+            itemHeight = s.height;
+            anim = isOldAndroid ? false : s.animate;
+            lines = s.multiline;
+            isLiquid = (s.layout || (/top|bottom/.test(s.display) && s.wheels.length == 1 ? 'liquid' : '')) === 'liquid';
+            isModal = s.display !== 'inline';
             buttons = s.buttons;
             wndw = $(s.context == 'body' ? window : s.context);
             doc = $(s.context)[0];
@@ -1012,7 +1074,7 @@
             }
 
             that.context = wndw;
-            that.live = !modal || ($.inArray('set', buttons) == -1);
+            that.live = !isModal || ($.inArray('set', buttons) == -1);
             that.buttons.set = { text: s.setText, css: 'dwb-s', handler: that.select };
             that.buttons.cancel = { text: (that.live) ? s.closeText : s.cancelText, css: 'dwb-c', handler: that.cancel };
             that.buttons.clear = { text: s.clearText, css: 'dwb-cl', handler: function () {
@@ -1029,7 +1091,7 @@
                 that.hide(true, false, true);
             }
 
-            if (modal) {
+            if (isModal) {
                 read();
                 if (input) {
                     // Set element readonly, save original state
@@ -1147,20 +1209,21 @@
         prefix = util.prefix,
         pr = util.jsPrefix,
         has3d = util.has3d,
+        hasFlex = util.hasFlex;
         getCoord = util.getCoord,
         testTouch = util.testTouch,
         empty = function () {},
         prevdef = function (e) { e.preventDefault(); },
         extend = $.extend,
-        START_EVENT = 'touchstart mousedown',
-        MOVE_EVENT = 'touchmove mousemove',
-        END_EVENT = 'touchend mouseup',
+        animEnd = 'webkitAnimationEnd animationend',
         userdef = ms.userdef,
+        isOldAndroid = /android [1-3]/i.test(navigator.userAgent),
         defaults = extend(ms.defaults, {
             // Options
-            width: 70,
+            minWidth: 80,
             height: 40,
             rows: 3,
+            multiline: 1,
             delay: 300,
             disabled: false,
             readonly: false,

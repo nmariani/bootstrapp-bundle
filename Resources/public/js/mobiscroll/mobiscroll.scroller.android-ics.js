@@ -3,9 +3,11 @@
         dateOrder: 'Mddyy',
         mode: 'mixed',
         rows: 5,
-        minWidth: 70,
+        minWidth: 76,
         height: 36,
         showLabel: false,
+        selectedLineHeight: true,
+        selectedLineBorder: 2,
         useShortLabels: true
     };
 

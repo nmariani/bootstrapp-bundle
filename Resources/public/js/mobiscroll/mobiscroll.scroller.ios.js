@@ -4,10 +4,12 @@
         dateOrder: 'MMdyy',
         rows: 5,
         height: 30,
-        minWidth: 55,
+        minWidth: 60,
         headerText: false,
         showLabel: false,
         btnWidth: false,
+        selectedLineHeight: true,
+        selectedLineBorder: 1,
         useShortLabels: true
     };
 
