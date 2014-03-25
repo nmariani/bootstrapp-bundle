@@ -20,7 +20,9 @@
     <nav class="collapse navbar-collapse" role="navigation">
         {% block navbar_navigation %}
             {% if navbar.nav is defined and navbar.nav is iterable %}
+            <ul class="nav navbar-nav">
                 {% include 'BootstrappBundle::navigation.html.twig' with {items: navbar.nav} %}
+            </ul>
             {% endif %}
         {% endblock navbar_navigation %}
         {% block navbar_collapse %}
