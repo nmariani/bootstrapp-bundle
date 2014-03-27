@@ -42,6 +42,13 @@ body > footer {
   padding: 10px 12px;
 }
 
+// Alerts
+// --------------------
+// Backward compatibility with "alert-error" (replaced by "alert-danger")
+.alert-error {
+  .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);
+}
+
 // Dropdown
 // --------------------
 // Hover/Focus/Active state
