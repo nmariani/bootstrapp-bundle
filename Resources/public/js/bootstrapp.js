@@ -23,7 +23,7 @@
                 var $this = $(this),
                     header = $this.data('modal-header'),
                     body = $this.data('modal-body'),
-                    modalButton = modal.find(".modal-footer a:not([data-dismiss])")
+                    modalButton = modal.find(".modal-footer .btn:not([data-dismiss])")
                 ;
                 if (!$this.data('modal-confirm')) {
                     e.stopImmediatePropagation();
