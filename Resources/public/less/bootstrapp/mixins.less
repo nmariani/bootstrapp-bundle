@@ -88,3 +88,20 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+// Vertical align (center|bottom)
+// -------------------------
+.vertical-align-center() {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.vertical-align-bottom() {
+  position: relative;
+  top: 100%;
+  -webkit-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
