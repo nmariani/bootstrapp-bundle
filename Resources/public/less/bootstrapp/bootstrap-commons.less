@@ -80,11 +80,15 @@
 // Footer
 // --------------------
 body > footer {
-  .locale-dropdown {
+  > span {
     display: inline-block;
     text-align: left;
     font-size: 13px;
-    margin-left: 10px;
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+  }
+  .locale-dropdown {
     img {
       margin-top: -4px;
       max-height: 20px;
