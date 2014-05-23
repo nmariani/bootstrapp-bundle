@@ -7,6 +7,7 @@ parameters:
     bootstrapp.elfinder.roots:
         - {path: %kernel.root_dir%/../web/files/, URL: /files/}
     bootstrapp.locales: [en_US,fr_FR]
+    bootstrapp.locales_display: language
     # choice
     form.type.choice.widget: select2
     # datetime
