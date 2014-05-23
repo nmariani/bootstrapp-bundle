@@ -77,6 +77,36 @@
   }
 }
 
+// Tabs
+// -------------------------
+.nav-tabs-wrapper {
+  .flexbox();
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  overflow: hidden;
+
+  > .nav-tabs {
+    position: relative;
+    .flex(1, 1, auto);
+    overflow: hidden;
+    white-space: nowrap;
+
+    > li {
+      float:none;
+      display:inline-block;
+    }
+  }
+
+  > button {
+    .flex(0, 0, auto);
+    display: none;
+    background: @gray-lighter;
+    width: 30px;
+    z-index: 1;
+  }
+}
+
 // Footer
 // --------------------
 body > footer {
