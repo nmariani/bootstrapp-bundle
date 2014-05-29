@@ -22,6 +22,7 @@
         this.refresh();
         this.getButtonPrev().click($.proxy(function(){this.prev();}, this));
         this.getButtonNext().click($.proxy(function(){this.next();}, this));
+        $(window).resize($.proxy(this.refresh, this));
     }
 
     BootstrappTab.prototype.getMaxScrollLeft = function () {
