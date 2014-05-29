@@ -120,7 +120,7 @@
                         <header class="clearfix">
                             {% block header %}
                             <div class="page-header">
-                                <h4>{% block headline %}Twitter Bootstrap base layout{% endblock headline %}</h4>
+                                {% block headline %}Twitter Bootstrap base layout{% endblock headline %}
                             </div>
                             {% block breadcrumb %}
                             {% if breadcrumb|length %}

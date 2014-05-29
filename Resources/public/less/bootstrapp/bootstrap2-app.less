@@ -135,9 +135,15 @@ header {
         padding: 15px;
         margin: 0 0 -1px;
         color:@grayLighter;
+        font-size: @baseFontSize * 1.25;
 
         &:empty {
-            display: none;
+            //display: none;
+            padding: 3px;
+        }
+
+        *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(.h1):not(.h2):not(.h3):not(.h4):not(.h5):not(.h6) {
+            font-size: @baseFontSize;
         }
 
         *:first-child {
