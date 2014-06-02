@@ -177,7 +177,7 @@
     <footer>
         {% block footer %}
         <span id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</span>
-        <span class="dropdown dropup locale-dropdown">
+        <span class="dropdown dropup locale-dropdown flags">
         {% render url('bootstrapp_locales', {
             'route':app.request.attributes.get('_route'),
             'routeParams':app.request.attributes.get('_route_params')|json_encode(),
