@@ -6,6 +6,7 @@
 {% endif %}
 
 <header class="navbar navbar-fixed-top navbar-{{ navbar.type|default('default') }}" role="banner">
+    {% block navbar_content %}
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="body > header > nav">
             <span class="sr-only">Toggle navigation</span>
@@ -82,4 +83,5 @@
             {% endif %}
         {% endblock navbar_collapse %}
     </nav>
+    {% endblock navbar_content %}
 </header>
