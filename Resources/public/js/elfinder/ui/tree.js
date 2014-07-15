@@ -394,7 +394,12 @@ $.fn.elfindertree = function(fm, opts) {
 					var link = $(this),
 						hash = fm.navId2Hash(link.attr('id')),
 						file = fm.file(hash);
-				
+					
+					if (link.data('longtap')) {
+						e.stopPropagation();
+						return;
+					}
+					
 					fm.trigger('searchend');
 				
 					if (hash != fm.cwd().hash && !link.is('.'+disabled)) {
@@ -402,6 +407,26 @@ $.fn.elfindertree = function(fm, opts) {
 					} else if (link.is('.'+collapsed)) {
 						link.children('.'+arrow).click();
 					}
+				})
+				// for touch device
+				.delegate('.'+navdir, 'touchstart', function(e) {
+					var p = $(this),
+					evt = e.originalEvent;
+					p.data('longtap', null);
+					p.data('touching', true);
+					p.data('tmlongtap', setTimeout(function(e){
+						// long tap
+						p.data('longtap', true);
+						fm.trigger('contextmenu', {
+							'type'    : 'navbar',
+							'targets' : [fm.navId2Hash(p.attr('id'))],
+							'x'       : evt.touches[0].clientX,
+							'y'       : evt.touches[0].clientY
+						});
+					}, 500));
+				})
+				.delegate('.'+navdir, 'touchmove touchend', function(e) {
+					clearTimeout($(this).data('tmlongtap'));
 				})
 				// toggle subfolders in tree
 				.delegate('.'+navdir+'.'+collapsed+' .'+arrow, 'click', function(e) {

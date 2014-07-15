@@ -16,6 +16,7 @@
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
 /*	border:1px solid #111;*/
 }
 
@@ -26,7 +27,10 @@
 .elfinder-ltr .ui-resizable-e { margin-left:10px; }
 
 /* folders tree container */
-.elfinder-tree { display:table; width:100%; margin: 0 0 .5em 0; }
+.elfinder-tree {
+	display:table; width:100%; margin: 0 0 .5em 0;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
 
 /* one folder wrapper */
 .elfinder-navbar-wrapper, .elfinder-place-wrapper { }
@@ -135,7 +139,7 @@
 .elfinder-rtl .elfinder-navbar .elfinder-symlink { right: 8px; }
 
 /* resizable */
-.elfinder-navbar .ui-resizable-handle { width:12px; background:transparent url('/bundles/bootstrapp/images/elfinder/resize.png') center center no-repeat; left:0; }
+.elfinder-navbar .ui-resizable-handle { width:12px; background:transparent url('/bundles/bootstrapp/images/elfinder/resize.png') center center no-repeat; }
 .elfinder-nav-handle-icon {
 	position:absolute;
 	top:50%;

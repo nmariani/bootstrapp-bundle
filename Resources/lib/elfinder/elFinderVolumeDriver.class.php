@@ -1244,11 +1244,12 @@ abstract class elFinderVolumeDriver {
 			return $this->setError(elFinder::ERROR_TRGDIR_NOT_FOUND, '#'.$dst);
 		}
 		
+		$path = $this->decode($dst);
+		
 		if (!$dir['write'] || !$this->allowCreate($path, $name, true)) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
 		}
 		
-		$path = $this->decode($dst);
 		$dst  = $this->_joinPath($path, $name);
 		$stat = $this->stat($dst); 
 		if (!empty($stat)) { 
@@ -2906,9 +2907,14 @@ abstract class elFinderVolumeDriver {
 					return false;
 				}
 
-				$img->resizeImage($size_w, $size_h, Imagick::FILTER_LANCZOS, true);
+				// Imagick::FILTER_BOX faster than FILTER_LANCZOS so use for createTmb
+				// resize bench: http://app-mgng.rhcloud.com/9
+				// resize sample: http://www.dylanbeattie.net/magick/filters/result.html
+				$filter = ($destformat === 'png' /* createTmb */)? Imagick::FILTER_BOX : Imagick::FILTER_LANCZOS;
+				$img->resizeImage($size_w, $size_h, $filter, 1);
 					
 				$result = $img->writeImage($path);
+				$img->destroy();
 
 				return $result ? $path : false;
 
@@ -2972,6 +2978,8 @@ abstract class elFinderVolumeDriver {
 				$img->cropImage($width, $height, $x, $y);
 
 				$result = $img->writeImage($path);
+				
+				$img->destroy();
 
 				return $result ? $path : false;
 
@@ -3049,6 +3057,7 @@ abstract class elFinderVolumeDriver {
 				$img1->setImageFormat($destformat != null ? $destformat : $img->getFormat());
 				$img1->compositeImage( $img, imagick::COMPOSITE_OVER, $x, $y );
 				$result = $img1->writeImage($path);
+				$img->destroy();
 				return $result ? $path : false;
 
 				break;
@@ -3105,6 +3114,7 @@ abstract class elFinderVolumeDriver {
 
 				$img->rotateImage(new ImagickPixel($bgcolor), $degree);
 				$result = $img->writeImage($path);
+				$img->destroy();
 				return $result ? $path : false;
 
 				break;
@@ -3304,18 +3314,19 @@ abstract class elFinderVolumeDriver {
 	 * @return array
 	 */
 	protected function getArchivers($use_cache = true) {
+
+		$arcs = array(
+				'create'  => array(),
+				'extract' => array()
+		);
+
 		if (!function_exists('proc_open')) {
-			return array();
+			return $arcs;
 		}
 		
 		if ($use_cache && isset($_SESSION['ELFINDER_ARCHIVERS_CACHE']) && is_array($_SESSION['ELFINDER_ARCHIVERS_CACHE'])) {
 			return $_SESSION['ELFINDER_ARCHIVERS_CACHE'];
 		}
-		
-		$arcs = array(
-				'create'  => array(),
-				'extract' => array()
-		);
 		
 		$this->procExec('tar --version', $o, $ctar);
 		

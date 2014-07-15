@@ -130,19 +130,23 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 		
 		if ($options['user'] === 'init') {
 
-			if (! $this->dropbox_phpFound || empty($options['consumerKey']) || empty($options['consumerSecret'])) {
+			if (! $this->dropbox_phpFound || empty($options['consumerKey']) || empty($options['consumerSecret']) || !class_exists('PDO')) {
 				return array('exit' => true, 'body' => '{msg:errNetMountNoDriver}');
 			}
 			
-			if (class_exists('OAuth')) {
-				$this->oauth = new Dropbox_OAuth_PHP($options['consumerKey'], $options['consumerSecret']);
+			if (defined('ELFINDER_DROPBOX_USE_CURL_PUT')) {
+				$this->oauth = new Dropbox_OAuth_Curl($options['consumerKey'], $options['consumerSecret']);
 			} else {
-				if (! class_exists('HTTP_OAuth_Consumer')) {
-					// We're going to try to load in manually
-					include 'HTTP/OAuth/Consumer.php';
-				}
-				if (class_exists('HTTP_OAuth_Consumer')) {
-					$this->oauth = new Dropbox_OAuth_PEAR($options['consumerKey'], $options['consumerSecret']);
+				if (class_exists('OAuth')) {
+					$this->oauth = new Dropbox_OAuth_PHP($options['consumerKey'], $options['consumerSecret']);
+				} else {
+					if (! class_exists('HTTP_OAuth_Consumer')) {
+						// We're going to try to load in manually
+						include 'HTTP/OAuth/Consumer.php';
+					}
+					if (class_exists('HTTP_OAuth_Consumer')) {
+						$this->oauth = new Dropbox_OAuth_PEAR($options['consumerKey'], $options['consumerSecret']);
+					}
 				}
 			}
 			
@@ -274,6 +278,10 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	 * @author Cem (DiscoFever)
 	 **/
 	protected function init() {
+		if (!class_exists('PDO')) {
+			return $this->setError('PHP PDO class is require.');
+		}
+		
 		if (!$this->options['consumerKey']
 		||  !$this->options['consumerSecret']
 		||  !$this->options['accessToken']
@@ -289,15 +297,19 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 		$this->netMountKey = md5(join('-', array('dropbox', $this->options['path'])));
 
 		if (! $this->oauth) {
-			if (class_exists('OAuth')) {
-				$this->oauth = new Dropbox_OAuth_PHP($this->options['consumerKey'], $this->options['consumerSecret']);
+			if (defined('ELFINDER_DROPBOX_USE_CURL_PUT')) {
+				$this->oauth = new Dropbox_OAuth_Curl($this->options['consumerKey'], $this->options['consumerSecret']);
 			} else {
-				if (! class_exists('HTTP_OAuth_Consumer')) {
-					// We're going to try to load in manually
-					include 'HTTP/OAuth/Consumer.php';
-				}
-				if (class_exists('HTTP_OAuth_Consumer')) {
-					$this->oauth = new Dropbox_OAuth_PEAR($this->options['consumerKey'], $this->options['consumerSecret']);
+				if (class_exists('OAuth')) {
+					$this->oauth = new Dropbox_OAuth_PHP($this->options['consumerKey'], $this->options['consumerSecret']);
+				} else {
+					if (! class_exists('HTTP_OAuth_Consumer')) {
+						// We're going to try to load in manually
+						include 'HTTP/OAuth/Consumer.php';
+					}
+					if (class_exists('HTTP_OAuth_Consumer')) {
+						$this->oauth = new Dropbox_OAuth_PEAR($this->options['consumerKey'], $this->options['consumerSecret']);
+					}
 				}
 			}
 		}
@@ -372,12 +384,13 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 		// DataBase table name
 		$this->DB_TableName = $this->options['PDO_DBName'];
 		// DataBase check or make table
-		if ($this->DB = new PDO($this->options['PDO_DSN'], $this->options['PDO_User'], $this->options['PDO_Pass'], $this->options['PDO_Options'])) {
+		try {
+			$this->DB = new PDO($this->options['PDO_DSN'], $this->options['PDO_User'], $this->options['PDO_Pass'], $this->options['PDO_Options']);
 			if (! $this->checkDB()) {
 				return $this->setError('Can not make DB table');
 			}
-		} else {
-			return $this->setError('Could not use PDO');
+		} catch (PDOException $e) {
+			return $this->setError('PDO connection failed: '.$e->getMessage());
 		}
 		
 		$res = $this->deltaCheck(!empty($_REQUEST['init']));
@@ -1197,6 +1210,21 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	 **/
 	protected function _fopen($path, $mode='rb') {
 
+		if (($mode == 'rb' || $mode == 'r')) {
+			try {
+				$res = $this->dropbox->media($path);
+				$url = parse_url($res['url']);
+ 				$fp = stream_socket_client('ssl://'.$url['host'].':443');
+ 				fputs($fp, "GET {$url['path']} HTTP/1.0\r\n");
+ 				fputs($fp, "Host: {$url['host']}\r\n");
+ 				fputs($fp, "\r\n");
+ 				while(trim(fgets($fp)) !== ''){};
+ 				return $fp;
+			} catch (Dropbox_Exception $e) {
+				return false;
+			}
+		}
+		
 		if ($this->tmp) {
 			$contents = $this->_getContents($path);
 			
@@ -1243,6 +1271,10 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 		try {
 			$this->dropbox->createFolder($path);
 		} catch (Dropbox_Exception $e) {
+			$this->deltaCheck();
+			if ($this->dir($this->encode($path))) {
+				return $path;
+			}
 			return $this->setError('Dropbox error: '.$e->getMessage());
 		}
 		$this->deltaCheck();
