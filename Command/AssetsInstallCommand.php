@@ -734,10 +734,19 @@ EOF
         // replace @import by content
         preg_match_all('/@import\s+"(.*)".*/', $lessFile, $matches, PREG_SET_ORDER);
         if (!isset($matches[1])) {
+            $output->writeln('<error>Error, @import expected in font-awesome.less! Files structure seems to have changed.</error>');
             return false;
         }
         foreach ($matches as $match) {
-            $lessFile = str_replace($match[0], file_get_contents($fontAwesomeDir.'less/'.$match[1].'.less'), $lessFile);
+            $file = $fontAwesomeDir.'less/'.$match[1];
+            if (false === strpos($file, '.less')) {
+                $file .= '.less';
+            }
+            if (!is_file($file)) {
+                $output->writeln(sprintf('<error>Error, unable to import less file %s!</error>', $file));
+                return false;
+            }
+            $lessFile = str_replace($match[0], file_get_contents($file), $lessFile);
         }
 
         // replace font path
