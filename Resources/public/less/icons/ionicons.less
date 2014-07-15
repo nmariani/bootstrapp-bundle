@@ -13,13 +13,12 @@
 @import "../bootstrapp/variables.less";
 
 /*!
-  Ionicons, v1.4.1
+  Ionicons, v1.5.2
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
   https://twitter.com/benjsperry  https://twitter.com/ionicframework
   MIT License: https://github.com/driftyco/ionicons
 */
-@font-face { font-family: "Ionicons"; src: url("/bundles/bootstrapp/fonts/ionicons/ionicons.eot?v=1.4.1"); src: url("/bundles/bootstrapp/fonts/ionicons/ionicons.eot?v=1.4.1#iefix") format("embedded-opentype"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.ttf?v=1.4.1") format("truetype"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.woff?v=1.4.1") format("woff"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.svg?v=1.4.1#Ionicons") format("svg"); font-weight: normal; font-style: normal; }
-
+@font-face { font-family: "Ionicons"; src: url("/bundles/bootstrapp/fonts/ionicons/ionicons.eot?v=1.5.2"); src: url("/bundles/bootstrapp/fonts/ionicons/ionicons.eot?v=1.5.2#iefix") format("embedded-opentype"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.ttf?v=1.5.2") format("truetype"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.woff?v=1.5.2") format("woff"), url("/bundles/bootstrapp/fonts/ionicons/ionicons.svg?v=1.5.2#Ionicons") format("svg"); font-weight: normal; font-style: normal; }
 .ionicons(@content:"") {
 display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; text-rendering: auto; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
@@ -47,6 +46,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-android-arrow-back()                { .ionicons("\f2ca"); }
 .ionicons-android-arrow-down-left()           { .ionicons("\f2cb"); }
 .ionicons-android-arrow-down-right()          { .ionicons("\f2cc"); }
+.ionicons-android-arrow-forward()             { .ionicons("\f30f"); }
 .ionicons-android-arrow-up-left()             { .ionicons("\f2cd"); }
 .ionicons-android-arrow-up-right()            { .ionicons("\f2ce"); }
 .ionicons-android-battery()                   { .ionicons("\f2cf"); }
@@ -64,6 +64,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-android-developer()                 { .ionicons("\f2db"); }
 .ionicons-android-display()                   { .ionicons("\f2dc"); }
 .ionicons-android-download()                  { .ionicons("\f2dd"); }
+.ionicons-android-drawer()                    { .ionicons("\f310"); }
 .ionicons-android-dropdown()                  { .ionicons("\f2de"); }
 .ionicons-android-earth()                     { .ionicons("\f2df"); }
 .ionicons-android-folder()                    { .ionicons("\f2e0"); }
@@ -94,6 +95,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-android-social()                    { .ionicons("\f2fa"); }
 .ionicons-android-social-user()               { .ionicons("\f2f9"); }
 .ionicons-android-sort()                      { .ionicons("\f2fb"); }
+.ionicons-android-stair-drawer()              { .ionicons("\f311"); }
 .ionicons-android-star()                      { .ionicons("\f2fc"); }
 .ionicons-android-stopwatch()                 { .ionicons("\f2fd"); }
 .ionicons-android-storage()                   { .ionicons("\f2fe"); }
@@ -102,8 +104,10 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-android-system-windows()            { .ionicons("\f301"); }
 .ionicons-android-timer()                     { .ionicons("\f302"); }
 .ionicons-android-trash()                     { .ionicons("\f303"); }
+.ionicons-android-user-menu()                 { .ionicons("\f312"); }
 .ionicons-android-volume()                    { .ionicons("\f304"); }
 .ionicons-android-wifi()                      { .ionicons("\f305"); }
+.ionicons-aperture()                          { .ionicons("\f313"); }
 .ionicons-archive()                           { .ionicons("\f102"); }
 .ionicons-arrow-down-a()                      { .ionicons("\f103"); }
 .ionicons-arrow-down-b()                      { .ionicons("\f104"); }
@@ -128,6 +132,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-arrow-up-a()                        { .ionicons("\f10c"); }
 .ionicons-arrow-up-b()                        { .ionicons("\f10d"); }
 .ionicons-arrow-up-c()                        { .ionicons("\f10e"); }
+.ionicons-asterisk()                          { .ionicons("\f314"); }
 .ionicons-at()                                { .ionicons("\f10f"); }
 .ionicons-bag()                               { .ionicons("\f110"); }
 .ionicons-battery-charging()                  { .ionicons("\f111"); }
@@ -138,6 +143,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-beaker()                            { .ionicons("\f269"); }
 .ionicons-beer()                              { .ionicons("\f26a"); }
 .ionicons-bluetooth()                         { .ionicons("\f116"); }
+.ionicons-bonfire()                           { .ionicons("\f315"); }
 .ionicons-bookmark()                          { .ionicons("\f26b"); }
 .ionicons-briefcase()                         { .ionicons("\f26c"); }
 .ionicons-bug()                               { .ionicons("\f2be"); }
@@ -145,6 +151,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-calendar()                          { .ionicons("\f117"); }
 .ionicons-camera()                            { .ionicons("\f118"); }
 .ionicons-card()                              { .ionicons("\f119"); }
+.ionicons-cash()                              { .ionicons("\f316"); }
 .ionicons-chatbox()                           { .ionicons("\f11b"); }
 .ionicons-chatbox-working()                   { .ionicons("\f11a"); }
 .ionicons-chatboxes()                         { .ionicons("\f11c"); }
@@ -163,6 +170,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-close()                             { .ionicons("\f12a"); }
 .ionicons-close-circled()                     { .ionicons("\f128"); }
 .ionicons-close-round()                       { .ionicons("\f129"); }
+.ionicons-closed-captioning()                 { .ionicons("\f317"); }
 .ionicons-cloud()                             { .ionicons("\f12b"); }
 .ionicons-code()                              { .ionicons("\f271"); }
 .ionicons-code-download()                     { .ionicons("\f26f"); }
@@ -172,6 +180,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-compose()                           { .ionicons("\f12c"); }
 .ionicons-connection-bars()                   { .ionicons("\f274"); }
 .ionicons-contrast()                          { .ionicons("\f275"); }
+.ionicons-cube()                              { .ionicons("\f318"); }
 .ionicons-disc()                              { .ionicons("\f12d"); }
 .ionicons-document()                          { .ionicons("\f12f"); }
 .ionicons-document-text()                     { .ionicons("\f12e"); }
@@ -186,7 +195,9 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-female()                            { .ionicons("\f278"); }
 .ionicons-filing()                            { .ionicons("\f134"); }
 .ionicons-film-marker()                       { .ionicons("\f135"); }
+.ionicons-fireball()                          { .ionicons("\f319"); }
 .ionicons-flag()                              { .ionicons("\f279"); }
+.ionicons-flame()                             { .ionicons("\f31a"); }
 .ionicons-flash()                             { .ionicons("\f137"); }
 .ionicons-flash-off()                         { .ionicons("\f136"); }
 .ionicons-flask()                             { .ionicons("\f138"); }
@@ -194,14 +205,17 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-fork()                              { .ionicons("\f27a"); }
 .ionicons-fork-repo()                         { .ionicons("\f2c0"); }
 .ionicons-forward()                           { .ionicons("\f13a"); }
+.ionicons-funnel()                            { .ionicons("\f31b"); }
 .ionicons-game-controller-a()                 { .ionicons("\f13b"); }
 .ionicons-game-controller-b()                 { .ionicons("\f13c"); }
 .ionicons-gear-a()                            { .ionicons("\f13d"); }
 .ionicons-gear-b()                            { .ionicons("\f13e"); }
 .ionicons-grid()                              { .ionicons("\f13f"); }
 .ionicons-hammer()                            { .ionicons("\f27b"); }
+.ionicons-happy()                             { .ionicons("\f31c"); }
 .ionicons-headphone()                         { .ionicons("\f140"); }
 .ionicons-heart()                             { .ionicons("\f141"); }
+.ionicons-heart-broken()                      { .ionicons("\f31d"); }
 .ionicons-help()                              { .ionicons("\f143"); }
 .ionicons-help-buoy()                         { .ionicons("\f27c"); }
 .ionicons-help-circled()                      { .ionicons("\f142"); }
@@ -218,6 +232,10 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-alarm-outline()                { .ionicons("\f14c"); }
 .ionicons-ios7-albums()                       { .ionicons("\f14f"); }
 .ionicons-ios7-albums-outline()               { .ionicons("\f14e"); }
+.ionicons-ios7-americanfootball()             { .ionicons("\f31f"); }
+.ionicons-ios7-americanfootball-outline()     { .ionicons("\f31e"); }
+.ionicons-ios7-analytics()                    { .ionicons("\f321"); }
+.ionicons-ios7-analytics-outline()            { .ionicons("\f320"); }
 .ionicons-ios7-arrow-back()                   { .ionicons("\f150"); }
 .ionicons-ios7-arrow-down()                   { .ionicons("\f151"); }
 .ionicons-ios7-arrow-forward()                { .ionicons("\f152"); }
@@ -230,6 +248,12 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-arrow-up()                     { .ionicons("\f155"); }
 .ionicons-ios7-at()                           { .ionicons("\f157"); }
 .ionicons-ios7-at-outline()                   { .ionicons("\f156"); }
+.ionicons-ios7-barcode()                      { .ionicons("\f323"); }
+.ionicons-ios7-barcode-outline()              { .ionicons("\f322"); }
+.ionicons-ios7-baseball()                     { .ionicons("\f325"); }
+.ionicons-ios7-baseball-outline()             { .ionicons("\f324"); }
+.ionicons-ios7-basketball()                   { .ionicons("\f327"); }
+.ionicons-ios7-basketball-outline()           { .ionicons("\f326"); }
 .ionicons-ios7-bell()                         { .ionicons("\f159"); }
 .ionicons-ios7-bell-outline()                 { .ionicons("\f158"); }
 .ionicons-ios7-bolt()                         { .ionicons("\f15b"); }
@@ -287,6 +311,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-drag()                         { .ionicons("\f185"); }
 .ionicons-ios7-email()                        { .ionicons("\f187"); }
 .ionicons-ios7-email-outline()                { .ionicons("\f186"); }
+.ionicons-ios7-expand()                       { .ionicons("\f30d"); }
 .ionicons-ios7-eye()                          { .ionicons("\f189"); }
 .ionicons-ios7-eye-outline()                  { .ionicons("\f188"); }
 .ionicons-ios7-fastforward()                  { .ionicons("\f18b"); }
@@ -299,6 +324,8 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-flag-outline()                 { .ionicons("\f190"); }
 .ionicons-ios7-folder()                       { .ionicons("\f193"); }
 .ionicons-ios7-folder-outline()               { .ionicons("\f192"); }
+.ionicons-ios7-football()                     { .ionicons("\f329"); }
+.ionicons-ios7-football-outline()             { .ionicons("\f328"); }
 .ionicons-ios7-gear()                         { .ionicons("\f195"); }
 .ionicons-ios7-gear-outline()                 { .ionicons("\f194"); }
 .ionicons-ios7-glasses()                      { .ionicons("\f197"); }
@@ -308,6 +335,8 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-help()                         { .ionicons("\f19c"); }
 .ionicons-ios7-help-empty()                   { .ionicons("\f19a"); }
 .ionicons-ios7-help-outline()                 { .ionicons("\f19b"); }
+.ionicons-ios7-home()                         { .ionicons("\f32b"); }
+.ionicons-ios7-home-outline()                 { .ionicons("\f32a"); }
 .ionicons-ios7-infinite()                     { .ionicons("\f19e"); }
 .ionicons-ios7-infinite-outline()             { .ionicons("\f19d"); }
 .ionicons-ios7-information()                  { .ionicons("\f1a1"); }
@@ -322,6 +351,8 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-location-outline()             { .ionicons("\f1a5"); }
 .ionicons-ios7-locked()                       { .ionicons("\f1a8"); }
 .ionicons-ios7-locked-outline()               { .ionicons("\f1a7"); }
+.ionicons-ios7-loop()                         { .ionicons("\f32d"); }
+.ionicons-ios7-loop-strong()                  { .ionicons("\f32c"); }
 .ionicons-ios7-medkit()                       { .ionicons("\f289"); }
 .ionicons-ios7-medkit-outline()               { .ionicons("\f288"); }
 .ionicons-ios7-mic()                          { .ionicons("\f1ab"); }
@@ -340,12 +371,16 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-musical-notes()                { .ionicons("\f1b6"); }
 .ionicons-ios7-navigate()                     { .ionicons("\f1b8"); }
 .ionicons-ios7-navigate-outline()             { .ionicons("\f1b7"); }
+.ionicons-ios7-paper()                        { .ionicons("\f32f"); }
+.ionicons-ios7-paper-outline()                { .ionicons("\f32e"); }
 .ionicons-ios7-paperplane()                   { .ionicons("\f1ba"); }
 .ionicons-ios7-paperplane-outline()           { .ionicons("\f1b9"); }
 .ionicons-ios7-partlysunny()                  { .ionicons("\f1bc"); }
 .ionicons-ios7-partlysunny-outline()          { .ionicons("\f1bb"); }
 .ionicons-ios7-pause()                        { .ionicons("\f1be"); }
 .ionicons-ios7-pause-outline()                { .ionicons("\f1bd"); }
+.ionicons-ios7-paw()                          { .ionicons("\f331"); }
+.ionicons-ios7-paw-outline()                  { .ionicons("\f330"); }
 .ionicons-ios7-people()                       { .ionicons("\f1c0"); }
 .ionicons-ios7-people-outline()               { .ionicons("\f1bf"); }
 .ionicons-ios7-person()                       { .ionicons("\f1c2"); }
@@ -363,8 +398,12 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-plus-outline()                 { .ionicons("\f1ca"); }
 .ionicons-ios7-pricetag()                     { .ionicons("\f28d"); }
 .ionicons-ios7-pricetag-outline()             { .ionicons("\f28c"); }
+.ionicons-ios7-pricetags()                    { .ionicons("\f333"); }
+.ionicons-ios7-pricetags-outline()            { .ionicons("\f332"); }
 .ionicons-ios7-printer()                      { .ionicons("\f1cd"); }
 .ionicons-ios7-printer-outline()              { .ionicons("\f1cc"); }
+.ionicons-ios7-pulse()                        { .ionicons("\f335"); }
+.ionicons-ios7-pulse-strong()                 { .ionicons("\f334"); }
 .ionicons-ios7-rainy()                        { .ionicons("\f1cf"); }
 .ionicons-ios7-rainy-outline()                { .ionicons("\f1ce"); }
 .ionicons-ios7-recording()                    { .ionicons("\f1d1"); }
@@ -376,10 +415,15 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-refresh-outline()              { .ionicons("\f1d5"); }
 .ionicons-ios7-reload()                       { .ionicons("\f28e"); }
 .ionicons-ios7-reloading()                    { .ionicons("\f28e"); }
+.ionicons-ios7-reverse-camera()               { .ionicons("\f337"); }
+.ionicons-ios7-reverse-camera-outline()       { .ionicons("\f336"); }
 .ionicons-ios7-rewind()                       { .ionicons("\f1d8"); }
 .ionicons-ios7-rewind-outline()               { .ionicons("\f1d7"); }
 .ionicons-ios7-search()                       { .ionicons("\f1da"); }
 .ionicons-ios7-search-strong()                { .ionicons("\f1d9"); }
+.ionicons-ios7-settings()                     { .ionicons("\f339"); }
+.ionicons-ios7-settings-strong()              { .ionicons("\f338"); }
+.ionicons-ios7-shrink()                       { .ionicons("\f30e"); }
 .ionicons-ios7-skipbackward()                 { .ionicons("\f1dc"); }
 .ionicons-ios7-skipbackward-outline()         { .ionicons("\f1db"); }
 .ionicons-ios7-skipforward()                  { .ionicons("\f1de"); }
@@ -388,6 +432,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-speedometer()                  { .ionicons("\f290"); }
 .ionicons-ios7-speedometer-outline()          { .ionicons("\f28f"); }
 .ionicons-ios7-star()                         { .ionicons("\f1e0"); }
+.ionicons-ios7-star-half()                    { .ionicons("\f33a"); }
 .ionicons-ios7-star-outline()                 { .ionicons("\f1df"); }
 .ionicons-ios7-stopwatch()                    { .ionicons("\f1e2"); }
 .ionicons-ios7-stopwatch-outline()            { .ionicons("\f1e1"); }
@@ -395,12 +440,16 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-ios7-sunny-outline()                { .ionicons("\f1e3"); }
 .ionicons-ios7-telephone()                    { .ionicons("\f1e6"); }
 .ionicons-ios7-telephone-outline()            { .ionicons("\f1e5"); }
+.ionicons-ios7-tennisball()                   { .ionicons("\f33c"); }
+.ionicons-ios7-tennisball-outline()           { .ionicons("\f33b"); }
 .ionicons-ios7-thunderstorm()                 { .ionicons("\f1e8"); }
 .ionicons-ios7-thunderstorm-outline()         { .ionicons("\f1e7"); }
 .ionicons-ios7-time()                         { .ionicons("\f292"); }
 .ionicons-ios7-time-outline()                 { .ionicons("\f291"); }
 .ionicons-ios7-timer()                        { .ionicons("\f1ea"); }
 .ionicons-ios7-timer-outline()                { .ionicons("\f1e9"); }
+.ionicons-ios7-toggle()                       { .ionicons("\f33e"); }
+.ionicons-ios7-toggle-outline()               { .ionicons("\f33d"); }
 .ionicons-ios7-trash()                        { .ionicons("\f1ec"); }
 .ionicons-ios7-trash-outline()                { .ionicons("\f1eb"); }
 .ionicons-ios7-undo()                         { .ionicons("\f1ee"); }
@@ -447,6 +496,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-man()                               { .ionicons("\f202"); }
 .ionicons-map()                               { .ionicons("\f203"); }
 .ionicons-medkit()                            { .ionicons("\f2a2"); }
+.ionicons-merge()                             { .ionicons("\f33f"); }
 .ionicons-mic-a()                             { .ionicons("\f204"); }
 .ionicons-mic-b()                             { .ionicons("\f205"); }
 .ionicons-mic-c()                             { .ionicons("\f206"); }
@@ -456,12 +506,15 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-model-s()                           { .ionicons("\f2c1"); }
 .ionicons-monitor()                           { .ionicons("\f20a"); }
 .ionicons-more()                              { .ionicons("\f20b"); }
+.ionicons-mouse()                             { .ionicons("\f340"); }
 .ionicons-music-note()                        { .ionicons("\f20c"); }
 .ionicons-navicon()                           { .ionicons("\f20e"); }
 .ionicons-navicon-round()                     { .ionicons("\f20d"); }
 .ionicons-navigate()                          { .ionicons("\f2a3"); }
+.ionicons-network()                           { .ionicons("\f341"); }
 .ionicons-no-smoking()                        { .ionicons("\f2c2"); }
 .ionicons-nuclear()                           { .ionicons("\f2a4"); }
+.ionicons-outlet()                            { .ionicons("\f342"); }
 .ionicons-paper-airplane()                    { .ionicons("\f2c3"); }
 .ionicons-paperclip()                         { .ionicons("\f20f"); }
 .ionicons-pause()                             { .ionicons("\f210"); }
@@ -473,22 +526,31 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-pinpoint()                          { .ionicons("\f2a7"); }
 .ionicons-pizza()                             { .ionicons("\f2a8"); }
 .ionicons-plane()                             { .ionicons("\f214"); }
+.ionicons-planet()                            { .ionicons("\f343"); }
 .ionicons-play()                              { .ionicons("\f215"); }
 .ionicons-playstation()                       { .ionicons("\f30a"); }
 .ionicons-plus()                              { .ionicons("\f218"); }
 .ionicons-plus-circled()                      { .ionicons("\f216"); }
 .ionicons-plus-round()                        { .ionicons("\f217"); }
+.ionicons-podium()                            { .ionicons("\f344"); }
 .ionicons-pound()                             { .ionicons("\f219"); }
 .ionicons-power()                             { .ionicons("\f2a9"); }
 .ionicons-pricetag()                          { .ionicons("\f2aa"); }
 .ionicons-pricetags()                         { .ionicons("\f2ab"); }
 .ionicons-printer()                           { .ionicons("\f21a"); }
+.ionicons-pull-request()                      { .ionicons("\f345"); }
+.ionicons-qr-scanner()                        { .ionicons("\f346"); }
+.ionicons-quote()                             { .ionicons("\f347"); }
 .ionicons-radio-waves()                       { .ionicons("\f2ac"); }
 .ionicons-record()                            { .ionicons("\f21b"); }
 .ionicons-refresh()                           { .ionicons("\f21c"); }
 .ionicons-refreshing()                        { .ionicons("\f21c"); }
 .ionicons-reply()                             { .ionicons("\f21e"); }
 .ionicons-reply-all()                         { .ionicons("\f21d"); }
+.ionicons-ribbon-a()                          { .ionicons("\f348"); }
+.ionicons-ribbon-b()                          { .ionicons("\f349"); }
+.ionicons-sad()                               { .ionicons("\f34a"); }
+.ionicons-scissors()                          { .ionicons("\f34b"); }
 .ionicons-search()                            { .ionicons("\f21f"); }
 .ionicons-settings()                          { .ionicons("\f2ad"); }
 .ionicons-share()                             { .ionicons("\f220"); }
@@ -511,13 +573,19 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-social-dropbox-outline()            { .ionicons("\f22e"); }
 .ionicons-social-facebook()                   { .ionicons("\f231"); }
 .ionicons-social-facebook-outline()           { .ionicons("\f230"); }
+.ionicons-social-foursquare()                 { .ionicons("\f34d"); }
+.ionicons-social-foursquare-outline()         { .ionicons("\f34c"); }
 .ionicons-social-freebsd-devil()              { .ionicons("\f2c4"); }
 .ionicons-social-github()                     { .ionicons("\f233"); }
 .ionicons-social-github-outline()             { .ionicons("\f232"); }
+.ionicons-social-google()                     { .ionicons("\f34f"); }
+.ionicons-social-google-outline()             { .ionicons("\f34e"); }
 .ionicons-social-googleplus()                 { .ionicons("\f235"); }
 .ionicons-social-googleplus-outline()         { .ionicons("\f234"); }
 .ionicons-social-hackernews()                 { .ionicons("\f237"); }
 .ionicons-social-hackernews-outline()         { .ionicons("\f236"); }
+.ionicons-social-instagram()                  { .ionicons("\f351"); }
+.ionicons-social-instagram-outline()          { .ionicons("\f350"); }
 .ionicons-social-linkedin()                   { .ionicons("\f239"); }
 .ionicons-social-linkedin-outline()           { .ionicons("\f238"); }
 .ionicons-social-pinterest()                  { .ionicons("\f2b1"); }
@@ -533,6 +601,8 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-social-tux()                        { .ionicons("\f2c5"); }
 .ionicons-social-twitter()                    { .ionicons("\f243"); }
 .ionicons-social-twitter-outline()            { .ionicons("\f242"); }
+.ionicons-social-usd()                        { .ionicons("\f353"); }
+.ionicons-social-usd-outline()                { .ionicons("\f352"); }
 .ionicons-social-vimeo()                      { .ionicons("\f245"); }
 .ionicons-social-vimeo-outline()              { .ionicons("\f244"); }
 .ionicons-social-windows()                    { .ionicons("\f247"); }
@@ -553,9 +623,13 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-thermometer()                       { .ionicons("\f2b6"); }
 .ionicons-thumbsdown()                        { .ionicons("\f250"); }
 .ionicons-thumbsup()                          { .ionicons("\f251"); }
+.ionicons-toggle()                            { .ionicons("\f355"); }
+.ionicons-toggle-filled()                     { .ionicons("\f354"); }
 .ionicons-trash-a()                           { .ionicons("\f252"); }
 .ionicons-trash-b()                           { .ionicons("\f253"); }
+.ionicons-trophy()                            { .ionicons("\f356"); }
 .ionicons-umbrella()                          { .ionicons("\f2b7"); }
+.ionicons-university()                        { .ionicons("\f357"); }
 .ionicons-unlocked()                          { .ionicons("\f254"); }
 .ionicons-upload()                            { .ionicons("\f255"); }
 .ionicons-usb()                               { .ionicons("\f2b8"); }
@@ -564,6 +638,7 @@ display: inline-block; font-family: "Ionicons"; speak: none; font-style: normal;
 .ionicons-volume-low()                        { .ionicons("\f258"); }
 .ionicons-volume-medium()                     { .ionicons("\f259"); }
 .ionicons-volume-mute()                       { .ionicons("\f25a"); }
+.ionicons-wand()                              { .ionicons("\f358"); }
 .ionicons-waterdrop()                         { .ionicons("\f25b"); }
 .ionicons-wifi()                              { .ionicons("\f25c"); }
 .ionicons-wineglass()                         { .ionicons("\f2b9"); }
