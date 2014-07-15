@@ -1,6 +1,5 @@
-
 /*!
- * pickadate.js v3.4.0, 2014/02/15
+ * pickadate.js v3.5.3, 2014/07/12
  * By Amsul, http://amsul.ca
  * Hosted on http://amsul.github.io/pickadate.js
  * Licensed under MIT
@@ -8,16 +7,22 @@
 
 (function ( factory ) {
 
-    // Register as an anonymous module.
-    if ( typeof define === 'function' && define.amd )
+    // AMD.
+    if ( typeof define == 'function' && define.amd )
         define( 'picker', ['jquery'], factory )
 
-    // Or using browser globals.
+    // Node.js/browserify.
+    else if ( typeof exports == 'object' )
+        module.exports = factory( require('jquery') )
+
+    // Browser globals.
     else this.Picker = factory( jQuery )
 
 }(function( $ ) {
 
+var $window = $( window )
 var $document = $( document )
+var $html = $( document.documentElement )
 
 
 /**
@@ -30,6 +35,9 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
 
     var
+        IS_DEFAULT_THEME = false,
+
+
         // The state of the picker.
         STATE = {
             id: ELEMENT.id || 'P' + Math.abs( ~~(Math.random() * new Date()) )
@@ -81,9 +89,11 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // Confirm focus state, convert into text input to remove UA stylings,
                 // and set as readonly to prevent keyboard popup.
                 ELEMENT.autofocus = ELEMENT == document.activeElement
-                ELEMENT.type = 'text'
                 ELEMENT.readOnly = !SETTINGS.editable
                 ELEMENT.id = ELEMENT.id || STATE.id
+                if ( ELEMENT.type != 'text' ) {
+                    ELEMENT.type = 'text'
+                }
 
 
                 // Create a new picker component with the settings.
@@ -126,6 +136,10 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     close: SETTINGS.onClose,
                     set: SETTINGS.onSet
                 })
+
+
+                // Once we’re all set, check the theme in use.
+                IS_DEFAULT_THEME = isUsingDefaultTheme( P.$root.children()[ 0 ] )
 
 
                 // If the element has autofocus, open the picker.
@@ -194,7 +208,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             }, //stop
 
 
-            /*
+            /**
              * Open up the picker
              */
             open: function( dontGiveFocus ) {
@@ -206,15 +220,29 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 $ELEMENT.addClass( CLASSES.active )
                 aria( ELEMENT, 'expanded', true )
 
-                // Add the “opened” class to the picker root.
-                P.$root.addClass( CLASSES.opened )
-                aria( P.$root[0], 'hidden', false )
+                // * A Firefox bug, when `html` has `overflow:hidden`, results in
+                //   killing transitions :(. So add the “opened” state on the next tick.
+                //   Bug: https://bugzilla.mozilla.org/show_bug.cgi?id=625289
+                setTimeout( function() {
+
+                    // Add the “opened” class to the picker root.
+                    P.$root.addClass( CLASSES.opened )
+                    aria( P.$root[0], 'hidden', false )
+
+                }, 0 )
 
                 // If we have to give focus, bind the element and doc events.
                 if ( dontGiveFocus !== false ) {
 
                     // Set it as open.
                     STATE.open = true
+
+                    // Prevent the page from scrolling.
+                    if ( IS_DEFAULT_THEME ) {
+                        $html.
+                            css( 'overflow', 'hidden' ).
+                            css( 'padding-right', '+=' + getScrollbarWidth() )
+                    }
 
                     // Pass focus to the element’s jQuery object.
                     $ELEMENT.trigger( 'focus' )
@@ -309,16 +337,29 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 $ELEMENT.removeClass( CLASSES.active )
                 aria( ELEMENT, 'expanded', false )
 
-                // Remove the “opened” and “focused” class from the picker root.
-                P.$root.removeClass( CLASSES.opened + ' ' + CLASSES.focused )
-                aria( P.$root[0], 'hidden', true )
-                aria( P.$root[0], 'selected', false )
+                // * A Firefox bug, when `html` has `overflow:hidden`, results in
+                //   killing transitions :(. So remove the “opened” state on the next tick.
+                //   Bug: https://bugzilla.mozilla.org/show_bug.cgi?id=625289
+                setTimeout( function() {
+
+                    // Remove the “opened” and “focused” class from the picker root.
+                    P.$root.removeClass( CLASSES.opened + ' ' + CLASSES.focused )
+                    aria( P.$root[0], 'hidden', true )
+
+                }, 0 )
 
                 // If it’s already closed, do nothing more.
                 if ( !STATE.open ) return P
 
                 // Set it as closed.
                 STATE.open = false
+
+                // Allow the page to scroll.
+                if ( IS_DEFAULT_THEME ) {
+                    $html.
+                        css( 'overflow', '' ).
+                        css( 'padding-right', '-=' + getScrollbarWidth() )
+                }
 
                 // Unbind the document events.
                 $document.off( '.' + STATE.id )
@@ -331,8 +372,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             /**
              * Clear the values
              */
-            clear: function() {
-                return P.set( 'clear' )
+            clear: function( options ) {
+                return P.set( 'clear', null, options )
             }, //clear
 
 
@@ -346,7 +387,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                     thingObject = thingIsObject ? thing : {}
 
                 // Make sure we have usable options.
-                options = thingIsObject && $.isPlainObject( value ) ? value : options || {}
+                options = thingIsObject && $.isPlainObject( value ) ? value : options || {}
 
                 if ( thing ) {
 
@@ -363,14 +404,15 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                         // First, if the item exists and there’s a value, set it.
                         if ( thingItem in P.component.item ) {
+                            if ( thingValue === undefined ) thingValue = null
                             P.component.set( thingItem, thingValue, options )
                         }
 
                         // Then, check to update the element value and broadcast a change.
                         if ( thingItem == 'select' || thingItem == 'clear' ) {
-                            $ELEMENT.val( thingItem == 'clear' ?
-                                '' : P.get( thingItem, SETTINGS.format )
-                            ).trigger( 'change' )
+                            $ELEMENT.
+                                val( thingItem == 'clear' ? '' : P.get( thingItem, SETTINGS.format ) ).
+                                trigger( 'change' )
                         }
                     }
 
@@ -404,11 +446,13 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // Check if a component item exists, return that.
                 if ( thing in P.component.item ) {
                     if ( typeof format == 'string' ) {
-                        return PickerConstructor._.trigger(
-                            P.component.formats.toString,
-                            P.component,
-                            [ format, P.component.get( thing ) ]
-                        )
+                        var thingValue = P.component.get( thing )
+                        return thingValue ?
+                            PickerConstructor._.trigger(
+                                P.component.formats.toString,
+                                P.component,
+                                [ format, thingValue ]
+                            ) : ''
                     }
                     return P.component.get( thing )
                 }
@@ -419,7 +463,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
             /**
              * Bind events on the things.
              */
-            on: function( thing, method ) {
+            on: function( thing, method, internal ) {
 
                 var thingName, thingMethod,
                     thingIsObject = $.isPlainObject( thing ),
@@ -437,6 +481,11 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                         // Grab the method of the thing.
                         thingMethod = thingObject[ thingName ]
+
+                        // If it was an internal binding, prefix it.
+                        if ( internal ) {
+                            thingName = '_' + thingName
+                        }
 
                         // Make sure the thing methods collection exists.
                         STATE.methods[ thingName ] = STATE.methods[ thingName ] || []
@@ -471,12 +520,16 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
              * Fire off method events.
              */
             trigger: function( name, data ) {
-                var methodList = STATE.methods[ name ]
-                if ( methodList ) {
-                    methodList.map( function( method ) {
-                        PickerConstructor._.trigger( method, P, [ data ] )
-                    })
+                var _trigger = function( name ) {
+                    var methodList = STATE.methods[ name ]
+                    if ( methodList ) {
+                        methodList.map( function( method ) {
+                            PickerConstructor._.trigger( method, P, [ data ] )
+                        })
+                    }
                 }
+                _trigger( '_' + name )
+                _trigger( name )
                 return P
             } //trigger
         } //PickerInstance.prototype
@@ -600,7 +653,6 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // to the doc and remove the “focused” state from the root.
                 focusin: function( event ) {
                     P.$root.removeClass( CLASSES.focused )
-                    aria( P.$root[0], 'selected', false )
                     event.stopPropagation()
                 },
 
@@ -662,6 +714,9 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 else if ( targetData.clear ) {
                     P.clear().close( true )
                 }
+            })
+            .on('click', '[data-close]', function () {
+                P.close(true);
             }) //P.$root
 
         aria( P.$root[0], 'hidden', true )
@@ -673,19 +728,29 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
       */
     function prepareElementHidden() {
 
-        var id = [
-            typeof SETTINGS.hiddenPrefix == 'string' ? SETTINGS.hiddenPrefix : '',
-            typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit'
-        ]
+        var name
+
+        if ( SETTINGS.hiddenName === true ) {
+            name = ELEMENT.name
+            ELEMENT.name = ''
+        }
+        else {
+            name = [
+                typeof SETTINGS.hiddenPrefix == 'string' ? SETTINGS.hiddenPrefix : '',
+                typeof SETTINGS.hiddenSuffix == 'string' ? SETTINGS.hiddenSuffix : '_submit'
+            ]
+            name = name[0] + ELEMENT.name + name[1]
+        }
 
         P._hidden = $(
             '<input ' +
             'type=hidden ' +
 
-            // Create the name and ID by using the original
-            // input’s with a prefix and suffix.
-            'name="' + id[0] + ELEMENT.name + id[1] + '"' +
-            'id="' + id[0] + ELEMENT.id + id[1] + '"' +
+            // Create the name using the original input’s with a prefix and suffix.
+            'name="' + name + '"' +
+
+            // Create the ID using the original input’s; only if it has one.
+            (ELEMENT.id ? 'id="' + ELEMENT.id + '_hidden"' : '') +
 
             // If the element has a value, set the hidden value as well.
             (
@@ -719,7 +784,6 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
         // If it’s a focus event, add the “focused” class to the root.
         if ( event.type == 'focus' ) {
             P.$root.addClass( CLASSES.focused )
-            aria( P.$root[0], 'selected', true )
         }
 
         // And then finally open the picker.
@@ -755,6 +819,63 @@ PickerConstructor.klasses = function( prefix ) {
         box: prefix + '__box'
     }
 } //PickerConstructor.klasses
+
+
+
+/**
+ * Check if the default theme is being used.
+ */
+function isUsingDefaultTheme( element ) {
+
+    var theme,
+        prop = 'position'
+
+    // For IE.
+    if ( element.currentStyle ) {
+        theme = element.currentStyle[prop]
+    }
+
+    // For normal browsers.
+    else if ( window.getComputedStyle ) {
+        theme = getComputedStyle( element )[prop]
+    }
+
+    return theme == 'fixed'
+}
+
+
+
+/**
+ * Get the width of the browser’s scrollbar.
+ * Taken from: https://github.com/VodkaBears/Remodal/blob/master/src/jquery.remodal.js
+ */
+function getScrollbarWidth() {
+
+    if ( $html.height() <= $window.height() ) {
+        return 0
+    }
+
+    var $outer = $( '<div style="visibility:hidden;width:100px" />' ).
+        appendTo( 'body' )
+
+    // Get the width without scrollbars.
+    var widthWithoutScroll = $outer[0].offsetWidth
+
+    // Force adding scrollbars.
+    $outer.css( 'overflow', 'scroll' )
+
+    // Add the inner div.
+    var $inner = $( '<div style="width:100%" />' ).appendTo( $outer )
+
+    // Get the width with scrollbars.
+    var widthWithScroll = $inner[0].offsetWidth
+
+    // Remove the divs.
+    $outer.remove()
+
+    // Return the difference between the widths.
+    return widthWithoutScroll - widthWithScroll
+}
 
 
 
@@ -896,8 +1017,7 @@ PickerConstructor.extend = function( name, Component ) {
 
         // If the component data exists and `options` is a string, carry out the action.
         if ( componentData && typeof options == 'string' ) {
-            PickerConstructor._.trigger( componentData[ options ], componentData, [ action ] )
-            return this
+            return PickerConstructor._.trigger( componentData[ options ], componentData, [ action ] )
         }
 
         // Otherwise go through each matched element and if the component
@@ -929,17 +1049,17 @@ function aria(element, attribute, value) {
 }
 function ariaSet(element, attribute, value) {
     element.setAttribute(
-        (attribute == 'role' ? '' : 'aria-') + attribute,
+        (attribute == 'role' ? '' : 'aria-') + attribute,
         value
     )
 }
 function ariaAttr(attribute, data) {
     if ( !$.isPlainObject(attribute) ) {
-        attribute = { attribute: data }
+        attribute = { attribute: data }
     }
     data = ''
     for ( var key in attribute ) {
-        var attr = (key == 'role' ? '' : 'aria-') + key,
+        var attr = (key == 'role' ? '' : 'aria-') + key,
             attrVal = attribute[key]
         data += attrVal == null ? '' : attr + '="' + attribute[key] + '"'
     }
