@@ -1,27 +1,30 @@
+
 /*
 // Copyright 2012 Twitter, Inc
 // http://www.apache.org/licenses/LICENSE-2.0
 
-// TwitterCLDR (JavaScript) v2.2.3
+// TwitterCLDR (JavaScript) v2.2.4
 // Authors:     Cameron Dutro [@camertron]
                 Kirill Lashuk [@KL_7]
                 portions by Sven Fuchs [@svenfuchs]
 // Homepage:    https://twitter.com
 // Description: Provides date, time, number, and list formatting functionality for various Twitter-supported locales in Javascript.
-*/
+ */
 
 
-/*<<module_def>>*/
-
+/*-module-*/
+/*_lib/twitter_cldr_*/
 
 (function() {
-  var TwitterCldr, key, obj, root, _ref, _ref1, _ref2, _ref3,
+  var TwitterCldr, key, obj, root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   TwitterCldr = {};
 
   TwitterCldr.is_rtl = false;
+
+  TwitterCldr.locale = "hr";
 
   TwitterCldr.Utilities = (function() {
     function Utilities() {}
@@ -288,22 +291,23 @@
     }
 
     DateTimeFormatter.prototype.format = function(obj, options) {
-      var format_token, token, tokens,
-        _this = this;
-      format_token = function(token) {
-        var result;
-        result = "";
-        switch (token.type) {
-          case "pattern":
-            return _this.result_for_token(token, obj);
-          default:
-            if (token.value.length > 0 && token.value[0] === "'" && token.value[token.value.length - 1] === "'") {
-              return token.value.substring(1, token.value.length - 1);
-            } else {
-              return token.value;
-            }
-        }
-      };
+      var format_token, token, tokens;
+      format_token = (function(_this) {
+        return function(token) {
+          var result;
+          result = "";
+          switch (token.type) {
+            case "pattern":
+              return _this.result_for_token(token, obj);
+            default:
+              if (token.value.length > 0 && token.value[0] === "'" && token.value[token.value.length - 1] === "'") {
+                return token.value.substring(1, token.value.length - 1);
+              } else {
+                return token.value;
+              }
+          }
+        };
+      })(this);
       tokens = this.get_tokens(obj, options);
       return ((function() {
         var _i, _len, _results;
@@ -569,7 +573,7 @@
     DateTimeFormatter.prototype.timezone = function(time, pattern, length) {
       var hours, minutes, offset, offsetString, sign;
       offset = time.getTimezoneOffset();
-      hours = ("00" + (Math.abs(offset) / 60).toString()).slice(-2);
+      hours = ("00" + (Math.floor(Math.abs(offset) / 60)).toString()).slice(-2);
       minutes = ("00" + (Math.abs(offset) % 60).toString()).slice(-2);
       sign = offset > 0 ? "-" : "+";
       offsetString = sign + hours + ":" + minutes;
@@ -744,7 +748,7 @@
     }
 
     NumberFormatter.prototype.format = function(number, options) {
-      var fraction, fraction_format, integer_format, intg, key, opts, prefix, result, sign, suffix, val, _ref, _ref1;
+      var fraction, fraction_format, integer_format, intg, key, opts, prefix, result, sign, suffix, tokens, val, _ref, _ref1;
       if (options == null) {
         options = {};
       }
@@ -753,18 +757,23 @@
         val = options[key];
         opts[key] = options[key] != null ? options[key] : opts[key];
       }
-      _ref = this.partition_tokens(this.get_tokens(number, opts)), prefix = _ref[0], suffix = _ref[1], integer_format = _ref[2], fraction_format = _ref[3];
-      number = this.transform_number(number);
-      _ref1 = this.parse_number(number, opts), intg = _ref1[0], fraction = _ref1[1];
-      result = integer_format.apply(parseFloat(intg), opts);
-      if (fraction) {
-        result += fraction_format.apply(fraction, opts);
+      tokens = this.get_tokens(number, opts);
+      if (tokens.join('') === '0') {
+        return number.toString();
+      } else {
+        _ref = this.partition_tokens(tokens), prefix = _ref[0], suffix = _ref[1], integer_format = _ref[2], fraction_format = _ref[3];
+        number = this.truncate_number(number, integer_format);
+        _ref1 = this.parse_number(number, opts), intg = _ref1[0], fraction = _ref1[1];
+        result = integer_format.apply(parseFloat(intg), opts);
+        if (fraction) {
+          result += fraction_format.apply(fraction, opts);
+        }
+        sign = number < 0 && prefix !== "-" ? this.symbols.minus_sign || this.default_symbols.minus_sign : "";
+        return "" + prefix + result + suffix;
       }
-      sign = number < 0 && prefix !== "-" ? this.symbols.minus_sign || this.default_symbols.minus_sign : "";
-      return "" + prefix + result + suffix;
     };
 
-    NumberFormatter.prototype.transform_number = function(number) {
+    NumberFormatter.prototype.truncate_number = function(number, integer_format) {
       return number;
     };
 
@@ -850,8 +859,7 @@
     __extends(DecimalFormatter, _super);
 
     function DecimalFormatter() {
-      _ref = DecimalFormatter.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return DecimalFormatter.__super__.constructor.apply(this, arguments);
     }
 
     DecimalFormatter.prototype.format = function(number, options) {
@@ -955,8 +963,7 @@
     __extends(AbbreviatedNumberFormatter, _super);
 
     function AbbreviatedNumberFormatter() {
-      _ref1 = AbbreviatedNumberFormatter.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return AbbreviatedNumberFormatter.__super__.constructor.apply(this, arguments);
     }
 
     AbbreviatedNumberFormatter.prototype.NUMBER_MAX = Math.pow(10, 15);
@@ -976,9 +983,9 @@
     AbbreviatedNumberFormatter.prototype.get_key = function(number) {
       var i, zeroes;
       zeroes = ((function() {
-        var _i, _ref2, _results;
+        var _i, _ref, _results;
         _results = [];
-        for (i = _i = 0, _ref2 = Math.floor(number).toString().length - 1; 0 <= _ref2 ? _i < _ref2 : _i > _ref2; i = 0 <= _ref2 ? ++_i : --_i) {
+        for (i = _i = 0, _ref = Math.floor(number).toString().length - 1; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
           _results.push("0");
         }
         return _results;
@@ -1001,12 +1008,11 @@
       return tokens;
     };
 
-    AbbreviatedNumberFormatter.prototype.transform_number = function(number) {
-      var factor, power;
-      if ((number < this.NUMBER_MAX) && (number >= this.NUMBER_MIN)) {
-        power = Math.floor((number.toString().length - 1) / 3) * 3;
-        factor = Math.pow(10, power);
-        return number / factor;
+    AbbreviatedNumberFormatter.prototype.truncate_number = function(number, integer_format) {
+      var factor;
+      if (this.NUMBER_MIN <= number && number < this.NUMBER_MAX) {
+        factor = Math.max(0, Math.floor(number).toString().length - integer_format.format.length);
+        return number / Math.pow(10, factor);
       } else {
         return number;
       }
@@ -1020,8 +1026,7 @@
     __extends(ShortDecimalFormatter, _super);
 
     function ShortDecimalFormatter() {
-      _ref2 = ShortDecimalFormatter.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return ShortDecimalFormatter.__super__.constructor.apply(this, arguments);
     }
 
     ShortDecimalFormatter.prototype.get_type = function() {
@@ -1036,8 +1041,7 @@
     __extends(LongDecimalFormatter, _super);
 
     function LongDecimalFormatter() {
-      _ref3 = LongDecimalFormatter.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return LongDecimalFormatter.__super__.constructor.apply(this, arguments);
     }
 
     LongDecimalFormatter.prototype.get_type = function() {
@@ -1158,9 +1162,9 @@
       })();
       widths.reverse();
       return ((function() {
-        var _i, _ref4, _results;
+        var _i, _ref, _results;
         _results = [];
-        for (index = _i = 0, _ref4 = widths.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; index = 0 <= _ref4 ? ++_i : --_i) {
+        for (index = _i = 0, _ref = widths.length; 0 <= _ref ? _i < _ref : _i > _ref; index = 0 <= _ref ? ++_i : --_i) {
           if (widths.indexOf(widths[index], index + 1) === -1) {
             _results.push(widths[index]);
           }
@@ -1239,11 +1243,11 @@
     Currencies.currency_codes = function() {
       var data, _;
       return this.codes || (this.codes = (function() {
-        var _ref4, _results;
-        _ref4 = this.currencies;
+        var _ref, _results;
+        _ref = this.currencies;
         _results = [];
-        for (_ in _ref4) {
-          data = _ref4[_];
+        for (_ in _ref) {
+          data = _ref[_];
           _results.push(data.code);
         }
         return _results;
@@ -1251,11 +1255,11 @@
     };
 
     Currencies.for_code = function(currency_code) {
-      var country_name, data, result, _ref4;
+      var country_name, data, result, _ref;
       result = null;
-      _ref4 = this.currencies;
-      for (country_name in _ref4) {
-        data = _ref4[country_name];
+      _ref = this.currencies;
+      for (country_name in _ref) {
+        data = _ref[country_name];
         if (data.currency === currency_code) {
           result = {
             country: country_name,
@@ -1290,10 +1294,10 @@
     };
 
     ListFormatter.prototype.compose_list = function(list) {
-      var format_key, i, result, _i, _ref4;
+      var format_key, i, result, _i, _ref;
       result = this.compose(this.formats.end || this.formats.middle || "", [list[list.length - 2], list[list.length - 1]]);
       if (list.length > 2) {
-        for (i = _i = 3, _ref4 = list.length; 3 <= _ref4 ? _i <= _ref4 : _i >= _ref4; i = 3 <= _ref4 ? ++_i : --_i) {
+        for (i = _i = 3, _ref = list.length; 3 <= _ref ? _i <= _ref : _i >= _ref; i = 3 <= _ref ? ++_i : --_i) {
           format_key = i === list.length ? "start" : "middle";
           if (this.formats[format_key] == null) {
             format_key = "middle";
@@ -1311,23 +1315,21 @@
         _results = [];
         for (_i = 0, _len = elements.length; _i < _len; _i++) {
           element = elements[_i];
-          if (element !== null) {
+          if (element != null) {
             _results.push(element);
           }
         }
         return _results;
       })();
       if (elements.length > 1) {
-        result = format.replace(/\{(\d+)\}/g, function() {
-          return RegExp.$1;
-        });
+        result = format.replace(/\{(\d+)\}/g, '$1');
         if (TwitterCldr.is_rtl) {
           result = TwitterCldr.Bidi.from_string(result, {
             "direction": "RTL"
           }).reorder_visually().toString();
         }
-        return result.replace(/(\d+)/g, function() {
-          return elements[parseInt(RegExp.$1)];
+        return result.replace(/(\d+)/g, function(match) {
+          return elements[parseInt(match)];
         });
       } else {
         return elements[0] || "";
@@ -1359,10 +1361,10 @@
     }
 
     Bidi.bidi_class_for = function(code_point) {
-      var bidi_class, end, range, range_list, range_offset, ranges, start, _i, _len, _ref4;
-      _ref4 = this.bidi_classes;
-      for (bidi_class in _ref4) {
-        ranges = _ref4[bidi_class];
+      var bidi_class, end, range, range_list, range_offset, ranges, start, _i, _len, _ref;
+      _ref = this.bidi_classes;
+      for (bidi_class in _ref) {
+        ranges = _ref[bidi_class];
         for (range_offset in ranges) {
           range_list = ranges[range_offset];
           for (_i = 0, _len = range_list.length; _i < _len; _i++) {
@@ -1412,15 +1414,15 @@
     };
 
     Bidi.prototype.reorder_visually = function() {
-      var depth, finish, i, level, lowest_odd, max, start, tmpb, tmpo, _i, _j, _k, _len, _ref4, _ref5;
+      var depth, finish, i, level, lowest_odd, max, start, tmpb, tmpo, _i, _j, _k, _len, _ref, _ref1;
       if (!this.string_arr) {
         throw "No string given!";
       }
       max = 0;
       lowest_odd = MAX_DEPTH + 1;
-      _ref4 = this.levels;
-      for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
-        level = _ref4[_i];
+      _ref = this.levels;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        level = _ref[_i];
         max = TwitterCldr.Utilities.max([level, max]);
         if (!TwitterCldr.Utilities.is_even(level)) {
           lowest_odd = TwitterCldr.Utilities.min([lowest_odd, level]);
@@ -1439,7 +1441,7 @@
           while (finish < this.levels.length && this.levels[finish] >= depth) {
             finish += 1;
           }
-          for (i = _k = 0, _ref5 = (finish - start) / 2; 0 <= _ref5 ? _k < _ref5 : _k > _ref5; i = 0 <= _ref5 ? ++_k : --_k) {
+          for (i = _k = 0, _ref1 = (finish - start) / 2; 0 <= _ref1 ? _k < _ref1 : _k > _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
             tmpb = this.levels[finish - i - 1];
             this.levels[finish - i - 1] = this.levels[start + i];
             this.levels[start + i] = tmpb;
@@ -1454,7 +1456,7 @@
     };
 
     Bidi.prototype.compute_paragraph_embedding_level = function() {
-      var type, _i, _len, _ref4;
+      var type, _i, _len, _ref;
       if (["LTR", "RTL"].indexOf(this.direction) > -1) {
         if (this.direction === "LTR") {
           return 0;
@@ -1462,9 +1464,9 @@
           return 1;
         }
       } else {
-        _ref4 = this.types;
-        for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
-          type = _ref4[_i];
+        _ref = this.types;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          type = _ref[_i];
           if (type === "L") {
             return 0;
           }
@@ -1481,13 +1483,13 @@
     };
 
     Bidi.prototype.compute_explicit_levels = function() {
-      var current_embedding, directional_override, embedding_stack, i, input, is_ltr, is_special, len, new_embedding, next_fmt, output, size, sp, _i, _j, _ref4, _ref5;
+      var current_embedding, directional_override, embedding_stack, i, input, is_ltr, is_special, len, new_embedding, next_fmt, output, size, sp, _i, _j, _ref, _ref1;
       current_embedding = this.base_embedding;
       directional_override = -1;
       embedding_stack = [];
       this.formatter_indices || (this.formatter_indices = []);
       sp = 0;
-      for (i = _i = 0, _ref4 = this.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; i = 0 <= _ref4 ? ++_i : --_i) {
+      for (i = _i = 0, _ref = this.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         is_ltr = false;
         is_special = true;
         is_ltr = this.types[i] === "LRE" || this.types[i] === "LRO";
@@ -1512,7 +1514,7 @@
               sp -= 1;
               new_embedding = embedding_stack[sp];
               current_embedding = new_embedding & 0x7f;
-              directional_override = new_embedding < 0 ? (_ref5 = (new_embedding & 1) === 0) != null ? _ref5 : {
+              directional_override = new_embedding < 0 ? (_ref1 = (new_embedding & 1) === 0) != null ? _ref1 : {
                 "L": "R"
               } : -1;
             }
@@ -1542,10 +1544,10 @@
     };
 
     Bidi.prototype.compute_runs = function() {
-      var current_embedding, i, last_run_start, run_count, where, _i, _j, _ref4, _ref5;
+      var current_embedding, i, last_run_start, run_count, where, _i, _j, _ref, _ref1;
       run_count = 0;
       current_embedding = this.base_embedding;
-      for (i = _i = 0, _ref4 = this.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; i = 0 <= _ref4 ? ++_i : --_i) {
+      for (i = _i = 0, _ref = this.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         if (this.levels[i] !== current_embedding) {
           current_embedding = this.levels[i];
           run_count += 1;
@@ -1554,7 +1556,7 @@
       where = 0;
       last_run_start = 0;
       current_embedding = this.base_embedding;
-      for (i = _j = 0, _ref5 = this.length; 0 <= _ref5 ? _j < _ref5 : _j > _ref5; i = 0 <= _ref5 ? ++_j : --_j) {
+      for (i = _j = 0, _ref1 = this.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
         if (this.levels[i] !== current_embedding) {
           this.runs[where] = last_run_start;
           where += 1;
@@ -1649,8 +1651,8 @@
     };
 
     Bidi.prototype.resolve_implicit_levels = function() {
-      var i, _i, _ref4;
-      for (i = _i = 0, _ref4 = this.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; i = 0 <= _ref4 ? ++_i : --_i) {
+      var i, _i, _ref;
+      for (i = _i = 0, _ref = this.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         if ((this.levels[i] & 1) === 0) {
           if (this.types[i] === "R") {
             this.levels[i] += 1;
@@ -1719,11 +1721,11 @@
     };
 
     Bidi.prototype.reinsert_formatting_codes = function() {
-      var index, input, left_level, len, next_fmt, output, right_level, _i, _ref4;
+      var index, input, left_level, len, next_fmt, output, right_level, _i, _ref;
       if ((this.formatter_indices != null) && this.formatter_indices.length > 0) {
         input = this.length;
         output = this.levels.length;
-        for (index = _i = _ref4 = this.formatter_indices.length - 1; _ref4 <= 0 ? _i <= 0 : _i >= 0; index = _ref4 <= 0 ? ++_i : --_i) {
+        for (index = _i = _ref = this.formatter_indices.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; index = _ref <= 0 ? ++_i : --_i) {
           next_fmt = this.formatter_indices[index];
           len = output - next_fmt - 1;
           output = next_fmt;
@@ -1757,7 +1759,7 @@
   TwitterCldr.Calendar = (function() {
     function Calendar() {}
 
-    Calendar.calendar = {"additional_formats":{"EHm":"E HH:mm","EHms":"E HH:mm:ss","Ed":"E, d.","Ehm":"E h:mm a","Ehms":"E h:mm:ss a","Gy":"y. G","GyMMM":"LLL y. G","GyMMMEd":"E, d. MMM y. G","GyMMMd":"d. MMM y. G","H":"HH","Hm":"HH:mm","Hms":"HH:mm:ss","M":"L.","MEd":"E, d. M.","MMM":"LLL","MMMEd":"E, d. MMM","MMMMEd":"E, d. MMMM","MMMMd":"d. MMMM","MMMMdd":"dd. MMMM","MMMd":"d. MMM","MMdd":"dd. MM.","Md":"d. M.","d":"d.","h":"hh a","hm":"hh:mm a","hms":"hh:mm:ss a","ms":"mm:ss","y":"y.","yM":"M. y.","yMEd":"E, d. M. y.","yMM":"MM. y.","yMMM":"LLL y.","yMMMEd":"E, d. MMM y.","yMMMM":"LLLL y.","yMMMd":"d. MMM y.","yMd":"d. M. y.","yQQQ":"QQQ y.","yQQQQ":"QQQQ y."},"days":{"format":{"abbreviated":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"narrow":{"fri":"P","mon":"P","sat":"S","sun":"N","thu":"Č","tue":"U","wed":"S"},"short":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"wide":{"fri":"petak","mon":"ponedjeljak","sat":"subota","sun":"nedjelja","thu":"četvrtak","tue":"utorak","wed":"srijeda"}},"stand-alone":{"abbreviated":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"narrow":{"fri":"p","mon":"p","sat":"s","sun":"n","thu":"č","tue":"u","wed":"s"},"short":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"wide":{"fri":"petak","mon":"ponedjeljak","sat":"subota","sun":"nedjelja","thu":"četvrtak","tue":"utorak","wed":"srijeda"}}},"eras":{"abbr":{"0":"p. n. e.","1":"A. D."},"name":{"0":"Prije Krista","1":"Poslije Krista"},"narrow":{"0":"pr.n.e.","1":"AD"}},"fields":{"day":"dan","dayperiod":"dio dana","era":"era","hour":"sat","minute":"minuta","month":"mjesec","second":"sekunda","week":"tjedan","weekday":"dan u tjednu","year":"godina","zone":"vremenska zona"},"formats":{"date":{"full":{"pattern":"EEEE, d. MMMM y."},"long":{"pattern":"d. MMMM y."},"medium":{"pattern":"d. M. y."},"short":{"pattern":"d.M.y."}},"datetime":{"full":{"pattern":"{{date}} {{time}}"},"long":{"pattern":"{{date}} {{time}}"},"medium":{"pattern":"{{date}} {{time}}"},"short":{"pattern":"{{date}} {{time}}"}},"time":{"full":{"pattern":"HH:mm:ss zzzz"},"long":{"pattern":"HH:mm:ss z"},"medium":{"pattern":"HH:mm:ss"},"short":{"pattern":"HH:mm"}}},"months":{"format":{"abbreviated":{"1":"sij","10":"lis","11":"stu","12":"pro","2":"velj","3":"ožu","4":"tra","5":"svi","6":"lip","7":"srp","8":"kol","9":"ruj"},"narrow":{"1":1.0,"10":10.0,"11":11.0,"12":12.0,"2":2.0,"3":3.0,"4":4.0,"5":5.0,"6":6.0,"7":7.0,"8":8.0,"9":9.0},"wide":{"1":"siječnja","10":"listopada","11":"studenoga","12":"prosinca","2":"veljače","3":"ožujka","4":"travnja","5":"svibnja","6":"lipnja","7":"srpnja","8":"kolovoza","9":"rujna"}},"stand-alone":{"abbreviated":{"1":"sij","10":"lis","11":"stu","12":"pro","2":"velj","3":"ožu","4":"tra","5":"svi","6":"lip","7":"srp","8":"kol","9":"ruj"},"narrow":{"1":1.0,"10":10.0,"11":11.0,"12":12.0,"2":2.0,"3":3.0,"4":4.0,"5":5.0,"6":6.0,"7":7.0,"8":8.0,"9":9.0},"wide":{"1":"siječanj","10":"listopad","11":"studeni","12":"prosinac","2":"veljača","3":"ožujak","4":"travanj","5":"svibanj","6":"lipanj","7":"srpanj","8":"kolovoz","9":"rujan"}}},"periods":{"format":{"abbreviated":{"afternoon":"popodne","earlyMorning":"ujutro","evening":"navečer","morning":"prijepodne","night":"noću","noon":"podne"},"narrow":{"afternoon":"popodne","am":"a","earlyMorning":"ujutro","evening":"navečer","morning":"prijepodne","night":"noću","noon":"n","pm":"p"},"wide":{"am":"AM","noon":"podne","pm":"PM","variant":{"am":"a.m.","pm":"p.m."}}},"stand-alone":{"abbreviated":{"afternoon":"popodne","earlyMorning":"ujutro","evening":"navečer","morning":"prijepodne","night":"noću","noon":"podne"}}},"quarters":{"format":{"abbreviated":{"1":"1kv","2":"2kv","3":"3kv","4":"4kv"},"narrow":{"1":1.0,"2":2.0,"3":3.0,"4":4.0},"wide":{"1":"1. kvartal","2":"2. kvartal","3":"3. kvartal","4":"4. kvartal"}},"stand-alone":{"abbreviated":{"1":"1kv","2":"2kv","3":"3kv","4":"4kv"},"narrow":{"1":1.0,"2":2.0,"3":3.0,"4":4.0},"wide":{"1":"1. kvartal","2":"2. kvartal","3":"3. kvartal","4":"4. kvartal"}}}};
+    Calendar.calendar = {"additional_formats":{"EHm":"E HH:mm","EHms":"E HH:mm:ss","Ed":"E, d.","Ehm":"E h:mm a","Ehms":"E h:mm:ss a","Gy":"y. G","GyMMM":"LLL y. G","GyMMMEd":"E, d. MMM y. G","GyMMMd":"d. MMM y. G","H":"HH","Hm":"HH:mm","Hms":"HH:mm:ss","M":"L.","MEd":"E, d. M.","MMM":"LLL","MMMEd":"E, d. MMM","MMMMEd":"E, d. MMMM","MMMMd":"d. MMMM","MMMMdd":"dd. MMMM","MMMd":"d. MMM","MMdd":"dd. MM.","Md":"d. M.","d":"d.","h":"hh a","hm":"hh:mm a","hms":"hh:mm:ss a","ms":"mm:ss","y":"y.","yM":"M. y.","yMEd":"E, d. M. y.","yMM":"MM. y.","yMMM":"LLL y.","yMMMEd":"E, d. MMM y.","yMMMM":"LLLL y.","yMMMd":"d. MMM y.","yMd":"d. M. y.","yQQQ":"QQQ y.","yQQQQ":"QQQQ y."},"days":{"format":{"abbreviated":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"narrow":{"fri":"P","mon":"P","sat":"S","sun":"N","thu":"Č","tue":"U","wed":"S"},"short":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"wide":{"fri":"petak","mon":"ponedjeljak","sat":"subota","sun":"nedjelja","thu":"četvrtak","tue":"utorak","wed":"srijeda"}},"stand-alone":{"abbreviated":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"narrow":{"fri":"p","mon":"p","sat":"s","sun":"n","thu":"č","tue":"u","wed":"s"},"short":{"fri":"pet","mon":"pon","sat":"sub","sun":"ned","thu":"čet","tue":"uto","wed":"sri"},"wide":{"fri":"petak","mon":"ponedjeljak","sat":"subota","sun":"nedjelja","thu":"četvrtak","tue":"utorak","wed":"srijeda"}}},"eras":{"abbr":{"0":"p. n. e.","1":"A. D."},"name":{"0":"Prije Krista","1":"Poslije Krista"},"narrow":{"0":"pr.n.e.","1":"AD"}},"fields":{"day":"dan","dayperiod":"dio dana","era":"era","hour":"sat","minute":"minuta","month":"mjesec","second":"sekunda","week":"tjedan","weekday":"dan u tjednu","year":"godina","zone":"vremenska zona"},"formats":{"date":{"full":{"pattern":"EEEE, d. MMMM y."},"long":{"pattern":"d. MMMM y."},"medium":{"pattern":"d. M. y."},"short":{"pattern":"d.M.y."}},"datetime":{"full":{"pattern":"{{date}} {{time}}"},"long":{"pattern":"{{date}} {{time}}"},"medium":{"pattern":"{{date}} {{time}}"},"short":{"pattern":"{{date}} {{time}}"}},"time":{"full":{"pattern":"HH:mm:ss zzzz"},"long":{"pattern":"HH:mm:ss z"},"medium":{"pattern":"HH:mm:ss"},"short":{"pattern":"HH:mm"}}},"months":{"format":{"abbreviated":{"1":"sij","10":"lis","11":"stu","12":"pro","2":"velj","3":"ožu","4":"tra","5":"svi","6":"lip","7":"srp","8":"kol","9":"ruj"},"narrow":{"1":"1.","10":"10.","11":"11.","12":"12.","2":"2.","3":"3.","4":"4.","5":"5.","6":"6.","7":"7.","8":"8.","9":"9."},"wide":{"1":"siječnja","10":"listopada","11":"studenoga","12":"prosinca","2":"veljače","3":"ožujka","4":"travnja","5":"svibnja","6":"lipnja","7":"srpnja","8":"kolovoza","9":"rujna"}},"stand-alone":{"abbreviated":{"1":"sij","10":"lis","11":"stu","12":"pro","2":"velj","3":"ožu","4":"tra","5":"svi","6":"lip","7":"srp","8":"kol","9":"ruj"},"narrow":{"1":"1.","10":"10.","11":"11.","12":"12.","2":"2.","3":"3.","4":"4.","5":"5.","6":"6.","7":"7.","8":"8.","9":"9."},"wide":{"1":"siječanj","10":"listopad","11":"studeni","12":"prosinac","2":"veljača","3":"ožujak","4":"travanj","5":"svibanj","6":"lipanj","7":"srpanj","8":"kolovoz","9":"rujan"}}},"periods":{"format":{"abbreviated":{"afternoon":"popodne","earlyMorning":"ujutro","evening":"navečer","morning":"prijepodne","night":"noću","noon":"podne"},"narrow":{"afternoon":"popodne","am":"a","earlyMorning":"ujutro","evening":"navečer","morning":"prijepodne","night":"noću","noon":"n","pm":"p"},"wide":{"am":"AM","noon":"podne","pm":"PM","variant":{"am":"a.m.","pm":"p.m."}}},"stand-alone":{"abbreviated":{"afternoon":"popodne","earlyMorning":"ujutro","evening":"navečer","morning":"prijepodne","night":"noću","noon":"podne"}}},"quarters":{"format":{"abbreviated":{"1":"1kv","2":"2kv","3":"3kv","4":"4kv"},"narrow":{"1":"1.","2":"2.","3":"3.","4":"4."},"wide":{"1":"1. kvartal","2":"2. kvartal","3":"3. kvartal","4":"4. kvartal"}},"stand-alone":{"abbreviated":{"1":"1kv","2":"2kv","3":"3kv","4":"4kv"},"narrow":{"1":"1.","2":"2.","3":"3.","4":"4."},"wide":{"1":"1. kvartal","2":"2. kvartal","3":"3. kvartal","4":"4. kvartal"}}}};
 
     Calendar.months = function(options) {
       var key, result, root, val;
@@ -1781,17 +1783,127 @@
     };
 
     Calendar.get_root = function(key, options) {
-      var format, names_form, root, _ref4;
+      var format, names_form, root, _ref;
       if (options == null) {
         options = {};
       }
       root = this.calendar[key];
       names_form = options["names_form"] || "wide";
-      format = options.format || ((root != null ? (_ref4 = root["stand-alone"]) != null ? _ref4[names_form] : void 0 : void 0) != null ? "stand-alone" : "format");
+      format = options.format || ((root != null ? (_ref = root["stand-alone"]) != null ? _ref[names_form] : void 0 : void 0) != null ? "stand-alone" : "format");
       return root[format][names_form];
     };
 
     return Calendar;
+
+  })();
+
+  TwitterCldr.PhoneCodes = (function() {
+    function PhoneCodes() {}
+
+    PhoneCodes.phone_codes = {"ac":"247","ad":"376","ae":"971","af":"93","ag":"1","ai":"1","al":"355","am":"374","an":"599","ao":"244","aq":"672","ar":"54","as":"1","at":"43","au":"61","aw":"297","ax":"358","az":"994","ba":"387","bb":"1","bd":"880","be":"32","bf":"226","bg":"359","bh":"973","bi":"257","bj":"229","bl":"590","bm":"1","bn":"673","bo":"591","br":"55","bs":"1","bt":"975","bw":"267","by":"375","bz":"501","ca":"1","cc":"61","cd":"243","cf":"236","cg":"242","ch":"41","ci":"225","ck":"682","cl":"56","cm":"237","cn":"86","co":"57","cr":"506","cu":"53","cv":"238","cx":"61","cy":"357","cz":"420","de":"49","dj":"253","dk":"45","dm":"1","do":"1","dz":"213","ec":"593","ee":"372","eg":"20","er":"291","es":"34","et":"251","fi":"358","fj":"679","fk":"500","fm":"691","fo":"298","fr":"33","ga":"241","gb":"44","gd":"1","ge":"995","gf":"594","gg":"44","gh":"233","gi":"350","gl":"299","gm":"220","gn":"224","gp":"590","gq":"240","gr":"30","gt":"502","gu":"1","gw":"245","gy":"592","hk":"852","hn":"504","hr":"385","ht":"509","hu":"36","id":"62","ie":"353","il":"972","im":"44","in":"91","io":"246","iq":"964","ir":"98","is":"354","it":"39","je":"44","jm":"1","jo":"962","jp":"81","ke":"254","kg":"996","kh":"855","ki":"686","km":"269","kn":"1","kp":"850","kr":"82","kw":"965","ky":"1","kz":"7","la":"856","lb":"961","lc":"1","li":"423","lk":"94","lr":"231","ls":"266","lt":"370","lu":"352","lv":"371","ly":"218","ma":"212","mc":"377","md":"373","me":"382","mg":"261","mh":"692","mk":"389","ml":"223","mm":"95","mn":"976","mo":"853","mp":"1","mq":"596","mr":"222","ms":"1","mt":"356","mu":"230","mv":"960","mw":"265","mx":"52","my":"60","mz":"258","na":"264","nc":"687","ne":"227","nf":"672","ng":"234","ni":"505","nl":"31","no":"47","np":"977","nr":"674","nu":"683","nz":"64","om":"968","pa":"507","pe":"51","pf":"689","pg":"675","ph":"63","pk":"92","pl":"48","pm":"508","pr":"1","ps":"972","pt":"351","pw":"680","py":"595","qa":"974","re":"262","ro":"40","rs":"381","ru":"7","rw":"250","sa":"966","sb":"677","sc":"248","sd":"249","se":"46","sg":"65","sh":"290","si":"386","sj":"47","sk":"421","sl":"232","sm":"378","sn":"221","so":"252","sr":"597","ss":"211","st":"239","sv":"503","sy":"963","sz":"268","tc":"1","td":"235","tf":"262","tg":"228","th":"66","tj":"992","tk":"690","tl":"670","tm":"993","tn":"216","to":"676","tr":"90","tt":"1","tv":"688","tw":"886","tz":"255","ua":"380","ug":"256","us":"1","uy":"598","uz":"998","va":"39","vc":"1","ve":"58","vg":"1","vi":"1","vn":"84","vu":"678","wf":"681","ws":"685","ye":"967","yt":"262","za":"27","zm":"260","zw":"263"};
+
+    PhoneCodes.territories = function() {
+      var data, _;
+      return this.codes || (this.codes = (function() {
+        var _ref, _results;
+        _ref = this.phone_codes;
+        _results = [];
+        for (data in _ref) {
+          _ = _ref[data];
+          _results.push(data);
+        }
+        return _results;
+      }).call(this));
+    };
+
+    PhoneCodes.code_for_territory = function(territory) {
+      var result;
+      result = this.phone_codes[territory];
+      if (result != null) {
+        return result;
+      } else {
+        return null;
+      }
+    };
+
+    return PhoneCodes;
+
+  })();
+
+  TwitterCldr.PostalCodes = (function() {
+    var find_regex, postal_codes;
+
+    function PostalCodes() {}
+
+    postal_codes = {"ad":"AD\\d{3}","am":"(37)?\\d{4}","ar":"([A-HJ-NP-Z])?\\d{4}([A-Z]{3})?","as":"96799","at":"\\d{4}","au":"\\d{4}","ax":"22\\d{3}","az":"\\d{4}","ba":"\\d{5}","bb":"(BB\\d{5})?","bd":"\\d{4}","be":"\\d{4}","bg":"\\d{4}","bh":"((1[0-2]|[2-9])\\d{2})?","bm":"[A-Z]{2}[ ]?[A-Z0-9]{2}","bn":"[A-Z]{2}[ ]?\\d{4}","br":"\\d{5}[\\-]?\\d{3}","by":"\\d{6}","ca":"[ABCEGHJKLMNPRSTVXY]\\d[ABCEGHJ-NPRSTV-Z][ ]?\\d[ABCEGHJ-NPRSTV-Z]\\d","cc":"6799","ch":"\\d{4}","ck":"\\d{4}","cl":"\\d{7}","cn":"\\d{6}","cr":"\\d{4,5}|\\d{3}-\\d{4}","cs":"\\d{5}","cv":"\\d{4}","cx":"6798","cy":"\\d{4}","cz":"\\d{3}[ ]?\\d{2}","de":"\\d{5}","dk":"\\d{4}","do":"\\d{5}","dz":"\\d{5}","ec":"([A-Z]\\d{4}[A-Z]|(?:[A-Z]{2})?\\d{6})?","ee":"\\d{5}","eg":"\\d{5}","es":"\\d{5}","et":"\\d{4}","fi":"\\d{5}","fk":"FIQQ 1ZZ","fm":"(9694[1-4])([ \\-]\\d{4})?","fo":"\\d{3}","fr":"\\d{2}[ ]?\\d{3}","gb":"GIR[ ]?0AA|((AB|AL|B|BA|BB|BD|BH|BL|BN|BR|BS|BT|CA|CB|CF|CH|CM|CO|CR|CT|CV|CW|DA|DD|DE|DG|DH|DL|DN|DT|DY|E|EC|EH|EN|EX|FK|FY|G|GL|GY|GU|HA|HD|HG|HP|HR|HS|HU|HX|IG|IM|IP|IV|JE|KA|KT|KW|KY|L|LA|LD|LE|LL|LN|LS|LU|M|ME|MK|ML|N|NE|NG|NN|NP|NR|NW|OL|OX|PA|PE|PH|PL|PO|PR|RG|RH|RM|S|SA|SE|SG|SK|SL|SM|SN|SO|SP|SR|SS|ST|SW|SY|TA|TD|TF|TN|TQ|TR|TS|TW|UB|W|WA|WC|WD|WF|WN|WR|WS|WV|YO|ZE)(\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}))|BFPO[ ]?\\d{1,4}","ge":"\\d{4}","gf":"9[78]3\\d{2}","gg":"GY\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}","gl":"39\\d{2}","gn":"\\d{3}","gp":"9[78][01]\\d{2}","gr":"\\d{3}[ ]?\\d{2}","gs":"SIQQ 1ZZ","gt":"\\d{5}","gu":"969[123]\\d([ \\-]\\d{4})?","gw":"\\d{4}","hm":"\\d{4}","hn":"(?:\\d{5})?","hr":"\\d{5}","ht":"\\d{4}","hu":"\\d{4}","id":"\\d{5}","ie":"((D|DUBLIN)?([1-9]|6[wW]|1[0-8]|2[024]))?","il":"\\d{5}","im":"IM\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}","in":"\\d{6}","io":"BBND 1ZZ","iq":"\\d{5}","is":"\\d{3}","it":"\\d{5}","je":"JE\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}","jo":"\\d{5}","jp":"\\d{3}-\\d{4}","ke":"\\d{5}","kg":"\\d{6}","kh":"\\d{5}","kr":"\\d{3}[\\-]\\d{3}","kw":"\\d{5}","kz":"\\d{6}","la":"\\d{5}","lb":"(\\d{4}([ ]?\\d{4})?)?","li":"(948[5-9])|(949[0-7])","lk":"\\d{5}","lr":"\\d{4}","ls":"\\d{3}","lt":"\\d{5}","lu":"\\d{4}","lv":"\\d{4}","ma":"\\d{5}","mc":"980\\d{2}","md":"\\d{4}","me":"8\\d{4}","mg":"\\d{3}","mh":"969[67]\\d([ \\-]\\d{4})?","mk":"\\d{4}","mn":"\\d{6}","mp":"9695[012]([ \\-]\\d{4})?","mq":"9[78]2\\d{2}","mt":"[A-Z]{3}[ ]?\\d{2,4}","mu":"(\\d{3}[A-Z]{2}\\d{3})?","mv":"\\d{5}","mx":"\\d{5}","my":"\\d{5}","nc":"988\\d{2}","ne":"\\d{4}","nf":"2899","ng":"(\\d{6})?","ni":"((\\d{4}-)?\\d{3}-\\d{3}(-\\d{1})?)?","nl":"\\d{4}[ ]?[A-Z]{2}","no":"\\d{4}","np":"\\d{5}","nz":"\\d{4}","om":"(PC )?\\d{3}","pf":"987\\d{2}","pg":"\\d{3}","ph":"\\d{4}","pk":"\\d{5}","pl":"\\d{2}-\\d{3}","pm":"9[78]5\\d{2}","pn":"PCRN 1ZZ","pr":"00[679]\\d{2}([ \\-]\\d{4})?","pt":"\\d{4}([\\-]\\d{3})?","pw":"96940","py":"\\d{4}","re":"9[78]4\\d{2}","ro":"\\d{6}","rs":"\\d{6}","ru":"\\d{6}","sa":"\\d{5}","se":"\\d{3}[ ]?\\d{2}","sg":"\\d{6}","sh":"(ASCN|STHL) 1ZZ","si":"\\d{4}","sj":"\\d{4}","sk":"\\d{3}[ ]?\\d{2}","sm":"4789\\d","sn":"\\d{5}","so":"\\d{5}","sz":"[HLMS]\\d{3}","tc":"TKCA 1ZZ","th":"\\d{5}","tj":"\\d{6}","tm":"\\d{6}","tn":"\\d{4}","tr":"\\d{5}","tw":"\\d{3}(\\d{2})?","ua":"\\d{5}","us":"\\d{5}([ \\-]\\d{4})?","uy":"\\d{5}","uz":"\\d{6}","va":"00120","ve":"\\d{4}","vi":"008(([0-4]\\d)|(5[01]))([ \\-]\\d{4})?","wf":"986\\d{2}","yt":"976\\d{2}","yu":"\\d{5}","za":"\\d{4}","zm":"\\d{5}"};
+
+    find_regex = function(territory) {
+      var regex_str;
+      regex_str = postal_codes[territory];
+      if (regex_str != null) {
+        return regex_str;
+      } else {
+        return null;
+      }
+    };
+
+    PostalCodes.territories = function() {
+      var data, _;
+      return this.codes || (this.codes = (function() {
+        var _results;
+        _results = [];
+        for (data in postal_codes) {
+          _ = postal_codes[data];
+          _results.push(data);
+        }
+        return _results;
+      })());
+    };
+
+    PostalCodes.regex_for_territory = function(territory) {
+      var regex;
+      regex = find_regex(territory);
+      if (regex != null) {
+        return new RegExp(regex);
+      } else {
+        return null;
+      }
+    };
+
+    PostalCodes.is_valid = function(territory, postal_code) {
+      var regex;
+      regex = this.regex_for_territory(territory);
+      return regex.test(postal_code);
+    };
+
+    return PostalCodes;
+
+  })();
+
+  TwitterCldr.Languages = (function() {
+    var rtl_data;
+
+    function Languages() {}
+
+    Languages.all = {"aa":"afarski","ab":"abhaski","ace":"achinese","ach":"acoli","ada":"adangme","ady":"adigejski","ae":"avestan","af":"afrikaans","afa":"ostali afričko-azijski","afh":"afrihili","agq":"aghem","ain":"ainu","ak":"akanski","akk":"akkadian","ale":"aleutski","alg":"algonquian","alt":"južni altai","am":"amharik","an":"aragonski","ang":"staroengleski","anp":"angika","apa":"apaški","ar":"arapski","ar-001":"Modern Standard Arabic","arc":"aramejski","arn":"araukanski","arp":"arapaho","art":"umjetni jezik","arw":"arawak","as":"asamski","asa":"asu","ast":"asturijski","ath":"athapascan","aus":"australski","av":"avarski","awa":"awadhi","ay":"aymara","az":"azerski","ba":"baškirski","bad":"banda","bai":"bamileke","bal":"baluchi","ban":"balinezijski","bas":"basa","bat":"baltički","bax":"bamunski","bbj":"ghomala","be":"bjeloruski","bej":"beja","bem":"bemba","ber":"berberski","bez":"bena","bfd":"bafut","bg":"bugarski","bh":"bihari","bho":"bhojpuri","bi":"bislama","bik":"bikol","bin":"bini","bkm":"kom","bla":"siksika","bm":"bambara","bn":"bengalski","bnt":"bantu","bo":"tibetanski","br":"bretonski","bra":"braj","brx":"bodo","bs":"bosanski","bss":"akoose","btk":"batak","bua":"buriat","bug":"buginski","bum":"bulu","byn":"blin","byv":"medumba","ca":"katalonski","cad":"caddo","cai":"jezik srednjoameričkih Indijanaca","car":"karipski","cau":"kavkaski","cay":"cayuga","cch":"atsam","ce":"čečenski","ceb":"cebuano","cel":"keltski","cgg":"chiga","ch":"chamorro","chb":"chibcha","chg":"chagatai","chk":"chuukese","chm":"mari","chn":"chinook žargon","cho":"choctaw","chp":"chipewyan","chr":"čeroki","chy":"čejenski","ckb":"soranski kurdski","cmc":"chamic","co":"korzički","cop":"koptski","cpe":"engleski - na osnovi kreolskog ili pidgin","cpf":"francuski - na osnovi kreolskog ili pidgin","cpp":"kreolski ili pidgin na osnovi portugalskog","cr":"cree","crh":"krimski turski","crp":"kreolski ili pidgin","cs":"češki","csb":"kašupski","cu":"crkvenoslavenski","cus":"kušitski","cv":"chuvash","cy":"velški","da":"danski","dak":"dakota jezik","dar":"dargwa","dav":"taita","day":"dayak","de":"njemački","de-AT":"austrijski njemački","de-CH":"gornjonjemački (švicarski)","del":"delavarski","den":"slave","dgr":"dogrib","din":"dinka","dje":"zarma","doi":"dogri","dra":"dravidski","dsb":"lužičkosrpski","dua":"duala","dum":"nizozemski, srednji","dv":"divehi","dyo":"jola-fonyi","dyu":"dyula","dz":"dzongkha","dzg":"dazaga","ebu":"embu","ee":"ewe","efi":"efik","egy":"staroegipatski","eka":"ekajuk","el":"grčki","elx":"elamitski","en":"engleski","en-AU":"engleski (australski)","en-CA":"kanadski engleski","en-GB":"engleski (britanski)","en-US":"engleski (američki)","enm":"engleski, srednji","eo":"esperanto","es":"španjolski","es-419":"španjolski (latinoamerički)","es-ES":"europski španjolski","et":"estonijski","eu":"baskijski","ewo":"ewondo","fa":"perzijski","fan":"fang","fat":"fanti","ff":"fulah","fi":"finski","fil":"filipino","fiu":"ugro-finski jezik","fj":"fidžijski","fo":"faroanski","fon":"fon","fr":"francuski","fr-CA":"kanadski francuski","fr-CH":"švicarski francuski","frm":"francuski, srednji","fro":"starofrancuski","frr":"sjevernofrizijski","frs":"istočnofrizijski","fur":"friulski","fy":"zapadnofrizijski","ga":"irski","gaa":"ga","gay":"gayo","gba":"gbaya","gd":"škotski-galski","gem":"germanski","gez":"staroetiopski","gil":"gilbertski","gl":"galicijski","gmh":"njemački, srednji visoki","gn":"guarani","goh":"staronjemački, visoki","gon":"gondi","gor":"gorontalo","got":"gothic","grb":"grebo","grc":"starogrčki","gsw":"švicarski njemački","gu":"gujarati","guz":"gusii","gv":"manx","gwi":"gwich'in","ha":"hausa","hai":"haidi","haw":"havajski","he":"hebrejski","hi":"hindski","hil":"hiligaynon","him":"himachali","hit":"hetitski","hmn":"hmong","ho":"hiri motu","hr":"hrvatski","hsb":"gornjolužički","ht":"kreolski","hu":"mađarski","hup":"hupa","hy":"armenski","hz":"herero","ia":"interlingua","iba":"iban","ibb":"ibibio","id":"indonezijski","ie":"interligua","ig":"igbo","ii":"sichuan yi","ijo":"ijo","ik":"inupiaq","ilo":"iloko","inc":"indijski","ine":"indoeuropski","inh":"ingušetski","io":"ido","ira":"iranski","iro":"irokeški","is":"islandski","it":"talijanski","iu":"inuktitut","ja":"japanski","jbo":"lojban","jgo":"Ngomba","jmc":"machame","jpr":"judejsko-perzijski","jrb":"judejsko-arapski","jv":"javanski","ka":"gruzijski","kaa":"kara-kalpak","kab":"kabyle","kac":"kachin","kaj":"kaje","kam":"kamba","kar":"karen","kaw":"kawi","kbd":"kabardian","kbl":"kanembu","kcg":"tyap","kde":"makonde","kea":"zelenortski","kfo":"koro","kg":"kongo","kha":"khasi","khi":"kojsanski","kho":"khotanese","khq":"koyra chiini","ki":"kikuyu","kj":"kuanyama","kk":"kazaški","kkj":"kako","kl":"kalaallisut","kln":"kalenjin","km":"kmerski","kmb":"kimbundu","kn":"kannadski","ko":"korejski","kok":"konkani","kos":"naurski","kpe":"kpelle","kr":"kanuri","krc":"karachay-balkar","krl":"karelijski","kro":"kru","kru":"kuruški","ks":"kašmirski","ksb":"shambala","ksf":"bafia","ksh":"kelnski","ku":"kurdski","kum":"kumyk","kut":"kutenai","kv":"komi","kw":"kornski","ky":"kirgiški","la":"latinski","lad":"ladino","lag":"langi","lah":"lahnda","lam":"lamba","lb":"luksemburški","lez":"lezgiški","lg":"ganda","li":"limburgish","lkt":"Lakota","ln":"lingala","lo":"laoski","lol":"mongo","loz":"lozi","lt":"litvanski","lu":"luba-katanga","lua":"luba-lulua","lui":"luiseno","lun":"lunda","luo":"luo","lus":"lushai","luy":"luyia","lv":"latvijski","mad":"madurski","maf":"mafa","mag":"magahi","mai":"maithili","mak":"makasar","man":"mandingo","map":"austronezijski","mas":"masajski","mde":"maba","mdf":"moksha","mdr":"mandar","men":"mende","mer":"meru","mfe":"mauricijski kreolski","mg":"malgaški","mga":"irski, srednji","mgh":"makhuwa-meetto","mgo":"Meta'","mh":"maršalski","mi":"maorski","mic":"micmac","min":"minangkabau","mis":"ostali jezici","mk":"makedonski","mkh":"mon-kmerski","ml":"malajalamski","mn":"mongolski","mnc":"mandžurski","mni":"manipurski","mno":"manobo","mo":"moldavski","moh":"mohawk","mos":"mossi","mr":"marathi","ms":"malajski","mt":"malteški","mua":"mundang","mul":"više jezika","mun":"munda","mus":"creek","mwl":"mirandski","mwr":"marwari","my":"burmanski","mye":"myene","myn":"majanski","myv":"mordvinski","na":"nauru","nah":"nahuatl","nai":"jezik sjevernoameričkih Indijanaca","nap":"napolitanski","naq":"nama","nb":"književni norveški","nd":"sjeverni ndebele","nds":"donjonjemački","ne":"nepalski","new":"newari","ng":"ndonga","nia":"nias","nic":"nigersko-kordofanski","niu":"niujski","nl":"nizozemski","nl-BE":"flamanski","nmg":"kwasio","nn":"novonorveški","nnh":"ngiemboon","no":"norveški","nog":"nogajski","non":"staronorveški","nqo":"n'ko","nr":"južni ndebele","nso":"sjeverni sotho","nub":"nubijski","nus":"nuer","nv":"navajo","nwc":"klasični newari","ny":"nyanja","nym":"nyamwezi","nyn":"nyankole","nyo":"nyoro","nzi":"nzima","oc":"okcitanski","oj":"ojibwa","om":"oromski","or":"orijski","os":"osetski","osa":"osage","ota":"turski - otomanski","oto":"otomijski","pa":"punjabi","paa":"papuanski","pag":"pangasinan","pal":"pahlavi","pam":"pampanga","pap":"papiamento","pau":"palauanski","peo":"staroperzijski","phi":"filipinski","phn":"fenički","pi":"pali","pl":"poljski","pon":"pohnpeian","pra":"prakrit","pro":"staroprovansalski","ps":"puštu","pt":"portugalski","pt-BR":"brazilski portugalski","pt-PT":"europski portugalski","qu":"quechua","raj":"rajasthani","rap":"rapa nui","rar":"rarotonški","rm":"romanš","rn":"rundi","ro":"rumunjski","roa":"romanski","rof":"rombo","rom":"romski","root":"korijenski","ru":"ruski","rup":"aromunski","rw":"kinyarwanda","rwk":"rwa","sa":"sanskrtski","sad":"sandawe","sah":"jakutski","sai":"jezik južnoameričkih Indijanaca","sal":"salishan","sam":"samarijanski aramejski","saq":"samburu","sas":"sasak","sat":"santali","sba":"ngambay","sbp":"sangu","sc":"sardski","scn":"sicilijski","sco":"škotski","sd":"sindhi","se":"južni sami","see":"seneca","seh":"sena","sel":"selkupski","sem":"semitic","ses":"koyraboro senni","sg":"sango","sga":"staroirski","sgn":"znakovni jezik","sh":"srpsko-hrvatski","shi":"tachelhit","shn":"shan","shu":"čadski arapski","si":"sinhaleški","sid":"sidamo","sio":"siouan","sit":"sino-tibetski","sk":"slovački","sl":"slovenski","sla":"slavenski","sm":"samoanski","sma":"sjeverni sami","smi":"sami","smj":"lule sami","smn":"inari sami","sms":"skolt sami","sn":"shona","snk":"soninke","so":"somalski","sog":"sogdien","son":"songhai","sq":"albanski","sr":"srpski","srn":"sranan tongo","srr":"serer","ss":"svati","ssa":"nilo-saharski","ssy":"saho","st":"sesotski","su":"sundanski","suk":"sukuma","sus":"susu","sux":"sumerski","sv":"švedski","sw":"svahili","swb":"komorski","swc":"kongoanski swahili","syc":"klasični sirski","syr":"sirijski","ta":"tamilski","tai":"tajski","te":"telugu","tem":"temne","teo":"teso","ter":"tereno","tet":"tetum","tg":"tajik","th":"tajlandski","ti":"tigrinya","tig":"tigriški","tiv":"tiv","tk":"turkmenski","tkl":"tokelaunski","tl":"tagalog","tlh":"klingonski","tli":"tlingit","tmh":"tamashek","tn":"cvana","to":"tonganski","tog":"nyasa tonga","tpi":"tok pisin","tr":"turski","trv":"taroko","ts":"tsonga","tsi":"tsimshian","tt":"tatarski","tum":"tumbuka","tup":"tupi","tut":"altajski","tvl":"tuvaluanski","tw":"twi","twq":"tasawaq","ty":"tahićanski","tyv":"tuvinian","tzm":"marokanski tamazight","udm":"udmurtski","ug":"ujgurski","uga":"ugaritski","uk":"ukrajinski","umb":"umbundu","und":"nepoznati jezik","ur":"urdski","uz":"uzbečki","vai":"vai","ve":"venda","vi":"vijetnamski","vo":"volapük","vot":"votic","vun":"vunjo","wa":"valonski","wae":"walser","wak":"wakashan","wal":"walamo","war":"waray","was":"washo","wen":"lužički","wo":"wolof","xal":"kalmyk","xh":"xhosa","xog":"soga","yao":"yao","yap":"japski","yav":"yangben","ybb":"yemba","yi":"jidiš","yo":"joruba","ypk":"yupik","yue":"kantonski","za":"zhuang","zap":"zapotec","zbl":"blissymbols","zen":"zenaga","zh":"kineski","zh-Hans":"kineski (pojednostavljeni)","zh-Hant":"kineski (tradicionalni)","znd":"zande","zu":"zulu","zun":"zuni","zxx":"bez jezičnog sadržaja","zza":"zazaki"};
+
+    rtl_data = {"af":false,"ar":true,"be":false,"bg":false,"bn":false,"ca":false,"cs":false,"cy":false,"da":false,"de":false,"el":false,"en":false,"en-GB":false,"es":false,"eu":false,"fa":true,"fi":false,"fil":false,"fr":false,"ga":false,"gl":false,"he":true,"hi":false,"hr":false,"hu":false,"id":false,"is":false,"it":false,"ja":false,"ko":false,"lv":false,"ms":false,"nb":false,"nl":false,"pl":false,"pt":false,"ro":false,"ru":false,"sk":false,"sq":false,"sr":false,"sv":false,"ta":false,"th":false,"tr":false,"uk":false,"ur":true,"vi":false,"zh":false,"zh-Hant":false};
+
+    Languages.from_code = function(code) {
+      return this.all[code] || null;
+    };
+
+    Languages.is_rtl = function(locale) {
+      var result;
+      result = rtl_data[locale];
+      if (result != null) {
+        return result;
+      } else {
+        return null;
+      }
+    };
+
+    return Languages;
 
   })();
 
@@ -1830,11 +1942,11 @@
       }
       if (punct_list.length > 0 && punct_list.slice(-1)[0]["type"] === "decimal") {
         result = parseInt(((function() {
-          var _j, _len1, _ref4, _results;
-          _ref4 = num_list.slice(0, -1);
+          var _j, _len1, _ref, _results;
+          _ref = num_list.slice(0, -1);
           _results = [];
-          for (_j = 0, _len1 = _ref4.length; _j < _len1; _j++) {
-            num = _ref4[_j];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            num = _ref[_j];
             _results.push(num.value);
           }
           return _results;
@@ -1880,7 +1992,11 @@
       if (callback) {
         return callback(result);
       } else {
-        return result || default_value;
+        if (result === null) {
+          return default_value;
+        } else {
+          return result;
+        }
       }
     };
 

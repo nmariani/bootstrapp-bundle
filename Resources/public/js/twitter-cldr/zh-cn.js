@@ -1,27 +1,30 @@
+
 /*
 // Copyright 2012 Twitter, Inc
 // http://www.apache.org/licenses/LICENSE-2.0
 
-// TwitterCLDR (JavaScript) v2.2.3
+// TwitterCLDR (JavaScript) v2.2.4
 // Authors:     Cameron Dutro [@camertron]
                 Kirill Lashuk [@KL_7]
                 portions by Sven Fuchs [@svenfuchs]
 // Homepage:    https://twitter.com
 // Description: Provides date, time, number, and list formatting functionality for various Twitter-supported locales in Javascript.
-*/
+ */
 
 
-/*<<module_def>>*/
-
+/*-module-*/
+/*_lib/twitter_cldr_*/
 
 (function() {
-  var TwitterCldr, key, obj, root, _ref, _ref1, _ref2, _ref3,
+  var TwitterCldr, key, obj, root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   TwitterCldr = {};
 
   TwitterCldr.is_rtl = false;
+
+  TwitterCldr.locale = "zh";
 
   TwitterCldr.Utilities = (function() {
     function Utilities() {}
@@ -288,22 +291,23 @@
     }
 
     DateTimeFormatter.prototype.format = function(obj, options) {
-      var format_token, token, tokens,
-        _this = this;
-      format_token = function(token) {
-        var result;
-        result = "";
-        switch (token.type) {
-          case "pattern":
-            return _this.result_for_token(token, obj);
-          default:
-            if (token.value.length > 0 && token.value[0] === "'" && token.value[token.value.length - 1] === "'") {
-              return token.value.substring(1, token.value.length - 1);
-            } else {
-              return token.value;
-            }
-        }
-      };
+      var format_token, token, tokens;
+      format_token = (function(_this) {
+        return function(token) {
+          var result;
+          result = "";
+          switch (token.type) {
+            case "pattern":
+              return _this.result_for_token(token, obj);
+            default:
+              if (token.value.length > 0 && token.value[0] === "'" && token.value[token.value.length - 1] === "'") {
+                return token.value.substring(1, token.value.length - 1);
+              } else {
+                return token.value;
+              }
+          }
+        };
+      })(this);
       tokens = this.get_tokens(obj, options);
       return ((function() {
         var _i, _len, _results;
@@ -569,7 +573,7 @@
     DateTimeFormatter.prototype.timezone = function(time, pattern, length) {
       var hours, minutes, offset, offsetString, sign;
       offset = time.getTimezoneOffset();
-      hours = ("00" + (Math.abs(offset) / 60).toString()).slice(-2);
+      hours = ("00" + (Math.floor(Math.abs(offset) / 60)).toString()).slice(-2);
       minutes = ("00" + (Math.abs(offset) % 60).toString()).slice(-2);
       sign = offset > 0 ? "-" : "+";
       offsetString = sign + hours + ":" + minutes;
@@ -744,7 +748,7 @@
     }
 
     NumberFormatter.prototype.format = function(number, options) {
-      var fraction, fraction_format, integer_format, intg, key, opts, prefix, result, sign, suffix, val, _ref, _ref1;
+      var fraction, fraction_format, integer_format, intg, key, opts, prefix, result, sign, suffix, tokens, val, _ref, _ref1;
       if (options == null) {
         options = {};
       }
@@ -753,18 +757,23 @@
         val = options[key];
         opts[key] = options[key] != null ? options[key] : opts[key];
       }
-      _ref = this.partition_tokens(this.get_tokens(number, opts)), prefix = _ref[0], suffix = _ref[1], integer_format = _ref[2], fraction_format = _ref[3];
-      number = this.transform_number(number);
-      _ref1 = this.parse_number(number, opts), intg = _ref1[0], fraction = _ref1[1];
-      result = integer_format.apply(parseFloat(intg), opts);
-      if (fraction) {
-        result += fraction_format.apply(fraction, opts);
+      tokens = this.get_tokens(number, opts);
+      if (tokens.join('') === '0') {
+        return number.toString();
+      } else {
+        _ref = this.partition_tokens(tokens), prefix = _ref[0], suffix = _ref[1], integer_format = _ref[2], fraction_format = _ref[3];
+        number = this.truncate_number(number, integer_format);
+        _ref1 = this.parse_number(number, opts), intg = _ref1[0], fraction = _ref1[1];
+        result = integer_format.apply(parseFloat(intg), opts);
+        if (fraction) {
+          result += fraction_format.apply(fraction, opts);
+        }
+        sign = number < 0 && prefix !== "-" ? this.symbols.minus_sign || this.default_symbols.minus_sign : "";
+        return "" + prefix + result + suffix;
       }
-      sign = number < 0 && prefix !== "-" ? this.symbols.minus_sign || this.default_symbols.minus_sign : "";
-      return "" + prefix + result + suffix;
     };
 
-    NumberFormatter.prototype.transform_number = function(number) {
+    NumberFormatter.prototype.truncate_number = function(number, integer_format) {
       return number;
     };
 
@@ -850,8 +859,7 @@
     __extends(DecimalFormatter, _super);
 
     function DecimalFormatter() {
-      _ref = DecimalFormatter.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return DecimalFormatter.__super__.constructor.apply(this, arguments);
     }
 
     DecimalFormatter.prototype.format = function(number, options) {
@@ -955,8 +963,7 @@
     __extends(AbbreviatedNumberFormatter, _super);
 
     function AbbreviatedNumberFormatter() {
-      _ref1 = AbbreviatedNumberFormatter.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return AbbreviatedNumberFormatter.__super__.constructor.apply(this, arguments);
     }
 
     AbbreviatedNumberFormatter.prototype.NUMBER_MAX = Math.pow(10, 15);
@@ -976,9 +983,9 @@
     AbbreviatedNumberFormatter.prototype.get_key = function(number) {
       var i, zeroes;
       zeroes = ((function() {
-        var _i, _ref2, _results;
+        var _i, _ref, _results;
         _results = [];
-        for (i = _i = 0, _ref2 = Math.floor(number).toString().length - 1; 0 <= _ref2 ? _i < _ref2 : _i > _ref2; i = 0 <= _ref2 ? ++_i : --_i) {
+        for (i = _i = 0, _ref = Math.floor(number).toString().length - 1; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
           _results.push("0");
         }
         return _results;
@@ -1001,12 +1008,11 @@
       return tokens;
     };
 
-    AbbreviatedNumberFormatter.prototype.transform_number = function(number) {
-      var factor, power;
-      if ((number < this.NUMBER_MAX) && (number >= this.NUMBER_MIN)) {
-        power = Math.floor((number.toString().length - 1) / 3) * 3;
-        factor = Math.pow(10, power);
-        return number / factor;
+    AbbreviatedNumberFormatter.prototype.truncate_number = function(number, integer_format) {
+      var factor;
+      if (this.NUMBER_MIN <= number && number < this.NUMBER_MAX) {
+        factor = Math.max(0, Math.floor(number).toString().length - integer_format.format.length);
+        return number / Math.pow(10, factor);
       } else {
         return number;
       }
@@ -1020,8 +1026,7 @@
     __extends(ShortDecimalFormatter, _super);
 
     function ShortDecimalFormatter() {
-      _ref2 = ShortDecimalFormatter.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return ShortDecimalFormatter.__super__.constructor.apply(this, arguments);
     }
 
     ShortDecimalFormatter.prototype.get_type = function() {
@@ -1036,8 +1041,7 @@
     __extends(LongDecimalFormatter, _super);
 
     function LongDecimalFormatter() {
-      _ref3 = LongDecimalFormatter.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return LongDecimalFormatter.__super__.constructor.apply(this, arguments);
     }
 
     LongDecimalFormatter.prototype.get_type = function() {
@@ -1158,9 +1162,9 @@
       })();
       widths.reverse();
       return ((function() {
-        var _i, _ref4, _results;
+        var _i, _ref, _results;
         _results = [];
-        for (index = _i = 0, _ref4 = widths.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; index = 0 <= _ref4 ? ++_i : --_i) {
+        for (index = _i = 0, _ref = widths.length; 0 <= _ref ? _i < _ref : _i > _ref; index = 0 <= _ref ? ++_i : --_i) {
           if (widths.indexOf(widths[index], index + 1) === -1) {
             _results.push(widths[index]);
           }
@@ -1239,11 +1243,11 @@
     Currencies.currency_codes = function() {
       var data, _;
       return this.codes || (this.codes = (function() {
-        var _ref4, _results;
-        _ref4 = this.currencies;
+        var _ref, _results;
+        _ref = this.currencies;
         _results = [];
-        for (_ in _ref4) {
-          data = _ref4[_];
+        for (_ in _ref) {
+          data = _ref[_];
           _results.push(data.code);
         }
         return _results;
@@ -1251,11 +1255,11 @@
     };
 
     Currencies.for_code = function(currency_code) {
-      var country_name, data, result, _ref4;
+      var country_name, data, result, _ref;
       result = null;
-      _ref4 = this.currencies;
-      for (country_name in _ref4) {
-        data = _ref4[country_name];
+      _ref = this.currencies;
+      for (country_name in _ref) {
+        data = _ref[country_name];
         if (data.currency === currency_code) {
           result = {
             country: country_name,
@@ -1290,10 +1294,10 @@
     };
 
     ListFormatter.prototype.compose_list = function(list) {
-      var format_key, i, result, _i, _ref4;
+      var format_key, i, result, _i, _ref;
       result = this.compose(this.formats.end || this.formats.middle || "", [list[list.length - 2], list[list.length - 1]]);
       if (list.length > 2) {
-        for (i = _i = 3, _ref4 = list.length; 3 <= _ref4 ? _i <= _ref4 : _i >= _ref4; i = 3 <= _ref4 ? ++_i : --_i) {
+        for (i = _i = 3, _ref = list.length; 3 <= _ref ? _i <= _ref : _i >= _ref; i = 3 <= _ref ? ++_i : --_i) {
           format_key = i === list.length ? "start" : "middle";
           if (this.formats[format_key] == null) {
             format_key = "middle";
@@ -1311,23 +1315,21 @@
         _results = [];
         for (_i = 0, _len = elements.length; _i < _len; _i++) {
           element = elements[_i];
-          if (element !== null) {
+          if (element != null) {
             _results.push(element);
           }
         }
         return _results;
       })();
       if (elements.length > 1) {
-        result = format.replace(/\{(\d+)\}/g, function() {
-          return RegExp.$1;
-        });
+        result = format.replace(/\{(\d+)\}/g, '$1');
         if (TwitterCldr.is_rtl) {
           result = TwitterCldr.Bidi.from_string(result, {
             "direction": "RTL"
           }).reorder_visually().toString();
         }
-        return result.replace(/(\d+)/g, function() {
-          return elements[parseInt(RegExp.$1)];
+        return result.replace(/(\d+)/g, function(match) {
+          return elements[parseInt(match)];
         });
       } else {
         return elements[0] || "";
@@ -1359,10 +1361,10 @@
     }
 
     Bidi.bidi_class_for = function(code_point) {
-      var bidi_class, end, range, range_list, range_offset, ranges, start, _i, _len, _ref4;
-      _ref4 = this.bidi_classes;
-      for (bidi_class in _ref4) {
-        ranges = _ref4[bidi_class];
+      var bidi_class, end, range, range_list, range_offset, ranges, start, _i, _len, _ref;
+      _ref = this.bidi_classes;
+      for (bidi_class in _ref) {
+        ranges = _ref[bidi_class];
         for (range_offset in ranges) {
           range_list = ranges[range_offset];
           for (_i = 0, _len = range_list.length; _i < _len; _i++) {
@@ -1412,15 +1414,15 @@
     };
 
     Bidi.prototype.reorder_visually = function() {
-      var depth, finish, i, level, lowest_odd, max, start, tmpb, tmpo, _i, _j, _k, _len, _ref4, _ref5;
+      var depth, finish, i, level, lowest_odd, max, start, tmpb, tmpo, _i, _j, _k, _len, _ref, _ref1;
       if (!this.string_arr) {
         throw "No string given!";
       }
       max = 0;
       lowest_odd = MAX_DEPTH + 1;
-      _ref4 = this.levels;
-      for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
-        level = _ref4[_i];
+      _ref = this.levels;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        level = _ref[_i];
         max = TwitterCldr.Utilities.max([level, max]);
         if (!TwitterCldr.Utilities.is_even(level)) {
           lowest_odd = TwitterCldr.Utilities.min([lowest_odd, level]);
@@ -1439,7 +1441,7 @@
           while (finish < this.levels.length && this.levels[finish] >= depth) {
             finish += 1;
           }
-          for (i = _k = 0, _ref5 = (finish - start) / 2; 0 <= _ref5 ? _k < _ref5 : _k > _ref5; i = 0 <= _ref5 ? ++_k : --_k) {
+          for (i = _k = 0, _ref1 = (finish - start) / 2; 0 <= _ref1 ? _k < _ref1 : _k > _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
             tmpb = this.levels[finish - i - 1];
             this.levels[finish - i - 1] = this.levels[start + i];
             this.levels[start + i] = tmpb;
@@ -1454,7 +1456,7 @@
     };
 
     Bidi.prototype.compute_paragraph_embedding_level = function() {
-      var type, _i, _len, _ref4;
+      var type, _i, _len, _ref;
       if (["LTR", "RTL"].indexOf(this.direction) > -1) {
         if (this.direction === "LTR") {
           return 0;
@@ -1462,9 +1464,9 @@
           return 1;
         }
       } else {
-        _ref4 = this.types;
-        for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
-          type = _ref4[_i];
+        _ref = this.types;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          type = _ref[_i];
           if (type === "L") {
             return 0;
           }
@@ -1481,13 +1483,13 @@
     };
 
     Bidi.prototype.compute_explicit_levels = function() {
-      var current_embedding, directional_override, embedding_stack, i, input, is_ltr, is_special, len, new_embedding, next_fmt, output, size, sp, _i, _j, _ref4, _ref5;
+      var current_embedding, directional_override, embedding_stack, i, input, is_ltr, is_special, len, new_embedding, next_fmt, output, size, sp, _i, _j, _ref, _ref1;
       current_embedding = this.base_embedding;
       directional_override = -1;
       embedding_stack = [];
       this.formatter_indices || (this.formatter_indices = []);
       sp = 0;
-      for (i = _i = 0, _ref4 = this.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; i = 0 <= _ref4 ? ++_i : --_i) {
+      for (i = _i = 0, _ref = this.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         is_ltr = false;
         is_special = true;
         is_ltr = this.types[i] === "LRE" || this.types[i] === "LRO";
@@ -1512,7 +1514,7 @@
               sp -= 1;
               new_embedding = embedding_stack[sp];
               current_embedding = new_embedding & 0x7f;
-              directional_override = new_embedding < 0 ? (_ref5 = (new_embedding & 1) === 0) != null ? _ref5 : {
+              directional_override = new_embedding < 0 ? (_ref1 = (new_embedding & 1) === 0) != null ? _ref1 : {
                 "L": "R"
               } : -1;
             }
@@ -1542,10 +1544,10 @@
     };
 
     Bidi.prototype.compute_runs = function() {
-      var current_embedding, i, last_run_start, run_count, where, _i, _j, _ref4, _ref5;
+      var current_embedding, i, last_run_start, run_count, where, _i, _j, _ref, _ref1;
       run_count = 0;
       current_embedding = this.base_embedding;
-      for (i = _i = 0, _ref4 = this.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; i = 0 <= _ref4 ? ++_i : --_i) {
+      for (i = _i = 0, _ref = this.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         if (this.levels[i] !== current_embedding) {
           current_embedding = this.levels[i];
           run_count += 1;
@@ -1554,7 +1556,7 @@
       where = 0;
       last_run_start = 0;
       current_embedding = this.base_embedding;
-      for (i = _j = 0, _ref5 = this.length; 0 <= _ref5 ? _j < _ref5 : _j > _ref5; i = 0 <= _ref5 ? ++_j : --_j) {
+      for (i = _j = 0, _ref1 = this.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
         if (this.levels[i] !== current_embedding) {
           this.runs[where] = last_run_start;
           where += 1;
@@ -1649,8 +1651,8 @@
     };
 
     Bidi.prototype.resolve_implicit_levels = function() {
-      var i, _i, _ref4;
-      for (i = _i = 0, _ref4 = this.length; 0 <= _ref4 ? _i < _ref4 : _i > _ref4; i = 0 <= _ref4 ? ++_i : --_i) {
+      var i, _i, _ref;
+      for (i = _i = 0, _ref = this.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         if ((this.levels[i] & 1) === 0) {
           if (this.types[i] === "R") {
             this.levels[i] += 1;
@@ -1719,11 +1721,11 @@
     };
 
     Bidi.prototype.reinsert_formatting_codes = function() {
-      var index, input, left_level, len, next_fmt, output, right_level, _i, _ref4;
+      var index, input, left_level, len, next_fmt, output, right_level, _i, _ref;
       if ((this.formatter_indices != null) && this.formatter_indices.length > 0) {
         input = this.length;
         output = this.levels.length;
-        for (index = _i = _ref4 = this.formatter_indices.length - 1; _ref4 <= 0 ? _i <= 0 : _i >= 0; index = _ref4 <= 0 ? ++_i : --_i) {
+        for (index = _i = _ref = this.formatter_indices.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; index = _ref <= 0 ? ++_i : --_i) {
           next_fmt = this.formatter_indices[index];
           len = output - next_fmt - 1;
           output = next_fmt;
@@ -1781,17 +1783,127 @@
     };
 
     Calendar.get_root = function(key, options) {
-      var format, names_form, root, _ref4;
+      var format, names_form, root, _ref;
       if (options == null) {
         options = {};
       }
       root = this.calendar[key];
       names_form = options["names_form"] || "wide";
-      format = options.format || ((root != null ? (_ref4 = root["stand-alone"]) != null ? _ref4[names_form] : void 0 : void 0) != null ? "stand-alone" : "format");
+      format = options.format || ((root != null ? (_ref = root["stand-alone"]) != null ? _ref[names_form] : void 0 : void 0) != null ? "stand-alone" : "format");
       return root[format][names_form];
     };
 
     return Calendar;
+
+  })();
+
+  TwitterCldr.PhoneCodes = (function() {
+    function PhoneCodes() {}
+
+    PhoneCodes.phone_codes = {"ac":"247","ad":"376","ae":"971","af":"93","ag":"1","ai":"1","al":"355","am":"374","an":"599","ao":"244","aq":"672","ar":"54","as":"1","at":"43","au":"61","aw":"297","ax":"358","az":"994","ba":"387","bb":"1","bd":"880","be":"32","bf":"226","bg":"359","bh":"973","bi":"257","bj":"229","bl":"590","bm":"1","bn":"673","bo":"591","br":"55","bs":"1","bt":"975","bw":"267","by":"375","bz":"501","ca":"1","cc":"61","cd":"243","cf":"236","cg":"242","ch":"41","ci":"225","ck":"682","cl":"56","cm":"237","cn":"86","co":"57","cr":"506","cu":"53","cv":"238","cx":"61","cy":"357","cz":"420","de":"49","dj":"253","dk":"45","dm":"1","do":"1","dz":"213","ec":"593","ee":"372","eg":"20","er":"291","es":"34","et":"251","fi":"358","fj":"679","fk":"500","fm":"691","fo":"298","fr":"33","ga":"241","gb":"44","gd":"1","ge":"995","gf":"594","gg":"44","gh":"233","gi":"350","gl":"299","gm":"220","gn":"224","gp":"590","gq":"240","gr":"30","gt":"502","gu":"1","gw":"245","gy":"592","hk":"852","hn":"504","hr":"385","ht":"509","hu":"36","id":"62","ie":"353","il":"972","im":"44","in":"91","io":"246","iq":"964","ir":"98","is":"354","it":"39","je":"44","jm":"1","jo":"962","jp":"81","ke":"254","kg":"996","kh":"855","ki":"686","km":"269","kn":"1","kp":"850","kr":"82","kw":"965","ky":"1","kz":"7","la":"856","lb":"961","lc":"1","li":"423","lk":"94","lr":"231","ls":"266","lt":"370","lu":"352","lv":"371","ly":"218","ma":"212","mc":"377","md":"373","me":"382","mg":"261","mh":"692","mk":"389","ml":"223","mm":"95","mn":"976","mo":"853","mp":"1","mq":"596","mr":"222","ms":"1","mt":"356","mu":"230","mv":"960","mw":"265","mx":"52","my":"60","mz":"258","na":"264","nc":"687","ne":"227","nf":"672","ng":"234","ni":"505","nl":"31","no":"47","np":"977","nr":"674","nu":"683","nz":"64","om":"968","pa":"507","pe":"51","pf":"689","pg":"675","ph":"63","pk":"92","pl":"48","pm":"508","pr":"1","ps":"972","pt":"351","pw":"680","py":"595","qa":"974","re":"262","ro":"40","rs":"381","ru":"7","rw":"250","sa":"966","sb":"677","sc":"248","sd":"249","se":"46","sg":"65","sh":"290","si":"386","sj":"47","sk":"421","sl":"232","sm":"378","sn":"221","so":"252","sr":"597","ss":"211","st":"239","sv":"503","sy":"963","sz":"268","tc":"1","td":"235","tf":"262","tg":"228","th":"66","tj":"992","tk":"690","tl":"670","tm":"993","tn":"216","to":"676","tr":"90","tt":"1","tv":"688","tw":"886","tz":"255","ua":"380","ug":"256","us":"1","uy":"598","uz":"998","va":"39","vc":"1","ve":"58","vg":"1","vi":"1","vn":"84","vu":"678","wf":"681","ws":"685","ye":"967","yt":"262","za":"27","zm":"260","zw":"263"};
+
+    PhoneCodes.territories = function() {
+      var data, _;
+      return this.codes || (this.codes = (function() {
+        var _ref, _results;
+        _ref = this.phone_codes;
+        _results = [];
+        for (data in _ref) {
+          _ = _ref[data];
+          _results.push(data);
+        }
+        return _results;
+      }).call(this));
+    };
+
+    PhoneCodes.code_for_territory = function(territory) {
+      var result;
+      result = this.phone_codes[territory];
+      if (result != null) {
+        return result;
+      } else {
+        return null;
+      }
+    };
+
+    return PhoneCodes;
+
+  })();
+
+  TwitterCldr.PostalCodes = (function() {
+    var find_regex, postal_codes;
+
+    function PostalCodes() {}
+
+    postal_codes = {"ad":"AD\\d{3}","am":"(37)?\\d{4}","ar":"([A-HJ-NP-Z])?\\d{4}([A-Z]{3})?","as":"96799","at":"\\d{4}","au":"\\d{4}","ax":"22\\d{3}","az":"\\d{4}","ba":"\\d{5}","bb":"(BB\\d{5})?","bd":"\\d{4}","be":"\\d{4}","bg":"\\d{4}","bh":"((1[0-2]|[2-9])\\d{2})?","bm":"[A-Z]{2}[ ]?[A-Z0-9]{2}","bn":"[A-Z]{2}[ ]?\\d{4}","br":"\\d{5}[\\-]?\\d{3}","by":"\\d{6}","ca":"[ABCEGHJKLMNPRSTVXY]\\d[ABCEGHJ-NPRSTV-Z][ ]?\\d[ABCEGHJ-NPRSTV-Z]\\d","cc":"6799","ch":"\\d{4}","ck":"\\d{4}","cl":"\\d{7}","cn":"\\d{6}","cr":"\\d{4,5}|\\d{3}-\\d{4}","cs":"\\d{5}","cv":"\\d{4}","cx":"6798","cy":"\\d{4}","cz":"\\d{3}[ ]?\\d{2}","de":"\\d{5}","dk":"\\d{4}","do":"\\d{5}","dz":"\\d{5}","ec":"([A-Z]\\d{4}[A-Z]|(?:[A-Z]{2})?\\d{6})?","ee":"\\d{5}","eg":"\\d{5}","es":"\\d{5}","et":"\\d{4}","fi":"\\d{5}","fk":"FIQQ 1ZZ","fm":"(9694[1-4])([ \\-]\\d{4})?","fo":"\\d{3}","fr":"\\d{2}[ ]?\\d{3}","gb":"GIR[ ]?0AA|((AB|AL|B|BA|BB|BD|BH|BL|BN|BR|BS|BT|CA|CB|CF|CH|CM|CO|CR|CT|CV|CW|DA|DD|DE|DG|DH|DL|DN|DT|DY|E|EC|EH|EN|EX|FK|FY|G|GL|GY|GU|HA|HD|HG|HP|HR|HS|HU|HX|IG|IM|IP|IV|JE|KA|KT|KW|KY|L|LA|LD|LE|LL|LN|LS|LU|M|ME|MK|ML|N|NE|NG|NN|NP|NR|NW|OL|OX|PA|PE|PH|PL|PO|PR|RG|RH|RM|S|SA|SE|SG|SK|SL|SM|SN|SO|SP|SR|SS|ST|SW|SY|TA|TD|TF|TN|TQ|TR|TS|TW|UB|W|WA|WC|WD|WF|WN|WR|WS|WV|YO|ZE)(\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}))|BFPO[ ]?\\d{1,4}","ge":"\\d{4}","gf":"9[78]3\\d{2}","gg":"GY\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}","gl":"39\\d{2}","gn":"\\d{3}","gp":"9[78][01]\\d{2}","gr":"\\d{3}[ ]?\\d{2}","gs":"SIQQ 1ZZ","gt":"\\d{5}","gu":"969[123]\\d([ \\-]\\d{4})?","gw":"\\d{4}","hm":"\\d{4}","hn":"(?:\\d{5})?","hr":"\\d{5}","ht":"\\d{4}","hu":"\\d{4}","id":"\\d{5}","ie":"((D|DUBLIN)?([1-9]|6[wW]|1[0-8]|2[024]))?","il":"\\d{5}","im":"IM\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}","in":"\\d{6}","io":"BBND 1ZZ","iq":"\\d{5}","is":"\\d{3}","it":"\\d{5}","je":"JE\\d[\\dA-Z]?[ ]?\\d[ABD-HJLN-UW-Z]{2}","jo":"\\d{5}","jp":"\\d{3}-\\d{4}","ke":"\\d{5}","kg":"\\d{6}","kh":"\\d{5}","kr":"\\d{3}[\\-]\\d{3}","kw":"\\d{5}","kz":"\\d{6}","la":"\\d{5}","lb":"(\\d{4}([ ]?\\d{4})?)?","li":"(948[5-9])|(949[0-7])","lk":"\\d{5}","lr":"\\d{4}","ls":"\\d{3}","lt":"\\d{5}","lu":"\\d{4}","lv":"\\d{4}","ma":"\\d{5}","mc":"980\\d{2}","md":"\\d{4}","me":"8\\d{4}","mg":"\\d{3}","mh":"969[67]\\d([ \\-]\\d{4})?","mk":"\\d{4}","mn":"\\d{6}","mp":"9695[012]([ \\-]\\d{4})?","mq":"9[78]2\\d{2}","mt":"[A-Z]{3}[ ]?\\d{2,4}","mu":"(\\d{3}[A-Z]{2}\\d{3})?","mv":"\\d{5}","mx":"\\d{5}","my":"\\d{5}","nc":"988\\d{2}","ne":"\\d{4}","nf":"2899","ng":"(\\d{6})?","ni":"((\\d{4}-)?\\d{3}-\\d{3}(-\\d{1})?)?","nl":"\\d{4}[ ]?[A-Z]{2}","no":"\\d{4}","np":"\\d{5}","nz":"\\d{4}","om":"(PC )?\\d{3}","pf":"987\\d{2}","pg":"\\d{3}","ph":"\\d{4}","pk":"\\d{5}","pl":"\\d{2}-\\d{3}","pm":"9[78]5\\d{2}","pn":"PCRN 1ZZ","pr":"00[679]\\d{2}([ \\-]\\d{4})?","pt":"\\d{4}([\\-]\\d{3})?","pw":"96940","py":"\\d{4}","re":"9[78]4\\d{2}","ro":"\\d{6}","rs":"\\d{6}","ru":"\\d{6}","sa":"\\d{5}","se":"\\d{3}[ ]?\\d{2}","sg":"\\d{6}","sh":"(ASCN|STHL) 1ZZ","si":"\\d{4}","sj":"\\d{4}","sk":"\\d{3}[ ]?\\d{2}","sm":"4789\\d","sn":"\\d{5}","so":"\\d{5}","sz":"[HLMS]\\d{3}","tc":"TKCA 1ZZ","th":"\\d{5}","tj":"\\d{6}","tm":"\\d{6}","tn":"\\d{4}","tr":"\\d{5}","tw":"\\d{3}(\\d{2})?","ua":"\\d{5}","us":"\\d{5}([ \\-]\\d{4})?","uy":"\\d{5}","uz":"\\d{6}","va":"00120","ve":"\\d{4}","vi":"008(([0-4]\\d)|(5[01]))([ \\-]\\d{4})?","wf":"986\\d{2}","yt":"976\\d{2}","yu":"\\d{5}","za":"\\d{4}","zm":"\\d{5}"};
+
+    find_regex = function(territory) {
+      var regex_str;
+      regex_str = postal_codes[territory];
+      if (regex_str != null) {
+        return regex_str;
+      } else {
+        return null;
+      }
+    };
+
+    PostalCodes.territories = function() {
+      var data, _;
+      return this.codes || (this.codes = (function() {
+        var _results;
+        _results = [];
+        for (data in postal_codes) {
+          _ = postal_codes[data];
+          _results.push(data);
+        }
+        return _results;
+      })());
+    };
+
+    PostalCodes.regex_for_territory = function(territory) {
+      var regex;
+      regex = find_regex(territory);
+      if (regex != null) {
+        return new RegExp(regex);
+      } else {
+        return null;
+      }
+    };
+
+    PostalCodes.is_valid = function(territory, postal_code) {
+      var regex;
+      regex = this.regex_for_territory(territory);
+      return regex.test(postal_code);
+    };
+
+    return PostalCodes;
+
+  })();
+
+  TwitterCldr.Languages = (function() {
+    var rtl_data;
+
+    function Languages() {}
+
+    Languages.all = {"aa":"阿法文","ab":"阿布哈西亚文","ace":"亚齐文","ach":"阿乔利文","ada":"阿当梅文","ady":"阿迪何文","ae":"阿维斯塔文","af":"南非荷兰文","afa":"其他亚非语系","afh":"阿弗里希利文","agq":"亚罕文","ain":"阿伊努文","ak":"阿肯文","akk":"阿卡德文","ale":"阿留申文","alg":"其他阿尔贡语系","alt":"南阿尔泰文","am":"阿姆哈拉文","an":"阿拉贡文","ang":"古英文","anp":"昂加文","apa":"阿帕切文","ar":"阿拉伯文","ar-001":"Modern Standard Arabic","arc":"阿拉米文","arn":"阿劳坎文","arp":"阿拉帕霍文","art":"其他人工语系","arw":"阿拉瓦克文","as":"阿萨姆文","asa":"阿苏文","ast":"阿斯图里亚思特文","ath":"阿萨帕斯坎语系","aus":"澳大利亚语系","av":"阿瓦尔文","awa":"阿瓦乔文","ay":"艾马拉文","az":"阿塞拜疆文","ba":"巴什客尔文","bad":"班达文","bai":"巴米累克语系","bal":"俾路支文","ban":"巴里文","bas":"巴萨文","bat":"其他波罗的语系","bax":"巴姆穆文","bbj":"戈马拉文","be":"白俄罗斯文","bej":"别札文","bem":"别姆巴文","ber":"柏柏尔文","bez":"贝纳文","bfd":"巴非特文","bg":"保加利亚文","bh":"比哈尔文","bho":"博杰普尔文","bi":"比斯拉马文","bik":"毕库尔文","bin":"比尼文","bkm":"科姆文","bla":"司克司卡文","bm":"班巴拉文","bn":"孟加拉文","bnt":"班图文","bo":"藏文","br":"布里多尼文","bra":"布拉杰文","brx":"博多文","bs":"波斯尼亚文","bss":"阿库色文","btk":"巴塔克文","bua":"布里亚特文","bug":"布吉文","bum":"布鲁文","byn":"布林文","byv":"梅敦巴文","ca":"加泰罗尼亚文","cad":"卡多文","cai":"其他中美印第安语系","car":"巴勒比文","cau":"其他高加索语系","cay":"卡尤加文","cch":"阿灿文","ce":"车臣文","ceb":"宿务文","cel":"其他凯尔特语系","cgg":"奇加文","ch":"查莫罗文","chb":"契布卡文","chg":"查加文","chk":"楚吾克文","chm":"马里文","chn":"契努克文","cho":"乔克托文","chp":"佩瓦扬文","chr":"彻罗基文","chy":"夏延文","ckb":"索拉尼库尔德文","cmc":"查米克文","co":"科西嘉文","cop":"科普特文","cpe":"其他以英文为基础的克里奥尔混合语系","cpf":"其他以法文为基础的克里奥尔混合语系","cpp":"其他以葡萄牙文为基础的克里奥尔混合语系","cr":"克里族文","crh":"克里米亚土耳其文","crp":"其他克里奥尔混合语系","cs":"捷克文","csb":"卡舒文","cu":"宗教斯拉夫文","cus":"其他库施特语系","cv":"楚瓦什文","cy":"威尔士文","da":"丹麦文","dak":"达科他文","dar":"达尔格瓦文","dav":"台塔文","day":"达雅克文","de":"德文","de-AT":"奥地利德文","de-CH":"瑞士高地德文","del":"特拉华文","den":"司雷夫文","dgr":"多格里布文","din":"丁卡文","dje":"哲尔马文","doi":"多格拉文","dra":"其他德拉维语系","dsb":"下索布文","dua":"都阿拉文","dum":"中古荷兰文","dv":"迪维希文","dyo":"朱拉文","dyu":"迪尤拉文","dz":"不丹文","dzg":"达扎葛文","ebu":"恩布文","ee":"埃维文","efi":"埃菲克文","egy":"古埃及文","eka":"埃克丘克文","el":"希腊文","elx":"艾拉米特文","en":"英文","en-AU":"澳大利亚英文","en-CA":"加拿大英文","en-GB":"英国英文","en-US":"美国英文","enm":"中古英文","eo":"世界文","es":"西班牙文","es-419":"拉丁美洲西班牙文","es-ES":"西班牙语（伊比利亚）","et":"爱沙尼亚文","eu":"巴斯克文","ewo":"旺杜文","fa":"波斯文","fan":"芳格文","fat":"芳蒂文","ff":"夫拉文","fi":"芬兰文","fil":"菲律宾文","fiu":"其他芬兰乌戈尔语系","fj":"斐济文","fo":"法罗文","fon":"丰文","fr":"法文","fr-CA":"加拿大法文","fr-CH":"瑞士法文","frm":"中古法文","fro":"古法文","frr":"北弗里西亚文","frs":"东弗里西亚文","fur":"弗留利文","fy":"西弗里西亚文","ga":"爱尔兰文","gaa":"加文","gay":"迦约文","gba":"葛巴亚文","gd":"苏格兰盖尔文","gem":"其他日尔曼语系","gez":"吉兹文","gil":"吉尔伯特斯文","gl":"加利西亚文","gmh":"中古高地德文","gn":"瓜拉尼文","goh":"古高地德文","gon":"岗德文","gor":"科洛涅达罗文","got":"哥特文","grb":"格列博文","grc":"古希腊文","gsw":"瑞士德文","gu":"古吉拉特文","guz":"古西文","gv":"马恩岛文","gwi":"吉维克琴文","ha":"豪萨文","hai":"海达文","haw":"夏威夷文","he":"希伯来文","hi":"印地文","hil":"希利盖农文","him":"赫马查利文","hit":"赫梯文","hmn":"赫蒙文","ho":"希里莫图文","hr":"克罗地亚文","hsb":"上索布文","ht":"海地文","hu":"匈牙利文","hup":"胡帕文","hy":"亚美尼亚文","hz":"赫雷罗文","ia":"国际文字","iba":"伊班文","ibb":"伊比比奥文","id":"印度尼西亚文","ie":"国际文字（E）","ig":"伊布文","ii":"四川彝文","ijo":"伊乔文","ik":"依奴皮维克文","ilo":"伊洛干诺文","inc":"其他印度语系","ine":"其他印欧语系","inh":"印古什文","io":"伊多文","ira":"伊朗文","iro":"伊洛魁语系","is":"冰岛文","it":"意大利文","iu":"伊努伊特文","ja":"日文","jbo":"逻辑文","jgo":"Ngomba","jmc":"马切姆文","jpr":"犹太波斯文","jrb":"犹太阿拉伯文","jv":"爪哇文","ka":"格鲁吉亚文","kaa":"卡拉卡尔帕克文","kab":"卡比尔文","kac":"卡琴文","kaj":"卡捷文","kam":"卡姆巴文","kar":"喀伦文","kaw":"卡威文","kbd":"卡巴尔达文","kbl":"加涅姆布文","kcg":"卡塔布文","kde":"马孔德文","kea":"卡布佛得鲁文","kfo":"科罗文","kg":"刚果文","kha":"卡西文","khi":"其他科伊桑语系","kho":"和田文","khq":"西桑海文","ki":"吉库尤文","kj":"宽亚玛文","kk":"哈萨克文","kkj":"卡库文","kl":"格陵兰文","kln":"卡伦金文","km":"高棉文","kmb":"金邦杜文","kn":"卡纳达文","ko":"韩文","kok":"刚卡尼文","kos":"科斯拉伊文","kpe":"克佩列文","kr":"卡努里文","krc":"卡拉恰伊巴尔卡尔文","krl":"卡累利阿文","kro":"克鲁文","kru":"库鲁克文","ks":"克什米尔文","ksb":"香巴拉文","ksf":"巴菲亚文","ksh":"科隆文","ku":"库尔德文","kum":"库梅克文","kut":"库特内文","kv":"科米文","kw":"凯尔特文","ky":"吉尔吉斯文","la":"拉丁文","lad":"拉迪诺文","lag":"朗吉文","lah":"拉亨达文","lam":"兰巴文","lb":"卢森堡文","lez":"莱兹依昂文","lg":"卢干达文","li":"淋布尔吉文","lkt":"Lakota","ln":"林加拉文","lo":"老挝文","lol":"芒戈文","loz":"洛兹文","lt":"立陶宛文","lu":"鲁巴加丹加文","lua":"鲁巴鲁瓦文","lui":"路易塞诺文","lun":"隆达文","luo":"卢奥文","lus":"卢晒文","luy":"卢雅文","lv":"拉脱维亚文","mad":"马都拉文","maf":"马法文","mag":"马加伊文","mai":"迈蒂利文","mak":"望加锡文","man":"曼丁哥文","map":"澳斯特罗尼西亚语系","mas":"萨伊文","mde":"马坝文","mdf":"莫克沙文","mdr":"曼达尔文","men":"门迪文","mer":"梅鲁文","mfe":"毛里求斯克里奥尔文","mg":"马尔加什文","mga":"中古爱尔兰文","mgh":"马夸文","mgo":"Meta'","mh":"马绍尔文","mi":"毛利文","mic":"米克马克文","min":"米南卡保文","mis":"各种不同语系","mk":"马其顿文","mkh":"其他孟高棉语系","ml":"马拉雅拉姆文","mn":"蒙古文","mnc":"满文","mni":"曼尼普里文","mno":"马诺博语系","mo":"摩尔多瓦文","moh":"摩霍克文","mos":"莫西文","mr":"马拉地文","ms":"马来文","mt":"马耳他文","mua":"蒙当文","mul":"多种语系","mun":"蒙达语系","mus":"克里克文","mwl":"米兰德斯文","mwr":"马尔瓦利文","my":"缅甸文","mye":"姆耶内文","myn":"玛雅语系","myv":"俄日亚文","na":"瑙鲁文","nah":"纳瓦特尔文","nai":"其他北美印第安语系","nap":"拿波里文","naq":"纳马文","nb":"挪威博克马尔文","nd":"北恩德贝勒文","nds":"低地德文","ne":"尼泊尔文","new":"尼瓦尔文","ng":"恩东加文","nia":"尼亚斯文","nic":"其他尼日尔科尔多凡语系","niu":"纽埃文","nl":"荷兰文","nl-BE":"佛兰芒文","nmg":"夸西奥文","nn":"挪威尼诺斯克文","nnh":"恩甘澎文","no":"挪威文","nog":"诺盖文","non":"古诺尔斯文","nqo":"西非书面文字","nr":"南恩德贝勒文","nso":"北索托文","nub":"努比亚语系","nus":"努埃尔文","nv":"纳瓦霍文","nwc":"经典尼瓦尔文","ny":"尼扬扎文","nym":"尼亚姆韦齐文","nyn":"尼昂科勒文","nyo":"尼约罗文","nzi":"恩济马文","oc":"奥克西唐文","oj":"奥吉布瓦文","om":"奥洛莫文","or":"欧里亚文","os":"奥塞梯文","osa":"奥萨格文","ota":"奥托曼土耳其文","oto":"奥托米语系","pa":"旁遮普文","paa":"其他巴布亚文","pag":"邦阿西楠文","pal":"帕拉维文","pam":"邦板牙文","pap":"帕皮亚门托文","pau":"帕劳文","peo":"古老波斯文","phi":"其他菲律宾语系","phn":"腓尼基文","pi":"巴利文","pl":"波兰文","pon":"波纳佩文","pra":"普拉克里特诸语言","pro":"普罗文斯文","ps":"普什图文","pt":"葡萄牙文","pt-BR":"巴西葡萄牙文","pt-PT":"欧洲葡萄牙文","qu":"盖丘亚文","raj":"拉贾斯坦文","rap":"拉帕努伊文","rar":"拉罗汤加文","rm":"罗曼什文","rn":"基隆迪文","ro":"罗马尼亚文","roa":"其他拉丁语系","rof":"兰博文","rom":"吉普赛文","root":"根语言","ru":"俄文","rup":"阿罗马尼亚文","rw":"卢旺达文","rwk":"罗瓦文","sa":"梵文","sad":"散达维文","sah":"雅库特文","sai":"其他南美印第安文","sal":"萨利什文","sam":"萨玛利亚文","saq":"桑布鲁文","sas":"萨萨克文","sat":"桑塔利文","sba":"甘拜文","sbp":"桑古文","sc":"萨丁文","scn":"西西里文","sco":"苏格兰文","sd":"信德文","se":"北萨米文","see":"塞内卡文","seh":"塞纳文","sel":"塞尔库普文","sem":"其他闪族语系","ses":"东桑海文","sg":"桑戈文","sga":"古爱尔兰文","sgn":"手语","sh":"塞尔维亚-克罗地亚文","shi":"希尔哈文","shn":"掸文","shu":"乍得阿拉伯文","si":"僧伽罗文","sid":"悉达摩文","sio":"苏语诸语言","sit":"其他汉藏语系","sk":"斯洛伐克文","sl":"斯洛文尼亚文","sla":"其他斯拉夫语系","sm":"萨摩亚文","sma":"南萨米文","smi":"其他萨米文","smj":"律勒欧萨莫斯文","smn":"伊纳里萨米文","sms":"斯科特萨米文","sn":"绍纳文","snk":"索尼基文","so":"索马里文","sog":"古粟特文","son":"桑海文","sq":"阿尔巴尼亚文","sr":"塞尔维亚文","srn":"苏里南汤加文","srr":"谢列尔文","ss":"斯瓦特文","ssa":"非洲撒哈拉沙漠边缘地带语言","ssy":"萨霍文","st":"南索托文","su":"巽他文","suk":"苏库马文","sus":"苏苏文","sux":"苏马文","sv":"瑞典文","sw":"斯瓦希里文","swb":"科摩罗文","swc":"刚果斯瓦希里文","syc":"经典叙利亚文","syr":"叙利亚文","ta":"泰米尔文","tai":"傣语诸语言","te":"泰卢固文","tem":"滕内文","teo":"特索文","ter":"特列纳文","tet":"特塔姆文","tg":"塔吉克文","th":"泰文","ti":"提格里尼亚文","tig":"提格雷文","tiv":"蒂夫文","tk":"土库曼文","tkl":"托克劳文","tl":"塔加洛文","tlh":"克林贡文","tli":"特林吉特文","tmh":"塔马奇克文","tn":"塞茨瓦纳文","to":"汤加文","tog":"汤加文（尼亚萨地区）","tpi":"托克皮辛文","tr":"土耳其文","trv":"太鲁阁文","ts":"宗加文","tsi":"蒂姆西亚文","tt":"塔塔尔文","tum":"通布卡文","tup":"图皮语系","tut":"阿尔泰诸语言","tvl":"图瓦卢文","tw":"特威文","twq":"北桑海文","ty":"塔西提文","tyv":"图瓦文","tzm":"塔马齐格特文","udm":"乌德穆尔特文","ug":"维吾尔文","uga":"乌加里特文","uk":"乌克兰文","umb":"翁本杜文","und":"未知语言","ur":"乌尔都文","uz":"乌兹别克文","vai":"瓦伊文","ve":"文达文","vi":"越南文","vo":"沃拉普克文","vot":"沃提克文","vun":"温旧文","wa":"瓦隆文","wae":"瓦尔瑟文","wak":"瓦卡什诸语言","wal":"瓦拉莫文","war":"瓦赖文","was":"瓦绍文","wen":"索布诸语言","wo":"沃洛夫文","xal":"卡尔梅克文","xh":"科萨文","xog":"索加文","yao":"瑶族文","yap":"雅浦文","yav":"洋卞文","ybb":"耶姆巴文","yi":"依地文","yo":"约鲁巴文","ypk":"尤皮克诸语言","yue":"粤语","za":"壮文","zap":"萨波蒂克文","zbl":"布利斯符号","zen":"泽纳加文","zh":"中文","zh-Hans":"简体中文","zh-Hant":"繁体中文","znd":"赞德文","zu":"祖鲁文","zun":"祖尼文","zxx":"无语言内容","zza":"扎扎文"};
+
+    rtl_data = {"af":false,"ar":true,"be":false,"bg":false,"bn":false,"ca":false,"cs":false,"cy":false,"da":false,"de":false,"el":false,"en":false,"en-GB":false,"es":false,"eu":false,"fa":true,"fi":false,"fil":false,"fr":false,"ga":false,"gl":false,"he":true,"hi":false,"hr":false,"hu":false,"id":false,"is":false,"it":false,"ja":false,"ko":false,"lv":false,"ms":false,"nb":false,"nl":false,"pl":false,"pt":false,"ro":false,"ru":false,"sk":false,"sq":false,"sr":false,"sv":false,"ta":false,"th":false,"tr":false,"uk":false,"ur":true,"vi":false,"zh":false,"zh-Hant":false};
+
+    Languages.from_code = function(code) {
+      return this.all[code] || null;
+    };
+
+    Languages.is_rtl = function(locale) {
+      var result;
+      result = rtl_data[locale];
+      if (result != null) {
+        return result;
+      } else {
+        return null;
+      }
+    };
+
+    return Languages;
 
   })();
 
@@ -1830,11 +1942,11 @@
       }
       if (punct_list.length > 0 && punct_list.slice(-1)[0]["type"] === "decimal") {
         result = parseInt(((function() {
-          var _j, _len1, _ref4, _results;
-          _ref4 = num_list.slice(0, -1);
+          var _j, _len1, _ref, _results;
+          _ref = num_list.slice(0, -1);
           _results = [];
-          for (_j = 0, _len1 = _ref4.length; _j < _len1; _j++) {
-            num = _ref4[_j];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            num = _ref[_j];
             _results.push(num.value);
           }
           return _results;
@@ -1880,7 +1992,11 @@
       if (callback) {
         return callback(result);
       } else {
-        return result || default_value;
+        if (result === null) {
+          return default_value;
+        } else {
+          return result;
+        }
       }
     };
 
