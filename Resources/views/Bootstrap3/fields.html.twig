@@ -323,7 +323,7 @@
     {% else %}
         <div class="fileupload {{ class }}" data-provides="fileupload">
             <div class="input-group">
-                <div class="uneditable-input span3"><i class="icon-file"></i>
+                <div class="form-control"><i class="icon-file"></i>
                     <span class="fileupload-preview">
                         {% if url is defined and url is not empty %}
                             <a href="{{ url }}" target="_blank">{{ filename|default(null) }}</a>
@@ -332,16 +332,18 @@
                         {% endif %}
                     </span>
                 </div>
-                <span class="btn btn-default btn-file">{{ 'form.button.file'|trans }}
-                    {{ block('form_widget') }}
-                </span>
-                <span class="btn btn-default fileupload-exists" data-dismiss="fileupload">
-                    {% if filename|default(null) is not empty and remove %}
-                    {{ 'form.button.remove'|trans }}
-                    {% else %}
-                    {{ 'form.button.cancel'|trans }}
-                    {% endif %}
-                </span>
+                <div class="input-group-addon">
+                    <span class="btn btn-default btn-file">{{ 'form.button.file'|trans }}
+                        {{ block('form_widget') }}
+                    </span>
+                    <span class="btn btn-default fileupload-exists" data-dismiss="fileupload">
+                        {% if filename|default(null) is not empty and remove %}
+                        {{ 'form.button.remove'|trans }}
+                        {% else %}
+                        {{ 'form.button.cancel'|trans }}
+                        {% endif %}
+                    </span>
+                </div>
             </div>
         </div>
     {% endif %}

@@ -246,7 +246,25 @@ legend {
 
 // Fileupload
 // --------------------
-.form-group.has-warning .fileupload .uneditable-input {
+.fileupload > .input-group > .form-control {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+    cursor: text;
+}
+.fileupload .input-group-addon {
+    padding: 0;
+    .btn {
+        background: transparent;
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+        &:first-child {
+            border-left: none;
+        }
+    }
+}
+.form-group.has-warning .fileupload .form-control {
   color: #a47e3c;
   border-color: #a47e3c;
 }
@@ -256,7 +274,7 @@ legend {
 .form-group.has-warning .fileupload .thumbnail {
   border-color: #a47e3c;
 }
-.form-group.has-error .fileupload .uneditable-input {
+.form-group.has-error .fileupload .form-control {
   color: #b94a48;
   border-color: #b94a48;
 }
@@ -266,7 +284,7 @@ legend {
 .form-group.has-error .fileupload .thumbnail {
   border-color: #b94a48;
 }
-.form-group.has-success .fileupload .uneditable-input {
+.form-group.has-success .fileupload .form-control {
   color: #468847;
   border-color: #468847;
 }
