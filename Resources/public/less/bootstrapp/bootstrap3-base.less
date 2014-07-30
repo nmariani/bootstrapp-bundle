@@ -251,6 +251,13 @@ legend {
     margin-bottom: 0;
     vertical-align: middle;
     cursor: text;
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+        + .fileupload-preview {
+            margin-left: 5px;
+        }
+    }
 }
 .fileupload .input-group-addon {
     padding: 0;
