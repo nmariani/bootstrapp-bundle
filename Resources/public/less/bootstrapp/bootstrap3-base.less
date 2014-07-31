@@ -251,11 +251,25 @@ legend {
     margin-bottom: 0;
     vertical-align: middle;
     cursor: text;
+    min-width: 270px;
+
+    .fileupload-preview {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: @input-height-base;
+        line-height: @input-height-base;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 
     [class^="icon-"],
     [class*=" icon-"] {
         + .fileupload-preview {
-            margin-left: 5px;
+            padding-left: 30px;
         }
     }
 }
