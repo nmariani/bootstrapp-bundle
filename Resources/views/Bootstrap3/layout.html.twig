@@ -8,7 +8,7 @@
     {% set sidebar = { visible: true, nav: false, subnav: true } %}
 {% endif %}
 {% if header is not defined %}
-    {% set header = { nav: not sidebar.nav|default(false) } %}
+    {% set header = { nav: true } %}
 {% endif %}
 
 {% spaceless %}
