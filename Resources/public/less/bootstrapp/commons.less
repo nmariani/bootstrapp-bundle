@@ -276,3 +276,31 @@ legend {
 .vertical-align-bottom {
   .vertical-align-bottom();
 }
+
+// Sidebar
+// -------------------------
+#sidebar {
+    position: relative;
+
+    &.auto {
+        margin-left: -175px;
+        &:hover {
+            margin-left: 0;
+        }
+    }
+
+    &.fixed {
+        > .grip {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    > .grip {
+        display: block;
+        visibility: visible;
+        position: absolute;
+        right: 5px;
+        top : 50%;
+    }
+}

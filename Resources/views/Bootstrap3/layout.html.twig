@@ -71,8 +71,13 @@
             {% block container %}
                 {% block sidebar_outer %}
                 {% if sidebar is defined and sidebar.visible == true %}
-                <div id="sidebar">
+                <div id="sidebar"{% if sidebar.class is defined and sidebar.class is not empty %} class="{{ sidebar.class }}"{% endif %}>
                     {% block sidebar %}
+                    {% block sidebar_grip %}
+                        <div class="grip">
+                            <i class="icon-bars icon-rotate-90"></i>
+                        </div>
+                    {% endblock sidebar_grip %}
                     {% block sidebar_header_outer %}
                     <div id="sidebar-header">
                         {% block sidebar_header %}
