@@ -384,7 +384,7 @@
 
 {% block form_row %}
 {% spaceless %}
-    <div class="control-group{% if errors %} error{% endif %}">
+    <div class="control-group{% if errors is iterable and errors|length %} error{% endif %}">
         {{ form_label(form) }}
         <div class="controls">
             {{ form_widget(form) }}
@@ -401,7 +401,7 @@
 {% block form_rows %}
 {% spaceless %}
     {% import 'BootstrappBundle:Macro:alert.html.twig' as alert %}
-    {% if errors %}
+    {% if errors is iterable and errors|length %}
         {% for error in errors %}
             {{ alert.message('error',
                 error.messagePluralization is null
