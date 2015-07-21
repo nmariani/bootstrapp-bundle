@@ -74,18 +74,23 @@ body {
 }
 
 #content {
+    .flexbox();
     .flex(1);
+    .box-sizing(border-box);
+    height: 100%;
     min-height: 0;
     max-height: 100%;
-    .scroll();
+    padding: 0;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
     background: @white;
-}
-.content {
-    padding: 20px;
 }
 #sidebar {
     .flexbox();
     .flex(0, 0, auto);
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
     background-color: @well-bg;
     padding: 15px;
@@ -181,9 +186,10 @@ ul.nav-pills {
 // Header
 // --------------------
 .content header {
-    position: relative;
+    .flex(0, 0, auto);
     background-color: #f5f5f5;
-    margin: -20px -20px 20px -20px !important;
+    margin: 0 !important;
+    z-index: 1;
 
     .page-header {
         background-color: @baseColor;
@@ -225,6 +231,14 @@ ul.nav-pills {
             line-height: 20px;
         }
     }
+}
+
+// Main
+// --------------------
+.content main {
+  .flex(1, 1, auto);
+  .scroll-y();
+  padding: 20px;
 }
 
 @media screen and (orientation:portrait) {
