@@ -26,6 +26,7 @@ class TwigRenderer extends BaseRenderer
 
         if ('root' === $item->getName()) {
             $item->setChildrenAttribute('class', trim('nav navbar-nav '.$item->getAttribute('class')));
+            $item->setChildrenAttribute('data-pk', $item->getLinkAttribute('data-pk'));
         }
 
         return parent::render($item, $options);

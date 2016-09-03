@@ -177,6 +177,7 @@
 {# ckeditor #}
     {% elseif vendor == 'ckeditor' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/ckeditor.js') }}"></script>
+        {# <script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script> #}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/config.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/styles.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/ckeditor/lang/' ~ app.request.locale|slice(0,2)|lower ~ '.js') }}"></script>
