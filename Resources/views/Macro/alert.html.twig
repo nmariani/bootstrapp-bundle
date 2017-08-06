@@ -16,6 +16,7 @@
 
 {# Displays flashbag messages from the session #}
 {% macro session_flashbag(type, close, use_raw, class) %}
+    {% import _self as macro %}
     {% if type|default(false) %}
         {% set types = [type] %}
     {% else %}
@@ -26,7 +27,7 @@
         {% if flashes|length > 0 %}
             {% for flash in flashes %}
                 {% if flash|length %}
-                    {{ _self.message(type, flash, close, use_raw, class) }}
+                    {{ macro.message(type, flash, close, use_raw, class) }}
                 {% endif %}
             {% endfor %}
         {% endif %}

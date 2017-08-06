@@ -1,4 +1,5 @@
 {% macro navlist(items, active, activeBlock) %}
+    {% import _self as macro %}
     <ul class="list-group">
     {% for i, item in items %}
         {% set classes = ['list-group-item'] %}
@@ -28,7 +29,7 @@
                 {{ activeBlock|raw }}
             {% endif %}
             {% if item.items is defined and item.items is iterable %}
-                {{ _self.navlist(item.items, active, activeBlock) }}
+                {{ macro.navlist(item.items, active, activeBlock) }}
             {% endif %}
         </li>
     {% endfor %}

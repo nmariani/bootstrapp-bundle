@@ -268,7 +268,7 @@
             {% set style = style ~ ' height: ' ~ placeholdHeight ~ ';' %}
             {% set ratio = '' %}
         {% else %}
-            {% set ratio = ratio ? ' ratio' ~ ratio|replace('/', '_') : ' square' %}
+            {% set ratio = ratio ? ' ratio' ~ ratio|replace({'/': '_'}) : ' square' %}
         {% endif %}
         <div class="fileupload {{ class }}" data-provides="fileupload" style="{{ style }}">
             <div class="fileupload-new thumbnail{{ ratio }}" style="{{ style }}">

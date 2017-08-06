@@ -13,13 +13,15 @@
 namespace nmariani\Bundle\BootstrappBundle\Twig\Extension;
 
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ThumbnailExtension extends \Twig_Extension
+class ThumbnailExtension extends AbstractExtension
 {
     public function getFunctions()
     {
         return array(
-            'placehold' => new \Twig_Function_Method($this, 'getPlaceholdItUrl')
+            new TwigFunction('placehold', 'getPlaceholdItUrl')
         );
     }
 

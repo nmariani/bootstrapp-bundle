@@ -13,11 +13,11 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=2.3.0"
+        "php": ">=5.4.0",
+        "symfony/framework-bundle": ">=2.7.0"
     },
     "autoload": {
-        "psr-0": { "nmariani\\Bundle\\BootstrappBundle": "" }
+        "psr-4": { "nmariani\\Bundle\\BootstrappBundle": "" }
     },
     "target-dir": "nmariani/Bundle/BootstrappBundle",
     "extra": {
