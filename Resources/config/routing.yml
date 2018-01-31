@@ -1,5 +1,5 @@
 bootstrapp_locales:
-    pattern:   /_internal/bootstrapp/locales/{route}/{routeParams}/{locale}
+    path:   /_internal/bootstrapp/locales/{route}/{routeParams}/{locale}
     defaults:  { _controller: BootstrappBundle:Intl:locales }
 
 bootstrapp_elfinder:

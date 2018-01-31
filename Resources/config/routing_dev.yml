@@ -1,44 +1,45 @@
 bootstrapp_readme:
-    pattern:  /
+    path:  /
     defaults: { _controller: BootstrappBundle:Doc:readme }
-    requirements: { _method: GET }
+    methods: [GET]
 bootstrapp_demo:
-    pattern:  /demo
+    path:  /demo
     defaults: { _controller: BootstrappBundle:Doc:demo }
-    requirements: { _method: GET }
+    methods: [GET]
 bootstrapp_eyecon:
-    pattern:  /demo/eyecon
+    path:  /demo/eyecon
     defaults: { _controller: BootstrappBundle:Doc:eyecon }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_jqueryui:
-    pattern:  /demo/jqueryui
+    path:  /demo/jqueryui
     defaults: { _controller: BootstrappBundle:Doc:jqueryui }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_pickadate:
-    pattern:  /demo/pickadate
+    path:  /demo/pickadate
     defaults: { _controller: BootstrappBundle:Doc:pickadate }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_mobiscroll:
-    pattern:  /demo/mobiscroll
+    path:  /demo/mobiscroll
     defaults: { _controller: BootstrappBundle:Doc:mobiscroll }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_ckeditor:
-    pattern:  /demo/ckeditor
+    path:  /demo/ckeditor
     defaults: { _controller: BootstrappBundle:Doc:ckeditor }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_redactor:
-    pattern:  /demo/redactor
+    path:  /demo/redactor
     defaults: { _controller: BootstrappBundle:Doc:redactor }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_fontawesome:
-    pattern:  /demo/fontawesome
+    path:  /demo/fontawesome
     defaults: { _controller: BootstrappBundle:Doc:fontawesome }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_select2:
-    pattern:  /demo/select2
+    path:  /demo/select2
     defaults: { _controller: BootstrappBundle:Doc:select2 }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
 bootstrapp_elfinder_demo:
-    pattern:  /demo/elfinder
+    path:  /demo/elfinder
     defaults: { _controller: BootstrappBundle:Doc:elfinder }
-    requirements: { _method: GET|POST }
+    methods: [GET, POST]
+

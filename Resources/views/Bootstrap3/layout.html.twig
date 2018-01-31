@@ -154,7 +154,7 @@
                             {% import 'BootstrappBundle:Macro:alert.html.twig' as alert %}
                             {{ alert.session_flashbag(false, true, true, 'fade in') }}
 
-                            {% for name, value in app.session.flashbag if name in ['success', 'error', 'notice'] %}
+                            {% for name, value in app.session.flashbag.all() if name in ['success', 'error', 'notice'] %}
                             <div class="alert alert-{{ name }}">
                                 <a class="close" data-dismiss="alert" href="#">×</a>
                                 {{ value|trans }}
@@ -185,11 +185,11 @@
         {% block footer %}
         <span id="copyright">&copy; {{ 'now'|date('Y') }} {{company|default('Your company')}}. {% trans %}All rights reserved{% endtrans %}.</span>
         <span class="dropdown dropup locale-dropdown flags">
-        {% render url('bootstrapp_locales', {
+        {{ render(controller('BootstrappBundle:Intl:locales', {
             'route':app.request.attributes.get('_route'),
             'routeParams':app.request.attributes.get('_route_params')|json_encode(),
             'locale':app.request.locale
-        }) %}
+        })) }}
         </span>
         {% endblock footer %}
     </footer>

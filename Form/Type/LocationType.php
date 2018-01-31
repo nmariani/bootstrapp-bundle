@@ -214,6 +214,8 @@ class LocationType  extends AbstractType
     {
         if(isset($options['widget']) && $this->assetsLoader) {
             $this->assetsLoader->addVendor($options['widget']);
+            $this->assetsLoader->addVendor('select2');
+            $this->assetsLoader->addVendor('gmaps');
         }
 
         $view->vars['defaultCountry'] = $this->getDefaultCountry();

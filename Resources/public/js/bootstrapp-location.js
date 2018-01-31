@@ -383,9 +383,13 @@
         geocode: function (parameters, callback) {
             var self = this;
             if (!$.type(parameters) === "object" || $.isEmptyObject(parameters)) {
-                parameters = {
-                    address: $.trim(this.element.val())
-                };
+                if (null != this.element) {
+                    parameters = {
+                        address: $.trim(this.element.val())
+                    };
+                } else {
+                    return;
+                }
             }
             if (parameters.address) {
                 parameters.address = parameters.address + this.settings.geocoderOptions.appendAddressString;

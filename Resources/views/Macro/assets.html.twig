@@ -166,12 +166,11 @@
 
 {# location-typeahead #}
     {% elseif vendor == 'location-typeahead' %}
-        <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&language={{ app.request.locale|slice(0,2)|lower }}&region={{ app.request.locale|slice(3,2)|upper }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/bootstrapp-location.js') }}"></script>
 
 {# gmaps #}
     {% elseif vendor == 'gmaps' %}
-        <script src="http://maps.googleapis.com/maps/api/js?libraries=places,panoramio&sensor=false&language={{ app.request.locale|slice(0,2)|lower }}&region={{ app.request.locale|slice(3,2)|upper }}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjkB2V8qMn6CDY1nFYimJWbAXPTkjscIg&libraries=places&language={{ app.request.locale|slice(0,2)|lower }}&region={{ app.request.locale|slice(3,2)|upper }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/gmaps.js') }}"></script>
 
 {# ckeditor #}
