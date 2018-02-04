@@ -1,7 +1,7 @@
 {# Load Bootstrapp vendors assets #}
 
 {# Stylesheets manager #}
-{% macro stylesheets(vendor, components) %}
+{% macro stylesheets(vendor, parameters) %}
 {# date pickers #}
     {% if vendor == 'eyecon' %}
         {% stylesheets filter='less' output='bundles/bootstrapp/css/eyecon.css'
@@ -74,7 +74,7 @@
 
 
 {# Javascripts manager #}
-{% macro javascripts(vendor, components) %}
+{% macro javascripts(vendor, parameters) %}
 {# twitter cldr #}
     {% if vendor == 'twitter-cldr' %}
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/twitter-cldr/'~ app.request.locale|slice(0,2)|lower ~'.js') }}"></script>
@@ -102,8 +102,8 @@
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/core.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/widget.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/mouse.js') }}"></script>
-        {% if components is defined and components is iterable %}
-            {% for component in components %}
+        {% if parameters is defined and parameters.components is defined and parameters.components is iterable %}
+            {% for component in parameters.components %}
                 <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/jquery-ui/'~component~'.js') }}"></script>
                 {% if component == 'datepicker' %}
                     {% if app.request.locale|slice(0,2)|lower != 'en' %}
@@ -170,7 +170,7 @@
 
 {# gmaps #}
     {% elseif vendor == 'gmaps' %}
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjkB2V8qMn6CDY1nFYimJWbAXPTkjscIg&libraries=places&language={{ app.request.locale|slice(0,2)|lower }}&region={{ app.request.locale|slice(3,2)|upper }}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?{% if parameters is iterable and parameters.api_key is not empty %}key={{ parameters.api_key }}&{% endif %}libraries=places&language={{ app.request.locale|slice(0,2)|lower }}&region={{ app.request.locale|slice(3,2)|upper }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/bootstrapp/js/gmaps.js') }}"></script>
 
 {# ckeditor #}

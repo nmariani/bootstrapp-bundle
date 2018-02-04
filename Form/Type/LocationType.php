@@ -19,7 +19,7 @@ use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
 
 class LocationType  extends AbstractType
@@ -30,6 +30,11 @@ class LocationType  extends AbstractType
     private $widget;
 
     /**
+     * @var string
+     */
+    private $mapApiKey;
+
+    /**
      * @var \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader
      */
     private $assetsLoader;
@@ -38,6 +43,21 @@ class LocationType  extends AbstractType
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
+
+    /**
+     * Constructor
+     * @param ContainerInterface $container
+     * @param AssetsLoader $assetsLoader
+     * @param string $widget
+     * @param string $mapApiKey
+     */
+    public function __construct(ContainerInterface $container, AssetsLoader $assetsLoader, $widget, $mapApiKey)
+    {
+        $this->setContainer($container);
+        $this->setAssetsLoader($assetsLoader);
+        $this->setDefaultWidget($widget);
+        $this->setDefaultMapApiKey($mapApiKey);
+    }
 
     /**
      * {@inheritdoc}
@@ -189,15 +209,16 @@ class LocationType  extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults([
             'data_class'    => 'nmariani\Bundle\BootstrappBundle\Form\Model\Location',
             'widget'        => $this->widget,
             'fields'        => [],
-            'preferred_countries'   => $this->container->getParameter('form.type.location.preferred_countries')
+            'preferred_countries'   => $this->container->getParameter('form.type.location.preferred_countries'),
+            'map_api_key'      => $this->mapApiKey
         ]);
 
         $resolver->addAllowedValues(array(
@@ -215,7 +236,7 @@ class LocationType  extends AbstractType
         if(isset($options['widget']) && $this->assetsLoader) {
             $this->assetsLoader->addVendor($options['widget']);
             $this->assetsLoader->addVendor('select2');
-            $this->assetsLoader->addVendor('gmaps');
+            $this->assetsLoader->addVendor('gmaps', ['api_key' => $options['map_api_key']]);
         }
 
         $view->vars['defaultCountry'] = $this->getDefaultCountry();
@@ -235,7 +256,7 @@ class LocationType  extends AbstractType
     /**
      * Set the default widget
      * @param string $widget
-     * @return DateTimeType
+     * @return LocationType
      */
     public function setDefaultWidget($widget) {
         if(is_string($widget)) {
@@ -245,9 +266,21 @@ class LocationType  extends AbstractType
     }
 
     /**
+     * Set the default map API key
+     * @param string $key
+     * @return LocationType
+     */
+    public function setDefaultMapApiKey($key) {
+        if(is_string($key)) {
+            $this->mapApiKey = $key;
+        }
+        return $this;
+    }
+
+    /**
      * Set the assets loader
      * @param \nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader $loader
-     * @return DateTimeType
+     * @return LocationType
      */
     public function setAssetsLoader(AssetsLoader $loader) {
         $this->assetsLoader= $loader;
@@ -256,7 +289,7 @@ class LocationType  extends AbstractType
 
     public function getDefaultCountry()
     {
-        $defaultCountry = $this->container->getParameter('form.type.location.defaultCountry');
+        $defaultCountry = $this->container->getParameter('form.type.location.country');
         if (false === $defaultCountry) {
             $defaultCountry = '';
         } else if (empty($defaultCountry)) {
@@ -265,7 +298,7 @@ class LocationType  extends AbstractType
         return $defaultCountry;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'bootstrapp_bundle_location';
     }

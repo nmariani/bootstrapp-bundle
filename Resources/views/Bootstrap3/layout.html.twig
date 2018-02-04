@@ -27,8 +27,8 @@
     <title>{% block title %}Your Twitter Bootstrap based application{% endblock title %}</title>
 
     {% block assets_stylesheets %}
-        {% for vendor, components in assets_loader.vendors %}
-            {{ assets.stylesheets(vendor, components) }}
+        {% for vendor, parameters in assets_loader.vendors %}
+            {{ assets.stylesheets(vendor, parameters) }}
         {% endfor %}
     {% endblock assets_stylesheets %}
 
@@ -223,8 +223,8 @@
 
         {# Dynamically load assets #}
         {% block assets_javascripts %}
-            {% for vendor, components in assets_loader.vendors %}
-                {{ assets.javascripts(vendor, components) }}
+            {% for vendor, parameters in assets_loader.vendors %}
+                {{ assets.javascripts(vendor, parameters) }}
             {% endfor %}
         {% endblock assets_javascripts %}
 

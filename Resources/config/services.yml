@@ -20,7 +20,8 @@ parameters:
     # location
     form.type.location.widget: location-typeahead
     form.type.location.preferred_countries: ['FR']
-    form.type.location.defaultCountry: 'FR'
+    form.type.location.country: 'FR'
+    form.type.location.map_api_key: ~
     # Global Variables
     templating.globals.class: nmariani\Bundle\BootstrappBundle\Templating\GlobalVariables
     # KnpMenu
@@ -28,57 +29,55 @@ parameters:
     knp_menu.renderer.twig.template: BootstrappBundle:Menu:knp_menu.html.twig
 
 services:
-    form.type.date:
+    bootstrapp.form.type.date:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\DateType
-        #scope: prototype
         tags: [{ name: form.type, alias: date }]
         calls:
             - [ setDefaultWidget, [ %form.type.date.widget% ] ]
             - [ setDefaultFormat, [ %form.type.date.format% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
-    form.type.time:
+
+    bootstrapp.form.type.time:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\TimeType
-        #scope: prototype
         tags: [{ name: form.type, alias: time }]
         calls:
             - [ setDefaultWidget, [ %form.type.time.widget% ] ]
             - [ setDefaultFormat, [ %form.type.time.format% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
-    form.type.datetime:
+
+    bootstrapp.form.type.datetime:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\DateTimeType
-        #scope: prototype
         tags: [{ name: form.type, alias: datetime }]
         calls:
             - [ setDefaultWidget, [ %form.type.datetime.widget% ] ]
             - [ setDefaultFormat, [ %form.type.datetime.format% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
-    form.type.choice:
+
+    bootstrapp.form.type.choice:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\ChoiceType
-        #scope: prototype
         tags: [{ name: form.type, alias: choice }]
         calls:
             - [ setDefaultWidget, [ %form.type.choice.widget% ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
-    form.type.location:
+
+    bootstrapp.form.type.location:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\LocationType
-        #scope: prototype
+        arguments: [@service_container, @assets_loader, %form.type.location.widget%, %form.type.location.map_api_key%]
         tags: [{ name: form.type, alias: bootstrapp_bundle_location }]
-        calls:
-            - [ setContainer, [ @service_container ] ]
-            - [ setDefaultWidget, [ %form.type.location.widget% ] ]
-            - [ setAssetsLoader, [ @assets_loader ] ]
-    form.type.ckeditor:
+
+    bootstrapp.form.type.ckeditor:
         class: %bootstrapp.ckeditor.class%
-        #scope: prototype
-        tags: [{ name: form.type, alias: bootstrapp_bundle_ckeditor }]
+        tags: [{ name: form.type, alias: bootstrapp_ckeditor }]
         calls:
             - [ setContainer, [ @service_container ] ]
             - [ setAssetsLoader, [ @assets_loader ] ]
-    form.type.file:
+
+    bootstrapp.form.type.file:
         class: nmariani\Bundle\BootstrappBundle\Form\Type\FileType
         tags: [{ name: form.type, alias: file }]
         calls:
             - [ setAssetsLoader, [ @assets_loader ] ]
             - [ setContainer, [ @service_container ] ]
+
     assets_loader:
         class: nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader

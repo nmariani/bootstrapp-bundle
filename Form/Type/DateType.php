@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType as BaseDateType,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    Symfony\Component\OptionsResolver\OptionsResolver;
 
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
 
@@ -75,7 +75,7 @@ class DateType extends BaseDateType
                             $components = [];
                             break;
                     }
-                    $this->assetsLoader->addVendor($options['widget'], $components);
+                    $this->assetsLoader->addVendor($options['widget'], ['components' => $components]);
                     $this->assetsLoader->addVendor('twitter-cldr');
                     $this->assetsLoader->addVendor('bootstrapp-datetime');
                 }
@@ -90,9 +90,9 @@ class DateType extends BaseDateType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $defaults = [
             'format'  => $this->format,
@@ -112,6 +112,14 @@ class DateType extends BaseDateType
                 'pickadate',
             )
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'bootstrapp_bundle_date';
     }
 
     /**

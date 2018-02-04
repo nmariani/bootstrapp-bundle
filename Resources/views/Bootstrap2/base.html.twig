@@ -35,8 +35,8 @@
     {% endblock stylesheets %}
 
     {% block assets_stylesheets %}
-        {% for vendor, components in app.vendors %}
-            {{ assets.stylesheets(vendor, components) }}
+        {% for vendor, parameters in app.vendors %}
+            {{ assets.stylesheets(vendor, parameters) }}
         {% endfor %}
     {% endblock assets_stylesheets %}
 
@@ -141,8 +141,8 @@
 
         {# Dynamically load assets #}
         {% block assets_javascripts %}
-            {% for vendor, components in app.vendors %}
-                {{ assets.javascripts(vendor, components) }}
+            {% for vendor, parameters in app.vendors %}
+                {{ assets.javascripts(vendor, parameters) }}
             {% endfor %}
         {% endblock assets_javascripts %}
 

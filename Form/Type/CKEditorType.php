@@ -19,12 +19,11 @@ use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
 
 class CKEditorType extends AbstractType
 {
-
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -102,7 +101,7 @@ class CKEditorType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'enable'        => $this->container->getParameter('bootstrapp.ckeditor.enable'),
@@ -123,7 +122,7 @@ class CKEditorType extends AbstractType
 
     /**
      * {@inheritdoc}
-    */
+     */
     public function getParent()
     {
         return 'textarea';
@@ -131,10 +130,9 @@ class CKEditorType extends AbstractType
 
     /**
      * {@inheritdoc}
-    */
-    public function getName()
+     */
+    public function getBlockPrefix()
     {
         return 'bootstrapp_bundle_ckeditor';
     }
-
 }

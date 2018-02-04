@@ -14,7 +14,7 @@ namespace nmariani\Bundle\BootstrappBundle\Form\Type;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType as BaseDateTimeType,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
 
@@ -36,9 +36,9 @@ class DateTimeType extends BaseDateTimeType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $defaults = [];
         if(null!==$this->widget) {
@@ -87,12 +87,20 @@ class DateTimeType extends BaseDateTimeType
                             $components = [];
                             break;
                     }
-                    $this->assetsLoader->addVendor($options['widget'], $components);
+                    $this->assetsLoader->addVendor($options['widget'], ['components' => $components]);
                 }
                 break;
         }
 
         parent::buildView($view, $form, $options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'bootstrapp_bundle_datetime';
     }
 
     /**

@@ -16,7 +16,7 @@ namespace nmariani\Bundle\BootstrappBundle\Form\Type;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType as BaseChoiceType,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
 
@@ -35,9 +35,9 @@ class ChoiceType extends BaseChoiceType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $defaults = [
             'widget' => $this->widget
@@ -70,6 +70,14 @@ class ChoiceType extends BaseChoiceType
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'bootstrapp_bundle_choice';
+    }
+
+    /**
      * Set the default widget
      * @param string $widget
      * @return DateTimeType
@@ -90,5 +98,4 @@ class ChoiceType extends BaseChoiceType
         $this->assetsLoader= $loader;
         return $this;
     }
-
 }

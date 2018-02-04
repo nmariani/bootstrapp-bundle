@@ -21,20 +21,20 @@ class AssetsLoader
     /**
      * Add vendor to vendors list
      * @param string $vendor
-     * @param array $components
+     * @param array $parameters
      * @return AssetsLoader
      * @throws \InvalidArgumentException
      */
-    public function addVendor($vendor, $components = [])
+    public function addVendor($vendor, $parameters = [])
     {
         if(!is_string($vendor)) {
             throw new \InvalidArgumentException('Vendor name should be a valid string!');
         }
-        if(!is_array($components)) {
-            throw new \InvalidArgumentException('Vendor components should be an array!');
+        if(!is_array($parameters)) {
+            throw new \InvalidArgumentException('Vendor parameters should be an array!');
         }
         if(!array_key_exists($vendor, $this->vendors)) {
-            $this->vendors[$vendor] = $components;
+            $this->vendors[$vendor] = $parameters;
         }
         return $this;
     }

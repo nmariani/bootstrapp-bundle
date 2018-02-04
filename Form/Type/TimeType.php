@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType as BaseTimeType,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use nmariani\Bundle\BootstrappBundle\Templating\Loader\AssetsLoader;
 
@@ -94,9 +94,9 @@ class TimeType extends BaseTimeType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $defaults = [
             'format'  => $this->format,
@@ -114,6 +114,14 @@ class TimeType extends BaseTimeType
                 'mobiscroll'
             )
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'bootstrapp_bundle_time';
     }
 
     /**

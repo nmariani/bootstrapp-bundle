@@ -24,7 +24,7 @@
     {{ parent() }}
 {% endblock choice_widget_collapsed %}
 
-{% block date_widget %}
+{% block bootstrapp_bundle_date_widget %}
     {% spaceless %}
         {% if widget == 'choice' or widget == 'single_text' or widget == 'text' %}
             {{ parent() }}
@@ -52,9 +52,9 @@
             {% endif %}
         {% endif %}
     {% endspaceless %}
-{% endblock date_widget %}
+{% endblock bootstrapp_bundle_date_widget %}
 
-{% block time_widget %}
+{% block bootstrapp_bundle_time_widget %}
     {% spaceless %}
         {% if widget == 'choice' or widget == 'single_text' or widget == 'text' %}
             {{ parent() }}
@@ -82,9 +82,9 @@
             {% endif %}
         {% endif %}
     {% endspaceless %}
-{% endblock time_widget %}
+{% endblock bootstrapp_bundle_time_widget %}
 
-{% block datetime_widget %}
+{% block bootstrapp_bundle_datetime_widget %}
     {% spaceless %}
         {% if widget == 'mobiscroll' %}
             {% set attr = attr|merge({'data-widget': widget, 'data-type':'datetime', 'style': 'position:relative;'}) %}
@@ -111,7 +111,7 @@
             </div>
         {% endif %}
     {% endspaceless %}
-{% endblock datetime_widget %}
+{% endblock bootstrapp_bundle_datetime_widget %}
 
 {% block bootstrapp_bundle_location_widget %}
     {% trans_default_domain "location" %}
@@ -256,7 +256,7 @@
     {% endif %}
 {% endblock bootstrapp_bundle_ckeditor_widget %}
 
-{% block file_widget %}
+{% block bootstrapp_bundle_file_widget %}
     {% set uploadtype = uploadtype|default('file') %}
     {% set class = filename|default(null) is not empty and remove ? 'fileupload-exists' : 'fileupload-new' %}
     {% if uploadtype == 'image' %}
@@ -381,7 +381,7 @@
         });
         {% endif %}
     </script>
-{% endblock file_widget %}
+{% endblock bootstrapp_bundle_file_widget %}
 
 {# Errors #}
 

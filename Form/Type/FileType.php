@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\File\File,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileType extends BaseFileType
 {
@@ -139,9 +139,9 @@ class FileType extends BaseFileType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $defaults = [];
         $defaults['uploadtype'] = 'file';
@@ -152,5 +152,13 @@ class FileType extends BaseFileType
         $defaults['remove'] = false;
 
         $resolver->setDefaults($defaults);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'bootstrapp_bundle_file';
     }
 }
